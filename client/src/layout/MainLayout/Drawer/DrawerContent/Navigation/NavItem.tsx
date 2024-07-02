@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, LinkProps, useLocation, useNavigate } from 'react-router-dom';
+import { LinkProps, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 // material-ui
@@ -11,7 +11,6 @@ import { activeItem } from '@store/reducers/menu';
 import { IRootState } from '@store/reducers';
 import { Override } from '@utils/common';
 import { MenuItem } from '@/types/menu';
-import navigation from '@/menu-items';
 
 // ==============================|| NAVIGATION - LIST ITEM ||============================== //
 
