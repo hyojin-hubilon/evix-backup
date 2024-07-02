@@ -1,0 +1,16 @@
+version: '3'
+services:
+  ecoa_front:
+    image: icn.ocir.io/cnahm0uo3g0f/evix-dct/ecoa-frontend:1.0.0
+    restart: always
+    hostname: ecoa_front
+    container_name: ecoa_front
+    #ports:
+    #  - 48001:48001
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+#nginx 와 동일 network 구성을 위함
+networks:
+  default:
+    external:
+      name: evix-dct_default
