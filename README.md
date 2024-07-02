@@ -4,6 +4,7 @@
 ## Run react-application for develop 
 
 ```bash
+npm install -g typescript
 cd client
 npm install
 npm run dev

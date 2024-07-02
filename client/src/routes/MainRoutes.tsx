@@ -1,34 +1,32 @@
-import { lazy } from "react";
-import LandingLayout from "@layout/LandingLayout";
-import LandingPage from "@pages/landing/Landing";
-import SupportPage from "@pages/landing/Support";
+import { lazy } from 'react';
+import LandingLayout from '@layout/LandingLayout';
+import LandingPage from '@pages/landing/Landing';
+import SupportPage from '@pages/landing/Support';
 
-import Loadable from "@components/Loadable";
-const ApplyFreeTrial = Loadable(
-    lazy(() => import("@pages/authentication/ApplyFreeTrial"))
-);
+import Loadable from '@components/Loadable';
+const ApplyFreeTrial = Loadable(lazy(() => import('@pages/authentication/ApplyFreeTrial')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
-    path: "/",
+    path: '/',
     element: <LandingLayout />,
     children: [
         {
-            path: "",
+            path: '',
             element: <LandingPage />,
         },
         {
-            path: "support",
+            path: 'support',
             element: <SupportPage />,
         },
         {
-            path: "apply",
+            path: 'apply',
             element: <ApplyFreeTrial />,
         },
         {
-            path: ""
-        }
+            path: '',
+        },
     ],
 };
 

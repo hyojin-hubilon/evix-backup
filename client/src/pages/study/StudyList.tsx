@@ -1,11 +1,7 @@
-import { Box } from "@mui/material";
+import { Box } from '@mui/material';
 
 const StudyList = () => {
-	return(
-		<Box>
-			
-		</Box>
-	)
-}
+    return <Box></Box>;
+};
 
 export default StudyList;

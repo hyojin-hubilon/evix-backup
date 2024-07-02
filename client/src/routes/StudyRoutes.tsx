@@ -10,15 +10,14 @@ const StudyDefault = Loadable(lazy(() => import('@pages/study')));
 // ==============================|| STUDY ROUTING ||============================== //
 
 const StudyRoutes = {
-	path: "/study",
-	element: <MainLayout />,
-	children: [
-	  {
-		path: 'list',
-		element: <StudyDefault />
-	  }
-	]
-  };
-  
-  export default StudyRoutes;
-  
+    path: '/study',
+    element: <MainLayout />,
+    children: [
+        {
+            path: 'list',
+            element: <StudyDefault />,
+        },
+    ],
+};
+
+export default StudyRoutes;

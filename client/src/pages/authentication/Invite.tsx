@@ -1,24 +1,22 @@
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
-import * as Yup from "yup";
-import { useFormik } from "formik";
-import axios from "axios";
-import { getDecodedToken } from "@utils/Cookie";
+import { Box, Button, Container, TextField, Typography } from '@mui/material';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
+import axios from 'axios';
+import { getDecodedToken } from '@utils/Cookie';
 
 const Invite = () => {
     const validationSchema = Yup.object({
-        std_no: Yup.string().required("Study number is required"),
-        user_email: Yup.string()
-            .email("Must be a valid email")
-            .required("Email is required"),
-        std_privilege: Yup.string().required("Privilege is required"),
+        std_no: Yup.string().required('Study number is required'),
+        user_email: Yup.string().email('Must be a valid email').required('Email is required'),
+        std_privilege: Yup.string().required('Privilege is required'),
     });
 
     const formik = useFormik({
         initialValues: {
-            std_no: "",
-            user_email: "",
-            std_privilege: "",
-			submit: ""
+            std_no: '',
+            user_email: '',
+            std_privilege: '',
+            submit: '',
         },
         validationSchema: validationSchema,
 
@@ -33,15 +31,15 @@ const Invite = () => {
                 ];
 
                 const response = await axios.post(
-                    "/api/v1/researcher/study/study-user-invite",
+                    '/api/v1/researcher/study/study-user-invite',
                     payload
                 );
                 setStatus({ success: true });
                 console.log(response.data);
                 console.log(getDecodedToken(response.data));
             } catch (error) {
-                setErrors({ submit: "에러 발생gg" });
-                console.log("에러 발생 : ", error);
+                setErrors({ submit: '에러 발생gg' });
+                console.log('에러 발생 : ', error);
                 setStatus({ success: false });
             }
         },
@@ -63,13 +61,8 @@ const Invite = () => {
                         fullWidth
                         margin="normal"
                         required
-                        error={
-                            formik.touched.std_no &&
-                            Boolean(formik.errors.std_no)
-                        }
-                        helperText={
-                            formik.touched.std_no && formik.errors.std_no
-                        }
+                        error={formik.touched.std_no && Boolean(formik.errors.std_no)}
+                        helperText={formik.touched.std_no && formik.errors.std_no}
                     />
                     <TextField
                         label="Email"
@@ -80,14 +73,8 @@ const Invite = () => {
                         fullWidth
                         margin="normal"
                         required
-                        error={
-                            formik.touched.user_email &&
-                            Boolean(formik.errors.user_email)
-                        }
-                        helperText={
-                            formik.touched.user_email &&
-                            formik.errors.user_email
-                        }
+                        error={formik.touched.user_email && Boolean(formik.errors.user_email)}
+                        helperText={formik.touched.user_email && formik.errors.user_email}
                     />
                     <TextField
                         label="Privilege"
@@ -98,14 +85,8 @@ const Invite = () => {
                         fullWidth
                         margin="normal"
                         required
-                        error={
-                            formik.touched.std_privilege &&
-                            Boolean(formik.errors.std_privilege)
-                        }
-                        helperText={
-                            formik.touched.std_privilege &&
-                            formik.errors.std_privilege
-                        }
+                        error={formik.touched.std_privilege && Boolean(formik.errors.std_privilege)}
+                        helperText={formik.touched.std_privilege && formik.errors.std_privilege}
                     />
 
                     <Button

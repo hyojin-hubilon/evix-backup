@@ -1,8 +1,5 @@
 const StudyDefault = () => {
-	return (
-	<>
-		Study default
-	</>)
-} 
+    return <>Study default</>;
+};
 
 export default StudyDefault;

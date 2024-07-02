@@ -1,12 +1,12 @@
-import AuthWrapper from "./AuthWrapper"; // 인증 페이지 레이아웃을 감싸는 래퍼 컴포넌트를 가져옵니다.
-import ChangePasswordForm from "./auth-forms/ChangePasswordForm";
+import AuthWrapper from './AuthWrapper'; // 인증 페이지 레이아웃을 감싸는 래퍼 컴포넌트를 가져옵니다.
+import ChangePasswordForm from './auth-forms/ChangePasswordForm';
 
 const ChangePassword = () => {
-  return (
-    <AuthWrapper>
-      <ChangePasswordForm />     
-    </AuthWrapper>
-  )
-}
+    return (
+        <AuthWrapper>
+            <ChangePasswordForm />
+        </AuthWrapper>
+    );
+};
 
 export default ChangePassword;

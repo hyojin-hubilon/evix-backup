@@ -10,5 +10,11 @@ import StudyRoutes from './StudyRoutes';
 // ==============================|| ROUTING RENDER ||============================== //
 
 export default function ThemeRoutes() {
-  return useRoutes([MainRoutes, DashBoardRoutes, StudyRoutes, LoginRoutes, { path: '*', element: <NotFound /> }]);
+    return useRoutes([
+        MainRoutes,
+        DashBoardRoutes,
+        StudyRoutes,
+        LoginRoutes,
+        { path: '*', element: <NotFound /> },
+    ]);
 }
