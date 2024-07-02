@@ -1,0 +1,1 @@
+# Evix Frontend new setting

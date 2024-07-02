@@ -1,0 +1,120 @@
+.landing {
+
+    .section-01 {
+        mix-blend-mode: multiply;
+        background-image: url("../../assets/images/landing/main-ai@2x.png");
+		background-repeat: no-repeat;
+		background-position: center 0;
+		background-size: cover;
+    }
+
+    .section-02 {
+        color: #222;
+
+        h2 {
+            font-weight: bold;
+            line-height: 1.35;
+        }
+    }
+
+
+    .section-04 {
+        background-image: url("../../assets/images/landing/img@2x.png");
+		background-repeat: no-repeat;
+		background-position: center center;
+		background-size: cover;
+
+        h2,
+        h4 {
+            color: #fefefe;
+        }
+    }
+
+    .section-05,
+    .section-06 {
+        padding: 5rem 0;
+
+        h6 {
+            color: #1881ff;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-weight: bold;
+            line-height: 1.33;
+            color: #222;
+        }
+
+        p {
+            line-height: 1.67;
+            font-weight: 300;
+            color: #222;
+        }
+    }
+
+    .section-07 {
+        h2 {
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        h4 {
+            font-weight: bold;			
+        }
+    }
+
+    .section-08 {
+        color: #f2f2f2;
+
+		.container-08 {
+			text-align: center;
+			border-radius: 1rem;
+			overflow: hidden;
+			background-image: url("../../assets/images/landing/img_2@2x.png");
+			background-repeat: no-repeat;
+			background-position: center center;
+			background-size: cover;
+		}
+
+        h4 {
+            font-weight: normal;
+            line-height: 1.58;
+        }
+    }
+
+    .section-10 {
+        background-image: url("../../assets/images/landing/layer-622@2x.png");
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position: center center;
+
+        h2,
+        h5,
+        h6 {
+            color: #f2f2f2;
+        }
+
+        .ellipse {
+			.img-box {
+				display: flex;
+				justify-content: center;
+
+				img {
+					width: 50%;
+					max-width:101px;
+				}
+			}
+            
+			h2 {
+				text-align: center;
+				line-height: 1;
+			}
+
+			h6 {
+				text-align: center;
+				font-weight: 500;
+				line-height: 1;
+			}
+        }
+    }
+}
