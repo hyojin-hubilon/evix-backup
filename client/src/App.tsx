@@ -1,10 +1,10 @@
-import "i18next";
-import "@i18n";
+import 'i18next';
+import '@i18n';
 
-import ScrollTop from "@components/ScrollTop";
+import ScrollTop from '@components/ScrollTop';
 // project import
-import Routes from "@/routes";
-import ThemeCustomization from "@/themes";
+import Routes from '@/routes';
+import ThemeCustomization from '@/themes';
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
