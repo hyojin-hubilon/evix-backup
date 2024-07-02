@@ -5,9 +5,10 @@ import { useRoutes } from 'react-router-dom';
 import LoginRoutes from './LoginRoutes';
 import MainRoutes from './MainRoutes';
 import DashBoardRoutes from './DashBoardRoutes';
+import StudyRoutes from './StudyRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
 export default function ThemeRoutes() {
-  return useRoutes([MainRoutes, DashBoardRoutes, LoginRoutes, { path: '*', element: <NotFound /> }]);
+  return useRoutes([MainRoutes, DashBoardRoutes, StudyRoutes, LoginRoutes, { path: '*', element: <NotFound /> }]);
 }

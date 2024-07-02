@@ -1,16 +1,17 @@
-import { ForwardRefRenderFunction, useEffect } from 'react';
-import { Link as ReactRouterLink, LinkProps, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, LinkProps, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Theme, Typography, Link } from '@mui/material';
+import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Theme, Typography } from '@mui/material';
 
 // project import
 import { activeItem } from '@store/reducers/menu';
 import { IRootState } from '@store/reducers';
 import { Override } from '@utils/common';
 import { MenuItem } from '@/types/menu';
+import navigation from '@/menu-items';
 
 // ==============================|| NAVIGATION - LIST ITEM ||============================== //
 
@@ -26,36 +27,15 @@ export type MainCardProps = Override<LinkProps, CustomProps>;
 const NavItem = ({ item, level }: CustomProps) => {
     const theme: Theme = useTheme();
     const dispatch = useDispatch();
+	const navigation = useNavigate();
     const { pathname } = useLocation();
 
     const { drawerOpen, openItem } = useSelector((state:IRootState) => state.menu);
 
-    let itemTarget = '_self';
-    if (item && item.target) {
-        itemTarget = '_blank';
-    }
-
-    let listItemProps: ForwardRefRenderFunction<HTMLAnchorElement, MainCardProps> = (
-        props,
-        ref
-    ) => {
-        return (
-            <ReactRouterLink {...props} ref={ref} to={item && item.url ? item.url : ''} target={itemTarget} />
-        );
-    };
-
-
-  if (item?.external) {
-    listItemProps = (props, ref) => { return (
-        <Link {...props} ref={ref} href={item && item.url ? item.url : ''} target={itemTarget} />
-    ) };
-  }
-
-  const itemHandler = (id) => {
-    dispatch(activeItem({ openItem: [id] }));
-  };
-
-
+	const itemHandler = (item) => {
+		navigation(item.url);
+    	dispatch(activeItem({ openItem: [item.id] }));
+  	};
   const Icon = item.icon;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   //@ts-expect-error
@@ -73,10 +53,10 @@ const NavItem = ({ item, level }: CustomProps) => {
   const iconSelectedColor = 'primary.main';
 
   return (
+	
     <ListItemButton
-      {...listItemProps}
       disabled={item.disabled}
-      onClick={() => itemHandler(item.id)}
+      onClick={() => itemHandler(item)}
       selected={isSelected}
       sx={{
         zIndex: 1201,
