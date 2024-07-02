@@ -19,7 +19,7 @@ const studies: MenuItem = {
             id: 'study-list',
             title: 'Study 목록',
             type: 'item',
-            url: '/study/list',
+            url: '/study',
             icon: icons.OrderedListOutlined,
             breadcrumbs: false,
         },

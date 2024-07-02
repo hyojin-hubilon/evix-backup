@@ -30,6 +30,10 @@ declare module '@mui/material/styles' {
             z1: string;
         };
     }
+
+	interface PaletteColor {
+		lighter: string;
+	}
 }
 
 declare module '@mui/material/styles/createMixins' {

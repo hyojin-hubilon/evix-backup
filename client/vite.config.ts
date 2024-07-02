@@ -22,6 +22,7 @@ export default defineConfig({
 			'@store': fileURLToPath(new URL("./src/store", import.meta.url)), 
 			'@utils': fileURLToPath(new URL("./src/utils", import.meta.url)), 
 			'@apis': fileURLToPath(new URL("./src/apis", import.meta.url)),
+			'@api': fileURLToPath(new URL("./src/api", import.meta.url)),
 			'@i18n': fileURLToPath(new URL("./src/i18n", import.meta.url)),
 		}
 	},
