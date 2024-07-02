@@ -1,7 +1,7 @@
-import { useState } from "react";
-import axios from "axios";
-import { Formik } from "formik";
-import * as Yup from "yup";
+import { useState } from 'react';
+import axios from 'axios';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import {
     Button,
     FormHelperText,
@@ -11,25 +11,25 @@ import {
     Typography,
     Modal,
     Box,
-} from "@mui/material";
+} from '@mui/material';
 
 const ForgotPassword = () => {
     const [emailSent, setEmailSent] = useState(false);
-    const [userEmail, setUserEmail] = useState("");
-	const [formError, setFormError] = useState("");
+    const [userEmail, setUserEmail] = useState('');
+    const [formError, setFormError] = useState('');
 
     const handleClose = () => {
         setEmailSent(false);
     };
 
     const style = {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
         width: 400,
-        bgcolor: "background.paper",
-        border: "2px solid #000",
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
         boxShadow: 24,
         p: 4,
     };
@@ -37,27 +37,21 @@ const ForgotPassword = () => {
     return (
         <>
             <Formik
-                initialValues={{ email: "" }}
+                initialValues={{ email: '' }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string()
-                        .email("Must be a valid email")
-                        .required("Please enter email"),
+                        .email('Must be a valid email')
+                        .required('Please enter email'),
                 })}
-                onSubmit={async (
-                    values,
-                    { setStatus, setSubmitting }
-                ) => {
+                onSubmit={async (values, { setStatus, setSubmitting }) => {
                     try {
-                        await axios.post(
-                            "/api/v1/auth/forgot-password",
-                            values
-                        );
+                        await axios.post('/api/v1/auth/forgot-password', values);
                         setUserEmail(values.email);
                         setEmailSent(true);
                         setStatus({ success: true });
                     } catch (err) {
                         setStatus({ success: false });
-                        setFormError("Failed to send reset email");
+                        setFormError('Failed to send reset email');
                         setSubmitting(false);
                     }
                 }}
@@ -74,16 +68,10 @@ const ForgotPassword = () => {
                     <form noValidate onSubmit={handleSubmit}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
-                                <Typography variant="h4">
-                                    Forgot your password?
-                                </Typography>
-                                <Typography
-                                    variant="body2"
-                                    color="textSecondary"
-                                >
-                                    Enter your email address and we'll send you
-                                    a link to reset your password. If your email
-                                    is not confirmed, please contact us.
+                                <Typography variant="h4">Forgot your password?</Typography>
+                                <Typography variant="body2" color="textSecondary">
+                                    Enter your email address and we'll send you a link to reset your
+                                    password. If your email is not confirmed, please contact us.
                                 </Typography>
                             </Grid>
                             <Grid item xs={12}>
@@ -97,9 +85,7 @@ const ForgotPassword = () => {
                                         onChange={handleChange}
                                         placeholder="Email"
                                         fullWidth
-                                        error={Boolean(
-                                            touched.email && errors.email
-                                        )}
+                                        error={Boolean(touched.email && errors.email)}
                                     />
                                     {touched.email && errors.email && (
                                         <FormHelperText
@@ -113,9 +99,7 @@ const ForgotPassword = () => {
                             </Grid>
                             {formError && (
                                 <Grid item xs={12}>
-                                    <FormHelperText error>
-                                        {formError}
-                                    </FormHelperText>
+                                    <FormHelperText error>{formError}</FormHelperText>
                                 </Grid>
                             )}
                             <Grid item xs={12}>

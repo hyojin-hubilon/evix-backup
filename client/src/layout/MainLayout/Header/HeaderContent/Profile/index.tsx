@@ -1,9 +1,9 @@
-import PropTypes from "prop-types";
-import { useEffect, useRef, useState } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import PropTypes from 'prop-types';
+import { useEffect, useRef, useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 // material-ui
-import { useTheme } from "@mui/material/styles";
+import { useTheme } from '@mui/material/styles';
 import {
     Avatar,
     Box,
@@ -18,22 +18,18 @@ import {
     Tab,
     Tabs,
     Typography,
-} from "@mui/material";
+} from '@mui/material';
 
 // project import
-import MainCard from "@components/MainCard";
-import Transitions from "@components/@extended/Transitions";
-import ProfileTab from "./ProfileTab";
-import SettingTab from "./SettingTab";
+import MainCard from '@components/MainCard';
+import Transitions from '@components/@extended/Transitions';
+import ProfileTab from './ProfileTab';
+import SettingTab from './SettingTab';
 
 // assets
-import avatar1 from "@assets/images/users/avatar-1.png";
-import {
-    LogoutOutlined,
-    SettingOutlined,
-    UserOutlined,
-} from "@ant-design/icons";
-import { getDecodedToken } from "@utils/Cookie";
+import avatar1 from '@assets/images/users/avatar-1.png';
+import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { getDecodedToken } from '@utils/Cookie';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -59,7 +55,7 @@ TabPanel.propTypes = {
 function a11yProps(index) {
     return {
         id: `profile-tab-${index}`,
-        "aria-controls": `profile-tabpanel-${index}`,
+        'aria-controls': `profile-tabpanel-${index}`,
     };
 }
 
@@ -71,8 +67,8 @@ const Profile = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const decodedToken = getDecodedToken("userInfoToken");
-            const aa = getDecodedToken("dctAccessToken");
+            const decodedToken = getDecodedToken('userInfoToken');
+            const aa = getDecodedToken('dctAccessToken');
             setUserData(decodedToken); // 토큰 복호화해서 userData에 넣어줌
             setDct(aa);
         };
@@ -87,19 +83,19 @@ const Profile = () => {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch("/api/v1/auth/logout", {
-                method: "GET",
-                credentials: "include",
+            const response = await fetch('/api/v1/auth/logout', {
+                method: 'GET',
+                credentials: 'include',
             });
             if (response.ok) {
                 // removeCookie();
                 setUserData(null);
-                navigate("/"); // 로그아웃 성공 시 홈 페이지로 이동
+                navigate('/'); // 로그아웃 성공 시 홈 페이지로 이동
             } else {
-                console.error("로그아웃 요청 실패:", response.statusText);
+                console.error('로그아웃 요청 실패:', response.statusText);
             }
         } catch (error) {
-            console.error("로그아웃 요청 중 에러 발생:", error);
+            console.error('로그아웃 요청 중 에러 발생:', error);
         }
     };
 
@@ -122,43 +118,34 @@ const Profile = () => {
         setValue(newValue);
     };
 
-    const iconBackColorOpen = "grey.300";
+    const iconBackColorOpen = 'grey.300';
 
     return (
         <Box sx={{ flexShrink: 0, ml: 0.75 }}>
             <ButtonBase
                 sx={{
                     p: 0.25,
-                    bgcolor: open ? iconBackColorOpen : "transparent",
+                    bgcolor: open ? iconBackColorOpen : 'transparent',
                     borderRadius: 1,
-                    "&:hover": { bgcolor: "secondary.lighter" },
+                    '&:hover': { bgcolor: 'secondary.lighter' },
                 }}
                 aria-label="open profile"
                 // ref={anchorRef}
-                aria-controls={open ? "profile-grow" : undefined}
+                aria-controls={open ? 'profile-grow' : undefined}
                 aria-haspopup="true"
                 onClick={handleToggle}
             >
-                <Stack
-                    direction="row"
-                    spacing={2}
-                    alignItems="center"
-                    sx={{ p: 0.5 }}
-                >
-                    <Avatar
-                        alt="profile user"
-                        src={avatar1}
-                        sx={{ width: 32, height: 32 }}
-                    />
+                <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
+                    <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
                     <Typography variant="subtitle1">
                         {userData ? (
-                            `welcome ${userData["user-firstname"]}`
+                            `welcome ${userData['user-firstname']}`
                         ) : (
                             <RouterLink
                                 to="/login"
                                 style={{
-                                    textDecoration: "none",
-                                    color: "inherit",
+                                    textDecoration: 'none',
+                                    color: 'inherit',
                                 }}
                             >
                                 로그인해주십시오
@@ -177,7 +164,7 @@ const Profile = () => {
                 popperOptions={{
                     modifiers: [
                         {
-                            name: "offset",
+                            name: 'offset',
                             options: {
                                 offset: [0, 9],
                             },
@@ -194,17 +181,13 @@ const Profile = () => {
                                     width: 290,
                                     minWidth: 240,
                                     maxWidth: 290,
-                                    [theme.breakpoints.down("md")]: {
+                                    [theme.breakpoints.down('md')]: {
                                         maxWidth: 250,
                                     },
                                 }}
                             >
                                 <ClickAwayListener onClickAway={handleClose}>
-                                    <MainCard
-                                        elevation={0}
-                                        border={false}
-                                        content={false}
-                                    >
+                                    <MainCard elevation={0} border={false} content={false}>
                                         <CardContent sx={{ px: 2.5, pt: 3 }}>
                                             <Grid
                                                 container
@@ -227,21 +210,13 @@ const Profile = () => {
                                                         />
                                                         <Stack>
                                                             <Typography variant="h6">
-                                                                {
-                                                                    userData[
-                                                                        "user-firstname"
-                                                                    ]
-                                                                }
+                                                                {userData['user-firstname']}
                                                             </Typography>
                                                             <Typography
                                                                 variant="body2"
                                                                 color="textSecondary"
                                                             >
-                                                                {
-                                                                    userData[
-                                                                        "user-privilege"
-                                                                    ]
-                                                                }
+                                                                {userData['user-privilege']}
                                                             </Typography>
                                                         </Stack>
                                                     </Stack>
@@ -262,7 +237,7 @@ const Profile = () => {
                                                 <Box
                                                     sx={{
                                                         borderBottom: 1,
-                                                        borderColor: "divider",
+                                                        borderColor: 'divider',
                                                     }}
                                                 >
                                                     <Tabs
@@ -273,22 +248,17 @@ const Profile = () => {
                                                     >
                                                         <Tab
                                                             sx={{
-                                                                display: "flex",
-                                                                flexDirection:
-                                                                    "row",
-                                                                justifyContent:
-                                                                    "center",
-                                                                alignItems:
-                                                                    "center",
-                                                                textTransform:
-                                                                    "capitalize",
+                                                                display: 'flex',
+                                                                flexDirection: 'row',
+                                                                justifyContent: 'center',
+                                                                alignItems: 'center',
+                                                                textTransform: 'capitalize',
                                                             }}
                                                             icon={
                                                                 <UserOutlined
                                                                     style={{
                                                                         marginBottom: 0,
-                                                                        marginRight:
-                                                                            "10px",
+                                                                        marginRight: '10px',
                                                                     }}
                                                                 />
                                                             }
@@ -297,22 +267,17 @@ const Profile = () => {
                                                         />
                                                         <Tab
                                                             sx={{
-                                                                display: "flex",
-                                                                flexDirection:
-                                                                    "row",
-                                                                justifyContent:
-                                                                    "center",
-                                                                alignItems:
-                                                                    "center",
-                                                                textTransform:
-                                                                    "capitalize",
+                                                                display: 'flex',
+                                                                flexDirection: 'row',
+                                                                justifyContent: 'center',
+                                                                alignItems: 'center',
+                                                                textTransform: 'capitalize',
                                                             }}
                                                             icon={
                                                                 <SettingOutlined
                                                                     style={{
                                                                         marginBottom: 0,
-                                                                        marginRight:
-                                                                            "10px",
+                                                                        marginRight: '10px',
                                                                     }}
                                                                 />
                                                             }
@@ -326,9 +291,7 @@ const Profile = () => {
                                                     index={0}
                                                     dir={theme.direction}
                                                 >
-                                                    <ProfileTab
-                                                        onLogout={handleLogout}
-                                                    />
+                                                    <ProfileTab onLogout={handleLogout} />
                                                 </TabPanel>
                                                 <TabPanel
                                                     value={value}

@@ -7,69 +7,66 @@ import {
     Checkbox,
     FormControlLabel,
     FormHelperText,
-} from "@mui/material";
-import { useFormik } from "formik";
-import * as Yup from "yup"; // 유효성 검사
-import axios from "axios";
-import { useNavigate } from "react-router";
+} from '@mui/material';
+import { useFormik } from 'formik';
+import * as Yup from 'yup'; // 유효성 검사
+import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 const SignUp = () => {
     const navigate = useNavigate();
     const validationSchema = Yup.object({
-        first_name: Yup.string().required("First Name is required"),
-        last_name: Yup.string().required("Last Name is required"),
+        first_name: Yup.string().required('First Name is required'),
+        last_name: Yup.string().required('Last Name is required'),
         password: Yup.string()
-            .min(8, "Password should be of minimum 8 characters length")
+            .min(8, 'Password should be of minimum 8 characters length')
             .matches(
                 /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()])[a-zA-Z0-9!@#$%^&*()]{8,16}$/,
-                "Combination of English, numbers and special characters"
+                'Combination of English, numbers and special characters'
             )
-            .required("Password is required"),
+            .required('Password is required'),
         confirmPassword: Yup.string()
-            .oneOf([Yup.ref("password"), ""], "Passwords must match")
-            .required("Confirm Password is required"),
-        mobile: Yup.string().required("mobile number is required"),
-        country: Yup.string().required("Country is required"),
-        company: Yup.string().required("Company is required"),
-        job_title: Yup.string().required("Job Position is required"),
-        industry: Yup.string().required("Industry is required"),
+            .oneOf([Yup.ref('password'), ''], 'Passwords must match')
+            .required('Confirm Password is required'),
+        mobile: Yup.string().required('mobile number is required'),
+        country: Yup.string().required('Country is required'),
+        company: Yup.string().required('Company is required'),
+        job_title: Yup.string().required('Job Position is required'),
+        industry: Yup.string().required('Industry is required'),
         terms: Yup.boolean().oneOf(
             [true],
-            "Please confirm you have agreed to Terms of Service, Privacy Policies"
+            'Please confirm you have agreed to Terms of Service, Privacy Policies'
         ),
     });
 
     const formik = useFormik({
         initialValues: {
-            password: "",
-            confirmPassword: "",
-            mobile: "",
-            country: "",
-            company: "",
-            job_title: "",
-            industry: "",
-            first_name: "",
-            last_name: "",
+            password: '',
+            confirmPassword: '',
+            mobile: '',
+            country: '',
+            company: '',
+            job_title: '',
+            industry: '',
+            first_name: '',
+            last_name: '',
             terms: false,
             // token에서 가져올 정보들
-            email: "mijin3004@gmail.com",
-            privilege: "DEVELOPER",
-            active_yn: "Y",
-            token: "eyJ0eXAiOiJkY3Qtc2VjcmV0LXRva2VuIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkY3Qtc2VjcmV0LXRva2VuIiwiaXNzIjoiZXZpeC1kY3QiLCJ0b2tlbi1raW5kIjoiSU5WSVRFIiwic2VxdWVuY2Utbm8iOjMsImVtYWlsIjoibWlqaW4zMDA0QGdtYWlsLmNvbSIsIm90aGVyLWluZm9ybWF0aW9uIjoiRGV2ZWxvcGVyIiwiaWF0IjoxNzE4MzMwNDU1LCJleHAiOjE3MTk2MjY0NTV9.TX30lKdSyBqEIRSuxwx3xbjb9RHsEWqKeIqvAkXRJ38",
+            email: 'mijin3004@gmail.com',
+            privilege: 'DEVELOPER',
+            active_yn: 'Y',
+            token: 'eyJ0eXAiOiJkY3Qtc2VjcmV0LXRva2VuIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkY3Qtc2VjcmV0LXRva2VuIiwiaXNzIjoiZXZpeC1kY3QiLCJ0b2tlbi1raW5kIjoiSU5WSVRFIiwic2VxdWVuY2Utbm8iOjMsImVtYWlsIjoibWlqaW4zMDA0QGdtYWlsLmNvbSIsIm90aGVyLWluZm9ybWF0aW9uIjoiRGV2ZWxvcGVyIiwiaWF0IjoxNzE4MzMwNDU1LCJleHAiOjE3MTk2MjY0NTV9.TX30lKdSyBqEIRSuxwx3xbjb9RHsEWqKeIqvAkXRJ38',
         },
         validationSchema: validationSchema,
         onSubmit: async (values, { setSubmitting }) => {
             try {
                 console.log(setSubmitting);
                 console.log(values);
-                const response = await axios.post(
-                    "/api/v1/auth/signup",
-                    values
-                );
-                console.log("Form submitted successfully", response.data);
-                navigate("/");
+                const response = await axios.post('/api/v1/auth/signup', values);
+                console.log('Form submitted successfully', response.data);
+                navigate('/');
             } catch (error) {
-                console.error("Error submitting the form", error);
+                console.error('Error submitting the form', error);
             } finally {
                 setSubmitting(false);
             }
@@ -83,8 +80,7 @@ const SignUp = () => {
                     Sign Up
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                    Welcome to evix-DCT! We're so great to you're here, let's
-                    start by signing up.
+                    Welcome to evix-DCT! We're so great to you're here, let's start by signing up.
                 </Typography>
                 <form onSubmit={formik.handleSubmit}>
                     <TextField
@@ -96,14 +92,8 @@ const SignUp = () => {
                         fullWidth
                         margin="normal"
                         required
-                        error={
-                            formik.touched.first_name &&
-                            Boolean(formik.errors.first_name)
-                        }
-                        helperText={
-                            formik.touched.first_name &&
-                            formik.errors.first_name
-                        }
+                        error={formik.touched.first_name && Boolean(formik.errors.first_name)}
+                        helperText={formik.touched.first_name && formik.errors.first_name}
                     />
                     <TextField
                         label="Last Name"
@@ -114,13 +104,8 @@ const SignUp = () => {
                         fullWidth
                         margin="normal"
                         required
-                        error={
-                            formik.touched.last_name &&
-                            Boolean(formik.errors.last_name)
-                        }
-                        helperText={
-                            formik.touched.last_name && formik.errors.last_name
-                        }
+                        error={formik.touched.last_name && Boolean(formik.errors.last_name)}
+                        helperText={formik.touched.last_name && formik.errors.last_name}
                     />
                     <TextField
                         label="Password"
@@ -132,13 +117,8 @@ const SignUp = () => {
                         fullWidth
                         margin="normal"
                         required
-                        error={
-                            formik.touched.password &&
-                            Boolean(formik.errors.password)
-                        }
-                        helperText={
-                            formik.touched.password && formik.errors.password
-                        }
+                        error={formik.touched.password && Boolean(formik.errors.password)}
+                        helperText={formik.touched.password && formik.errors.password}
                     />
                     <TextField
                         label="Confirm Password"
@@ -151,13 +131,9 @@ const SignUp = () => {
                         margin="normal"
                         required
                         error={
-                            formik.touched.confirmPassword &&
-                            Boolean(formik.errors.confirmPassword)
+                            formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)
                         }
-                        helperText={
-                            formik.touched.confirmPassword &&
-                            formik.errors.confirmPassword
-                        }
+                        helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
                     />
                     <TextField
                         label="mobile"
@@ -168,13 +144,8 @@ const SignUp = () => {
                         fullWidth
                         margin="normal"
                         required
-                        error={
-                            formik.touched.mobile &&
-                            Boolean(formik.errors.mobile)
-                        }
-                        helperText={
-                            formik.touched.mobile && formik.errors.mobile
-                        }
+                        error={formik.touched.mobile && Boolean(formik.errors.mobile)}
+                        helperText={formik.touched.mobile && formik.errors.mobile}
                     />
                     <TextField
                         label="Country"
@@ -185,13 +156,8 @@ const SignUp = () => {
                         fullWidth
                         margin="normal"
                         required
-                        error={
-                            formik.touched.country &&
-                            Boolean(formik.errors.country)
-                        }
-                        helperText={
-                            formik.touched.country && formik.errors.country
-                        }
+                        error={formik.touched.country && Boolean(formik.errors.country)}
+                        helperText={formik.touched.country && formik.errors.country}
                     />
                     <TextField
                         label="Company"
@@ -202,13 +168,8 @@ const SignUp = () => {
                         fullWidth
                         margin="normal"
                         required
-                        error={
-                            formik.touched.company &&
-                            Boolean(formik.errors.company)
-                        }
-                        helperText={
-                            formik.touched.company && formik.errors.company
-                        }
+                        error={formik.touched.company && Boolean(formik.errors.company)}
+                        helperText={formik.touched.company && formik.errors.company}
                     />
                     <TextField
                         label="Job Position"
@@ -219,13 +180,8 @@ const SignUp = () => {
                         fullWidth
                         margin="normal"
                         required
-                        error={
-                            formik.touched.job_title &&
-                            Boolean(formik.errors.job_title)
-                        }
-                        helperText={
-                            formik.touched.job_title && formik.errors.job_title
-                        }
+                        error={formik.touched.job_title && Boolean(formik.errors.job_title)}
+                        helperText={formik.touched.job_title && formik.errors.job_title}
                     />
                     <TextField
                         label="Industry"
@@ -236,13 +192,8 @@ const SignUp = () => {
                         fullWidth
                         margin="normal"
                         required
-                        error={
-                            formik.touched.industry &&
-                            Boolean(formik.errors.industry)
-                        }
-                        helperText={
-                            formik.touched.industry && formik.errors.industry
-                        }
+                        error={formik.touched.industry && Boolean(formik.errors.industry)}
+                        helperText={formik.touched.industry && formik.errors.industry}
                     />
                     <FormControlLabel
                         control={
@@ -259,7 +210,7 @@ const SignUp = () => {
                         // }
                     />
                     {formik.touched.terms && formik.errors.terms && (
-                        <FormHelperText style={{ color: "red" }}>
+                        <FormHelperText style={{ color: 'red' }}>
                             {formik.errors.terms}
                         </FormHelperText>
                     )}

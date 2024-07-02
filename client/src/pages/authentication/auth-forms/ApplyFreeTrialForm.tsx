@@ -1,19 +1,19 @@
-import { useState } from "react";
-import { TextField, Button, Grid, Stack, Typography } from "@mui/material";
-import axios from "axios";
-import { useNavigate } from "react-router";
+import { useState } from 'react';
+import { TextField, Button, Grid, Stack, Typography } from '@mui/material';
+import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 const ApplyFreeTrialForm = () => {
     const [formState, setFormState] = useState({
-        email: "",
-        first_name: "",
-        last_name: "",
-        mobile: "",
-        company_name: "",
-        job_title: "",
-        industry: "",
-        country: "",
-        message: "",
+        email: '',
+        first_name: '',
+        last_name: '',
+        mobile: '',
+        company_name: '',
+        job_title: '',
+        industry: '',
+        country: '',
+        message: '',
     });
 
     const navigate = useNavigate();
@@ -29,26 +29,22 @@ const ApplyFreeTrialForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(
-                "/api/v1/auth/apply-free-trial",
-                formState,
-                {
-                    headers: {
-                        "Content-Type": "application/json;charset=UTF-8",
-                    },
-                }
-            );
-            console.log("Response:", response.data);
-            alert("Evix-DCT 무료 버전을 신청하였습니다.");
+            const response = await axios.post('/api/v1/auth/apply-free-trial', formState, {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                },
+            });
+            console.log('Response:', response.data);
+            alert('Evix-DCT 무료 버전을 신청하였습니다.');
             navigate(-1);
         } catch (error) {
-            console.error("Error:", error);
+            console.error('Error:', error);
         }
     };
 
     return (
-        <Grid container alignItems='center' justifyContent='center' sx={{p: '2rem'}}>
-            <Stack spacing={2} width={1}>    
+        <Grid container alignItems="center" justifyContent="center" sx={{ p: '2rem' }}>
+            <Stack spacing={2} width={1}>
                 <Typography variant="h4" gutterBottom>
                     Apply for Free Trial
                 </Typography>
@@ -134,16 +130,10 @@ const ApplyFreeTrialForm = () => {
                         margin="normal"
                         required
                     />
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        fullWidth
-                    >
+                    <Button type="submit" variant="contained" color="primary" fullWidth>
                         Submit
                     </Button>
                 </form>
-            
             </Stack>
         </Grid>
     );

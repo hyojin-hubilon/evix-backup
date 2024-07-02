@@ -1,18 +1,18 @@
-import { jwtDecode } from "jwt-decode";
-import { Stack, useMediaQuery } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import { useNavigate } from "react-router-dom";
-import { postGoogleLogin } from "@/apis/auth";
+import { jwtDecode } from 'jwt-decode';
+import { Stack, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
+import { postGoogleLogin } from '@/apis/auth';
 
 type Decoded = {
-	email: string,
-	sub:string
-}
+    email: string;
+    sub: string;
+};
 
 const GoogleSocial = () => {
     const theme = useTheme();
-    const matchDownSM = useMediaQuery(theme.breakpoints.down("sm"));
+    const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
     const navigate = useNavigate();
 
     const googleHandler = async (response) => {
@@ -21,12 +21,12 @@ const GoogleSocial = () => {
             const googleInfo: Decoded = jwtDecode(response.credential);
             const { email, sub } = googleInfo;
             console.log({ email, sub });
-            const googleResponse = await postGoogleLogin({email, sub});
+            const googleResponse = await postGoogleLogin({ email, sub });
             console.log({ googleResponse });
             // 로그인이 성공하면 메인 화면으로 이동
-            navigate("/");
+            navigate('/');
         } catch (error) {
-			console.log(error);
+            console.log(error);
             // if (error.response) {
             //     console.log("Error Response:", error.response.data);
             // } else if (error.request) {
@@ -45,20 +45,20 @@ const GoogleSocial = () => {
                 justifyContent="center"
                 alignItems="center"
                 sx={{
-                    "& .MuiButton-startIcon": {
+                    '& .MuiButton-startIcon': {
                         mr: matchDownSM ? 0 : 1,
                         ml: matchDownSM ? 0 : -0.5,
                     },
-                    textAlign: "center",
-                    width: "100%",
+                    textAlign: 'center',
+                    width: '100%',
                 }}
             >
                 <GoogleLogin
                     size="large"
                     onSuccess={googleHandler}
                     onError={() => {
-                        alert("login error");
-                        console.error("Google login failed");
+                        alert('login error');
+                        console.error('Google login failed');
                     }}
                 />
             </Stack>

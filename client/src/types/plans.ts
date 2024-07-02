@@ -16,8 +16,8 @@ export interface ControlPlan {
     tdr_count: number;
     treatment_id: number;
     treatment_name: string;
-    method: {name: string; treatment_method_id: number}[];
-    species: {name: string; species_id: number}[];
+    method: { name: string; treatment_method_id: number }[];
+    species: { name: string; species_id: number }[];
 }
 
 export interface ControlPlanRes {
@@ -26,7 +26,7 @@ export interface ControlPlanRes {
 }
 
 export interface ControlPlanParams {
-    treatment_id:number;
+    treatment_id: number;
     start_date: string | Date;
     end_Date: string | Date;
 }
@@ -34,7 +34,7 @@ export interface ControlPlanParams {
 export interface DailyReportByControlPlan {
     tdr_id: string;
     tdr_weekly_id: string | null;
-    treatment_id: number;    
+    treatment_id: number;
     report_date: string;
     title: string;
     applicator_name: string;
@@ -43,17 +43,17 @@ export interface DailyReportByControlPlan {
     total_treated: string | number;
     total_covered: string | number;
     method_name: string;
-    species_name:string;
-    site_name:string;
+    species_name: string;
+    site_name: string;
 }
-export interface ControlPlanFile { 
-    created_on:Date;
-    extension:string;
-    file_id:string;
-    geolocation:string;
-    location:string;
-    name:string;
-    path:string;
-    size:number;
-    thumbnail:string;
+export interface ControlPlanFile {
+    created_on: Date;
+    extension: string;
+    file_id: string;
+    geolocation: string;
+    location: string;
+    name: string;
+    path: string;
+    size: number;
+    thumbnail: string;
 }

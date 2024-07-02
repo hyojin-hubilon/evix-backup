@@ -8,7 +8,7 @@ import { MenuItems } from '@/types/menu';
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems: MenuItems = {
-  items: [dashboard, studies, pages, support]
+    items: [dashboard, studies, pages, support],
 };
 
 export default menuItems;

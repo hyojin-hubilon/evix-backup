@@ -3,17 +3,17 @@ import Axios, { AxiosRequestConfig } from 'axios';
 export type API_ACTION = 'post' | 'get' | 'put' | 'delete';
 const apiVersion = 'api/v1';
 export interface CommonResponse {
-	result: boolean,
-	code: number,
-	message: string
+    result: boolean;
+    code: number;
+    message: string;
 }
 
 export interface ErrorResponse {
-	result: boolean;
-	dateTime: string,
-	status: number,
-	error: string,
-	message: string
+    result: boolean;
+    dateTime: string;
+    status: number;
+    error: string;
+    message: string;
 }
 
 export const axios = Axios.create({
@@ -22,28 +22,32 @@ export const axios = Axios.create({
     timeout: 60000,
     headers: {
         'Content-Language': 'utf-8',
-        'Content-Type': 'application/json'
-    }
+        'Content-Type': 'application/json',
+    },
 });
 
-export async function api<Response>(url: string, method: API_ACTION ,data?: any, config?: AxiosRequestConfig) {
+export async function api<Response>(
+    url: string,
+    method: API_ACTION,
+    data?: any,
+    config?: AxiosRequestConfig
+) {
     let loadingEle;
     let res;
-    try{
-		if(method == 'post') res = await axios.post<Response>(url, data, config);
-		else if(method == 'put') res = await axios.put<Response>(url, data);
-		else if(method == 'delete') res = await axios.delete<Response>(url);
-		else res = await axios.get<Response>(url);
+    try {
+        if (method == 'post') res = await axios.post<Response>(url, data, config);
+        else if (method == 'put') res = await axios.put<Response>(url, data);
+        else if (method == 'delete') res = await axios.delete<Response>(url);
+        else res = await axios.get<Response>(url);
         if (loadingEle) {
             loadingEle.style.display = 'none';
         }
 
-		if(res.result) {
-			return res.data;
-		} else {
-			throw new Error(res);
-		}
-        
+        if (res.result) {
+            return res.data;
+        } else {
+            throw new Error(res);
+        }
     } catch (e) {
         if (loadingEle) {
             loadingEle.style.display = 'none';

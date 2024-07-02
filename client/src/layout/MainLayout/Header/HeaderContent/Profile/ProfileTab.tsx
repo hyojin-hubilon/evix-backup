@@ -1,13 +1,8 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 // material-ui
-import { useTheme } from "@mui/material/styles";
-import {
-    List,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-} from "@mui/material";
+import { useTheme } from '@mui/material/styles';
+import { List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 
 // assets
 import {
@@ -16,14 +11,14 @@ import {
     LogoutOutlined,
     UserOutlined,
     WalletOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
 const ProfileTab = ({ onLogout }) => {
     const theme = useTheme();
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleListItemClick = (event, index) => {
-		event.preventDefault();
+        event.preventDefault();
         setSelectedIndex(index);
     };
 
@@ -32,7 +27,7 @@ const ProfileTab = ({ onLogout }) => {
             component="nav"
             sx={{
                 p: 0,
-                "& .MuiListItemIcon-root": {
+                '& .MuiListItemIcon-root': {
                     minWidth: 32,
                     color: theme.palette.grey[500],
                 },

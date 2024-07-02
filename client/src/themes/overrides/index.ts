@@ -8,8 +8,5 @@ import InputLabel from './InputLabel';
 // ==============================|| OVERRIDES - MAIN ||============================== //
 
 export default function ComponentsOverrides(theme) {
-  return merge(
-    Button(theme),
-	InputLabel(theme)
-  );
+    return merge(Button(theme), InputLabel(theme));
 }
