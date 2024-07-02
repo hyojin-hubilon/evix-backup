@@ -10,54 +10,54 @@ import { BrowserView, MobileView } from 'react-device-detect';
 
 // root style
 const RootStyle = styled(BrowserView)({
-  flexGrow: 1,
-  height: '100%',
-  overflow: 'hidden'
+    flexGrow: 1,
+    height: '100%',
+    overflow: 'hidden',
 });
 
 // scroll bar wrapper
 const SimpleBarStyle = styled(SimpleBar)(({ theme }) => ({
-  maxHeight: '100%',
-  '& .simplebar-scrollbar': {
-    '&:before': {
-      backgroundColor: alpha(theme.palette.grey[500], 0.48)
+    maxHeight: '100%',
+    '& .simplebar-scrollbar': {
+        '&:before': {
+            backgroundColor: alpha(theme.palette.grey[500], 0.48),
+        },
+        '&.simplebar-visible:before': {
+            opacity: 1,
+        },
     },
-    '&.simplebar-visible:before': {
-      opacity: 1
-    }
-  },
-  '& .simplebar-track.simplebar-vertical': {
-    width: 10
-  },
-  '& .simplebar-track.simplebar-horizontal .simplebar-scrollbar': {
-    height: 6
-  },
-  '& .simplebar-mask': {
-    zIndex: 'inherit'
-  }
+    '& .simplebar-track.simplebar-vertical': {
+        width: 10,
+    },
+    '& .simplebar-track.simplebar-horizontal .simplebar-scrollbar': {
+        height: 6,
+    },
+    '& .simplebar-mask': {
+        zIndex: 'inherit',
+    },
 }));
 
 // ==============================|| SIMPLE SCROLL BAR  ||============================== //
 
 export default function SimpleBarScroll({ children, sx, ...other }) {
-  return (
-    <>
-      <RootStyle>
-        <SimpleBarStyle clickOnTrack={false} sx={sx} {...other}> 
-		{/* timeout={500} */}
-          {children}
-        </SimpleBarStyle>
-      </RootStyle>
-      <MobileView>
-        <Box sx={{ overflowX: 'auto', ...sx }} {...other}>
-          {children}
-        </Box>
-      </MobileView>
-    </>
-  );
+    return (
+        <>
+            <RootStyle>
+                <SimpleBarStyle clickOnTrack={false} sx={sx} {...other}>
+                    {/* timeout={500} */}
+                    {children}
+                </SimpleBarStyle>
+            </RootStyle>
+            <MobileView>
+                <Box sx={{ overflowX: 'auto', ...sx }} {...other}>
+                    {children}
+                </Box>
+            </MobileView>
+        </>
+    );
 }
 
 SimpleBarScroll.propTypes = {
-  children: PropTypes.node,
-  sx: PropTypes.object
+    children: PropTypes.node,
+    sx: PropTypes.object,
 };

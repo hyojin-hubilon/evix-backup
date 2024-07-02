@@ -13,24 +13,24 @@ import { IRootState } from '@/store/reducers';
 // ==============================|| MAIN LOGO ||============================== //
 
 type Props = {
-	sx?: SxProps<Theme>;
-	to?: string;
-}
-const LogoSection = ({ sx, to } : Props) => {
-  const { defaultId } = useSelector((state: IRootState) => state.menu);
+    sx?: SxProps<Theme>;
+    to?: string;
+};
+const LogoSection = ({ sx, to }: Props) => {
+    const { defaultId } = useSelector((state: IRootState) => state.menu);
 
-  const dispatch = useDispatch();
-  return (
-    <ButtonBase
-      disableRipple
-      component={Link}
-      onClick={() => dispatch(activeItem({ openItem: [defaultId] }))}
-      to={!to ? config.defaultPath : to}
-      sx={sx}
-    >
-      <Logo />
-    </ButtonBase>
-  );
+    const dispatch = useDispatch();
+    return (
+        <ButtonBase
+            disableRipple
+            component={Link}
+            onClick={() => dispatch(activeItem({ openItem: [defaultId] }))}
+            to={!to ? config.defaultPath : to}
+            sx={sx}
+        >
+            <Logo />
+        </ButtonBase>
+    );
 };
 
 export default LogoSection;
