@@ -1,11 +1,11 @@
-import { EditOutlined, FundViewOutlined, PlusOutlined, UserAddOutlined } from '@ant-design/icons';
-import { Grid, Box, Typography, Chip, Container, Card, Tabs, Tab, Button, useTheme, Avatar, AvatarGroup } from '@mui/material';
+import { PlusOutlined } from '@ant-design/icons';
+import { Grid, Box, Typography, Chip, Container, Tabs, Tab, Button, ButtonBase, IconButton } from '@mui/material';
 import { useState } from 'react';
-import aImage1 from '@assets/images/users/avatar-1.png';
-import aImage2 from '@assets/images/users/avatar-2.png';
+import StudyListItem from './components/StudyListItem';
+import StudyInvitedItem from './components/StudyInvitedItem';
+import { Link } from 'react-router-dom';
 
 const StudyList = () => {
-	const theme = useTheme();
 	const [ studyCount, setStudyCount ] = useState(0);
 	const [ activeTab, setActiveTab ] = useState('0');
 
@@ -13,7 +13,6 @@ const StudyList = () => {
 		event.preventDefault();
 		setActiveTab(newValue);
 	};
-	
 
     return (
 		<Container maxWidth="lg">
@@ -25,62 +24,62 @@ const StudyList = () => {
 					</Box>
 				</Grid>
 
-				<Grid container item xs={12} sx={{ borderBottom: 1, borderColor: 'divider' }} alignItems="center">
-					<Grid item xs={10}>
-						<Tabs value={activeTab} onChange={handleChange} aria-label="Study Status Tab">
-							{/* 나의 스터디 전체 목록 출력(최근 생성순) */}
-							<Tab label="전체" value="0" />
-							{/* 내가 생성한(Owner) Study 목록 출력 */}
-							<Tab label="My Study" value="1" />
-							{/* 내가 매니저인 Study 목록 출력 */}
-							<Tab label="Maintainer" value="2" />
-							{/* 내가 멤버로 참여된 Study 목록 출력 */}
-							<Tab label="Developer" value="3" />
-						</Tabs>
-					</Grid>
-					<Grid container item xs={2} justifyContent="flex-end">
-						<Button variant="contained">
-							<PlusOutlined /><Typography sx={{ml: 1}}>Study 생성</Typography>
-						</Button>
-					</Grid>
-				</Grid>
-
-
-				<Grid item xs={12}>
-					<Card sx={{bgcolor: theme.palette.primary.lighter, p: "1rem"}}>
-						<Grid container>
-							<Grid item xs={8}>
-								{/* 진행중/배포전/진행종료/일시정지/중단/Demo */}
-								<Typography variant="h6" color="primary.main">진행중</Typography>
-								<Typography variant="h4">중증 아토피 피부염 임상연구 – 부작용</Typography>
-								<Typography sx={{fontSize: "0.7rem", color: theme.palette.grey[500]}}>2024.06.01 ~ 2024.12.31</Typography>
-								<Box display="flex" mt={1}>
-									<AvatarGroup total={4}>
-										<Avatar alt="Remy Sharp" src={aImage1} />
-										<Avatar alt="Travis Howard" src={aImage2} />
-										<Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-									</AvatarGroup>
-								</Box>
+				{
+					studyCount !== 0 ? //Study가 존재할때
+					<>
+						<Grid container item xs={12} sx={{ borderBottom: 1, borderColor: 'divider' }} alignItems="center">
+							<Grid item xs={10}>
+								<Tabs value={activeTab} onChange={handleChange} aria-label="Study Status Tab">
+									{/* 나의 스터디 전체 목록 출력(최근 생성순) */}
+									<Tab label="전체" value="0" />
+									{/* 내가 생성한(Owner) Study 목록 출력 */}
+									<Tab label="My Study" value="1" />
+									{/* 내가 매니저인 Study 목록 출력 */}
+									<Tab label="Maintainer" value="2" />
+									{/* 내가 멤버로 참여된 Study 목록 출력 */}
+									<Tab label="Developer" value="3" />
+								</Tabs>
 							</Grid>
-							<Grid item container xs={4} alignItems="center" justifyContent="flex-end" gap={1}>
-								{/* 멤버초대 */}
-								<Button size="large" variant="outlined">
-									<UserAddOutlined style={{fontSize: "1.5rem"}} />
-								</Button>
-								
-								{/* 수정 */}
-								<Button size="large" variant="outlined">
-									<EditOutlined style={{fontSize: "1.5rem"}} />
-								</Button>
-								
-								{/* Overview  */}
-								<Button size="large" variant="outlined">
-									<FundViewOutlined style={{fontSize: "1.5rem"}} />
+							<Grid container item xs={2} justifyContent="flex-end">
+								<Button variant="contained">
+									<PlusOutlined /><Typography sx={{ml: 1}}>Study 생성</Typography>
 								</Button>
 							</Grid>
 						</Grid>
-					</Card>
-				</Grid>
+
+
+						<Grid item xs={12}>
+							<StudyListItem />
+						</Grid>
+					</>
+
+					: //Study가 0건일때
+					<>
+						<Grid container item xs={12} alignItems="center" justifyContent="center" sx={{ pb: 4, borderBottom: 1, borderColor: 'divider' }} >
+							<Box display="flex" flexDirection="column" alignItems="center">
+								<IconButton color="primary">
+									<PlusOutlined />
+								</IconButton>
+								<Typography sx={{
+									mt: 1,
+									cursor: "pointer",
+									'&:hover' : {textDecoration: "underline"}
+								}} color="primary" variant="h5">Study 생성</Typography>
+							</Box>
+						</Grid>
+
+
+						<Grid container xs={12} direction="column">
+							<Box m={1}>
+								<Typography color="primary" variant="caption">OOO</Typography>님, 초대 받은 Study가 있습니다.
+							</Box>
+							<StudyInvitedItem />
+						</Grid>
+					</>
+				}
+
+				
+				
 			</Grid>
 		</Container>
 	);
