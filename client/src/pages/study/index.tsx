@@ -1,9 +1,8 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Grid, Box, Typography, Chip, Container, Tabs, Tab, Button, ButtonBase, IconButton } from '@mui/material';
+import { Grid, Box, Typography, Chip, Container, Tabs, Tab, Button, IconButton } from '@mui/material';
 import { useState } from 'react';
 import StudyListItem from './components/StudyListItem';
 import StudyInvitedItem from './components/StudyInvitedItem';
-import { Link } from 'react-router-dom';
 
 const StudyList = () => {
 	const [ studyCount, setStudyCount ] = useState(0);
