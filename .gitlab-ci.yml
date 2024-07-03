@@ -25,6 +25,8 @@ dev_build:       # This job runs in the build stage, which runs first.
     - echo "Compiling the code..."
     - docker build -t ecoa-frontend:1.0.1 .
     - echo "Compile complete."
+  tags:
+    - ecoa-runner
 
 dev_package:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.  
@@ -44,3 +46,5 @@ dev_package:      # This job runs in the deploy stage.
     - echo "Application successfully deployed."
   after_script:
     - docker logout
+    tags:
+    - ecoa-runner
