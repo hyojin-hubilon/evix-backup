@@ -1,5 +1,19 @@
 # Evix Frontend 개발 규칙
 
+## Branch 생성 규칙
+
+티켓 처리를 위한 브랜치 생성규칙을 공유한다.
+
+### 주요 branch 설명
+- main, dev : 초기 개발된 부분으로 향후 미사용
+- v1/develop : typescript로 제작된 1차 메인 branch
+
+### jira 와 매칭되는 브랜치 생성 방법
+- 지라 이슈 번호를 이용하여 branch 생성한다. `feature/{지라번호}`
+(e.g. DCT-27 을 브랜치 이름으로 정의)
+- 이슈 번호 외 추가 코멘트를 추가하고 싶은 경우 `feature/{지라번호}-{코멘트}` 로 생성
+- 특정 이슈의 `하위 브랜치(기능)`의 경우 `feature/{지라번호}_{임의번호 or 코멘트}` 를 추가
+
 ## prettierrc 설정 및 적용
 - 코드 개발 개발 이후 커밋 전 prettier 를 통하여 코드 정리 필수
 - /.prettierrc 파일내 정의된 설정에 맞춰서 코드정리가 되는지 확인 필요
@@ -21,3 +35,6 @@
 - component 파일의 생성이 필요할 경우 각 layout, page 폴더에 components 폴더를 생성하고 파일을 생성한다.
 - src/componenets 폴더는 전역적으로 사용가능한 componenets에 대해서만 추가를 수행한다.
 
+## 코드 커밋 관련
+- 기본적으로 코드는 review 를 진행할 수 있도록 merge request 를 요청한다.
+- `안효진` , `이수환` 중 한명에게 코드 리뷰를 신청
