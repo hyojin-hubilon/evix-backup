@@ -19,10 +19,9 @@ import {
     Typography,
 } from '@mui/material';
 import GoogleSocial from './GoogleSocial';
-import { postLogin } from '@/apis/auth';
+import authApi from '@/api/Auth/authAPI';
 
 const AuthLogin = () => {
-    // const [loggedIn, setLoggedIn] = useState(false);
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [formError, setFormError] = useState('');
@@ -43,8 +42,8 @@ const AuthLogin = () => {
 
             <Formik
                 initialValues={{
-                    email: 'alwls3004@hubilon.com',
-                    password: 'alwls0818',
+                    email: '',
+                    password: '',
                 }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string()
@@ -55,8 +54,8 @@ const AuthLogin = () => {
                 })}
                 onSubmit={async (values, { setStatus, setSubmitting }) => {
                     try {
-                        const res = await postLogin(values);
-                        console.log(res.content);
+                        await authApi.login(values);
+                        // console.log(res.content);
                         setStatus({ success: true });
                         navigate('/');
                     } catch (e) {
@@ -65,20 +64,6 @@ const AuthLogin = () => {
                         setFormError('login failed');
                         setSubmitting(false);
                     }
-                    // try {
-                    //     const response = await axios.post(
-                    //         "/api/v1/auth/login",
-                    //         values
-                    //     );
-                    //     setStatus({ success: true });
-                    //     console.log({ response });
-                    //     navigate("/");
-                    // } catch (err) {
-                    //     setStatus({ success: false });
-                    //     console.log(err);
-                    //     setErrors({ submit: "login failed" });
-                    //     setSubmitting(false);
-                    // }
                 }}
             >
                 {({
@@ -201,7 +186,7 @@ const AuthLogin = () => {
                                     <Link
                                         variant="h6"
                                         component={RouterLink}
-                                        to="/forgotPassword"
+                                        to="/forgot-password"
                                         color="text.primary"
                                         underline="always"
                                     >
