@@ -19,11 +19,9 @@ import {
     Typography,
 } from '@mui/material';
 import GoogleSocial from './GoogleSocial';
-import { postLogin } from '@/apis/auth';
 import authApi from '@/api/Auth/authAPI';
 
 const AuthLogin = () => {
-    // const [loggedIn, setLoggedIn] = useState(false);
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [formError, setFormError] = useState('');
@@ -56,7 +54,6 @@ const AuthLogin = () => {
                 })}
                 onSubmit={async (values, { setStatus, setSubmitting }) => {
                     try {
-                        // const res = await postLogin(values);
                         await authApi.login(values);
                         // console.log(res.content);
                         setStatus({ success: true });
