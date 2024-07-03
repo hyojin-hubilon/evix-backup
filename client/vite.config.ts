@@ -6,6 +6,7 @@ import packageJson from './package.json';
 // https://vitejs.dev/config/
 export default defineConfig({
 	server: {
+		port: 3000,	/** port 설정 안 하면 구글 로그인이 안 되서 붙여놨음 */
 		proxy: {
 			'/api':'https://dev.evix-dct.com/',
 		},
