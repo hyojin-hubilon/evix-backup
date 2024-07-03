@@ -42,8 +42,8 @@ const AuthLogin = () => {
 
             <Formik
                 initialValues={{
-                    email: 'alwls3004@hubilon.com',
-                    password: 'alwls0818',
+                    email: '',
+                    password: '',
                 }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string()
@@ -186,7 +186,7 @@ const AuthLogin = () => {
                                     <Link
                                         variant="h6"
                                         component={RouterLink}
-                                        to="/forgotPassword"
+                                        to="/forgot-password"
                                         color="text.primary"
                                         underline="always"
                                     >
