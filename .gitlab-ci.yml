@@ -20,7 +20,7 @@ stages:          # List of stages for jobs, and their order of execution
 dev_build:       # This job runs in the build stage, which runs first.
   stage: build
   only:
-    - develop
+    - v1/develop
   script:
     - echo "Compiling the code..."
     - docker build -t ecoa-frontend:1.0.1 .
@@ -29,7 +29,7 @@ dev_build:       # This job runs in the build stage, which runs first.
 dev_package:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.  
   only:
-    - develop
+    - v1/develop
   variables:
     IMAGE_NAME: ecoa-frontend
     TAG: $CI_COMMIT_REF_NAME
