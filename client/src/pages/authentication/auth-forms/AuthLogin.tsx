@@ -19,7 +19,7 @@ import {
     Typography,
 } from '@mui/material';
 import GoogleSocial from './GoogleSocial';
-import authApi from '@/api/Auth/authAPI';
+import authApi from '@/apis/auth';
 
 const AuthLogin = () => {
     const navigate = useNavigate();

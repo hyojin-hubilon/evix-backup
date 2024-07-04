@@ -5,7 +5,7 @@ import StudyListItem from './components/StudyListItem';
 import StudyInvitedItem from './components/StudyInvitedItem';
 
 const StudyList = () => {
-	const [ studyCount, setStudyCount ] = useState(0);
+	const [ studyCount ] = useState(0);
 	const [ activeTab, setActiveTab ] = useState('0');
 
 	const handleChange = (event: React.SyntheticEvent, newValue: string) => {

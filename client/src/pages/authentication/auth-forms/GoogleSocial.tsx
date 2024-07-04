@@ -3,7 +3,7 @@ import { Stack, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
-import authApi from '@/api/Auth/authAPI';
+import authApi from '@/apis/auth';
 
 type Decoded = {
     email: string;
