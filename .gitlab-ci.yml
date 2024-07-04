@@ -23,7 +23,7 @@ dev_build:       # This job runs in the build stage, which runs first.
     - v1/develop
   script:
     - echo "Compiling the code..."
-    - docker build -t ecoa-frontend:1.0.1 .
+ #   - docker build -t ecoa-frontend:1.0.1 .
     - echo "Compile complete."
   tags:
     - ecoa-runner
@@ -39,15 +39,14 @@ dev_package:      # This job runs in the deploy stage.
     DK_USER: cnahm0uo3g0f/ascom4@hubilon.com
     DK_PW: ycy7y353IthBiQ;6z[IN
   before_script:
-    - docker login $DK_REPO -u $DK_USER -p $DK_PW
+   # - docker login $DK_REPO -u $DK_USER -p $DK_PW
   script:
     - echo "Package application..."
   #  - docker build -t $IMAGE_NAME:$TAG .
-    - docker tag ecoa-frontend:1.0.1 icn.ocir.io/cnahm0uo3g0f/evix-dct/ecoa-frontend:1.0.1
-    - docker push icn.ocir.io/cnahm0uo3g0f/evix-dct/ecoa-frontend:1.0.1
-  #  - docker push $IMAGE_NAME:$TAG
+  #  - docker tag ecoa-frontend:1.0.1 icn.ocir.io/cnahm0uo3g0f/evix-dct/ecoa-frontend:1.0.1
+  #  - docker push icn.ocir.io/cnahm0uo3g0f/evix-dct/ecoa-frontend:1.0.1
     - echo "Application successfully deployed."
   after_script:
-    - docker logout
+   # - docker logout
   tags:
     - ecoa-runner
