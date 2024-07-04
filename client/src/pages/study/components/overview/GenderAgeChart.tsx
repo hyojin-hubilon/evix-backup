@@ -2,6 +2,45 @@ import { Box, Grid, Stack, Typography } from "@mui/material";
 import { ApexOptions } from "apexcharts";
 import ReactApexChart from "react-apexcharts";
 
+const ageChartOptions: ApexOptions = {
+	chart: {
+		type: 'bar',
+		stacked: true,
+		stackType: '100%',
+		toolbar: {
+			show: false
+		}
+	},
+	plotOptions: {
+		bar: {
+			horizontal: true,
+		},
+	},
+	stroke: {
+		width: 1,
+		colors: ['#fff']
+	},
+	xaxis: {
+		categories: ['10대', '20대', '30대', '40대', '50대', '60대', '70대 이상'],
+		labels: {
+			show:false
+		}	
+	},
+	tooltip: {
+		y: {
+			formatter: function (val) {
+				return val + "명"
+			}
+		}
+	},
+	fill: {
+		opacity: 1
+	},
+	legend: {
+		show: false
+	}
+}
+
 const GenderAgeChart = () => {
 	const genderChartSeries = [
 		{
@@ -39,56 +78,14 @@ const GenderAgeChart = () => {
 		}
 	}
 
-	const ageChartSeries = 
-		[{
-			name: '남성',
-			data: [44, 55, 41, 37, 22, 43, 21]
-		  }, {
-			name: '여성',
-			data: [53, 32, 33, 52, 13, 43, 32]
-		  }
-		];
-          
-	const ageChartOptions: ApexOptions = {
-		chart: {
-			type: 'bar',
-			stacked: true,
-			stackType: '100%',
-			toolbar: {
-				show: false
-			}
-		},
-		plotOptions: {
-			bar: {
-				horizontal: true,
-			},
-		},
-		stroke: {
-			width: 1,
-			colors: ['#fff']
-		},
-		xaxis: {
-			categories: ['10대', '20대', '30대', '40대', '50대', '60대', '70대 이상'],
-			labels: {
-				show:false
-			}	
-		},
-		tooltip: {
-			y: {
-				formatter: function (val) {
-					return val + "명"
-				}
-			}
-		},
-		fill: {
-			opacity: 1
-		},
-		legend: {
-			show: false
+	const ageChartSeries = [{
+		name: '남성',
+		data: [44, 55, 41, 37, 22, 43, 21]
+	}, {
+		name: '여성',
+		data: [53, 32, 33, 52, 13, 43, 32]
 		}
-	}
-	
-	  
+	];
 	
 	return (
 		<Box>

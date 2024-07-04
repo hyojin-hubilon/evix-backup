@@ -9,12 +9,11 @@ export type ApexDonutChartSeriesType = {
 }
 
 type CircleChartProps = {
-	title: string;
 	series: ApexDonutChartSeriesType;
 }
 
 const CircleChart = (props: CircleChartProps) => {
-	const { title, series } = props;
+	const { series } = props;
 	
 	const [ chartData, setChartData ] = useState<number[]>([]);
 	const [ chartOptions, setChartOptions ] = useState<ApexOptions>({chart: {type:'donut'}});
@@ -45,14 +44,9 @@ const CircleChart = (props: CircleChartProps) => {
 	}, [series])
 
 	return (
-		<Stack>
-			<Typography variant="h6" color="textSecondary">
-				{title}
-			</Typography>
-			<Box minHeight={100}>
-				<ReactApexChart options={chartOptions} series={chartData} type="donut" width="150" height="150" />
-			</Box>
-		</Stack>
+		<Box minHeight={100} display="flex" justifyContent="center">
+			<ReactApexChart options={chartOptions} series={chartData} type="donut" width="150" height="150" />
+		</Box>
 	)
 
 

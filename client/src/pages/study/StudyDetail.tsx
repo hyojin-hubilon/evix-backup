@@ -1,11 +1,10 @@
 import Breadcrumbs2 from "@/components/@extended/Breadcrumbs2";
-import MainCard from "@/components/MainCard";
 import { EditOutlined } from "@ant-design/icons";
 import { Avatar, Box, Button, Chip, Grid, Tab, Tabs, Typography } from "@mui/material";
 import { useState } from "react";
 import aImage1 from '@assets/images/users/avatar-1.png';
-import CircleChart, { ApexDonutChartSeriesType } from "./components/CircleChart";
-import GenderAgeChart from "./components/GenderAgeChart";
+import { ApexDonutChartSeriesType } from "./components/overview/CircleChart";
+import StudyOverView from "./components/StudyOverview";
 
 const StudyDetail = () => {
 	const [ activeTab, setActiveTab ] = useState('0');
@@ -15,7 +14,7 @@ const StudyDetail = () => {
 		setActiveTab(newValue);
 	};
 
-	const participationCompletionRate: ApexDonutChartSeriesType = {
+	const partCompleteRate: ApexDonutChartSeriesType = {
 		labels: ['참여완료율', '미완료율'],
 		series: [75, 25]
 	};
@@ -58,29 +57,10 @@ const StudyDetail = () => {
 					</Grid>
 				</Grid>
 
-				<Grid container item columnSpacing={1.5}>
-					<Grid item xs={2}>
-						<MainCard sx={{height: '190px'}}>
-							<CircleChart title="참여완료율" series={participationCompletionRate} />
-						</MainCard>
-					</Grid>
-					<Grid item xs={2}>
-						<MainCard sx={{height: '190px'}}>
-							<Typography variant="h6" color="textSecondary">
-								참여자수
-							</Typography>
-							<Box>
-								<Typography variant="h2" color="primary" sx={{display: 'block', textAlign: 'center', mt: '2rem'}}>1500</Typography>
-								<Typography variant="h5" sx={{display: 'block', textAlign: 'center', ml: '2rem'}}>/2000</Typography>
-							</Box>
-						</MainCard>
-					</Grid>
-					<Grid item xs={8}>
-						<MainCard sx={{height: '190px'}}>
-							<GenderAgeChart />
-						</MainCard>
-					</Grid>
-				</Grid>
+				{
+					activeTab == '0' && <StudyOverView partCompleteRate={partCompleteRate} />
+				}
+				
 			</Grid>			
 			
 		</>
