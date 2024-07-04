@@ -14,7 +14,7 @@ RUN npm run build
 FROM node:20-alpine
 
 WORKDIR /usr/app/
-COPY --from=client /usr/app/client/dist/ ./client/build/
+COPY --from=client /usr/app/client/dist/ /user/app/client/build/
 
 WORKDIR /usr/app/server/
 COPY server/package*.json ./
@@ -22,7 +22,7 @@ RUN npm install -qy
 COPY server/ ./
 
 #internal network 사용하기 때문에 expose 필요없음
-#ENV PORT 48001 
-#EXPOSE 48001
+ENV PORT 48001 
+EXPOSE 48001
 
 CMD ["npm", "start"]
