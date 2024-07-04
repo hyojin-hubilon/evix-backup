@@ -14,7 +14,7 @@ RUN npm run build
 FROM node:20-alpine
 
 WORKDIR /usr/app/
-COPY --from=client /usr/app/client/dist/ ./client/dist/
+COPY --from=client /usr/app/client/dist/ ./client/build/
 
 WORKDIR /usr/app/server/
 COPY server/package*.json ./
