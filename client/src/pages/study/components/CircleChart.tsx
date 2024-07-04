@@ -1,34 +1,47 @@
-import { Box, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { ApexOptions } from 'apexcharts';
 import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 
-type CircleChartProps = {
-	title: string;
-	series: ApexAxisChartSeries;
+export type ApexDonutChartSeriesType = {
+	series: number[],
+	labels: string[]
 }
 
-const circleChartInitial: ApexOptions = {
-	chart: {
-		type: 'donut',
-		width: 200,
-		height: 200
-	}
+type CircleChartProps = {
+	title: string;
+	series: ApexDonutChartSeriesType;
 }
+
 const CircleChart = (props: CircleChartProps) => {
 	const { title, series } = props;
-	const theme = useTheme();
-	const [ chartOptions, setChartOptions ] = useState<ApexOptions>(circleChartInitial);
+	
+	const [ chartData, setChartData ] = useState<number[]>([]);
+	const [ chartOptions, setChartOptions ] = useState<ApexOptions>({chart: {type:'donut'}});
 	
 	useEffect(() => {
 		console.log(series);
 		setChartOptions((prevState) => ({
 			...prevState,
-			colors: [theme.palette.primary.main, theme.palette.primary[700]], // 차트 색상을 설정합니다.
 			tooltip: {
 			  theme: 'light'
-			}
+			},
+			legend: {
+				show: false
+			},
+			plotOptions: {
+				pie: {
+					startAngle: -360,
+					endAngle: 0,
+				}
+			},
+			labels: series.labels.map(data => data),
+			series: series.series.map(data => data)
 		}));
+
+		
+		setChartData([...series.series.map(data => data)]);
+		
 	}, [series])
 
 	return (
@@ -36,8 +49,8 @@ const CircleChart = (props: CircleChartProps) => {
 			<Typography variant="h6" color="textSecondary">
 				{title}
 			</Typography>
-			<Box minHeight={200}>
-				<ReactApexChart options={chartOptions} series={series} type="donut" width="200" height="200" />
+			<Box minHeight={100}>
+				<ReactApexChart options={chartOptions} series={chartData} type="donut" width="150" height="150" />
 			</Box>
 		</Stack>
 	)
