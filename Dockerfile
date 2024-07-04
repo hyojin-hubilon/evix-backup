@@ -9,13 +9,12 @@ RUN npm install -qy
 COPY client/ ./
 RUN npm run build
 
-
 # Setup the server
 
 FROM node:20-alpine
 
 WORKDIR /usr/app/
-COPY --from=client /usr/app/client/build/ ./client/build/
+COPY --from=client /usr/app/client/dist/ ./client/dist/
 
 WORKDIR /usr/app/server/
 COPY server/package*.json ./
