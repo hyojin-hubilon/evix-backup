@@ -1,17 +1,24 @@
 import { Cookies } from 'react-cookie';
+import { Cookie } from '@/types/cookie';
 
 const cookies = new Cookies();
 
-export const setCookie = (name, value, options) => {
+export const setCookie = (name: string, value: any, options): void => {
     return cookies.set(name, value, { ...options });
 };
 
-export const getCookie = (name) => {
+export const getCookie = (name: string) => {
     return cookies.get(name);
 };
 
-export const removeCookie = (name) => {
+export const removeCookie = (name: string): void => {
     cookies.remove(name);
+};
+
+export const getCookies = (names: string[]): Cookie[] => {
+    return names.map(item => {
+        return { name: item, value: getCookie(item) ?? undefined };
+    });
 };
 
 // Base64Url decoding (한글 깨짐 이슈)
@@ -31,7 +38,7 @@ const base64UrlDecode = (input) => {
     return atob(input);
 };
 
-export const getDecodedToken = (cookieName) => {
+export const getDecodedToken = (cookieName:string) => {
     const token = getCookie(cookieName);
     if (token) {
         try {
