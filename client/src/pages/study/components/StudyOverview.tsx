@@ -3,6 +3,7 @@ import CircleChart, { ApexDonutChartSeriesType } from "./overview/CircleChart";
 import MainCard from "@/components/MainCard";
 import GenderAgeChart from "./overview/GenderAgeChart";
 import AllPartTransitionChart from "./overview/AllPartTransitionChart";
+import PartByHospitalsChart from "./overview/PartByHospitalsChart";
 
 type StudyOverviewProps = {
 	partCompleteRate : ApexDonutChartSeriesType
@@ -12,7 +13,7 @@ const StudyOverView = ({partCompleteRate} : StudyOverviewProps)  => {
 		<>
 			<Grid container item columnSpacing={1.5}>
 				<Grid item xs={2}>
-					<MainCard sx={{height: '190px'}}>
+					<MainCard sx={{height: '190px'}} overflow="visible">
 						<Typography variant="h6" color="textSecondary">참여완료율</Typography>
 						<CircleChart series={partCompleteRate} />
 					</MainCard>
@@ -36,14 +37,14 @@ const StudyOverView = ({partCompleteRate} : StudyOverviewProps)  => {
 			</Grid>
 
 			<Grid container item columnSpacing={1.5}>
-				<Grid item xs={6}>
-					<MainCard sx={{height: '300px'}}>
+				<Grid item xs={7}>
+					<MainCard sx={{height: '300px'}} overflow="visible">
 						<AllPartTransitionChart title="전체 참여자 추이" />
 					</MainCard>
 				</Grid>
-				<Grid item xs={6}>
+				<Grid item xs={5}>
 					<MainCard sx={{height: '300px'}}>
-						<Typography variant="h6" color="textSecondary">병원별 참여자</Typography>
+						<PartByHospitalsChart title="병원별 참여자" />
 					</MainCard>
 				</Grid>
 			</Grid>
@@ -51,6 +52,7 @@ const StudyOverView = ({partCompleteRate} : StudyOverviewProps)  => {
 			<Grid item xs={12}>
 				<MainCard>
 					<Typography variant="h6" color="textSecondary">최근 참여자</Typography>
+					
 				</MainCard>
 			</Grid>
 		</>

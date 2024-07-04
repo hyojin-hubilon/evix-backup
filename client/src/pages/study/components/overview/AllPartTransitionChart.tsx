@@ -7,7 +7,7 @@ import ReactApexChart from "react-apexcharts";
 const areaChartOptions: ApexOptions = {
 	chart: {
 	  height: 250, // 차트의 높이를 설정합니다.
-	  type: 'area', // 차트 유형을 'area'로 설정합니다.
+	  type: 'line', // 차트 유형을 'line'으로 설정합니다.
 	  toolbar: {
 		show: false // 툴바를 숨깁니다.
 	  }
@@ -28,10 +28,7 @@ const areaChartOptions: ApexOptions = {
 	},
 	stroke: {
 	  	curve: 'smooth', // 곡선 형태의 선을 사용합니다.
-	  	width: 1 // 선의 너비를 1로 설정합니다.
-	},
-	fill: {
-		opacity:0
+	  	width: 2 // 선의 너비를 1로 설정합니다.
 	}
   };
 
@@ -40,19 +37,18 @@ const AllPartTransitionChart = ({ title } : {title:string}) => {
 
 	const theme = useTheme(); // MUI의 테마 정보를 가져옵니다.
 
-	const { primary, secondary, disabled } = theme.palette.text; // 테마에서 텍스트 색상 정보를 가져옵니다.
+	const { secondary } = theme.palette.text; // 테마에서 텍스트 색상 정보를 가져옵니다.
   	const line = theme.palette.divider; // 테마에서 구분선 색상을 가져옵니다.
 	const [options, setOptions] = useState<ApexOptions>(areaChartOptions); // 차트 옵션 상태를 관리합니다.
 
 	const getMinDate = () => {
-		console.log(series);
 		const dataArray = series[0].data.map(item => item[0]);
 		return Math.min(...dataArray);
 	}
 
 	const [series, setSeries] = useState([ // 예시데이터
 		{
-			name: '명',
+			name: '참여자',
 			data: [
 				[1327359600000,30], //날짜, 참여자
                 [1327446000000,31],
@@ -357,14 +353,25 @@ const AllPartTransitionChart = ({ title } : {title:string}) => {
 					style: {
 						colors: [secondary] // y축 레이블의 색상을 설정합니다.
 					}
+				},
+				axisBorder: {
+					show: true,
+					color: line,
+					offsetX: 0,
+					offsetY: 0
+				},
+			},
+			tooltip: {
+				y: {
+					formatter: function (val) {
+						return val + "명"
+					}
 				}
 			},
 			grid: {
 				borderColor: line // 그리드 경계선의 색상을 설정합니다.
 			}
 		}));
-
-		console.log(series)
 	}, [theme, slot, series]); // 종속성 배열: primary, secondary, line, theme, slot이 변경될 때마다 실행됩니다.
 	
 	
@@ -379,9 +386,10 @@ const AllPartTransitionChart = ({ title } : {title:string}) => {
 		<>
 			<Grid container>
 				<Grid item xs={4}>
-				<Typography variant="h6" color="textSecondary">
-					{title}
-				</Typography>
+					<Typography variant="h6" color="textSecondary">
+						{title} 
+					</Typography>
+					{/* 수정하기 (해당자료 수정하기 링크)? */}
 				</Grid>
 				<Grid item xs={8}>
 					<Stack direction="row" justifyContent="flex-end" alignItems="flex-end" spacing={1}>
@@ -416,7 +424,7 @@ const AllPartTransitionChart = ({ title } : {title:string}) => {
 				</Grid>
 			</Grid>
 			<Box>
-				<ReactApexChart options={options} series={series} type="area" height={250} />
+				<ReactApexChart options={options} series={series} type="line" height={250} />
 			</Box>
 		</>
 	)

@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { ApexOptions } from 'apexcharts';
 import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
@@ -14,6 +14,7 @@ type CircleChartProps = {
 
 const CircleChart = (props: CircleChartProps) => {
 	const { series } = props;
+	const theme = useTheme();
 	
 	const [ chartData, setChartData ] = useState<number[]>([]);
 	const [ chartOptions, setChartOptions ] = useState<ApexOptions>({chart: {type:'donut'}});
@@ -22,9 +23,7 @@ const CircleChart = (props: CircleChartProps) => {
 		console.log(series);
 		setChartOptions((prevState) => ({
 			...prevState,
-			tooltip: {
-			  theme: 'light'
-			},
+			colors: [theme.palette.primary.main, theme.palette.grey[200]],
 			legend: {
 				show: false
 			},
@@ -34,8 +33,7 @@ const CircleChart = (props: CircleChartProps) => {
 					endAngle: 0,
 				}
 			},
-			labels: series.labels.map(data => data),
-			series: series.series.map(data => data)
+			labels: series.labels.map(data => data)
 		}));
 
 		
