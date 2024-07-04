@@ -1,17 +1,46 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Grid, Box, Typography, Chip, Container, Tabs, Tab, Button, IconButton } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import StudyListItem from './components/StudyListItem';
 import StudyInvitedItem from './components/StudyInvitedItem';
+import studyApi from '@/api/Study/studyAPI';
+interface Study {
+	std_no: number;
+	title: string;
+	std_status: string;
+	std_start_date: string;
+	std_end_date: string;
+}
 
 const StudyList = () => {
 	const [ studyCount, setStudyCount ] = useState(0);
-	const [ activeTab, setActiveTab ] = useState('0');
+	const [activeTab, setActiveTab] = useState('0');
+	const [studies, setStudies] = useState<Study[]>([]);
+
+    useEffect(() => {
+        const fetchStudies = async () => {
+            try {
+                const response = await studyApi.myStudyList(1, 4);
+                if (response.result && response.code === 200) {
+                    setStudies(response.content.studyMyList);
+                    setStudyCount(response.content.studyMyList.length);
+                }
+            } catch (error) {
+                console.error('Failed to fetch study list:', error);
+            }
+        };
+        
+        fetchStudies();
+	}, []);
+	
+	console.log('studies : ', studies);
 
 	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
 		event.preventDefault();
 		setActiveTab(newValue);
 	};
+
+	// privilege 데이터가 어떻게 올까? 
 
     return (
 		<Container maxWidth="lg">
@@ -46,10 +75,11 @@ const StudyList = () => {
 							</Grid>
 						</Grid>
 
-
-						<Grid item xs={12}>
-							<StudyListItem />
-						</Grid>
+						{studies.map((study) => (
+							<Grid item xs={12} key={study.std_no}>
+								<StudyListItem study={study} />
+							</Grid>
+						))}
 					</>
 
 					: //Study가 0건일때

@@ -3,16 +3,31 @@ import { Avatar, AvatarGroup, Box, Button, Card, Grid, Typography, useTheme } fr
 import aImage1 from '@assets/images/users/avatar-1.png';
 import aImage2 from '@assets/images/users/avatar-2.png';
 
-const StudyListItem = () => {
+interface Study {
+	std_no: number;
+	title: string;
+	std_status: string;
+	std_start_date: string;
+	std_end_date: string;
+}
+
+interface SttudyListItemProps {
+	study: Study;
+}
+
+
+const StudyListItem = ({ study }: SttudyListItemProps ) => {
 	const theme = useTheme();
+
 	return (
+		<>
 		<Card sx={{bgcolor: theme.palette.primary.lighter, p: "1rem"}}>
 			<Grid container>
 				<Grid item xs={8}>
 					{/* 진행중/배포전/진행종료/일시정지/중단/Demo */}
-					<Typography variant="h6" color="primary.main">진행중</Typography>
-					<Typography variant="h4">중증 아토피 피부염 임상연구 – 부작용</Typography>
-					<Typography variant="caption" sx={{color: theme.palette.grey[500]}}>2024.06.01 ~ 2024.12.31</Typography>
+						<Typography variant="h6" color="primary.main">{study.std_status}</Typography>
+					<Typography variant="h4">{study.title}</Typography>
+					<Typography variant="caption" sx={{color: theme.palette.grey[500]}}>{study.std_start_date} ~ {study.std_end_date}</Typography>
 					<Box display="flex" mt={1}>
 						<AvatarGroup total={4}>
 							<Avatar alt="Remy Sharp" src={aImage1} />
@@ -39,6 +54,7 @@ const StudyListItem = () => {
 				</Grid>
 			</Grid>
 		</Card>
+			</>
 	)
 }
 

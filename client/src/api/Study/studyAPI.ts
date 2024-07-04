@@ -187,7 +187,6 @@ const studyApi = {
             const response = await instance.get(
                 `${BASE_API_URL}/my-list/${pageNum}/${elementSize}`
             );
-
             return response.data;
         } catch (error) {
             handleApiError(error, "My Study List error");
