@@ -35,8 +35,11 @@ dev_package:      # This job runs in the deploy stage.
   variables:
     IMAGE_NAME: ecoa-frontend
     TAG: $CI_COMMIT_REF_NAME
+    DK_REPO: icn.ocir.io
+    DK_USER: cnahm0uo3g0f/ascom4@hubilon.com
+    DK_PW: ycy7y353IthBiQ;6z[IN
   before_script:
-    - docker login $PRI_DOCKER_REPO -u $PRI_DOCKER_USER -p $PRI_DOCKER_PW
+    - docker login $DK_REPO -u $DK_USER -p $DK_PW
   script:
     - echo "Package application..."
   #  - docker build -t $IMAGE_NAME:$TAG .
