@@ -43,7 +43,9 @@ const NavItem = ({ item, level }: CustomProps) => {
     };
     const Icon = item.icon;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
+    /*
+    @ts-expect-error
+    */
     const itemIcon = Icon ? (
         <Icon style={{ fontSize: drawerOpen ? '1rem' : '1.25rem' }} />
     ) : (
