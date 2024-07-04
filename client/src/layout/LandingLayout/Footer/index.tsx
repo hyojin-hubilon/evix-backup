@@ -154,9 +154,9 @@ const LandingFooter = () => {
                     </Grid>
                 </Container>
             </Box>
-            <PrivacyPolicy isOpen={privacyPolicyIsOpen} handleOpen={handlePravacyPolicy} />
-            <Terms isOpen={termsIsOpen} handleOpen={handleTerms} />
-            <CookiePolicy isOpen={cookiePolicyIsOpen} handleOpen={handleCookiePolicy} />
+            <PrivacyPolicy isOpen={privacyPolicyIsOpen} handleClose={handlePravacyPolicy} />
+            <Terms isOpen={termsIsOpen} handleClose={handleTerms} />
+            <CookiePolicy isOpen={cookiePolicyIsOpen} handleClose={handleCookiePolicy} />
             <CookieGuide handleCookiePolicy={handleCookiePolicy} />
         </>
     );

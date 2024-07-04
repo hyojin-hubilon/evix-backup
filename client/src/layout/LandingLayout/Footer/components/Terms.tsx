@@ -10,14 +10,16 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-const Terms: React.FC<{ isOpen: boolean; handleOpen: () => void }> = ({ isOpen, handleOpen }) => {
+type Props = { isOpen: boolean; handleClose: () => void };
+
+const Terms: React.FC<Props> = ({ isOpen, handleClose }) => {
     return (
-        <Dialog open={isOpen} onClose={handleOpen}>
+        <Dialog open={isOpen} onClose={handleClose}>
             <DialogTitle>
                 <h3>Website terms and conditions</h3>
                 <IconButton
                     aria-label="close"
-                    onClick={handleOpen}
+                    onClick={handleClose}
                     sx={{
                         position: 'absolute',
                         right: 8,

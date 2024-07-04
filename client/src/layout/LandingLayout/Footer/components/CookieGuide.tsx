@@ -20,36 +20,40 @@ const style = {
     flexDirection: 'row',
 };
 
-const CookieGuide: React.FC<{
+type Props = {
     handleCookiePolicy: () => void;
-}> = ({ handleCookiePolicy }) => {
+};
 
+const CookieGuide: React.FC<Props> = ({ handleCookiePolicy }) => {
     const cookies = getCookies(['necessaryCookies', 'functionalCookies', 'advertisingCookies']);
     const [openThis, setOpenThis] = useState<boolean>(
         cookies?.every((cookie) => cookie.value === undefined)
     );
+    const handleThisClose = () => {
+        setOpenThis((prev) => !prev);
+    };
 
     const [cookieSettingsIsOpen, setCookieSettingsIsOpen] = useState<boolean>(false);
     const handleCookieSetting = () => {
         setCookieSettingsIsOpen((prev) => !prev);
     };
 
-    const handleConfirm = (dummyCookies:Cookie[]):void => {
-        dummyCookies.forEach(cookie => setCookie(cookie.name, cookie.value, null));
+    const handleConfirm = (dummyCookies: Cookie[]): void => {
+        dummyCookies.forEach((cookie) => setCookie(cookie.name, cookie.value, null));
         handleCookieSetting();
-        setOpenThis(() => false);
+        handleThisClose();
     };
 
     const handleAcceptAllCookie = (): void => {
         cookies.forEach((cookie) => setCookie(cookie.name, true, null));
-        setOpenThis(() => false);
+        handleThisClose();
     };
 
     return (
         <>
             <Modal
                 open={openThis}
-                onClose={handleCookieSetting}
+                onClose={handleThisClose}
                 aria-labelledby="cookie-modal-title"
                 aria-describedby="cookie-modal-description"
             >
@@ -91,13 +95,13 @@ const CookieGuide: React.FC<{
                         </Button>
                     </Box>
                     <IconButton aria-label="close" sx={{ position: 'absolute', top: 8, right: 8 }}>
-                        <CloseIcon />
+                        <CloseIcon onClick={handleThisClose}/>
                     </IconButton>
                 </Box>
             </Modal>
             <CookieSettings
                 isOpen={cookieSettingsIsOpen}
-                handleOpen={handleCookieSetting}
+                handleClose={handleCookieSetting}
                 handleConfirm={handleConfirm}
             />
         </>

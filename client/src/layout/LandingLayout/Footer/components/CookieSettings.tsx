@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Box, Button, Typography, Modal, Switch, FormControlLabel, Paper } from '@mui/material';
 import { Cookie } from '@/types/cookie';
 
-const CookieSettings: React.FC<{
+type Props = {
     isOpen: boolean;
-    handleOpen: () => void;
+    handleClose: () => void;
     handleConfirm: (dummyCookies: Cookie[]) => void;
-}> = ({ isOpen, handleOpen, handleConfirm }) => {
+};
+
+const CookieSettings: React.FC<Props> = ({ isOpen, handleClose, handleConfirm }) => {
     const [dummyCookies, setDummyCookies] = useState<Cookie[]>([
         { name: 'necessaryCookies', value: true },
         { name: 'functionalCookies', value: false },
@@ -26,7 +28,7 @@ const CookieSettings: React.FC<{
         <div>
             <Modal
                 open={isOpen}
-                onClose={handleOpen}
+                onClose={handleClose}
                 aria-labelledby="cookie-settings-title"
                 aria-describedby="cookie-settings-description"
             >

@@ -84,7 +84,7 @@ const SupportForm = () => {
         },
     });
 
-    const handleFormType = (e) => {
+    const handleFormType = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormType(e.target.value);
     };
 
@@ -302,7 +302,7 @@ const SupportForm = () => {
                         </Button>
                         <PrivacyPolicy
                             isOpen={privacyPolicyIsOpen}
-                            handleOpen={handlePrivacyPolicy}
+                            handleClose={handlePrivacyPolicy}
                         />
                     </Stack>
                 </form>
