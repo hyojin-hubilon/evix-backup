@@ -1,9 +1,9 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Grid, Box, Typography, Chip, Container, Tabs, Tab, Button, IconButton } from '@mui/material';
 import { useEffect, useState } from 'react';
+import studyApi from '../../api/Study/studyAPI';
 import StudyListItem from './components/StudyListItem';
 import StudyInvitedItem from './components/StudyInvitedItem';
-import studyApi from '@/api/Study/studyAPI';
 interface Study {
 	std_no: number;
 	title: string;

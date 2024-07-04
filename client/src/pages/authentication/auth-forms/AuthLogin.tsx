@@ -1,6 +1,5 @@
 import { useState } from 'react';
 // import axios from "axios";
-import AnimateButton from '@components/@extended/AnimateButton';
 import { Formik } from 'formik';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -19,7 +18,8 @@ import {
     Typography,
 } from '@mui/material';
 import GoogleSocial from './GoogleSocial';
-import authApi from '@/api/Auth/authAPI';
+import authApi from '@/apis/auth';
+import AnimateButton from '@/components/@extended/AnimateButton';
 
 const AuthLogin = () => {
     const navigate = useNavigate();

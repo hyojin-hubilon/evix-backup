@@ -1,7 +1,7 @@
-import authApi from '@/api/Auth/authAPI';
 import * as Yup from 'yup';
 import { Container, Typography, Link, Stack,Button, TextField } from '@mui/material';
 import { useFormik } from 'formik';
+import authApi from '@/apis/auth';
 
 const ForgotPasswordForm = () => {
 
