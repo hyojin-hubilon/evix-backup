@@ -42,7 +42,6 @@ const NavItem = ({ item, level }: CustomProps) => {
         dispatch(activeItem({ openItem: [item.id] }));
     };
     const Icon = item.icon;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     const itemIcon = Icon ? <Icon style={{ fontSize: drawerOpen ? '1rem' : '1.25rem' }} /> : '';
     const isSelected = openItem.findIndex((id) => id === item.id) > -1;
     // active menu item on page load

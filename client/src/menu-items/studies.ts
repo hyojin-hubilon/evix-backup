@@ -21,7 +21,7 @@ const studies: MenuItem = {
             type: 'item',
             url: '/study',
             icon: icons.OrderedListOutlined,
-            breadcrumbs: false,
+            breadcrumbs: false
         },
         {
             id: 'new-study',
