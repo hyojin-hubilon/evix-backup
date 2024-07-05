@@ -5,6 +5,7 @@ import { useState } from "react";
 import aImage1 from '@assets/images/users/avatar-1.png';
 import { ApexDonutChartSeriesType } from "./components/overview/CircleChart";
 import StudyOverView from "./components/StudyOverview";
+import StudyInfo from "./components/StudyInfo";
 
 const StudyDetail = () => {
 	const [ activeTab, setActiveTab ] = useState('0');
@@ -59,6 +60,9 @@ const StudyDetail = () => {
 
 				{
 					activeTab == '0' && <StudyOverView partCompleteRate={partCompleteRate} />
+				}
+				{
+					activeTab == '1' && <StudyInfo />
 				}
 				
 			</Grid>			
