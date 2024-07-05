@@ -4,6 +4,7 @@ import MainCard from "@/components/MainCard";
 import GenderAgeChart from "./overview/GenderAgeChart";
 import AllPartTransitionChart from "./overview/AllPartTransitionChart";
 import PartByHospitalsChart from "./overview/PartByHospitalsChart";
+import RecentParticipant from "./overview/RecentParticipant";
 
 type StudyOverviewProps = {
 	partCompleteRate : ApexDonutChartSeriesType
@@ -51,8 +52,7 @@ const StudyOverView = ({partCompleteRate} : StudyOverviewProps)  => {
 
 			<Grid item xs={12}>
 				<MainCard>
-					<Typography variant="h6" color="textSecondary">최근 참여자</Typography>
-					
+					<RecentParticipant />
 				</MainCard>
 			</Grid>
 		</>
