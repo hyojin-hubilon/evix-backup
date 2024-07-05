@@ -193,7 +193,7 @@ const studyApi = {
      * @param invites
      * @returns
      */
-    inviteStudyMember: async (invites: StudyApiType.StudyUserInvite[]) => {
+    inviteStudyMember: async (invites: StudyApiType.StudyUserInvites) => {
         try {
             const responseData = await api<{}>(`${BASE_API_URL}/study-user-invite`, 'post', invites);
 

@@ -18,6 +18,7 @@ import {
     Typography,
 } from '@mui/material';
 import GoogleSocial from './GoogleSocial';
+import * as AuthApiType from '@/types/auth';
 import authApi from '@/apis/auth';
 import AnimateButton from '@/components/@extended/AnimateButton';
 
@@ -40,7 +41,7 @@ const AuthLogin = () => {
                 Sign In
             </Typography>
 
-            <Formik
+            <Formik<AuthApiType.LoginReq>
                 initialValues={{
                     email: '',
                     password: '',
