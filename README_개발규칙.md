@@ -38,3 +38,16 @@
 ## 코드 커밋 관련
 - 기본적으로 코드는 review 를 진행할 수 있도록 merge request 를 요청한다.
 - `안효진` , `이수환` 중 한명에게 코드 리뷰를 신청
+
+## 서버요청 관련 기능 개발시 필요사항 정리
+- [API 파일을 생성하는 위치 정리](#api-파일-생성-위치-정리)
+- [interface 네이밍 규칙 정리](#api-연동-interface-네이밍-규칙)
+
+### API 파일 생성 위치 정리
+- src/types : 요청에 필요한 body 및 Response 데이터 정의
+- src/apis : 서버 요청을 위한 실제 요청 함수 정의
+
+### API 연동 interface 네이밍 규칙
+- 요청 body 명 : {사용할 명칭}`Req`
+- 응답 contents 명 : {사용할 명칭}`Res`
+

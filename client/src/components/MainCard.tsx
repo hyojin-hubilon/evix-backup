@@ -39,6 +39,7 @@ type CustomProps = {
     sx?: CardProps['sx'];
     title?: ReactNode | string;
     codeHighlight?: boolean;
+	overflow?: string;
 };
 
 export type MainCardProps = Override<CardProps, CustomProps>;
@@ -58,6 +59,7 @@ const MainCard = forwardRef<typeof Card, MainCardProps>(
             sx = {},
             title,
             codeHighlight,
+			overflow,
             ...others
         },
         ref
@@ -82,6 +84,7 @@ const MainCard = forwardRef<typeof Card, MainCardProps>(
                         boxShadow && (!border || theme.palette.mode === 'dark')
                             ? shadow || theme.customShadows.z1
                             : 'inherit',
+					overflow : overflow,
                     ':hover': {
                         boxShadow: boxShadow ? shadow || theme.customShadows.z1 : 'inherit',
                     },

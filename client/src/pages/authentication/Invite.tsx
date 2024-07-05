@@ -51,7 +51,7 @@ const Invite = () => {
                 <Typography variant="h4" gutterBottom>
                     임상 연구원 초대
                 </Typography>
-                <form onSubmit={formik.handleSubmit}>
+                <form noValidate onSubmit={formik.handleSubmit}>
                     <TextField
                         label="Study Number"
                         name="std_no"
