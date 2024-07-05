@@ -1,8 +1,17 @@
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { Box } from '@mui/material';
-import { useMemo } from 'react';
+import { DataGrid, GridToolbarContainer, GridToolbarQuickFilter, gridClasses } from '@mui/x-data-grid';
+import { Box, useTheme } from '@mui/material';
+
+
+function CustomToolbar() {
+	return (
+	  <GridToolbarContainer>
+		<GridToolbarQuickFilter />
+	  </GridToolbarContainer>
+	);
+}
 
 const StudyParticipants = () => {
+	const theme = useTheme();
 	const createData = (
 		id: number,
 		name: string,
@@ -36,23 +45,24 @@ const StudyParticipants = () => {
 		{ field: 'status', headerName: 'Status', width: 150}
 	]
 
-
-	
-	
 	return (
-		<Box sx={{ minHeight: 400, width: 1 }}>
+		<Box sx={{ minHeight: 400, width: 'calc(100vw - 300px)', pt:'1rem' }}>
 			<DataGrid 
 				columns={columns}
 				rows={data}
 				disableColumnFilter
 				disableColumnSelector
 				disableDensitySelector
-				slots={{ toolbar: GridToolbar }}
-				slotProps={{
-				toolbar: {
-					showQuickFilter: true,
-				},
-				}}
+				slots={{ toolbar: CustomToolbar }}
+				sx={{
+					border: '1px solid #ddd',
+					[`& .${gridClasses.virtualScrollerContent}`]: {
+						borderTop: `1px solid ${theme.palette.grey[500]}`,
+					},
+					[`& .${gridClasses.row}`]: {
+						borderBottom: `1px solid ${theme.palette.grey[400]}`,
+					}
+				  }}
 			/>
 		</Box>
 	)
