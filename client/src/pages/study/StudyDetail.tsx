@@ -24,7 +24,7 @@ const StudyDetail = () => {
 	return (
 		<>
 			<Breadcrumbs2 />
-			<Box >
+			<Grid container rowSpacing={3} columnSpacing={1}>
 				<Grid container item xs={12}>
 					<Box display="flex" alignItems="center" gap={1}>
 						<Chip label="진행중" color="primary" />
@@ -69,7 +69,7 @@ const StudyDetail = () => {
 					activeTab == '2' && <StudyParticipants />
 				}
 				
-			</Box>			
+			</Grid>			
 			
 		</>
 	)
