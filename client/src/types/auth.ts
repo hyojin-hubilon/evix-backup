@@ -48,3 +48,13 @@ export interface ApplyFreeTrialReq {
     coutnry: string;
     message: string;
 }
+
+///api/v1/researcher/study/study-user-invite 에서 사용하는 부분
+export interface InviteStudyUser {
+    std_no: number,
+    user_email: string,
+    std_privilege: string,
+}
+
+
+export interface InviteStudyUsers extends Array<InviteStudyUser>{}

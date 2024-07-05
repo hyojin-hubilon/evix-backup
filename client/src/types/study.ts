@@ -40,6 +40,8 @@ export interface StudyUserInvite {
     std_privilege: string;
 }
 
+export interface StudyUserInvites extends Array<StudyUserInvite>{}
+
 export interface UpdateMemberPrivilegeRequest {
     std_no: number;
     user_no: number;
