@@ -18,6 +18,9 @@ const StudyInfo = () => {
 							<Box display="flex" gap={1}>
 								<Typography variant="h6" color="primary">진행중</Typography>
 								<Typography>(최근 업데이트 2024.06.27)</Typography>
+
+								{/* <Typography variant="h6" color="error">진행중단</Typography> */}
+								
 							</Box>
 						</ListItem>
 						<ListItem>
@@ -29,9 +32,19 @@ const StudyInfo = () => {
 						<ListItem>
 							<Typography variant="h5">유료이용기간</Typography>
 							<Box display="flex" gap={1} alignItems="center">
+								{/* 진행중, 혹은 오너가 중단처리했을때  */}
 								<Typography>2024.05.28 ~ 2024.08.31</Typography>
 								<Typography color="error">(만료 67일전)</Typography>
+								
+								{/* 유료이용기간 만료 - 진행중단 상태일때  */}
+								{/* <Typography>유료이용기간이 만료되었습니다. 연장결제 후 다시 진행 가능합니다.</Typography> */}
+
+								{/* 종료
+									<Typography>2024.05.28 ~ 2024.08.31</Typography> */}
+								
+								{/* 종료 : 연장 결제하기 버튼 안나옴 */}
 								<Button variant="contained" size="small">연장결제하기</Button>
+								
 								<Button variant="outlined" size="small">지난 결제내역</Button>
 							</Box>
 						</ListItem>
