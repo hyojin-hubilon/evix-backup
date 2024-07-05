@@ -1,4 +1,4 @@
-import { instance } from "../commonApi";
+import { instance } from "./commonApi";
 
 const US_API_URL = "https://api.fda.gov/drug/label.json";
 const KOREA_API_URL = "https://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList";

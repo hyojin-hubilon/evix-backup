@@ -6,8 +6,8 @@ const BASE_API_URL = '/researcher/user';
 const userApi = {
     updateUser: async (userData: UpdateUserData) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}`, 'put', userData);
-            return response;
+            const responseData = await api<{}>(`${BASE_API_URL}`, 'put', userData);
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -15,8 +15,8 @@ const userApi = {
     },
     getUserInfo: async (userNo: number) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}/${userNo}`, 'get');
-            return response;
+            const responseData = await api<{}>(`${BASE_API_URL}/${userNo}`, 'get');
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -24,8 +24,8 @@ const userApi = {
     },
     deleteUser: async (userNo: number) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}/${userNo}`, 'delete');
-            return response;
+            const responseData = await api<{}>(`${BASE_API_URL}/${userNo}`, 'delete');
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -34,8 +34,8 @@ const userApi = {
     // 현재 로그인된 쿠키 정보로 내 정보 조회
     getMyProfile: async () => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}/my-profile`, 'get');
-            return response;
+            const responseData = await api<{}>(`${BASE_API_URL}/my-profile`, 'get');
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;

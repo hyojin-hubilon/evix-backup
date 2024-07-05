@@ -3,14 +3,14 @@ import Axios, { AxiosRequestConfig } from 'axios';
 /**
  * http status 외 예외가 발생했을 때 코드 정의
  */
-export enum ResCustomErrorCode {
+export const ResCustomErrorCode = {
     // timeout or cancel request
-    TIMEOUT = 600,
+    TIMEOUT: 600,
     // 에러 발생 이후 response.data 에서 data or response 가 없는 경우 
-    NONE_RESPONSE = 601,
+    NONE_RESPONSE: 601,
     // 그 외 모든 에러 (설정에러 등)
-    OTHERS = 699,
-}
+    OTHERS: 699,
+} as const;
 
 export type API_ACTION = 'post' | 'get' | 'put' | 'delete';
 

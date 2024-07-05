@@ -9,9 +9,8 @@ const authApi = {
      */
     login: async (loginData: AuthApiType.LoginReq) => {
         try {
-            const response = await api<AuthApiType.LoginRes>('/auth/login', 'post', loginData);
-            console.log(response);
-            return response;
+            const responseData = await api<AuthApiType.LoginRes>('/auth/login', 'post', loginData);
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -24,9 +23,8 @@ const authApi = {
      */
     logout: async () => {
         try {
-            const response = await api<AuthApiType.LoginRes>('/auth/logout', 'get');
-            console.log(response);
-            return response;
+            const responseData = await api<AuthApiType.LoginRes>('/auth/logout', 'get');
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -40,9 +38,8 @@ const authApi = {
      */
     googleLogin: async (loginData: AuthApiType.GoogleLoginReq) => {
         try {
-            const response = await api<{}>('/auth/social_login', 'post', loginData);
-            console.log(response);
-            return response;
+            const responseData = await api<{}>('/auth/social_login', 'post', loginData);
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -56,9 +53,8 @@ const authApi = {
      */
     sendPasswordResetLink: async (email: string) => {
         try {
-            const response = await api<{}>('/auth/social_login', 'post', { email });
-            console.log(response);
-            return response;
+            const responseData = await api<{}>('/auth/social_login', 'post', { email });
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -72,9 +68,8 @@ const authApi = {
      */
     resetPassword: async (passwordData: AuthApiType.ResetPasswordDataReq) => {
         try {
-            const response = await api<{}>('/auth/password/reset', 'put', passwordData);
-            console.log(response);
-            return response;
+            const responseData = await api<{}>('/auth/password/reset', 'put', passwordData);
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -88,9 +83,8 @@ const authApi = {
      */
     signUp: async (signUpData: AuthApiType.SignUpReq) => {
         try {
-            const response = await api<{}>('/auth/signup', 'put', signUpData);
-            console.log(response);
-            return response;
+            const responseData = await api<{}>('/auth/signup', 'put', signUpData);
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -104,9 +98,8 @@ const authApi = {
      */
     verifyAcceptToken: async (token: string) => {
         try {
-            const response = await api<{}>(`/auth/accept-verification/${token}`, 'get');
-            console.log(response);
-            return response;
+            const responseData = await api<{}>(`/auth/accept-verification/${token}`, 'get');
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -120,9 +113,8 @@ const authApi = {
      */
     verifyInviteToken: async (token: string) => {
         try {
-            const response = await api<{}>(`/auth/invite-verification/${token}`, 'get');
-            console.log(response);
-            return response;
+            const responseData = await api<{}>(`/auth/invite-verification/${token}`, 'get');
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -138,8 +130,8 @@ const authApi = {
     verifyPasswordReset: async (authCode: string, token: string) => {
         try {
             const uri = `/auth/authentication-code-verification/${authCode}/${token}`;
-            const response = await api<{}>(uri, 'get');
-            return response;
+            const responseData = await api<{}>(uri, 'get');
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -153,8 +145,8 @@ const authApi = {
      */
     applyFreeTrial: async (applyData: AuthApiType.ApplyFreeTrialReq) => {
         try {
-            const response = await api<{}>('/auth/apply-free-trial', 'post', applyData);
-            return response;
+            const responseData = await api<{}>('/auth/apply-free-trial', 'post', applyData);
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;

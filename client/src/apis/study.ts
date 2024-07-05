@@ -13,9 +13,9 @@ const studyApi = {
      */
     createStudy: async (data: StudyApiType.Study) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}`, 'post', data);
+            const responseData = await api<{}>(`${BASE_API_URL}`, 'post', data);
 
-            return response;
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -29,9 +29,9 @@ const studyApi = {
      */
     updateStudy: async (data: any) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}`, 'put', data);
+            const responseData = await api<{}>(`${BASE_API_URL}`, 'put', data);
 
-            return response;
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -45,11 +45,11 @@ const studyApi = {
      */
     deleteStudy: async (deleteData: number) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}`, 'delete', {
+            const responseData = await api<{}>(`${BASE_API_URL}`, 'delete', {
                 data: deleteData,
             });
 
-            return response;
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -63,8 +63,8 @@ const studyApi = {
      */
     getStudyDetail: async (stdNo: number) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}/${stdNo}`, 'get');
-            return response;
+            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}`, 'get');
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -78,8 +78,8 @@ const studyApi = {
      */
     getStudyManager: async (stdNo: number) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}/${stdNo}/manager`, 'get');
-            return response;
+            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/manager`, 'get');
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -93,8 +93,8 @@ const studyApi = {
      */
     getInvitedStudyManager: async (stdNo: number) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}/${stdNo}/manager-invite`, 'get');
-            return response;
+            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/manager-invite`, 'get');
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -108,8 +108,8 @@ const studyApi = {
      */
     getStudyOverview: async (stdNo: number) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}/${stdNo}/overview`, 'get');
-            return response;
+            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/overview`, 'get');
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -123,8 +123,8 @@ const studyApi = {
      */
     getStudySurvey: async (stdNo: number) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}/${stdNo}/survey`, 'get');
-            return response;
+            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/survey`, 'get');
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -139,12 +139,12 @@ const studyApi = {
      */
     myStudyList: async (pageNum: number, elementSize: number) => {
         try {
-            const response = await api<{}>(
+            const responseData = await api<{}>(
                 `${BASE_API_URL}/my-list/${pageNum}/${elementSize}`,
                 'get'
             );
 
-            return response;
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -158,9 +158,9 @@ const studyApi = {
      */
     updateStudyStatus: async (data: any) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}/study-status`, 'put', data);
+            const responseData = await api<{}>(`${BASE_API_URL}/study-status`, 'put', data);
 
-            return response;
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -175,13 +175,13 @@ const studyApi = {
      */
     deleteStudyMember: async (std_no: number, user_no: number) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}/study-user`, 'delete', {
+            const responseData = await api<{}>(`${BASE_API_URL}/study-user`, 'delete', {
                 data: {
                     std_no,
                     user_no,
                 },
             });
-            return response;
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -195,9 +195,9 @@ const studyApi = {
      */
     inviteStudyMember: async (invites: StudyApiType.StudyUserInvite[]) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}/study-user-invite`, 'post', invites);
+            const responseData = await api<{}>(`${BASE_API_URL}/study-user-invite`, 'post', invites);
 
-            return response;
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -211,12 +211,12 @@ const studyApi = {
      */
     updateMemberPrivilege: async (updateData: StudyApiType.UpdateMemberPrivilegeRequest) => {
         try {
-            const response = await api<{}>(
+            const responseData = await api<{}>(
                 `${BASE_API_URL}/study-user-privilege`,
                 'put',
                 updateData
             );
-            return response;
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -229,11 +229,11 @@ const studyApi = {
      */
     unauthorizedInvitation: async () => {
         try {
-            const response = await api<{}>(
+            const responseData = await api<{}>(
                 `${BASE_API_URL}/my-list-unauthorized-invitation`,
                 'get'
             );
-            return response;
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
