@@ -6,6 +6,7 @@ import aImage1 from '@assets/images/users/avatar-1.png';
 import { ApexDonutChartSeriesType } from './components/overview/CircleChart';
 import StudyOverView from './components/StudyOverview';
 import StudyInfo from './components/StudyInfo';
+import StudyParticipants from './components/StudyParicipations';
 
 const StudyDetail = () => {
     const [activeTab, setActiveTab] = useState('0');
@@ -69,9 +70,9 @@ const StudyDetail = () => {
                         </Box>
                     </Grid>
                 </Grid>
-
                 {activeTab == '0' && <StudyOverView partCompleteRate={partCompleteRate} />}
                 {activeTab == '1' && <StudyInfo />}
+                {activeTab == '2' && <StudyParticipants />}
             </Grid>
         </>
     );

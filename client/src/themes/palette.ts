@@ -17,7 +17,7 @@ const Palette = (mode: PaletteMode) => {
         '#ffffff',
         '#fafafa',
         '#f5f5f5',
-        '#f0f0f0',
+        '#f0f0f0',//line에 이 컬러 자꾸 들어가고 있음.. 전체적으로 수정필요
         '#d9d9d9',
         '#bfbfbf',
         '#8c8c8c',
