@@ -73,9 +73,11 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                         </Button>
 
                         {/* Overview  */}
-                        <Button size="large" variant="outlined">
-                            <FundViewOutlined style={{ fontSize: '1.5rem' }} />
-                        </Button>
+                        {study.std_status === 'STD-PROGRESSION' && (
+                            <Button size="large" variant="outlined">
+                                <FundViewOutlined style={{ fontSize: '1.5rem' }} />
+                            </Button>
+                        )}
                     </Grid>
                 </Grid>
             </Card>
