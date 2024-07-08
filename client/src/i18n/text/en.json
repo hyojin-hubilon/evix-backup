@@ -1,27 +1,30 @@
 {
-    "common" : {
+    "common": {
         "home": "Home",
         "products": "Products",
         "case": "Case",
         "price": "Price",
         "support": "Support"
     },
-    "langding" : {
+    "langding": {
         "make_the_world": "Make the world healthy",
         "with_data": "with data",
         "initiation_of_a": "Initiation of a decentralized clinical trial",
-        "join_us_with": "Join us with efficient and economical evix-DCT."
-    },
-    "study" : {
-        
-    },
-    "survey" : {
+        "join_us_with": "Join us with efficient and economical evix-DCT.",
 
+        "cookie_policy": {
+            "what_are_cookies": "What are cookies?",
+            "what_are_cookies_description": "When you visit a website such as uMotif.com, the website stores data in small files on your computer, known as cookies. Cookies are used to store information about you and your preferences, so that you don't have to keep re-entering them, and improve your browsing experience.",
+            "how_do_we": "How do we use cookies?",
+            "how_do_we_description": "There are several different types of cookie:"
+        },
+        "language": {
+            "en": "English",
+            "ko": "Korean"
+        }
     },
-    "user" : {
-
-    },
-    "my_page" : {
-
-    }
+    "study": {},
+    "survey": {},
+    "user": {},
+    "my_page": {}
 }

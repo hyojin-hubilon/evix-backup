@@ -1,27 +1,30 @@
 {
-    "common" : {
-        "home": "Home",
-        "products": "Products",
+    "common": {
+        "home": "홈",
+        "products": "상품",
         "case": "Case",
-        "price": "Price",
-        "support": "Support"
+        "price": "가격",
+        "support": "고객지원"
     },
-    "langding" : {
+    "langding": {
         "make_the_world": "Make the world healthy",
         "with_data": "with data",
         "initiation_of_a": "Initiation of a decentralized clinical trial",
-        "join_us_with": "Join us with efficient and economical evix-DCT."
-    },
-    "study" : {
-        
-    },
-    "survey" : {
+        "join_us_with": "Join us with efficient and economical evix-DCT.",
 
+        "cookie_policy": {
+            "what_are_cookies": "쿠키란 무엇입니까?",
+            "what_are_cookies_description": "When you visit a website such as uMotif.com, the website stores data in small files on your computer, known as cookies. Cookies are used to store information about you and your preferences, so that you don't have to keep re-entering them, and improve your browsing experience.",
+            "how_do_we": "쿠키는 어떻게 사용되나요?",
+            "how_do_we_description": "There are several different types of cookie:"
+        },
+        "language": {
+            "en": "영어",
+            "ko": "한국어"
+        }
     },
-    "user" : {
-
-    },
-    "my_page" : {
-
-    }
+    "study": {},
+    "survey": {},
+    "user": {},
+    "my_page": {}
 }

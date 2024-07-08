@@ -13,6 +13,8 @@ import LogoSection from '@components/Logo';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { ReactEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { IRootState } from '@/store/reducers';
 
 // ==============================|| LANDING LAYOUT - HEADER ||============================== //
 type Props = {
@@ -21,6 +23,7 @@ type Props = {
 }
 
 const LandingHeader = ({ open, handleDrawerToggle } : Props) => {
+	const languageSelector = useSelector((state: IRootState) => state.language);
 	const { t } = useTranslation();
 	const theme = useTheme();
     const navigate = useNavigate();
