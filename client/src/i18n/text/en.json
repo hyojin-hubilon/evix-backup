@@ -1,0 +1,27 @@
+{
+    "common" : {
+        "home": "Home",
+        "products": "Products",
+        "case": "Case",
+        "price": "Price",
+        "support": "Support"
+    },
+    "langding" : {
+        "make_the_world": "Make the world healthy",
+        "with_data": "with data",
+        "initiation_of_a": "Initiation of a decentralized clinical trial",
+        "join_us_with": "Join us with efficient and economical evix-DCT."
+    },
+    "study" : {
+        
+    },
+    "survey" : {
+
+    },
+    "user" : {
+
+    },
+    "my_page" : {
+
+    }
+}

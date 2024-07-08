@@ -1,49 +1,73 @@
 import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import * as Yup from 'yup';
-import { useFormik } from 'formik';
-import axios from 'axios';
-import { getDecodedToken } from '@utils/Cookie';
+import { FormikErrors, FormikTouched, useFormik } from 'formik';
+import { StudyUserInvite, StudyUserInvites } from '@/types/study';
+import studyApi from '@apis/study';
 
 const Invite = () => {
     const validationSchema = Yup.object({
-        std_no: Yup.string().required('Study number is required'),
+        std_no: Yup.string()
+            .matches(/^[0-9]+$/, 'Must be numbers')
+            .required('Study number is required'),
         user_email: Yup.string().email('Must be a valid email').required('Email is required'),
         std_privilege: Yup.string().required('Privilege is required'),
     });
 
-    const formik = useFormik({
+    const formik = useFormik<StudyUserInvite>({
         initialValues: {
-            std_no: '',
+            std_no: 0,
             user_email: '',
             std_privilege: '',
-            submit: '',
         },
         validationSchema: validationSchema,
 
-        onSubmit: async (values, { setStatus, setErrors }) => {
+        onSubmit: async (values, { setStatus }) => {
             try {
-                const payload = [
+                const payload: StudyUserInvites = [
                     {
-                        std_no: values.std_no,
+                        std_no: +values.std_no,
                         user_email: values.user_email,
                         std_privilege: values.std_privilege,
                     },
                 ];
 
-                const response = await axios.post(
-                    '/api/v1/researcher/study/study-user-invite',
-                    payload
-                );
+                const responseData = studyApi.inviteStudyMember(payload);
                 setStatus({ success: true });
-                console.log(response.data);
-                console.log(getDecodedToken(response.data));
+                console.log(responseData);
+                // console.log(getDecodedToken(responseData));
             } catch (error) {
-                setErrors({ submit: '에러 발생gg' });
-                console.log('에러 발생 : ', error);
+                console.log('error occur : ', error);
                 setStatus({ success: false });
             }
         },
     });
+
+    const makeTextField = (
+        labal: string,
+        name: string,
+        formik: {
+            values: StudyUserInvite;
+            errors: FormikErrors<StudyUserInvite>;
+            touched: FormikTouched<StudyUserInvite>;
+            handleChange;
+            handleBlur;
+        }
+    ) => {
+        return (
+            <TextField
+                label={labal}
+                name={name}
+                value={formik.values[name]}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                fullWidth
+                margin="normal"
+                required
+                error={formik.touched[name] && Boolean(formik.errors[name])}
+                helperText={formik.touched[name] && formik.errors[name]}
+            />
+        );
+    };
 
     return (
         <Container maxWidth="sm">
@@ -51,44 +75,10 @@ const Invite = () => {
                 <Typography variant="h4" gutterBottom>
                     임상 연구원 초대
                 </Typography>
-                <form onSubmit={formik.handleSubmit}>
-                    <TextField
-                        label="Study Number"
-                        name="std_no"
-                        value={formik.values.std_no}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        fullWidth
-                        margin="normal"
-                        required
-                        error={formik.touched.std_no && Boolean(formik.errors.std_no)}
-                        helperText={formik.touched.std_no && formik.errors.std_no}
-                    />
-                    <TextField
-                        label="Email"
-                        name="user_email"
-                        value={formik.values.user_email}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        fullWidth
-                        margin="normal"
-                        required
-                        error={formik.touched.user_email && Boolean(formik.errors.user_email)}
-                        helperText={formik.touched.user_email && formik.errors.user_email}
-                    />
-                    <TextField
-                        label="Privilege"
-                        name="std_privilege"
-                        value={formik.values.std_privilege}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        fullWidth
-                        margin="normal"
-                        required
-                        error={formik.touched.std_privilege && Boolean(formik.errors.std_privilege)}
-                        helperText={formik.touched.std_privilege && formik.errors.std_privilege}
-                    />
-
+                <form noValidate onSubmit={formik.handleSubmit}>
+                    {makeTextField('Study Number', 'std_no', formik)}
+                    {makeTextField('Email', 'user_email', formik)}
+                    {makeTextField('Privilege', 'std_privilege', formik)}
                     <Button
                         type="submit"
                         variant="contained"

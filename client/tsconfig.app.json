@@ -34,6 +34,7 @@
             "@store/*": ["./src/store/*"],
             "@utils/*": ["./src/utils/*"],
             "@apis/*": ["./src/apis/*"],
+			"@api/*": ["./src/api/*"],
             "@i18n/*": ["./src/i18n/*"]
         },
         "noImplicitAny": false,

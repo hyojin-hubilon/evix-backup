@@ -12,6 +12,7 @@ import LogoSection from '@components/Logo';
 // assets
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { ReactEventHandler } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // ==============================|| LANDING LAYOUT - HEADER ||============================== //
 type Props = {
@@ -20,6 +21,7 @@ type Props = {
 }
 
 const LandingHeader = ({ open, handleDrawerToggle } : Props) => {
+	const { t } = useTranslation();
 	const theme = useTheme();
     const navigate = useNavigate();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
@@ -60,11 +62,11 @@ const LandingHeader = ({ open, handleDrawerToggle } : Props) => {
 					<LogoSection sx={{display:"flex", justifyContent: "flex-start"}} />
                 </Grid>
 				<Grid item xs={6} {...contentAlignCenter} sx={{display: 'flex', gap: { xs: "1rem", md: "3rem", lg: "5rem"}}}>
-					<NavLink to='/'>Home</NavLink>
-					<NavLink to="/">Products</NavLink>
-					<NavLink to="/">Case</NavLink>
-					<NavLink to="/">Price</NavLink>
-					<NavLink to='support'>Support</NavLink>
+					<NavLink to='/'>{t('common.home')}</NavLink>
+					<NavLink to="/">{t('common.products')}</NavLink>
+					<NavLink to="/">{t('common.case')}</NavLink>
+					<NavLink to="/">{t('common.price')}</NavLink>
+					<NavLink to='support'>{t('common.support')}</NavLink>
 				</Grid>
 				<Grid item xs={3} alignItems="center" justifyContent="flex-end" sx={{display: 'flex', gap: 1}}>
 					<Button variant='contained' onClick={toDashBoardPage} sx={{fontSize: "1rem"}}>Demo</Button>
