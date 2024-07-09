@@ -51,10 +51,31 @@ export interface ApplyFreeTrialReq {
 
 ///api/v1/researcher/study/study-user-invite 에서 사용하는 부분
 export interface InviteStudyUser {
-    std_no: number,
-    user_email: string,
-    std_privilege: string,
+    std_no: number;
+    user_email: string;
+    std_privilege: string;
 }
 
+export interface InviteStudyUsers extends Array<InviteStudyUser> {}
 
-export interface InviteStudyUsers extends Array<InviteStudyUser>{}
+export interface MyProfile {
+    user_no: number;
+    email: string;
+    first_name: string;
+    last_name: string;
+    mobile: string;
+    company_name: string;
+    job_title: string;
+    industry: string;
+    country: string;
+    privilege: string;
+    profile_image_url: string;
+    profile_image_name: string;
+    profile_image_origin_name: string;
+    created_at: string;
+    updated_user_no: number;
+    updated_at: string;
+    last_login: string;
+    active_yn: string;
+    delete_yn: string;
+}

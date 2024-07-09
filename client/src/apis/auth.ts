@@ -152,6 +152,21 @@ const authApi = {
             throw e;
         }
     },
+
+    /**
+     * 비밀번호 재설정 토큰 발급 및 인증번호 이메일 발송
+     * @param email
+     * @returns
+     */
+    requestChangePassword: async (email: string) => {
+        try {
+            const responseData = await api<{}>('/auth/password/authentication-code', 'post', email);
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
 };
 
 export default authApi;

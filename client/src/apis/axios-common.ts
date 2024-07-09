@@ -22,7 +22,7 @@ export interface ResCommonSuccess<T> {
     result: boolean;
     code: number;
     message: string;
-    content?: T;
+    content: T;
 }
 
 export interface ResCommonErrorInf {

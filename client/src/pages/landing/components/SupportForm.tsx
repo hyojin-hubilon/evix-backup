@@ -85,7 +85,7 @@ const SupportForm = () => {
         },
     });
 
-    const handleFormType = (e: SelectChangeEvent) => {
+    const handleFormType = (e) => {
         setFormType(e.target.value);
     };
 
