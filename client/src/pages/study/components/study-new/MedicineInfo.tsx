@@ -1,4 +1,5 @@
 import { Button, FormControl, Grid, OutlinedInput, Typography, useTheme } from "@mui/material"
+import MedicineSearch from "./MedicineSearch";
 
 const MedicineInfo = () => {
 	const theme = useTheme();
@@ -71,6 +72,8 @@ const MedicineInfo = () => {
 				</FormControl>
 			</Grid>
 		</Grid>
+
+		<MedicineSearch />
 	</>
 	)
 }
