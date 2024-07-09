@@ -3,12 +3,11 @@ import { combineReducers } from 'redux'; // Redux에서 제공하는 combineRedu
 
 // project import
 import menu from './menu'; // 우리가 정의한 menu 슬라이스를 import 합니다.
-import language from './language';
 // ==============================|| COMBINE REDUCERS ||============================== //
 
 // 여러 리듀서를 하나로 합칩니다.
 // 현재는 menu 리듀서 하나만 합쳐서 사용하고 있습니다.
-const reducers = combineReducers({ menu, language});
+const reducers = combineReducers({ menu });
 export type IRootState = ReturnType<typeof reducers>;
 
 export default reducers; // 합쳐진 리듀서를 export 합니다.

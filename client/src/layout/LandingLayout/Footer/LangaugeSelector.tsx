@@ -1,19 +1,15 @@
 import { useState } from 'react';
 import { FormControl, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { setLanguage as languageReduce } from '@/store/reducers/language';
 
 
 const LanguageSelector = () => {
-    const dispatch = useDispatch(); // dispatch로 재선언하여 사용한다.
     const { t, i18n } = useTranslation();
     const [language, setLanguage] = useState<string>('en');
 
     const handleChange = (event: SelectChangeEvent<unknown>) => {
         setLanguage(event.target.value as string);
         i18n.changeLanguage(event.target.value as string);
-        dispatch( languageReduce({ language: event.target.value as string }));
     };
 
     return (
