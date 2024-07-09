@@ -1,5 +1,6 @@
 import { Button, Container, Grid, Box, Typography, styled } from '@mui/material';
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 //Landing Images
 //Section 03
@@ -29,6 +30,7 @@ import './Landing.scss';
 
 export default function LandingPage() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     // const theme = useTheme();
 
     // const toLoginPage = () => {
@@ -112,9 +114,9 @@ export default function LandingPage() {
                             },
                         }}
                     >
-                        Make the world healthy
+                        {t('landing.make_the_world')}
                         <br />
-                        with data
+                        {t('landing.with_data')}
                     </Typography>
                     <Typography
                         sx={{
@@ -133,9 +135,9 @@ export default function LandingPage() {
                             lineHeight: 1.56,
                         }}
                     >
-                        Initiation of a decentralized clinical trial
+                        {t('landing.initiation_of_a')}
                         <br />
-                        Join us with efficient and economical evix-DCT.
+                        {t('landing.join_us_with')}
                     </Typography>
                 </Container>
             </Box>

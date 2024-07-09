@@ -16,6 +16,7 @@ import SimpleModal from '../../../components/ui/SimpleModal';
 import { useNavigate } from 'react-router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import PrivacyPolicy from '@/components/modal/PrivacyPolicy';
 
 //   const emailAdress = 'evix-dct@evidnet.co.kr';
 const emailAdress = 'bha4388@naver.com';
@@ -36,8 +37,9 @@ const modalStyle = {
 
 const SupportForm = () => {
     const navigate = useNavigate();
-    const [formType, setFormType] = useState('Support');
-    const [isComplete, setIsComplete] = useState(false);
+    const [formType, setFormType] = useState<string>('Support');
+    const [isComplete, setIsComplete] = useState<boolean>(false);
+    const [privacyPolicyIsOpen, setPrivacyPolicyIsOpen] = useState<boolean>(false);
 
     const validationSchema = Yup.object({
         first_name: Yup.string().required('Please enter First Name'),
@@ -82,12 +84,12 @@ const SupportForm = () => {
         },
     });
 
-    const handleFormType = (e) => {
+    const handleFormType = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormType(e.target.value);
     };
 
-    const handlePrivacyPolicyClick = () => {
-        alert('개인정보처리방침입니다.');
+    const handlePrivacyPolicy = () => {
+        setPrivacyPolicyIsOpen((prev) => !prev);
     };
 
     const handleComplete = () => {
@@ -280,7 +282,7 @@ const SupportForm = () => {
                                         textDecoration: 'underline',
                                         marginLeft: '5px',
                                     }}
-                                    onClick={handlePrivacyPolicyClick}
+                                    onClick={handlePrivacyPolicy}
                                 >
                                     Privacy Policies
                                 </label>
@@ -298,6 +300,10 @@ const SupportForm = () => {
                         <Button variant="contained" type="submit">
                             Send
                         </Button>
+                        <PrivacyPolicy
+                            isOpen={privacyPolicyIsOpen}
+                            handleClose={handlePrivacyPolicy}
+                        />
                     </Stack>
                 </form>
             </Stack>

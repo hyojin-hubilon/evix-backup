@@ -8,79 +8,30 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import XIcon from '@mui/icons-material/X';
 
 import footerLogo from '@assets/images/EVIDNET_LOGO.svg';
-import SimpleModal from '@components/ui/SimpleModal';
 import LanguageSelector from './LangaugeSelector';
+import Terms from './components/Terms';
+import CookiePolicy from './components/CookiePolicy';
+import PrivacyPolicy from '@/components/modal/PrivacyPolicy';
+import CookieGuide from './components/CookieGuide';
+import { useTranslation } from 'react-i18next';
 
-const cookieDescriptionButtonText = 'Accept all';
-const cookieDescriptionStyle = {
-    position: 'absolute',
-    top: '92%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '100%',
-    bgcolor: 'white',
-    boxShadow: 24,
-    p: 1,
-};
-
-const cookiePolicyText = (
-    <div
-        dangerouslySetInnerHTML={{
-            __html: `<h3>Cookie Policy</h3>
-            <h4>What are cookies?</h4>
-            When you visit a website such as uMotif.com, the website stores data in small files on your computer, known as cookies.
-            Cookies are used to store information about you and your preferences, so that you don’t have to keep re-entering them, and improve your browsing experience.
-            <h4>How do we use cookies?</h4>
-            There are several different types of cookie:
-            <h4>Strictly necessary cookies</h4>
-            These cookies are essential to enable you to move around the website and use its features, such as accessing secure areas of the website.  Without these cookies, the services you have asked for cannot be provided.
-            <h4>Examples of how we use strictly necessary cookies include:</h4>
-            Session Cookies: A session cookie is stored in temporary memory and is not retained after the browser is closed.  Session cookies do not collect information from the user’s computer, and contain only a session identifier which is not personally identifiable.
-            <h4>Authentication Cookies:</h4> If you register and authenticate (log in) to any of uMotif’s services you may receive authentication cookies these are used to securely maintain a logged-in state to one or more of our services and will usually expire after a period for your safety.  They contain no personally identifiable information.
-            <h4>Performance cookies</h4>
-            These cookies collect information about how visitors use a website, for instance, which pages visitors go to most often, and if they get error messages from web pages.  These cookies don’t collect information that identifies a visitor.  All information these cookies collect is aggregated and therefore anonymous. It is only used to improve how a website works.
-            <h4>Examples of how we use functionality cookies include:</h4>
-            <h4>Preference Cookies</h4>
-            We may store non-personally identifiable preferences such as your preferred language choice so that we can display content in the correct language to you when you use our services.
-            `,
-        }}
-    />
-);
-
-const cookiePolicyButtonText = 'Close';
-const cookiePolicyStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 1000,
-    bgcolor: 'white',
-    boxShadow: 24,
-    p: 1,
-};
+const cursorPointer = { cursor: 'pointer' };
 
 const LandingFooter = () => {
-    const [isCookieDescriptionOpen, setIsCookieDescriptionOpen] = useState(false);
-    const [isCookiePolicyOpen, setIsCookiePolicyOpen] = useState(false);
+    const { t } = useTranslation();
+    const [cookiePolicyIsOpen, setCookiePolicyIsOpen] = useState<boolean>(false);
+    const [privacyPolicyIsOpen, setPrivacyPolicyIsOpen] = useState<boolean>(false);
+    const [termsIsOpen, setTermsIsOpen] = useState<boolean>(false);
 
-    const handleCookieDescriptionOpen = () => {
-        setIsCookieDescriptionOpen((prev) => !prev);
+    const handleCookiePolicy = (): void => {
+        setCookiePolicyIsOpen((prev) => !prev);
     };
-    const handleCookiePolicyOpen = () => {
-        setIsCookiePolicyOpen((prev) => !prev);
+    const handlePravacyPolicy = (): void => {
+        setPrivacyPolicyIsOpen((prev) => !prev);
     };
-
-    const cookieDescriptionText = (
-        <div>
-            The website uses technologies such as cookies to activate essential site features and
-            use them for analysis, personalization, and target advertising purposes. You can change
-            the settings at any time or leave the default settings as they are. You can close this
-            banner if you want to continue using only required cookies.
-            <span style={{ color: 'blue', cursor: 'pointer' }} onClick={handleCookiePolicyOpen}>
-                Cookie Policy
-            </span>
-        </div>
-    );
+    const handleTerms = (): void => {
+        setTermsIsOpen((prev) => !prev);
+    };
 
     const theme = useTheme();
 
@@ -126,11 +77,15 @@ const LandingFooter = () => {
                         </Grid>
                         <Grid item xs={12} sm={8} md={4} lg={4}>
                             <Box sx={{ width: 1, display: 'flex', gap: 3 }}>
-                                <FooterLink href="support">Support</FooterLink>
-                                <FooterLink>Privacy</FooterLink>
-                                <FooterLink>Terms</FooterLink>
-                                <FooterLink onClick={handleCookieDescriptionOpen}>
-                                    Cookie Policy
+                                <FooterLink href="support">{t('common.support')}</FooterLink>
+                                <FooterLink style={cursorPointer} onClick={handlePravacyPolicy}>
+                                    {t('common.privacy')}
+                                </FooterLink>
+                                <FooterLink style={cursorPointer} onClick={handleTerms}>
+                                    {t('common.terms')}
+                                </FooterLink>
+                                <FooterLink style={cursorPointer} onClick={handleCookiePolicy}>
+                                    {t('common.cookie_policy')}
                                 </FooterLink>
                             </Box>
                             <Box sx={{ width: 1, paddingTop: '10px' }}>
@@ -201,22 +156,10 @@ const LandingFooter = () => {
                     </Grid>
                 </Container>
             </Box>
-            <SimpleModal
-                text={cookieDescriptionText}
-                isOpen={isCookieDescriptionOpen}
-                handleOpen={handleCookieDescriptionOpen}
-                handleClick={handleCookieDescriptionOpen}
-                style={cookieDescriptionStyle}
-                buttonText={cookieDescriptionButtonText}
-            />
-            <SimpleModal
-                text={cookiePolicyText}
-                isOpen={isCookiePolicyOpen}
-                handleOpen={handleCookiePolicyOpen}
-                handleClick={handleCookiePolicyOpen}
-                style={cookiePolicyStyle}
-                buttonText={cookiePolicyButtonText}
-            />
+            <PrivacyPolicy isOpen={privacyPolicyIsOpen} handleClose={handlePravacyPolicy} />
+            <Terms isOpen={termsIsOpen} handleClose={handleTerms} />
+            <CookiePolicy isOpen={cookiePolicyIsOpen} handleClose={handleCookiePolicy} />
+            <CookieGuide handleCookiePolicy={handleCookiePolicy} />
         </>
     );
 };

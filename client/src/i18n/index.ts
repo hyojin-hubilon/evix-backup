@@ -1,11 +1,14 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import ko from './ko.json';
+import ko from './text/ko.json';
+import en from './text/en.json';
 
 i18n.use(initReactI18next).init({
     resources: {
-        en: {},
+        en: {
+            translation: en,
+        },
         ko: {
             translation: ko,
         },
