@@ -4,19 +4,54 @@
         "products": "Products",
         "case": "Case",
         "price": "Price",
-        "support": "Support"
+        "support": "Support",
+        "privacy" : "Privacy",
+        "terms" : "Terms",
+        "cookie_policy" : "Cookie Policy"
     },
-    "langding": {
+    "landing": {
         "make_the_world": "Make the world healthy",
         "with_data": "with data",
         "initiation_of_a": "Initiation of a decentralized clinical trial",
         "join_us_with": "Join us with efficient and economical evix-DCT.",
-
+        "privacy_policy" : {
+            "title" : "Privacy notice",
+            "last_revised" : "Last Revised: November 2022",
+            "description" : "These Terms and Conditions together with our Privacy Notice govern your use or viewing of this website (the “Site”) and your relationship with the owner of the Site, Roche Diagnostics (the “Site Owner”). You may contact Roche Diagnostics at F. Hoffmann-La Roche Ltd, Corporate Communications, Grenzacherstrasse 124, CH-4070 Basel, Switzerland. By using this Site, you agree to be bound by these Terms and Conditions."
+        },
+        "terms" : {
+            "title" : "Website terms and conditions",
+            "last_revised" : "Last Revised: November 2022",
+            "description" : "These Terms and Conditions together with our Privacy Notice govern your use or viewing of this website (the “Site”) and your relationship with the owner of the Site, Roche Diagnostics (the “Site Owner”). You may contact Roche Diagnostics at F. Hoffmann-La Roche Ltd, Corporate Communications, Grenzacherstrasse 124, CH-4070 Basel, Switzerland. By using this Site, you agree to be bound by these Terms and Conditions."
+        },
         "cookie_policy": {
             "what_are_cookies": "What are cookies?",
             "what_are_cookies_description": "When you visit a website such as uMotif.com, the website stores data in small files on your computer, known as cookies. Cookies are used to store information about you and your preferences, so that you don't have to keep re-entering them, and improve your browsing experience.",
             "how_do_we": "How do we use cookies?",
-            "how_do_we_description": "There are several different types of cookie:"
+            "how_do_we_description": "There are several different types of cookie:",
+            "strictly_necessary" : "Strictly necessary cookies",
+            "strictly_necessary_description" : "These cookies are essential to enable you to move around the website and use its features, such as accessing secure areas of the website. Without these cookies, the services you have asked for cannot be provided.",
+            "session_cookie" : "Session Cookies",
+            "session_cookie_description" : "A session cookie is stored in temporary memory and is not retained after the browser is closed. Session cookies do not collect information from the user's computer and contain only a session identifier which is not personally identifiable.",
+            "auth_cookie" : "Authentication Cookies",
+            "auth_cookie_description" : "If you register and authenticate (log in) to any of uMotif's services you may receive authentication cookies that are used to securely maintain a logged-in state to one or more of our services and will usually expire after a period for your safety. They contain no personally identifiable information.",
+            "analytics_cookie" : "Analytics Cookies",
+            "analytics_cookie_description" : "These cookies collect information about how visitors use a website, for instance, which pages visitors go to most often, and if they get error messages from web pages. These cookies don't collect information that identifies a visitor. All information these cookies collect is aggregated and therefore anonymous. It is only used to improve how a website works.",
+            "preference_cookie" : "Preference Cookies",
+            "preference_cookie_description" : "You may store non-personally identifiable preferences such as your preferred language choice so that we can display content in the correct language to you when you use our services."
+        },
+        "cookie_guide": {
+            "the_website": "The website uses technologies such as cookies to activate essential site features and use them for analysis, personalization, and target advertising purposes. You can change the settings at any time or leave the default settings as they are. You can close this banner if you want to continue using only required cookies.",
+            "cookie_policy": "Cookie Policy"
+        },
+        "cookie_settings" : {
+            "title" : "Cookie settings",
+            "description" : "For cookies on this site, you can use features and advertising cookies or related technologies to select whether you can collect user data for the following purposes.",
+            "necessary_cookie" : "Necessary Cookies",
+            "necessary_cookie_description" : "Required to activate the default website functionality. Unable to deactivate required cookies. Save login details, secure login support, and save incomplete transactions or tasks.",
+            "funtional_cookie" : "Functional Cookies",
+            "funtional_cookie_description" : "A cookie that supports you to provide a customized browsing experience. It analyzes usage records to provide customized content, stores shopping cart lists, and analyzes to optimize site functions.",
+            "confirm_my_choice" : "Confirm My Choice"
         },
         "language": {
             "en": "English",

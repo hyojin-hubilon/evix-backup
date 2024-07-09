@@ -4,6 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import CookieSettings from './CookieSettings';
 import { getCookies, setCookie } from '@/utils/Cookie';
 import { Cookie } from '@/types/cookie';
+import { useTranslation } from 'react-i18next';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -25,6 +26,7 @@ type Props = {
 };
 
 const CookieGuide: React.FC<Props> = ({ handleCookiePolicy }) => {
+    const { t } = useTranslation();
     const cookies = getCookies(['necessaryCookies', 'functionalCookies', 'advertisingCookies']);
     const [openThis, setOpenThis] = useState<boolean>(
         cookies?.every((cookie) => cookie.value === undefined)
@@ -60,18 +62,13 @@ const CookieGuide: React.FC<Props> = ({ handleCookiePolicy }) => {
                 <Box sx={style}>
                     <Box sx={{ flexGrow: 1 }}>
                         <Typography variant="body2">
-                            The website uses technologies such as cookies to activate essential site
-                            features and use them for analysis, personalization, and target
-                            advertising purposes. <br />
-                            You can change the settings at any time or leave the default settings as
-                            they are. You can close this banner if you want to continue using only
-                            required cookies.
+                            {t('landing.cookie_guide.the_website')}
                             <Link
                                 onClick={handleCookiePolicy}
                                 style={{ cursor: 'pointer' }}
                                 sx={{ ml: 1 }}
                             >
-                                Cookie Policy
+                                {t('landing.cookie_guide.cookie_policy')}
                             </Link>
                         </Typography>
                     </Box>
@@ -95,7 +92,7 @@ const CookieGuide: React.FC<Props> = ({ handleCookiePolicy }) => {
                         </Button>
                     </Box>
                     <IconButton aria-label="close" sx={{ position: 'absolute', top: 8, right: 8 }}>
-                        <CloseIcon onClick={handleThisClose}/>
+                        <CloseIcon onClick={handleThisClose} />
                     </IconButton>
                 </Box>
             </Modal>

@@ -34,8 +34,8 @@ const LanguageSelector = () => {
                     },
                 }}
             >
-                <MenuItem value="en">{t('langding.language.en')}</MenuItem>
-                <MenuItem value="ko">{t('langding.language.ko')}</MenuItem>
+                <MenuItem value="en">{t('landing.language.en')}</MenuItem>
+                <MenuItem value="ko">{t('landing.language.ko')}</MenuItem>
             </Select>
         </FormControl>
     );

@@ -1,22 +1,57 @@
 {
     "common": {
         "home": "홈",
-        "products": "상품",
-        "case": "Case",
-        "price": "가격",
-        "support": "고객지원"
+        "products": "제품",
+        "case": "사례",
+        "price": "요금안내",
+        "support": "고객지원",
+        "privacy" : "개인정보처리방침",
+        "terms" : "이용 약관",
+        "cookie_policy" : "쿠키 정책"
     },
-    "langding": {
+    "landing": {
         "make_the_world": "Make the world healthy",
         "with_data": "with data",
         "initiation_of_a": "Initiation of a decentralized clinical trial",
         "join_us_with": "Join us with efficient and economical evix-DCT.",
-
+        "privacy_policy" : {
+            "title" : "개인정보 처리 방침",
+            "last_revised" : "최근 수정일: 2022년 11월",
+            "description" : "본 약관은 개인 정보 보호 공지와 함께 사용자가 본 웹 사이트(사이트)를 이용하거나 시청하는 것과 사이트 소유자인 로슈 진단(사이트 소유자)과의 관계를 관리합니다. 로슈 진단에 문의할 수 있습니다. 본 사이트를 이용함으로써 본 약관에 구속되는 것에 동의하는 것입니다."
+        },
+        "terms" : {
+            "title" : "이용 약관",
+            "last_revised" : "최근 수정일: 2022년 11월",
+            "description" : "본 약관은 개인 정보 보호 공지와 함께 사용자가 본 웹 사이트(사이트)를 이용하거나 시청하는 것과 사이트 소유자인 로슈 진단(사이트 소유자)과의 관계를 관리합니다. 로슈 진단에 문의할 수 있습니다. 본 사이트를 이용함으로써 본 약관에 구속되는 것에 동의하는 것입니다."
+        },
         "cookie_policy": {
             "what_are_cookies": "쿠키란 무엇입니까?",
-            "what_are_cookies_description": "When you visit a website such as uMotif.com, the website stores data in small files on your computer, known as cookies. Cookies are used to store information about you and your preferences, so that you don't have to keep re-entering them, and improve your browsing experience.",
+            "what_are_cookies_description": "같은 웹사이트를 방문하면 웹사이트는 쿠키라고 알려진 컴퓨터의 작은 파일에 데이터를 저장합니다",
             "how_do_we": "쿠키는 어떻게 사용되나요?",
-            "how_do_we_description": "There are several different types of cookie:"
+            "how_do_we_description": "쿠키에는 여러 종류가 있습니다.",
+            "strictly_necessary" : "필수 쿠키",
+            "strictly_necessary_description" : "쿠키는 웹사이트를 이동하고 웹사이트의 보안 영역에 액세스하는 것과 같은 웹사이트의 기능을 사용할 수 있도록 하는 데 필수적입니다. 이러한 쿠키가 없으면 요청한 서비스를 제공할 수 없습니다.",
+            "session_cookie" : "세션 쿠키",
+            "session_cookie_description" : "세션 쿠키는 임시 메모리에 저장되며 브라우저를 닫은 후에는 유지되지 않습니다. 세션 쿠키는 사용자의 컴퓨터에서 정보를 수집하지 않으며 개인 식별이 불가능한 세션 식별자만 포함합니다.",
+            "auth_cookie" : "인증 쿠키",
+            "auth_cookie_description" : "서비스에 등록하고 인증(로그인)하면 하나 이상의 서비스에 안전하게 로그인 상태를 유지하는 데 사용되는 인증 쿠키를 받을 수 있으며, 일반적으로 사용자의 안전을 위해 기간이 지나면 만료됩니다. 쿠키에는 개인 식별 정보가 포함되어 있지 않습니다.",
+            "analytics_cookie" : "분석 쿠키",
+            "analytics_cookie_description" : "이 쿠키들은 방문자들이 웹사이트를 어떻게 사용하는지, 예를 들어 방문자들이 어떤 페이지를 가장 자주 방문하는지, 웹페이지에서 오류 메시지를 받으면 어떻게 사용하는지에 대한 정보를 수집합니다. 이 쿠키들은 방문자를 식별하는 정보를 수집하지 않습니다. 이 쿠키들이 수집하는 모든 정보는 집계되므로 익명입니다. 이는 웹사이트의 작동 방식을 개선하는 데에만 사용됩니다.",
+            "preference_cookie" : "기본 설정 쿠키",
+            "preference_cookie_description" : "선호하는 언어 선택과 같이 개인적으로 식별할 수 없는 기본 설정을 저장하여 서비스를 사용할 때 올바른 언어로 콘텐츠를 표시할 수 있습니다."
+        },
+        "cookie_guide": {
+            "the_website": "이 웹사이트는 쿠키와 같은 기술을 사용하여 필수 사이트 기능을 활성화하고 분석, 개인화 및 대상 광고 목적을 위해 사용합니다. 언제든지 설정을 변경하거나 기본 설정을 그대로 사용할 수 있습니다. 필수 쿠키만 계속 사용하려면 이 배너를 닫을 수 있습니다.",
+            "cookie_policy": "쿠키 정책"
+        },
+        "cookie_settings" : {
+            "title" : "쿠키 설정",
+            "description" : "이 사이트의 쿠키에 대하여 기능 및 광고 쿠키 혹은 관련 기술을 사용하여 다음 목적으로 사용자 데이터를 수집할 수 있는지 여부를 선택할 수 있습니다.",
+            "necessary_cookie" : "필수 쿠키",
+            "necessary_cookie_description" : "기본 웹 사이트 기능을 활성화하는 데 필요합니다. 필수 쿠키를 비활성화할 수 없습니다. 로그인 세부 사항 저장 및 보안 로그인 지원하고, 완료되지 않은 트랜잭션 혹은 작업의 저장합니다.",
+            "funtional_cookie" : "기능 쿠키",
+            "funtional_cookie_description" : "맞춤화된 브라우징 경험을 제공할 수 있도록 지원하는 쿠키입니다. 이용 기록을 분석하여 맞춤형 콘텐츠 제공하며 장바구니 목록을 저장, 사이트 기능을 최적화하기 위한 분석을 수행합니다.",
+            "confirm_my_choice" : "확인"
         },
         "language": {
             "en": "영어",

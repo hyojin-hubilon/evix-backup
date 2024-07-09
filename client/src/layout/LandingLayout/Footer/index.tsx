@@ -13,10 +13,12 @@ import Terms from './components/Terms';
 import CookiePolicy from './components/CookiePolicy';
 import PrivacyPolicy from '@/components/modal/PrivacyPolicy';
 import CookieGuide from './components/CookieGuide';
+import { useTranslation } from 'react-i18next';
 
 const cursorPointer = { cursor: 'pointer' };
 
 const LandingFooter = () => {
+    const { t } = useTranslation();
     const [cookiePolicyIsOpen, setCookiePolicyIsOpen] = useState<boolean>(false);
     const [privacyPolicyIsOpen, setPrivacyPolicyIsOpen] = useState<boolean>(false);
     const [termsIsOpen, setTermsIsOpen] = useState<boolean>(false);
@@ -75,15 +77,15 @@ const LandingFooter = () => {
                         </Grid>
                         <Grid item xs={12} sm={8} md={4} lg={4}>
                             <Box sx={{ width: 1, display: 'flex', gap: 3 }}>
-                                <FooterLink href="support">Support</FooterLink>
+                                <FooterLink href="support">{t('common.support')}</FooterLink>
                                 <FooterLink style={cursorPointer} onClick={handlePravacyPolicy}>
-                                    Privacy
+                                    {t('common.privacy')}
                                 </FooterLink>
                                 <FooterLink style={cursorPointer} onClick={handleTerms}>
-                                    Terms
+                                    {t('common.terms')}
                                 </FooterLink>
                                 <FooterLink style={cursorPointer} onClick={handleCookiePolicy}>
-                                    Cookie Policy
+                                    {t('common.cookie_policy')}
                                 </FooterLink>
                             </Box>
                             <Box sx={{ width: 1, paddingTop: '10px' }}>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography, Modal, Switch, FormControlLabel, Paper } from '@mui/material';
 import { Cookie } from '@/types/cookie';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     isOpen: boolean;
@@ -9,10 +10,10 @@ type Props = {
 };
 
 const CookieSettings: React.FC<Props> = ({ isOpen, handleClose, handleConfirm }) => {
+    const { t } = useTranslation();
     const [dummyCookies, setDummyCookies] = useState<Cookie[]>([
         { name: 'necessaryCookies', value: true },
         { name: 'functionalCookies', value: false },
-        { name: 'advertisingCookies', value: false },
     ]);
 
     const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,12 +47,10 @@ const CookieSettings: React.FC<Props> = ({ isOpen, handleClose, handleConfirm })
                     }}
                 >
                     <Typography id="cookie-settings-title" variant="h5" component="h2">
-                        Cookie settings
+                        {t('landing.cookie_settings.title')}
                     </Typography>
                     <Typography id="cookie-settings-description" sx={{ mt: 2 }}>
-                        For cookies on this site, you can use features and advertising cookies or
-                        related technologies to select whether you can collect user data for the
-                        following purposes.
+                        {t('landing.cookie_settings.description')}
                     </Typography>
                     <Paper sx={{ mt: 2, p: 2, border: 1, borderColor: 'divider' }}>
                         <FormControlLabel
@@ -63,12 +62,10 @@ const CookieSettings: React.FC<Props> = ({ isOpen, handleClose, handleConfirm })
                                     disabled
                                 />
                             }
-                            label="Necessary Cookies"
+                            label={t('landing.cookie_settings.necessary_cookie')}
                         />
                         <Typography variant="body2">
-                            Required to activate the default website functionality. Unable to
-                            deactivate required cookies. Save login details, secure login support,
-                            and save incomplete transactions or tasks.
+                            {t('landing.cookie_settings.necessary_cookie_description')}
                         </Typography>
                     </Paper>
                     <Paper sx={{ mt: 2, p: 2, border: 1, borderColor: 'divider' }}>
@@ -81,15 +78,13 @@ const CookieSettings: React.FC<Props> = ({ isOpen, handleClose, handleConfirm })
                                     color="primary"
                                 />
                             }
-                            label="Functional Cookies"
+                            label={t('landing.cookie_settings.funtional_cookie')}
                         />
                         <Typography variant="body2">
-                            A cookie that supports you to provide a customized browsing experience.
-                            It analyzes usage records to provide customized content, stores shopping
-                            cart lists, and analyzes to optimize site functions.
+                            {t('landing.cookie_settings.funtional_cookie_description')}
                         </Typography>
                     </Paper>
-                    <Paper sx={{ mt: 2, p: 2, border: 1, borderColor: 'divider' }}>
+                    {/* <Paper sx={{ mt: 2, p: 2, border: 1, borderColor: 'divider' }}>
                         <FormControlLabel
                             control={
                                 <Switch
@@ -104,14 +99,14 @@ const CookieSettings: React.FC<Props> = ({ isOpen, handleClose, handleConfirm })
                         <Typography variant="body2">
                             A cookie that supports advertising features.
                         </Typography>
-                    </Paper>
+                    </Paper> */}
                     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
                         <Button
                             variant="contained"
                             color="primary"
                             onClick={() => handleConfirm(dummyCookies)}
                         >
-                            Confirm My Choice
+                            {t('landing.cookie_settings.confirm_my_choice')}
                         </Button>
                     </Box>
                 </Box>

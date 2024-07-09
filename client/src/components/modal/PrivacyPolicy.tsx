@@ -9,6 +9,7 @@ import {
     IconButton,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     isOpen: boolean;
@@ -20,44 +21,40 @@ type Term = {
     description: string;
 };
 
-const termsGenerator = ():Term[] => {
-    return [
-        {
-            title: 'Last Revised: November 2022',
-            description: '',
-        },
-        {
-            title: '',
-            description: `These Terms and Conditions together with our Privacy Notice govern your
-                        use or viewing of this website (the “Site”) and your relationship with
-                        the owner of the Site, Roche Diagnostics (the “Site Owner”). You may
-                        contact Roche Diagnostics at F. Hoffmann-La Roche Ltd, Corporate
-                        Communications, Grenzacherstrasse 124, CH-4070 Basel, Switzerland. By
-                        using this Site, you agree to be bound by these Terms and Conditions.`,
-        },
-        { title: '1. Terms of Use: ', description: '' },
-        { title: '2. Not Health Advice: ', description: '' },
-        { title: '3. DISCLAIMER OF WARRANTIES: ', description: '' },
-        { title: '4. LIABILITY: ', description: '' },
-        { title: '5. INDEMNITY: ', description: '' },
-        { title: '6. Third Party Content: ', description: '' },
-        { title: '7. Copyright and Trademark: ', description: '' },
-        {
-            title: '8. No Offers or Solicitations; Forward-Looking Statements: ',
-            description: '',
-        },
-    ];
-};
-
 const PrivacyPolicy: React.FC<Props> = ({ isOpen, handleClose }) => {
+    const { t, i18n } = useTranslation();
+    const termsGenerator = ():Term[] => {
+        return [
+            {
+                title: t('landing.privacy_policy.last_revised'),
+                description: '',
+            },
+            {
+                title: '',
+                description: t('landing.privacy_policy.description'),
+            },
+            { title: '1. Terms of Use: ', description: '' },
+            { title: '2. Not Health Advice: ', description: '' },
+            { title: '3. DISCLAIMER OF WARRANTIES: ', description: '' },
+            { title: '4. LIABILITY: ', description: '' },
+            { title: '5. INDEMNITY: ', description: '' },
+            { title: '6. Third Party Content: ', description: '' },
+            { title: '7. Copyright and Trademark: ', description: '' },
+            {
+                title: '8. No Offers or Solicitations; Forward-Looking Statements: ',
+                description: '',
+            },
+        ];
+    };
+
     const terms:Term[] = useMemo(() => {
         return termsGenerator();
-    }, []);
+    }, [i18n.language]);
 
     return (
         <Dialog open={isOpen} onClose={handleClose}>
             <DialogTitle>
-                <h3>Privacy notice</h3>
+                <h3>{t('landing.privacy_policy.title')}</h3>
                 <IconButton
                     aria-label="close"
                     onClick={handleClose}

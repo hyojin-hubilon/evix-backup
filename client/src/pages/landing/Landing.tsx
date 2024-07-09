@@ -114,9 +114,9 @@ export default function LandingPage() {
                             },
                         }}
                     >
-                        {t('langding.make_the_world')}
+                        {t('landing.make_the_world')}
                         <br />
-                        {t('langding.with_data')}
+                        {t('landing.with_data')}
                     </Typography>
                     <Typography
                         sx={{
@@ -135,9 +135,9 @@ export default function LandingPage() {
                             lineHeight: 1.56,
                         }}
                     >
-                        {t('langding.initiation_of_a')}
+                        {t('landing.initiation_of_a')}
                         <br />
-                        {t('langding.join_us_with')}
+                        {t('landing.join_us_with')}
                     </Typography>
                 </Container>
             </Box>
