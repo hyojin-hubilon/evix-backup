@@ -6,14 +6,20 @@ import ScrollTop from '@components/ScrollTop';
 import Routes from '@/routes';
 import ThemeCustomization from '@/themes';
 import { CookiesProvider } from 'react-cookie';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
 const App = () => (
     <CookiesProvider>
         <ThemeCustomization>
+			<LocalizationProvider dateAdapter={AdapterDayjs}>
+
             <ScrollTop>
                 <Routes />
             </ScrollTop>
+			</LocalizationProvider>
         </ThemeCustomization>
     </CookiesProvider>
 );
