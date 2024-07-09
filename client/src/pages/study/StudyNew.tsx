@@ -21,7 +21,7 @@ const StudyNew = () => {
 	const { divider, primary } = theme.palette;
 	const [ dateRange, setDateRange ] = useState({ startDt: dayjs(), endDt: dayjs()})
 	const [ medicineYOrN, setMedicineYOrN] = useState<'true' | 'false'>('false');
-	const [ mode, setMode ] = useState<'write' | 'edit'>('edit')
+	const [ mode, setMode ] = useState<'write' | 'edit'>('write')
 	
 	const changeDateRange = (e: DateRage) => {
 		//console.log(e.startDt.format('DD/MM/YYYY')); 포맷적용 예시
