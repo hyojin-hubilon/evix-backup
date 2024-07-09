@@ -3,7 +3,6 @@ import { combineReducers } from 'redux'; // Redux에서 제공하는 combineRedu
 
 // project import
 import menu from './menu'; // 우리가 정의한 menu 슬라이스를 import 합니다.
-
 // ==============================|| COMBINE REDUCERS ||============================== //
 
 // 여러 리듀서를 하나로 합칩니다.

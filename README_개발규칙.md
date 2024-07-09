@@ -27,7 +27,8 @@
 - src/apis : 서버 연동 API 들에 대해서 정의
 - src/menu-items : navigation 내 static item 들을 정의
 - src/utils : 앱 전체에서 사용할 Utility 기능을 수행하는 것들을 정의
-- src/types : 앱 전체에서 사용되는 type 및 interface 들을 정의
+- src/types : 앱 전체에서 사용되는 type 및 interface 들을 정의. 
+    - `파일 내부`에서만 사용되는 interface / type 은 src/types 에 포함되지 않도록 한다.
 - src/store : 전역으로 사용하는 redux 셋팅
 - src/routes : Router 데이터 정의
 
@@ -50,4 +51,17 @@
 ### API 연동 interface 네이밍 규칙
 - 요청 body 명 : {사용할 명칭}`Req`
 - 응답 contents 명 : {사용할 명칭}`Res`
+
+## i18n  텍스트 지원을 위한 규칙 정의
+en.json, kr.json 내부에 영문/한글을 지원하기 위한 데이터 정의 수행
+
+- 하위 depth 생성시 네이밍 규칙
+    > 1. 단어의 경우 `소문자`만 사용
+    > 2. 단어 연결의 경우 소문자`_`소문자`_`소문자 형식으로 이름 정리
+
+- 최종문구에 대한 property 이름 정의
+    > 영어 문장 앞 단어 3~5개 이내로 추출 하여 `소문자_소문자_소문자` 형식으로 정의  
+    > e.g) I am a very smart. >> `"i_am_a_very": "I am a very smart."` 로 정의
+
+
 
