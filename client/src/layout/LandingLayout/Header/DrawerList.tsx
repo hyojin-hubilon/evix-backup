@@ -15,7 +15,7 @@ const DrawerList = ({handleDrawerToggle} : Props) => {
 		handleDrawerToggle();
 	};
 
-	const toDashBoardPage = () => {
+	const toDemoPage = () => {
 		navigate("/apply");
 		handleDrawerToggle();
 	};
@@ -45,7 +45,7 @@ const DrawerList = ({handleDrawerToggle} : Props) => {
 			<List>
 			<ListItem>
 				<Box display="flex" gap={2}>
-				<Button variant='contained' onClick={toDashBoardPage} sx={{fontSize: "0.9rem"}}>Demo</Button>
+				<Button variant='contained' onClick={toDemoPage} sx={{fontSize: "0.9rem"}}>Demo</Button>
 				<Button variant='contained' sx={{backgroundColor: '#091C3D', fontSize: "0.9rem"}} onClick={toLoginPage}>Login</Button>
 				</Box>
 			</ListItem>
