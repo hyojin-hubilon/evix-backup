@@ -59,6 +59,8 @@ interface StudyInfoProps {
         description: string;
         disease: string;
         target_number: number;
+        eic_name: string | null;
+        eic_origin_name: string | null;
         std_status: string;
         updated_at: string;
         studySurveySetList: {
@@ -83,7 +85,8 @@ interface StudyInfoProps {
             email: string;
             first_name: string;
             last_name: string;
-            profile_image_path: string | null;
+            profile_image_url: string | null;
+            profile_image_name: string | null;
         }[];
         inviteList: {
             std_no: number;
@@ -264,7 +267,8 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                             }}
                         >
                             <ListItem>
-                                <Link>개인정보 제공 및 참여 동의서</Link>
+                                {/* <Link>개인정보 제공 및 참여 동의서</Link> */}
+                                <Link>{studyDetail.eic_origin_name}</Link>
                             </ListItem>
                         </List>
                     </MainCard>
@@ -290,7 +294,10 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                     </Grid>
                 </Grid>
                 <MainCard>
-                    <StudyMemberStatus inviteList={studyDetail.inviteList} />
+                    <StudyMemberStatus
+                        managerList={studyDetail.managerList}
+                        inviteList={studyDetail.inviteList}
+                    />
                 </MainCard>
             </Grid>
         </Grid>

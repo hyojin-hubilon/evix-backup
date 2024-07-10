@@ -2,7 +2,6 @@ import Breadcrumbs2 from '@/components/@extended/Breadcrumbs2';
 import { EditOutlined } from '@ant-design/icons';
 import { Avatar, Box, Button, Chip, Grid, Tab, Tabs, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import aImage1 from '@assets/images/users/avatar-1.png';
 import { ApexDonutChartSeriesType } from './components/overview/CircleChart';
 import StudyOverView from './components/StudyOverview';
 import StudyInfo from './components/StudyInfo';
@@ -14,12 +13,11 @@ import { STUDY_STATUS, STUDY_STATUS_KEY } from './components/StudyListItem';
 const StudyDetail = () => {
     const { std_no } = useParams<{ std_no: any }>();
 
-    const [studyDetail, setStudyDetail] = useState<any>('');
+    const [studyDetail, setStudyDetail] = useState<any>(null);
 
     useEffect(() => {
         const fetchStudyDetail = async () => {
             const response = await studyApi.getStudyDetail(parseInt(std_no, 10));
-
             setStudyDetail(response.content);
         };
 
@@ -37,7 +35,11 @@ const StudyDetail = () => {
         labels: ['참여완료율', '미완료율'],
         series: [75, 25],
     };
-    const statusLabel = STUDY_STATUS[studyDetail.std_status as STUDY_STATUS_KEY];
+
+    const statusLabel = STUDY_STATUS[studyDetail?.std_status as STUDY_STATUS_KEY];
+    const owner = studyDetail?.managerList?.find(
+        (manager: any) => manager.std_privilege === 'OWNER'
+    );
 
     return (
         <>
@@ -77,20 +79,27 @@ const StudyDetail = () => {
                         </Tabs>
                     </Grid>
                     <Grid container item xs={2} justifyContent="flex-end">
-                        <Box display="flex" gap={1}>
-                            <Avatar alt="Remy Sharp" src={aImage1} />
-                            <Box>
-                                <Typography variant="caption" sx={{ mb: '0' }}>
-                                    Owner
-                                </Typography>
-                                <Typography color="primary">Ben Kim</Typography>
+                        {owner && (
+                            <Box display="flex" gap={1}>
+                                <Avatar
+                                    alt={owner.profile_image_name || 'profile'}
+                                    src={owner.profile_image_url || ''}
+                                />
+                                <Box>
+                                    <Typography variant="caption" sx={{ mb: '0' }}>
+                                        Owner
+                                    </Typography>
+                                    <Typography color="primary">
+                                        {`${owner.first_name} ${owner.last_name}`}
+                                    </Typography>
+                                </Box>
                             </Box>
-                        </Box>
+                        )}
                     </Grid>
                 </Grid>
-                {activeTab == '0' && <StudyOverView partCompleteRate={partCompleteRate} />}
-                {activeTab == '1' && <StudyInfo studyDetail={studyDetail} />}
-                {activeTab == '2' && <StudyParticipants />}
+                {activeTab === '0' && <StudyOverView partCompleteRate={partCompleteRate} />}
+                {activeTab === '1' && <StudyInfo studyDetail={studyDetail} />}
+                {activeTab === '2' && <StudyParticipants />}
             </Grid>
         </>
     );

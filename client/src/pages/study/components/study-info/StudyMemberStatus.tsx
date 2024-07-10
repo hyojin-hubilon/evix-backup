@@ -11,9 +11,37 @@ import {
     useTheme,
 } from '@mui/material';
 
-const StudyMemberStatus = ({ inviteList }) => {
+interface ManagerType {
+    std_no: number;
+    user_no: number;
+    std_privilege: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    profile_image_url: string | null;
+    profile_image_name: string | null;
+}
+
+interface InviteType {
+    std_no: number;
+    user_email: string;
+    std_privilege: string;
+    created_at: string;
+    accepted_at: string | null;
+}
+
+interface StudyMemberStatusProps {
+    managerList: ManagerType[];
+    inviteList: InviteType[];
+}
+
+const StudyMemberStatus = ({ managerList, inviteList }: StudyMemberStatusProps) => {
+    console.log('inviteList: ', inviteList);
+    console.log('managerList: ', managerList);
+
     const theme = useTheme();
     const { divider } = theme.palette;
+
     const createData = (
         profilePic: string, //프로필이미지
         name: string, //이름
@@ -26,44 +54,38 @@ const StudyMemberStatus = ({ inviteList }) => {
         return { profilePic, name, authority, belong, email, inviteDate, inviteStatus };
     };
 
-    const rows = [
+    // 매니저 리스트(초대 승인한 멤버)
+    const rows = managerList.map((manager) =>
         createData(
-            '',
-            'Kate Brown',
-            'Maintainer',
-            '순천향대학교 중앙의료원',
-            'apple2024@naver.com',
-            '2024.06.01 22:15',
+            manager.profile_image_url || '',
+            `${manager.first_name} ${manager.last_name}`,
+            manager.std_privilege,
+            '-', // 현재 소속 정보 데이터 없음
+            manager.email,
+            '-', // 현재 초대 발송일자 없음
             'Approved'
-        ),
-        createData(
-            '',
-            'Daniel Heny',
-            'Developer',
-            '건국대학교 병원',
-            'banana2024@naver.com',
-            '2024.06.01 22:15',
-            'Approved'
-        ),
-        createData(
-            '',
-            'Julia hose Yoon',
-            'Developer',
-            '순천향대학교 중앙의료원',
-            'mango2024@naver.com',
-            '2024.06.01 22:15',
-            'Approved'
-        ),
-        createData(
-            '',
-            '-',
-            'Maintainer',
-            '-',
-            'Clara_dew_Mio@gmail.com',
-            '2024.06.01 22:15',
-            'Waiting for approval'
-        ),
-    ];
+        )
+    );
+
+    // 초대 리스트(초대 승인 + 초대 승인X)
+    inviteList.forEach((invite) => {
+        // managerList에 있으면 미노출
+        const isExist = managerList.some((manager) => manager.email === invite.user_email);
+
+        if (!isExist) {
+            rows.push(
+                createData(
+                    '',
+                    '-',
+                    invite.std_privilege,
+                    '-',
+                    invite.user_email,
+                    '-',
+                    'Waiting for approval'
+                )
+            );
+        }
+    });
 
     return (
         <Box>
