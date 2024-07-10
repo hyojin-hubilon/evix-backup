@@ -1,9 +1,24 @@
 import { Button, FormControl, Grid, OutlinedInput, Typography, useTheme } from "@mui/material"
 import MedicineSearch from "./MedicineSearch";
+import { useState } from "react";
+import { Drug } from "@/apis/test/drug/drugsAPI_TEST";
 
 const MedicineInfo = () => {
 	const theme = useTheme();
 	const { divider } = theme.palette;
+	const [openSearch, setOpenSearch] = useState<boolean>(false);
+	const [ drug, setDrug ] = useState<Drug>();
+
+
+	const setSelectedDrug = (e) => {
+		console.log(e)
+		setDrug(e);
+	}
+
+	const handleSearchClose = () => {
+		setOpenSearch(!openSearch);
+	}
+
 	return (
 	<>
 		<Grid item xs={3}></Grid>
@@ -12,7 +27,7 @@ const MedicineInfo = () => {
 				<Typography>검색</Typography>
 			</Grid>
 			<Grid item xs={9}>		
-				<Button variant="contained">의약품 검색</Button>
+				<Button variant="contained" onClick={() => setOpenSearch(true)}>의약품 검색</Button>
 			</Grid>
 
 			<Grid item xs={3}>
@@ -20,7 +35,7 @@ const MedicineInfo = () => {
 			</Grid>
 			<Grid item xs={9}>		
 				<FormControl size="small" fullWidth>
-					<OutlinedInput placeholder="제품명" sx={{backgroundColor: "white"}} />
+					<OutlinedInput placeholder="제품명" sx={{backgroundColor: "white"}} value={drug?.productName}/>
 				</FormControl>
 			</Grid>
 
@@ -30,7 +45,7 @@ const MedicineInfo = () => {
 			</Grid>
 			<Grid item xs={9}>		
 				<FormControl size="small" fullWidth>
-					<OutlinedInput placeholder="업체명" sx={{backgroundColor: "white"}} />
+					<OutlinedInput placeholder="업체명" sx={{backgroundColor: "white"}} value={drug?.companyName}/>
 				</FormControl>
 			</Grid>
 
@@ -40,7 +55,7 @@ const MedicineInfo = () => {
 			</Grid>
 			<Grid item xs={3}>		
 				<FormControl size="small" fullWidth>
-					<OutlinedInput placeholder="품목기준코드" sx={{backgroundColor: "white"}} />
+					<OutlinedInput placeholder="품목기준코드" sx={{backgroundColor: "white"}} value={drug?.itemCode} />
 				</FormControl>
 			</Grid>
 
@@ -50,7 +65,7 @@ const MedicineInfo = () => {
 			</Grid>
 			<Grid item xs={3}>		
 				<FormControl size="small" fullWidth>
-					<OutlinedInput placeholder="품목구분" sx={{backgroundColor: "white"}} />
+					<OutlinedInput placeholder="품목구분" sx={{backgroundColor: "white"}} value={drug?.itemType} />
 				</FormControl>
 			</Grid>
 
@@ -59,7 +74,7 @@ const MedicineInfo = () => {
 			</Grid>
 			<Grid item xs={3}>		
 				<FormControl size="small" fullWidth>
-					<OutlinedInput placeholder="허가번호" sx={{backgroundColor: "white"}} />
+					<OutlinedInput placeholder="허가번호" sx={{backgroundColor: "white"}} value={drug?.approvalNumber} />
 				</FormControl>
 			</Grid>
 		
@@ -68,12 +83,12 @@ const MedicineInfo = () => {
 			</Grid>
 			<Grid item xs={3}>		
 				<FormControl size="small" fullWidth>
-					<OutlinedInput placeholder="허가일" sx={{backgroundColor: "white"}} />
+					<OutlinedInput placeholder="허가일" sx={{backgroundColor: "white"}} value={drug?.approvalDate} />
 				</FormControl>
 			</Grid>
 		</Grid>
 
-		<MedicineSearch />
+		<MedicineSearch isOpen={openSearch} handleClose={handleSearchClose} selectMedicine={(e) => setSelectedDrug(e)}/>
 	</>
 	)
 }

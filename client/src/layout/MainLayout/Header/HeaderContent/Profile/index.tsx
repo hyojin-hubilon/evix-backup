@@ -99,7 +99,7 @@ const Profile = () => {
         }
     };
 
-    const anchorRef = useRef<HTMLAnchorElement>();
+    const anchorRef = useRef<HTMLButtonElement | null>(null);
     const [open, setOpen] = useState(false);
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
@@ -125,12 +125,13 @@ const Profile = () => {
             <ButtonBase
                 sx={{
                     p: 0.25,
+					color: theme.palette.grey[800],
                     bgcolor: open ? iconBackColorOpen : 'transparent',
                     borderRadius: 1,
                     '&:hover': { bgcolor: 'secondary.lighter' },
                 }}
                 aria-label="open profile"
-                // ref={anchorRef}
+                ref={anchorRef} 
                 aria-controls={open ? 'profile-grow' : undefined}
                 aria-haspopup="true"
                 onClick={handleToggle}
@@ -144,8 +145,7 @@ const Profile = () => {
                             <RouterLink
                                 to="/login"
                                 style={{
-                                    textDecoration: 'none',
-                                    color: 'inherit',
+                                    textDecoration: 'none'
                                 }}
                             >
                                 로그인해주십시오
@@ -156,6 +156,7 @@ const Profile = () => {
             </ButtonBase>
             <Popper
                 placement="bottom-end"
+				className='popper-root'
                 open={open}
                 anchorEl={anchorRef.current}
                 role={undefined}
@@ -171,6 +172,7 @@ const Profile = () => {
                         },
                     ],
                 }}
+				
             >
                 {({ TransitionProps }) => (
                     <Transitions type="fade" in={open} {...TransitionProps}>
@@ -179,7 +181,7 @@ const Profile = () => {
                                 sx={{
                                     // boxShadow: theme.customShadows.z1,
                                     width: 290,
-                                    minWidth: 240,
+									minWidth: 240,
                                     maxWidth: 290,
                                     [theme.breakpoints.down('md')]: {
                                         maxWidth: 250,
