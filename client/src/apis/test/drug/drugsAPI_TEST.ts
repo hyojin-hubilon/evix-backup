@@ -3,7 +3,7 @@ import { instance } from "./commonApi";
 const US_API_URL = "https://api.fda.gov/drug/label.json";
 const KOREA_API_URL = "https://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList";
 
-interface Drug {
+export interface Drug {
     id: number;
     productName: string;
     companyName: string;
@@ -24,7 +24,7 @@ export const fetchKoreanDrugs = async (searchTerm: string): Promise<Drug[]> => {
         const response = await instance.get(KOREA_API_URL, {
             params: {
                 serviceKey: decodeURIComponent(
-                    process.env.REACT_APP_KOREA_API_KEY as string
+                    import.meta.env.VITE_KOREA_API_KEY as string
                 ),
                 itemName: searchTerm,
                 type: "json",
@@ -34,7 +34,7 @@ export const fetchKoreanDrugs = async (searchTerm: string): Promise<Drug[]> => {
 
         const items = response.data.body.items;
 
-        const drugs: Drug[] = items.map((item: any, index: number) => ({
+        const drugs: Drug[] = items ? items.map((item: any, index: number) => ({
             id: index + 1,
             productName: item.itemName,
             companyName: item.entpName,
@@ -42,7 +42,7 @@ export const fetchKoreanDrugs = async (searchTerm: string): Promise<Drug[]> => {
             itemType: item.className,
             approvalNumber: item.itemPermit,
             approvalDate: item.openDe,
-        }));
+        })) : [];
 
         return drugs;
     } catch (error) {
