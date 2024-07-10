@@ -1,13 +1,12 @@
-import { ResCommonError, api } from '@/apis/axios-common';
-import { MyProfile } from '@/types/auth';
-import { UpdateUserData } from '@/types/user';
+import { ResCommonError, api, file_api } from '@/apis/axios-common';
+import { MyProfile, UpdateUserData } from '@/types/user';
 
 const BASE_API_URL = '/researcher/user';
 
 const userApi = {
     updateUser: async (userData: UpdateUserData) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}`, 'put', userData);
+            const responseData = await api<Number>(`${BASE_API_URL}`, 'put', userData);
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
@@ -36,6 +35,19 @@ const userApi = {
     getMyProfile: async () => {
         try {
             const responseData = await api<MyProfile>(`${BASE_API_URL}/my-profile`, 'get');
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+    uploadProfileImage: async (file: FormData) => {
+        try {
+            const responseData = await file_api<{ content: number }>(
+                `${BASE_API_URL}/my-profile/image-upload`,
+                'post',
+                file,
+            );
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;

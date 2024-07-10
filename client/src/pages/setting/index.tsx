@@ -3,7 +3,7 @@ import SettingForm from './components/SettingForm';
 import SettingsMain from './components/SettingsMain';
 import userApi from '@/apis/user';
 import { ResCommonError } from '@/apis/axios-common';
-import { MyProfile } from '@/types/auth';
+import { MyProfile } from '@/types/user';
 
 const Settings = () => {
     const [loginIsSuccess, setLoginIsSucess] = useState<boolean>(false);
@@ -28,6 +28,7 @@ const Settings = () => {
         active_yn: '',
         delete_yn: '',
     });
+
     const handleSuccessLogin = (status: boolean) => {
         setLoginIsSucess(status);
     };
@@ -37,9 +38,10 @@ const Settings = () => {
             try {
                 const responseData = await userApi.getMyProfile();
                 setMyProfile(responseData.content);
-                console.log(responseData.content);
             } catch (error) {
-                alert((error as ResCommonError).message);
+                if (error instanceof ResCommonError) {
+                    alert(error.message);
+                }
             }
         };
         getMyProfile();

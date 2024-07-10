@@ -14,50 +14,111 @@ import {
     Radio,
     RadioGroup,
     FormControl,
-    FormLabel,
 } from '@mui/material';
-import { MyProfile } from '@/types/auth';
+import { MyProfile, UpdateUserData } from '@/types/user';
+import { ResCommonError } from '@/apis/axios-common';
+import userApi from '@/apis/user';
+import { useNavigate } from 'react-router-dom';
 import authApi from '@/apis/auth';
 
 const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
+    const initialValues = {
+        first_name: myProfile.first_name,
+        last_name: myProfile.last_name,
+        email: myProfile.email,
+        password: '********',
+        mobile: myProfile.mobile,
+        country: myProfile.country,
+        company_name: myProfile.company_name,
+        job_title: myProfile.job_title,
+        user_no: myProfile.user_no,
+        industry: myProfile.industry,
+        privilege: myProfile.privilege,
+    };
+    const navigate = useNavigate();
+
     const [invitationCount, setInvitationCount] = useState<number>(0);
     const [studyCount, setStudyCount] = useState<number>(0);
     const [surveyCount, setServeyCount] = useState<number>(0);
-
     const [emailAlerts, setEmailAlerts] = useState(true);
     const [language, setLanguage] = useState('English');
 
-    const handleChangePassword = async () => {
-        try {
-            const responseData = authApi.requestChangePassword(myProfile.email);
-        } catch (error) {
-            //alert(error.message);
-        }
-    }
-
     const validationSchema = Yup.object({
-        mobile: Yup.string().required('Phone number is required'),
-        country: Yup.string().required('Country is required'),
-        company_name: Yup.string().required('Company is required'),
-        job_title: Yup.string().required('Job position is required'),
+        mobile: Yup.string().required('전화번호를 입력해주세요'),
+        country: Yup.string().required('국가를 입력해주세요.'),
+        company_name: Yup.string().required('회사를 입력해주세요.'),
+        job_title: Yup.string().required('직업을 입력해주세요.'),
     });
 
     const formik = useFormik({
-        initialValues: {
-            first_name: myProfile.first_name,
-            last_name: myProfile.last_name,
-            email: myProfile.email,
-            password: '********',
-            mobile: myProfile.mobile,
-            country: myProfile.country,
-            company_name: myProfile.company_name,
-            job_title: myProfile.job_title,
-        },
+        initialValues,
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-            console.log(values);
+        onSubmit: ({ user_no, mobile, country, company_name, job_title, industry, privilege }) => {
+            const requestData: UpdateUserData = {
+                user_no,
+                mobile,
+                country,
+                company_name,
+                job_title,
+                industry,
+                privilege,
+                active_yn: 'Y',
+            };
+            handleUpdateUser(requestData);
         },
     });
+
+    // 비밀번호 재설정 토큰 발급 및 인증번호 이메일 발송
+    const handleChangePassword = async () => {
+        try {
+            const { content } = await authApi.sendPasswordResetLink({ email: myProfile.email });
+            if (content.email && content.reset_token) {
+                alert('비밀번호 변경안내 이메일이 발송되었습니다. 이메일을 확인해주세요.');
+            }
+        } catch (error) {
+            if (error instanceof ResCommonError) {
+                alert(error.message);
+            }
+        }
+    };
+
+    const handleUpdateUser = async (props: UpdateUserData) => {
+        try {
+            const { content } = await userApi.updateUser(props);
+            if (content) {
+                alert('수정이 완료되었습니다.');
+            }
+            return content;
+        } catch (error) {
+            if (error instanceof ResCommonError) {
+                alert(error.message);
+            }
+        }
+    };
+
+    const handleUploadProfileImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFile: File | undefined = event.target.files?.[0];
+        if (!selectedFile) {
+            return;
+        }
+        const formData = new FormData();
+        formData.append('image_file', selectedFile);
+        
+        try {
+            const { content } = await userApi.uploadProfileImage(formData);
+            if (content) {
+                alert('프로필 사진이 변경되었습니다.');
+            }
+        } catch(error) {
+            if (error instanceof ResCommonError) {
+                alert(error.message);
+            }
+        }
+    };
+
+    const handleMovePage = (url: string) => {
+        navigate(url);
+    };
 
     return (
         <Grid
@@ -154,9 +215,18 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                             backgroundPosition: 'center',
                                         }}
                                     />
-                                    <Button variant="outlined" color="primary">
-                                        사진 변경
-                                    </Button>
+                                    <input
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        id="upload-button"
+                                        type="file"
+                                        onChange={handleUploadProfileImage}
+                                    />
+                                    <label htmlFor="upload-button">
+                                        <Button variant="outlined" color="primary" component="span">
+                                            사진 변경
+                                        </Button>
+                                    </label>
                                 </Box>
                                 <TextField
                                     label="Name"
@@ -186,13 +256,14 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                         variant="contained"
                                         sx={{ marginLeft: '1rem' }}
                                         color="secondary"
+                                        onClick={handleChangePassword}
                                     >
                                         변경
                                     </Button>
                                 </Box>
                                 <TextField
                                     label="Phone"
-                                    name="phone"
+                                    name="mobile"
                                     value={formik.values.mobile}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
@@ -212,7 +283,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                 />
                                 <TextField
                                     label="Company"
-                                    name="company"
+                                    name="company_name"
                                     value={formik.values.company_name}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
@@ -227,7 +298,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                 />
                                 <TextField
                                     label="Job Position"
-                                    name="jobPosition"
+                                    name="job_title"
                                     value={formik.values.job_title}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}

@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { ResCommonError } from '@/apis/axios-common';
-import { Box, Grid, Stack, TextField, Button, Typography, Paper } from '@mui/material';
+import { Grid, Stack, TextField, Button, Typography, Paper } from '@mui/material';
 import authApi from '@/apis/auth';
-import { LoginReq, MyProfile } from '@/types/auth';
+import { MyProfile } from '@/types/user';
+import { LoginReq } from '@/types/auth';
 
 type Props = {
-    myProfile : MyProfile;
+    myProfile: MyProfile;
     handleLogin: (status: boolean) => void;
 };
 
 const SettingForm: React.FC<Props> = ({ myProfile, handleLogin }) => {
-    const initialValues: LoginReq = ({ email: myProfile.email, password: '' });
+    const initialValues: LoginReq = { email: myProfile.email, password: '' };
 
     const validationSchema = Yup.object({
         email: Yup.string().email().required('이메일을 입력해주세요.'),
@@ -26,11 +27,17 @@ const SettingForm: React.FC<Props> = ({ myProfile, handleLogin }) => {
         onSubmit: async ({ email, password }) => {
             try {
                 const responseData = await authApi.login({ email, password });
+                if (responseData.code === 400) {
+                    alert('비밀번호를 다시 확인해주세요.');
+                    return;
+                }
                 if (responseData.code === 200) {
                     handleLogin(true);
                 }
             } catch (error) {
-                alert((error as ResCommonError).message);
+                if (error instanceof ResCommonError) {
+                    alert(error.message);
+                }
             }
         },
     });

@@ -51,9 +51,13 @@ const authApi = {
      * @param email
      * @returns
      */
-    sendPasswordResetLink: async (email: string) => {
+    sendPasswordResetLink: async (email: AuthApiType.Email) => {
         try {
-            const responseData = await api<{}>('/auth/social_login', 'post', { email });
+            const responseData = await api<AuthApiType.RequestChangePasswordRes>(
+                '/auth/password/authentication-code',
+                'post',
+                email
+            );
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
@@ -146,21 +150,6 @@ const authApi = {
     applyFreeTrial: async (applyData: AuthApiType.ApplyFreeTrialReq) => {
         try {
             const responseData = await api<{}>('/auth/apply-free-trial', 'post', applyData);
-            return responseData;
-        } catch (error) {
-            const e = error as ResCommonError;
-            throw e;
-        }
-    },
-
-    /**
-     * 비밀번호 재설정 토큰 발급 및 인증번호 이메일 발송
-     * @param email
-     * @returns
-     */
-    requestChangePassword: async (email: string) => {
-        try {
-            const responseData = await api<{}>('/auth/password/authentication-code', 'post', email);
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
