@@ -18,7 +18,7 @@ const ForgotPasswordForm = () => {
         validationSchema: validationSchema,
         onSubmit: async (values, { setStatus, setSubmitting }) => {
             try {
-                await authApi.sendPasswordResetLink(values.email);
+                await authApi.sendPasswordResetLink(values);
                 setStatus({ success: true });
             } catch (error) {
                 console.error('Error sending password reset link:', error);

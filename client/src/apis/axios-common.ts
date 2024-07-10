@@ -128,10 +128,8 @@ export async function file_api<T>(
     // let loadingEle;
     let res;
     try {
-        if (method == 'post')
+        if (method === 'post')
             res = await axios_file_instance.post<ResCommonSuccess<T>>(url, data, config);
-        else if (method == 'put') res = await axios_file_instance.put<ResCommonSuccess<T>>(url, data);
-        else if (method == 'delete') res = await axios_file_instance.delete<ResCommonSuccess<T>>(url);
         else res = await axios_file_instance.get(url);
         // if (loadingEle) {
         //     loadingEle.style.display = 'none';

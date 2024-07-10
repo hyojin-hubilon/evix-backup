@@ -55,10 +55,15 @@ const AuthLogin = () => {
                 })}
                 onSubmit={async (values, { setStatus, setSubmitting }) => {
                     try {
-                        await authApi.login(values);
-                        // console.log(res.content);
-                        setStatus({ success: true });
-                        navigate('/');
+                        const { code } = await authApi.login(values);
+                        if (code === 400) {
+                            alert('아이디 또는 패스워드를 확인해주세요.');
+                            return;
+                        }
+                        if (code === 200) {
+                            setStatus({ success: true });
+                            navigate('/dashboard');
+                        }
                     } catch (e) {
                         alert('This surfactant is already in use.');
                         setStatus({ success: false });
