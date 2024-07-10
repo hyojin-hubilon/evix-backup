@@ -6,7 +6,7 @@ import Axios, { AxiosRequestConfig } from 'axios';
 export const ResCustomErrorCode = {
     // timeout or cancel request
     TIMEOUT: 600,
-    // 에러 발생 이후 response.data 에서 data or response 가 없는 경우 
+    // 에러 발생 이후 response.data 에서 data or response 가 없는 경우
     NONE_RESPONSE: 601,
     // 그 외 모든 에러 (설정에러 등)
     OTHERS: 699,
@@ -39,7 +39,7 @@ export interface ResCommonError {
 
 export const axios_instance = Axios.create({
     withCredentials: true,
-    baseURL: apiVersion,
+    baseURL: `/${apiVersion}`, // baseURL을 확인하고 변경 필요
     timeout: 60000,
     headers: {
         'Content-Language': 'utf-8',
@@ -77,7 +77,8 @@ export async function api<T>(
             res = await axios_instance.post<ResCommonSuccess<T>>(url, data, config);
         else if (method == 'put') res = await axios_instance.put<ResCommonSuccess<T>>(url, data);
         else if (method == 'delete') res = await axios_instance.delete<ResCommonSuccess<T>>(url);
-        else res = await axios_instance.get(url);
+        // else res = await axios_instance.get(url);
+        else res = await axios_instance.get<ResCommonSuccess<T>>(url);
         // if (loadingEle) {
         //     loadingEle.style.display = 'none';
         // }

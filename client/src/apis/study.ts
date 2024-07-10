@@ -76,7 +76,7 @@ const studyApi = {
      * @param stdNo
      * @returns
      */
-    getStudyManager: async (stdNo: number) => {
+    getStudyManager: async (stdNo: any) => {
         try {
             const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/manager`, 'get');
             return responseData;
@@ -195,7 +195,11 @@ const studyApi = {
      */
     inviteStudyMember: async (invites: StudyApiType.StudyUserInvites) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/study-user-invite`, 'post', invites);
+            const responseData = await api<{}>(
+                `${BASE_API_URL}/study-user-invite`,
+                'post',
+                invites
+            );
 
             return responseData;
         } catch (error) {

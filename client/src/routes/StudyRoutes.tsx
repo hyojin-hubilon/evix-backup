@@ -7,7 +7,7 @@ import MainLayout from '@layout/MainLayout';
 // render - dashboard
 const StudyList = Loadable(lazy(() => import('@pages/study')));
 const StudyDetail = Loadable(lazy(() => import('@pages/study/StudyDetail')));
-const StudyNew = Loadable(lazy(() => import('@pages/study/StudyNew')))
+const StudyNew = Loadable(lazy(() => import('@pages/study/StudyNew')));
 
 // ==============================|| STUDY ROUTING ||============================== //
 
@@ -19,14 +19,14 @@ const StudyRoutes = {
             path: '',
             element: <StudyList />,
         },
-		{
-			path: 'detail',
-			element: <StudyDetail /	>
-		},
-		{
-			path: 'new',
-			element: <StudyNew />
-		}
+        {
+            path: 'detail/:std_no',
+            element: <StudyDetail />,
+        },
+        {
+            path: 'new',
+            element: <StudyNew />,
+        },
     ],
 };
 
