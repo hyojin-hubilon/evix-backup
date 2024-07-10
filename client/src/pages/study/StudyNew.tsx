@@ -21,7 +21,8 @@ const StudyNew = () => {
 	const { divider, primary } = theme.palette;
 	const [ dateRange, setDateRange ] = useState({ startDt: dayjs(), endDt: dayjs()})
 	const [ medicineYOrN, setMedicineYOrN] = useState<'true' | 'false'>('false');
-
+	const [ mode, setMode ] = useState<'write' | 'edit'>('write')
+	
 	const changeDateRange = (e: DateRage) => {
 		//console.log(e.startDt.format('DD/MM/YYYY')); 포맷적용 예시
 		setDateRange(e);
@@ -237,10 +238,34 @@ const StudyNew = () => {
 
 			</Box>
 		</Box>
-		<Box display="flex" justifyContent="flex-end" pt="1rem" gap={2}>
-			<Button variant="outlined" size="large">취소</Button>
-			<Button variant="contained" size="large">생성</Button>
-		</Box>
+		{
+			mode == 'write' ? 
+			<Box display="flex" justifyContent="flex-end" pt="1rem" gap={2}>
+				<Button variant="outlined" size="large">취소</Button>
+				<Button variant="contained" size="large">생성</Button>
+			</Box>
+			:
+			// 일반멤버에게는 하단 전체 다 표시 안됨
+			<Grid container pt="1rem">
+				<Grid item xs={2}>
+					{/* 오너에게만 표시 */}
+					<Button variant="outlined" color="error">스터디 삭제</Button>
+				</Grid>
+				<Grid item xs={10}>
+					<Box justifyContent="flex-end" display="flex" gap={1}>
+						<Button variant="outlined">취소</Button>
+						<Button variant="outlined">수정</Button>
+						<Button variant="outlined" color="info">미리보기</Button>
+						<Button variant="contained">배포</Button>
+						
+						{/* <Button variant="outlined" color="warning">일시중지</Button>
+						<Button variant="outlined" color="error">종료</Button>
+						<Button variant="outlined" color="info">재시작</Button> */}
+					</Box>
+				</Grid>
+			</Grid>
+		}
+		
 	</Container>)
 }
 
