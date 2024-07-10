@@ -1,0 +1,365 @@
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import {
+    Box,
+    Grid,
+    Paper,
+    Stack,
+    TextField,
+    Button,
+    Typography,
+    Switch,
+    FormControlLabel,
+    Radio,
+    RadioGroup,
+    FormControl,
+} from '@mui/material';
+import { MyProfile, UpdateUserData } from '@/types/user';
+import { ResCommonError } from '@/apis/axios-common';
+import userApi from '@/apis/user';
+import { useNavigate } from 'react-router-dom';
+import authApi from '@/apis/auth';
+
+const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
+    const initialValues = {
+        first_name: myProfile.first_name,
+        last_name: myProfile.last_name,
+        email: myProfile.email,
+        password: '********',
+        mobile: myProfile.mobile,
+        country: myProfile.country,
+        company_name: myProfile.company_name,
+        job_title: myProfile.job_title,
+        user_no: myProfile.user_no,
+        industry: myProfile.industry,
+        privilege: myProfile.privilege,
+    };
+    const navigate = useNavigate();
+
+    const [invitationCount, setInvitationCount] = useState<number>(0);
+    const [studyCount, setStudyCount] = useState<number>(0);
+    const [surveyCount, setServeyCount] = useState<number>(0);
+    const [emailAlerts, setEmailAlerts] = useState(true);
+    const [language, setLanguage] = useState('English');
+
+    const validationSchema = Yup.object({
+        mobile: Yup.string().required('전화번호를 입력해주세요'),
+        country: Yup.string().required('국가를 입력해주세요.'),
+        company_name: Yup.string().required('회사를 입력해주세요.'),
+        job_title: Yup.string().required('직업을 입력해주세요.'),
+    });
+
+    const formik = useFormik({
+        initialValues,
+        validationSchema: validationSchema,
+        onSubmit: ({ user_no, mobile, country, company_name, job_title, industry, privilege }) => {
+            const requestData: UpdateUserData = {
+                user_no,
+                mobile,
+                country,
+                company_name,
+                job_title,
+                industry,
+                privilege,
+                active_yn: 'Y',
+            };
+            handleUpdateUser(requestData);
+        },
+    });
+
+    // 비밀번호 재설정 토큰 발급 및 인증번호 이메일 발송
+    const handleChangePassword = async () => {
+        try {
+            const { content } = await authApi.sendPasswordResetLink({ email: myProfile.email });
+            if (content.email && content.reset_token) {
+                alert('비밀번호 변경안내 이메일이 발송되었습니다. 이메일을 확인해주세요.');
+            }
+        } catch (error) {
+            if (error instanceof ResCommonError) {
+                alert(error.message);
+            }
+        }
+    };
+
+    const handleUpdateUser = async (props: UpdateUserData) => {
+        try {
+            const { content } = await userApi.updateUser(props);
+            if (content) {
+                alert('수정이 완료되었습니다.');
+            }
+            return content;
+        } catch (error) {
+            if (error instanceof ResCommonError) {
+                alert(error.message);
+            }
+        }
+    };
+
+    const handleUploadProfileImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFile: File | undefined = event.target.files?.[0];
+        if (!selectedFile) {
+            return;
+        }
+        const formData = new FormData();
+        formData.append('image_file', selectedFile);
+        
+        try {
+            const { content } = await userApi.uploadProfileImage(formData);
+            if (content) {
+                alert('프로필 사진이 변경되었습니다.');
+            }
+        } catch(error) {
+            if (error instanceof ResCommonError) {
+                alert(error.message);
+            }
+        }
+    };
+
+    const handleMovePage = (url: string) => {
+        navigate(url);
+    };
+
+    return (
+        <Grid
+            container
+            spacing={3}
+            sx={{ padding: '2rem', backgroundColor: '#f0f2f5', minHeight: '100vh' }}
+            justifyContent="center"
+        >
+            <Box sx={{ width: '100%', maxWidth: 800 }}>
+                <Grid item xs={12}>
+                    <Typography variant="h4" gutterBottom>
+                        Settings
+                    </Typography>
+                </Grid>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} sm={4}>
+                        <Paper
+                            elevation={4}
+                            sx={{
+                                padding: '1.5rem',
+                                textAlign: 'center',
+                                borderRadius: '8px',
+                            }}
+                        >
+                            <Typography variant="h6" color="primary">
+                                내가 받은 Study 초대
+                            </Typography>
+                            <Typography variant="h2" color="secondary">
+                                {invitationCount}
+                            </Typography>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <Paper
+                            elevation={4}
+                            sx={{
+                                padding: '1.5rem',
+                                textAlign: 'center',
+                                borderRadius: '8px',
+                            }}
+                        >
+                            <Typography variant="h6" color="primary">
+                                My Study
+                            </Typography>
+                            <Typography variant="h2" color="secondary">
+                                {studyCount}
+                            </Typography>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <Paper
+                            elevation={4}
+                            sx={{
+                                padding: '1.5rem',
+                                textAlign: 'center',
+                                borderRadius: '8px',
+                            }}
+                        >
+                            <Typography variant="h6" color="primary">
+                                My Survey
+                            </Typography>
+                            <Typography variant="h2" color="secondary">
+                                {surveyCount}
+                            </Typography>
+                        </Paper>
+                    </Grid>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <Paper
+                        elevation={4}
+                        sx={{
+                            padding: '1.5rem',
+                            backgroundColor: '#ffffff',
+                            borderRadius: '8px',
+                            marginTop: '1rem',
+                        }}
+                    >
+                        <Typography variant="h6" color="primary">
+                            계정정보
+                        </Typography>
+                        <form onSubmit={formik.handleSubmit}>
+                            <Stack spacing={2} sx={{ marginTop: '1rem' }}>
+                                <Box display="flex" alignItems="center">
+                                    <Box
+                                        sx={{
+                                            width: '80px',
+                                            height: '80px',
+                                            backgroundColor: '#bdbdbd',
+                                            borderRadius: '50%',
+                                            marginRight: '1rem',
+                                            backgroundImage: `url(${myProfile.profile_image_url})`,
+                                            backgroundSize: 'cover',
+                                            backgroundPosition: 'center',
+                                        }}
+                                    />
+                                    <input
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        id="upload-button"
+                                        type="file"
+                                        onChange={handleUploadProfileImage}
+                                    />
+                                    <label htmlFor="upload-button">
+                                        <Button variant="outlined" color="primary" component="span">
+                                            사진 변경
+                                        </Button>
+                                    </label>
+                                </Box>
+                                <TextField
+                                    label="Name"
+                                    name="name"
+                                    value={`${formik.values.first_name} ${formik.values.last_name}`}
+                                    disabled
+                                    fullWidth
+                                />
+                                <TextField
+                                    label="Email"
+                                    name="email"
+                                    value={formik.values.email}
+                                    fullWidth
+                                    disabled
+                                />
+                                <Box display="flex" alignItems="center">
+                                    <TextField
+                                        type="password"
+                                        label="Password"
+                                        name="password"
+                                        value={formik.values.password}
+                                        fullWidth
+                                        disabled
+                                        InputProps={{ style: { color: '#000000' } }}
+                                    />
+                                    <Button
+                                        variant="contained"
+                                        sx={{ marginLeft: '1rem' }}
+                                        color="secondary"
+                                        onClick={handleChangePassword}
+                                    >
+                                        변경
+                                    </Button>
+                                </Box>
+                                <TextField
+                                    label="Phone"
+                                    name="mobile"
+                                    value={formik.values.mobile}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.mobile && Boolean(formik.errors.mobile)}
+                                    helperText={formik.touched.mobile && formik.errors.mobile}
+                                    fullWidth
+                                />
+                                <TextField
+                                    label="Country"
+                                    name="country"
+                                    value={formik.values.country}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.country && Boolean(formik.errors.country)}
+                                    helperText={formik.touched.country && formik.errors.country}
+                                    fullWidth
+                                />
+                                <TextField
+                                    label="Company"
+                                    name="company_name"
+                                    value={formik.values.company_name}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={
+                                        formik.touched.company_name &&
+                                        Boolean(formik.errors.company_name)
+                                    }
+                                    helperText={
+                                        formik.touched.company_name && formik.errors.company_name
+                                    }
+                                    fullWidth
+                                />
+                                <TextField
+                                    label="Job Position"
+                                    name="job_title"
+                                    value={formik.values.job_title}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={
+                                        formik.touched.job_title && Boolean(formik.errors.job_title)
+                                    }
+                                    helperText={formik.touched.job_title && formik.errors.job_title}
+                                    fullWidth
+                                />
+                            </Stack>
+                            <Typography variant="h6" color="primary">
+                                알림 설정
+                            </Typography>
+                            <FormControlLabel
+                                label="이메일 알림"
+                                control={
+                                    <Switch
+                                        checked={emailAlerts}
+                                        onChange={() => setEmailAlerts(!emailAlerts)}
+                                        name="emailAlerts"
+                                        color="primary"
+                                    />
+                                }
+                            />
+                            <Typography variant="h6" color="primary">
+                                언어 설정
+                            </Typography>
+                            <FormControl component="fieldset">
+                                <RadioGroup
+                                    row
+                                    name="language"
+                                    value={language}
+                                    onChange={(e) => setLanguage(e.target.value)}
+                                >
+                                    <FormControlLabel
+                                        value="English"
+                                        control={<Radio color="primary" />}
+                                        label="English"
+                                    />
+                                    <FormControlLabel
+                                        value="Korean"
+                                        control={<Radio color="primary" />}
+                                        label="Korean"
+                                    />
+                                </RadioGroup>
+                            </FormControl>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                fullWidth
+                                sx={{ marginTop: '1rem' }}
+                            >
+                                수정 완료
+                            </Button>
+                        </form>
+                    </Paper>
+                </Grid>
+            </Box>
+        </Grid>
+    );
+};
+
+export default SettingsMain;

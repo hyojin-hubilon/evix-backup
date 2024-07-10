@@ -51,9 +51,13 @@ const authApi = {
      * @param email
      * @returns
      */
-    sendPasswordResetLink: async (email: string) => {
+    sendPasswordResetLink: async (email: AuthApiType.Email) => {
         try {
-            const responseData = await api<{}>('/auth/social_login', 'post', { email });
+            const responseData = await api<AuthApiType.RequestChangePasswordRes>(
+                '/auth/password/authentication-code',
+                'post',
+                email
+            );
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;

@@ -22,7 +22,7 @@ export interface ResCommonSuccess<T> {
     result: boolean;
     code: number;
     message: string;
-    content?: T;
+    content: T;
 }
 
 export interface ResCommonErrorInf {
@@ -49,6 +49,16 @@ export const axios_instance = Axios.create({
     headers: {
         'Content-Language': 'utf-8',
         'Content-Type': 'application/json',
+    },
+});
+
+export const axios_file_instance = Axios.create({
+    withCredentials: true,
+    baseURL: apiVersion,
+    timeout: 60000,
+    headers: {
+        'Content-Language': 'utf-8',
+        'Content-Type': 'multipart/form-data',
     },
 });
 
@@ -83,6 +93,46 @@ export async function api<T>(
         else if (method == 'delete') res = await axios_instance.delete<ResCommonSuccess<T>>(url);
         // else res = await axios_instance.get(url);
         else res = await axios_instance.get<ResCommonSuccess<T>>(url);
+        // if (loadingEle) {
+        //     loadingEle.style.display = 'none';
+        // }
+        return res.data as ResCommonSuccess<T>;
+    } catch (error) {
+        // if (loadingEle) {
+        //     loadingEle.style.display = 'none';
+        // }
+        if (Axios.isCancel(error)) {
+            throw generateError(ResCustomErrorCode.TIMEOUT, null, null, error.message);
+        }
+        if (Axios.isAxiosError<ResCommonError>(error)) {
+            if (error.response !== undefined) {
+                const errorResult = error.response.data;
+                errorResult.code == error.response.status;
+                throw errorResult;
+            } else {
+                throw generateError(ResCustomErrorCode.NONE_RESPONSE, null, null, error.message);
+            }
+        } else {
+            throw generateError(ResCustomErrorCode.OTHERS, null, null, (error as Error).message);
+        }
+    }
+}
+
+export async function file_api<T>(
+    url: string,
+    method: API_ACTION,
+    data?: any,
+    config?: AxiosRequestConfig
+): Promise<ResCommonSuccess<T>> {
+    // loadingEle 은 향후 화면이 개발되면 추가한다
+    // let loadingEle;
+    let res;
+    try {
+        if (method == 'post')
+            res = await axios_file_instance.post<ResCommonSuccess<T>>(url, data, config);
+        else if (method == 'put') res = await axios_file_instance.put<ResCommonSuccess<T>>(url, data);
+        else if (method == 'delete') res = await axios_file_instance.delete<ResCommonSuccess<T>>(url);
+        else res = await axios_file_instance.get(url);
         // if (loadingEle) {
         //     loadingEle.style.display = 'none';
         // }

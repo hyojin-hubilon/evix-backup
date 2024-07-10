@@ -6,6 +6,7 @@ import LoginRoutes from './LoginRoutes';
 import MainRoutes from './MainRoutes';
 import DashBoardRoutes from './DashBoardRoutes';
 import StudyRoutes from './StudyRoutes';
+import SettingsRoutes from './SettingsRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
@@ -15,6 +16,7 @@ export default function ThemeRoutes() {
         DashBoardRoutes,
         StudyRoutes,
         LoginRoutes,
+        SettingsRoutes,
         { path: '*', element: <NotFound /> },
     ]);
 }
