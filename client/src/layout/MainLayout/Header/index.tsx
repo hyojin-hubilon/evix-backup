@@ -47,7 +47,7 @@ const Header = ({ open, handleDrawerToggle }) => {
         sx: {
             borderBottom: `1px solid ${theme.palette.divider}`,
             background: theme.palette.common.white,
-            zIndex: 1301,
+            // zIndex: 1201,
             boxShadow: 'none',
         },
     };

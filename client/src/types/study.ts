@@ -40,7 +40,7 @@ export interface StudyUserInvite {
     std_privilege: string;
 }
 
-export interface StudyUserInvites extends Array<StudyUserInvite>{}
+export interface StudyUserInvites extends Array<StudyUserInvite> {}
 
 export interface UpdateMemberPrivilegeRequest {
     std_no: number;
@@ -51,6 +51,16 @@ export interface UpdateMemberPrivilegeRequest {
 // ===================================
 // 내 Study 목록
 // ===================================
+
+export interface ManagerList {
+    std_no: number;
+    user_no: number;
+    profile_image_url: string;
+    profile_image_name: string;
+    first_name: string;
+    last_name: string;
+}
+
 export interface MyStudyList {
     std_no: number;
     title: string;
@@ -58,6 +68,7 @@ export interface MyStudyList {
     std_start_date: string;
     std_end_date: string;
     std_privilege: string;
+    managerList: ManagerList[];
 }
 
 export interface StudyListItemProps {

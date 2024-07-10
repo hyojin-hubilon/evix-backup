@@ -44,7 +44,7 @@ export class ResCommonError implements ResCommonErrorInf {
 
 export const axios_instance = Axios.create({
     withCredentials: true,
-    baseURL: apiVersion,
+    baseURL: `/${apiVersion}`, // baseURL을 확인하고 변경 필요
     timeout: 60000,
     headers: {
         'Content-Language': 'utf-8',
@@ -81,7 +81,8 @@ export async function api<T>(
             res = await axios_instance.post<ResCommonSuccess<T>>(url, data, config);
         else if (method == 'put') res = await axios_instance.put<ResCommonSuccess<T>>(url, data);
         else if (method == 'delete') res = await axios_instance.delete<ResCommonSuccess<T>>(url);
-        else res = await axios_instance.get(url);
+        // else res = await axios_instance.get(url);
+        else res = await axios_instance.get<ResCommonSuccess<T>>(url);
         // if (loadingEle) {
         //     loadingEle.style.display = 'none';
         // }

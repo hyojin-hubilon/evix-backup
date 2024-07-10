@@ -1,14 +1,31 @@
 import Breadcrumbs2 from '@/components/@extended/Breadcrumbs2';
 import { EditOutlined } from '@ant-design/icons';
 import { Avatar, Box, Button, Chip, Grid, Tab, Tabs, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import aImage1 from '@assets/images/users/avatar-1.png';
 import { ApexDonutChartSeriesType } from './components/overview/CircleChart';
 import StudyOverView from './components/StudyOverview';
 import StudyInfo from './components/StudyInfo';
 import StudyParticipants from './components/StudyParicipations';
+import { useParams } from 'react-router-dom';
+import studyApi from '@/apis/study';
+import { STUDY_STATUS, STUDY_STATUS_KEY } from './components/StudyListItem';
 
 const StudyDetail = () => {
+    const { std_no } = useParams<{ std_no: any }>();
+
+    const [studyDetail, setStudyDetail] = useState<any>('');
+
+    useEffect(() => {
+        const fetchStudyDetail = async () => {
+            const response = await studyApi.getStudyDetail(parseInt(std_no, 10));
+
+            setStudyDetail(response.content);
+        };
+
+        fetchStudyDetail();
+    }, [std_no]);
+
     const [activeTab, setActiveTab] = useState('0');
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -20,6 +37,7 @@ const StudyDetail = () => {
         labels: ['참여완료율', '미완료율'],
         series: [75, 25],
     };
+    const statusLabel = STUDY_STATUS[studyDetail.std_status as STUDY_STATUS_KEY];
 
     return (
         <>
@@ -27,8 +45,8 @@ const StudyDetail = () => {
             <Grid container rowSpacing={3} columnSpacing={1}>
                 <Grid container item xs={12}>
                     <Box display="flex" alignItems="center" gap={1}>
-                        <Chip label="진행중" color="primary" />
-                        <Typography variant="h3">중증 아토피 피부염 임상연구 – 부작용</Typography>
+                        <Chip label={statusLabel} color="primary" />
+                        <Typography variant="h3">{studyDetail?.title || ''}</Typography>
                         <Button variant="outlined" sx={{ width: '3rem', minWidth: '48px' }}>
                             <EditOutlined style={{ fontSize: '1.2rem' }} />
                         </Button>
@@ -71,7 +89,7 @@ const StudyDetail = () => {
                     </Grid>
                 </Grid>
                 {activeTab == '0' && <StudyOverView partCompleteRate={partCompleteRate} />}
-                {activeTab == '1' && <StudyInfo />}
+                {activeTab == '1' && <StudyInfo studyDetail={studyDetail} />}
                 {activeTab == '2' && <StudyParticipants />}
             </Grid>
         </>

@@ -16,6 +16,7 @@ import studyApi from '@/apis/study';
 import { MyStudyList, StudyApiResponse } from '@/types/study';
 import { getDecodedToken } from '@/utils/Cookie';
 import StudyInvitedItem from './components/StudyInvitedItem';
+import { useNavigate } from 'react-router-dom';
 
 const StudyList = () => {
     const [studyCount, setStudyCount] = useState<number>(0); // Study 개수 상태
@@ -23,6 +24,7 @@ const StudyList = () => {
     const [studies, setStudies] = useState<MyStudyList[]>([]); // 내 Study 목록 상태
     const [invitedStudies, setInvitedStudies] = useState<any[]>([]); // 초대 받은 스터디 목록 상태
     const [fullName, setFullName] = useState<string>(''); // 사용자 전체 이름 상태
+    const navigate = useNavigate();
 
     // Study 데이터 불러오기
     const fetchStudies = async () => {
@@ -54,8 +56,6 @@ const StudyList = () => {
         }
     };
 
-    console.log('studies : ', studies);
-
     useEffect(() => {
         fetchStudies();
         fetchInvitedStudies();
@@ -67,7 +67,7 @@ const StudyList = () => {
     };
 
     const handleCreateStudy = () => {
-        console.log('새로운 Study 생성');
+        navigate('/study/new');
     };
 
     // 초대 승인 성공 시,

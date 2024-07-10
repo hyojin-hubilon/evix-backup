@@ -1,14 +1,10 @@
-import { useState } from 'react';
 import { FormControl, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-
 const LanguageSelector = () => {
     const { t, i18n } = useTranslation();
-    const [language, setLanguage] = useState<string>('en');
 
     const handleChange = (event: SelectChangeEvent<unknown>) => {
-        setLanguage(event.target.value as string);
         i18n.changeLanguage(event.target.value as string);
     };
 
@@ -16,7 +12,7 @@ const LanguageSelector = () => {
         <FormControl fullWidth>
             <Select
                 name="language-select"
-                value={language}
+                value={i18n.language}
                 onChange={handleChange}
                 sx={{
                     color: 'white',
