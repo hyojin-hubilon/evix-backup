@@ -35,7 +35,7 @@ const StudyNew = () => {
 	return (
 	<Container maxWidth="lg">
 		<Typography variant="h2" mb={2}>Create Study</Typography>
-		<Box sx={{p:'1rem', borderRadius: '1rem', border: `1px solid ${divider}`}}>
+		<Box sx={{p:'1rem', borderRadius: '1rem', border: `1px solid ${divider}`, backgroundColor: '#fff'}}>
 			<Box display="flex" alignItems="center" flexDirection="column" gap={2} sx={{p: "1rem"}}>
 
 
