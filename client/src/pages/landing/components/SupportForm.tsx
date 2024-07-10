@@ -10,6 +10,7 @@ import {
     Typography,
     MenuItem,
     Box,
+	SelectChangeEvent,
 } from '@mui/material';
 import { useState } from 'react';
 import SimpleModal from '../../../components/ui/SimpleModal';
@@ -84,7 +85,7 @@ const SupportForm = () => {
         },
     });
 
-    const handleFormType = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFormType = (e: SelectChangeEvent) => {
         setFormType(e.target.value);
     };
 

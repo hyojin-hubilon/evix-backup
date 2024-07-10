@@ -25,7 +25,7 @@ export interface ResCommonSuccess<T> {
     content?: T;
 }
 
-export interface ResCommonError {
+export interface ResCommonErrorInf {
     // [A] YiSuHwan TypeGuard 를 위함
     type: 'FAIL';
     // [A] YiSuHwan Add 값을 강제로 채워준다.
@@ -35,6 +35,11 @@ export interface ResCommonError {
     status: number;
     error: string;
     message: string;
+}
+
+export class ResCommonError implements ResCommonErrorInf {
+    type;
+    constructor(public code, public dateTime, public status, public error, public message) {}
 }
 
 export const axios_instance = Axios.create({
@@ -53,14 +58,13 @@ function generateError(
     error: string | null | undefined,
     message: string | null | undefined
 ): ResCommonError {
-    return {
-        type: 'FAIL',
-        code: code,
-        dateTime: dateTime ? dateTime : '',
-        status: 0,
-        error: error ? error : '',
-        message: message ? message : '메시지가 없습니다.',
-    };
+    return new ResCommonError(
+        code,
+        dateTime ? dateTime : '',
+        0,
+        error ? error : '',
+        message ? message : '메시지가 없습니다.'
+    );
 }
 
 export async function api<T>(
