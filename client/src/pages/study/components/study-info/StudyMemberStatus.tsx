@@ -11,7 +11,7 @@ import {
     useTheme,
 } from '@mui/material';
 
-interface ManagerType {
+export interface ManagerType {
     std_no: number;
     user_no: number;
     std_privilege: string;

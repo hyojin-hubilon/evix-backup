@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import DateRangePicker, { DateRage } from "./components/study-new/Daterangepicker";
 import MedicineInfo from "./components/study-new/MedicineInfo";
+import MemberMangement from "./components/study-new/MemberManagement";
 
 const FormTooltip = ({text}) => {
 	return (
@@ -21,7 +22,8 @@ const StudyNew = () => {
 	const { divider, primary } = theme.palette;
 	const [ dateRange, setDateRange ] = useState({ startDt: dayjs(), endDt: dayjs()})
 	const [ medicineYOrN, setMedicineYOrN] = useState<'true' | 'false'>('false');
-	const [ mode, setMode ] = useState<'write' | 'edit'>('write')
+	const [ mode, setMode ] = useState<'write' | 'edit'>('write');
+	const [ isOpenMember, setIsOpenMemmber ] = useState(false);
 	
 	const changeDateRange = (e: DateRage) => {
 		//console.log(e.startDt.format('DD/MM/YYYY')); 포맷적용 예시
@@ -30,6 +32,10 @@ const StudyNew = () => {
 
 	const handleChangeMedicine = (e) => {
 		setMedicineYOrN(e);
+	}
+
+	const handleCloseMember = () => {
+		setIsOpenMemmber(!isOpenMember);
 	}
 
 	return (
@@ -207,7 +213,7 @@ const StudyNew = () => {
 						</Box>
 					</Grid>
 					<Grid item xs={9}>
-						<Button variant="contained">초대하기</Button>
+						<Button variant="contained" onClick={() => setIsOpenMemmber(true)}>초대하기</Button>
 					</Grid>
 				</Grid>
 
@@ -266,6 +272,7 @@ const StudyNew = () => {
 			</Grid>
 		}
 		
+		<MemberMangement isOpen={isOpenMember} handleClose={handleCloseMember} />
 	</Container>)
 }
 
