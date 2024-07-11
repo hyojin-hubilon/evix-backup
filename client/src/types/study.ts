@@ -55,6 +55,7 @@ export interface UpdateMemberPrivilegeRequest {
 export interface ManagerList {
     std_no: number;
     user_no: number;
+    std_privilege: string;
     profile_image_url: string;
     profile_image_name: string;
     first_name: string;
