@@ -20,6 +20,8 @@ interface ManagerType {
     last_name: string;
     profile_image_url: string | null;
     profile_image_name: string | null;
+    company_name: string;
+    invited_at: string;
 }
 
 interface InviteType {
@@ -60,9 +62,9 @@ const StudyMemberStatus = ({ managerList, inviteList }: StudyMemberStatusProps) 
             manager.profile_image_url || '',
             `${manager.first_name} ${manager.last_name}`,
             manager.std_privilege,
-            '-', // 현재 소속 정보 데이터 없음
+            manager.company_name || '-',
             manager.email,
-            '-', // 현재 초대 발송일자 없음
+            manager.invited_at || '-',
             'Approved'
         )
     );
@@ -80,7 +82,7 @@ const StudyMemberStatus = ({ managerList, inviteList }: StudyMemberStatusProps) 
                     invite.std_privilege,
                     '-',
                     invite.user_email,
-                    '-',
+                    invite.created_at,
                     'Waiting for approval'
                 )
             );

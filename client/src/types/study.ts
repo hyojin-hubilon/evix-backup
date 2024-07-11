@@ -24,8 +24,7 @@ export interface Study {
     location?: string; // 생성 시에만 필요
     disease: string;
     target_number: number;
-    drug_code: string;
-    eic_file: string | null;
+    drug_code: string | null;
     std_status?: string; // 생성 시에만 필요
     std_payment_status?: string; // 생성 시에만 필요
     deploy_method?: string; // 생성 시에만 필요

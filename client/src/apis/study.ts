@@ -1,6 +1,12 @@
 // import { handleApiError, instance } from "../commonApi";
 
-import { ResCommonError, api } from '@/apis/axios-common';
+import {
+    ResCommonError,
+    ResCommonSuccess,
+    api,
+    axios_file_instance,
+    file_api,
+} from '@/apis/axios-common';
 import * as StudyApiType from '@/types/study';
 
 const BASE_API_URL = '/researcher/study';
@@ -11,9 +17,13 @@ const studyApi = {
      * @param data
      * @returns
      */
-    createStudy: async (data: StudyApiType.Study) => {
+    createStudy: async (data: any) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}`, 'post', data);
+            console.log('data: ', ...data);
+
+            const responseData = await file_api<{}>(`${BASE_API_URL}`, 'post', data);
+
+            console.log(responseData);
 
             return responseData;
         } catch (error) {

@@ -29,11 +29,15 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
 
     const decodedToken = getDecodedToken('userInfoToken');
 
-    const userNo = decodedToken['user_no'];
+    console.log(decodedToken);
+
+    const userNo = decodedToken['user-no'];
 
     const isOwner = managerList.some(
         (manager) => manager.user_no === userNo && manager.std_privilege === 'OWNER'
     );
+
+    console.log(isOwner);
 
     const isEditable = managerList.some(
         (manager) =>
