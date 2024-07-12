@@ -29,6 +29,7 @@ import MemberMangement from "./components/study-new/MemberManagement";
 import * as StudyApiType from '@/types/study';
 import studyApi from '@/apis/study';
 import { useNavigate } from 'react-router-dom';
+import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
 
 const FormTooltip = ({ text }) => {
     return (
@@ -52,6 +53,7 @@ const StudyNew = () => {
     const [disease, setDisease] = useState('');
     const [eicFile, setEicFile] = useState(null);
 	const [ isOpenMember, setIsOpenMemmber ] = useState(false);
+	const [ isOpenSurvey, setIsOpenSurvey ] = useState(true);
 
     const navigate = useNavigate();
 
@@ -135,6 +137,10 @@ const StudyNew = () => {
 
 	const handleCloseMember = () => {
 		setIsOpenMemmber(!isOpenMember);
+	}
+
+	const handleCloseSurvey = () => {
+		setIsOpenSurvey(!isOpenSurvey);
 	}
 
     return (
@@ -435,6 +441,7 @@ const StudyNew = () => {
                 </Grid>
             )}
 			<MemberMangement isOpen={isOpenMember} handleClose={handleCloseMember} />
+			<SurveyConnectDialog isOpen={isOpenSurvey} handleClose={handleCloseSurvey}/>
         </Container>
 		
     );

@@ -4,28 +4,33 @@ import dayjs from 'dayjs';
 import { ChangeEvent, useState } from "react";
 import PreviewIcon from '@mui/icons-material/Preview';
 
+export type SurveyAdd = {
+	type: "add" | "delete",
+	survey: RegistrableSurvey
+}
+
 type SurveyListTableProps = {
 	surveyList: RegistrableSurvey[],
-	handleSelected: (survey: RegistrableSurvey[]) => void
+	handleSelected: (selectedSurvey:SurveyAdd) => void
 }
 const SurveyListTable = ({surveyList, handleSelected}: SurveyListTableProps) => {
 	const theme = useTheme();
 	const { divider } = theme.palette;
-	const [selectedSurvey, setSelectedSurvey] = useState<RegistrableSurvey[]>([]);
 
-	const handleSelectSurvey = (e:ChangeEvent, survey) => {
-		console.log(e, survey);
-		handleSelected(selectedSurvey);
+	const handleSelectSurvey = (e:ChangeEvent<HTMLInputElement>, survey) => {
+		const checked = e.target.checked;
+		if(checked) handleSelected({type: 'add', survey: survey});
+		else handleSelected({type: 'delete', survey:survey});
 	}
 
 	return (
 		<TableContainer component={Paper}>
-			<Table sx={{ minWidth: 650  }} aria-label="simple table" size="small">
+			<Table sx={{ minWidth: 650 }} aria-label="simple table" size="small">
 			<TableHead>
 				<TableRow
 					sx={{ 'td, th': {borderBottom: `1px solid ${theme.palette.grey[400]}`}}}
 				>
-					<TableCell></TableCell>
+					<TableCell align="center">선택</TableCell>
 					<TableCell align="left">Survey 제목</TableCell>
 					<TableCell align="center">업데이트</TableCell>
 					<TableCell align="center">미리보기</TableCell>
@@ -37,7 +42,7 @@ const SurveyListTable = ({surveyList, handleSelected}: SurveyListTableProps) => 
 					key={survey.survey_no}
 					sx={{ 'td, th': {borderBottom: `1px solid ${divider}`}, '&:last-child td, &:last-child th': { border: 0 } }}
 				>
-					<TableCell>
+					<TableCell align="center">
 						<FormControl>
 							<Checkbox onChange={(e) => handleSelectSurvey(e, survey)} />
 						</FormControl>
