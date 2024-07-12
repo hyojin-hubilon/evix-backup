@@ -105,11 +105,11 @@ const MemberMangement = ({isOpen, handleClose}) => {
 			<Dialog
 				open={isOpen}
 				onClose={handleClose}
-				aria-labelledby="medicine-search-title"
-				aria-describedby="medicine-search-description"
+				aria-labelledby="member-management-title"
+				aria-describedby="member-management-description"
 				maxWidth="sm"
 			>
-				<DialogTitle id="medicine-search-title" variant="h4" width={600}>
+				<DialogTitle id="member-management-title" variant="h4" width={600}>
 					멤버관리 <span style={{color: primary.main}}>(8)</span>
 					<IconButton 
 						size="small"
@@ -122,7 +122,7 @@ const MemberMangement = ({isOpen, handleClose}) => {
 				<DialogContent>
 					<Grid container mb={1}>
 						<Grid item container xs={8} alignItems="center">
-							<Typography id="medicine-search-description" variant="h5">
+							<Typography id="member-management-description" variant="h5">
 								중증 아토피 피부염 임상연구 – 부작용 
 							</Typography>
 						</Grid>
