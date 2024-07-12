@@ -7,12 +7,11 @@ import { useState } from 'react';
 
 type MemberListItemProps = {
 	member: MemberTempType,
-	key: number,
 	sendMailConfirm: (member: MemberTempType) => void,
 	sendDeleteConfirm: (member: MemberTempType) => void
 };
 
-const MemberListItem = ({member, key, sendMailConfirm, sendDeleteConfirm}: MemberListItemProps) => {
+const MemberListItem = ({member, sendMailConfirm, sendDeleteConfirm}: MemberListItemProps) => {
 	const [ memberAuth, setMemberAuth ] = useState(member.std_privilege.toLowerCase())
 	
 	return (
