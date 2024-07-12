@@ -87,6 +87,8 @@ interface StudyInfoProps {
             last_name: string;
             profile_image_url: string | null;
             profile_image_name: string | null;
+            company_name: string;
+            invited_at: string;
         }[];
         inviteList: {
             std_no: number;
@@ -118,9 +120,11 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                 <Typography variant="h6" color="primary">
                                     {statusLabel}
                                 </Typography>
-                                <Typography>
-                                    (최근 업데이트 {formatDate(studyDetail.updated_at)}){' '}
-                                </Typography>
+                                {studyDetail.updated_at && (
+                                    <Typography>
+                                        (최근 업데이트 {formatDate(studyDetail.updated_at)})
+                                    </Typography>
+                                )}
                             </Box>
                         </ListItem>
                         <ListItem>

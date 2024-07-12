@@ -54,7 +54,7 @@ export const axios_instance = Axios.create({
 
 export const axios_file_instance = Axios.create({
     withCredentials: true,
-    baseURL: apiVersion,
+    baseURL: `/${apiVersion}`,
     timeout: 60000,
     headers: {
         'Content-Language': 'utf-8',
@@ -124,28 +124,23 @@ export async function file_api<T>(
     data?: any,
     config?: AxiosRequestConfig
 ): Promise<ResCommonSuccess<T>> {
-    // loadingEle 은 향후 화면이 개발되면 추가한다
-    // let loadingEle;
     let res;
     try {
-        if (method === 'post')
+        if (method === 'post') {
+            console.log(url, ', ', data);
             res = await axios_file_instance.post<ResCommonSuccess<T>>(url, data, config);
-        else res = await axios_file_instance.get(url);
-        // if (loadingEle) {
-        //     loadingEle.style.display = 'none';
-        // }
+        } else {
+            res = await axios_file_instance.get(url);
+        }
         return res.data as ResCommonSuccess<T>;
     } catch (error) {
-        // if (loadingEle) {
-        //     loadingEle.style.display = 'none';
-        // }
         if (Axios.isCancel(error)) {
             throw generateError(ResCustomErrorCode.TIMEOUT, null, null, error.message);
         }
         if (Axios.isAxiosError<ResCommonError>(error)) {
             if (error.response !== undefined) {
                 const errorResult = error.response.data;
-                errorResult.code == error.response.status;
+                errorResult.code = error.response.status;
                 throw errorResult;
             } else {
                 throw generateError(ResCustomErrorCode.NONE_RESPONSE, null, null, error.message);

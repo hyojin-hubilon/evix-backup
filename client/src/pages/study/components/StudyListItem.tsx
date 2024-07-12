@@ -3,6 +3,7 @@ import { EditOutlined, FundViewOutlined, UserAddOutlined } from '@ant-design/ico
 import { Avatar, AvatarGroup, Box, Button, Card, Grid, Typography, useTheme } from '@mui/material';
 
 import { ManagerList, StudyListItemProps } from '@/types/study';
+import { getDecodedToken } from '@/utils/Cookie';
 
 // * 진행중인 상태일 경우, 한눈에 알아볼 수 있도록 bg를 다르게 처리함.
 // * 배포전/일시정지/중단: 빨간색 txt 처리
@@ -26,6 +27,23 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
 
     const managerList: ManagerList[] = study.managerList;
 
+    const decodedToken = getDecodedToken('userInfoToken');
+
+    console.log(decodedToken);
+
+    const userNo = decodedToken['user-no'];
+
+    const isOwner = managerList.some(
+        (manager) => manager.user_no === userNo && manager.std_privilege === 'OWNER'
+    );
+
+    console.log(isOwner);
+
+    const isEditable = managerList.some(
+        (manager) =>
+            (manager.user_no === userNo && manager.std_privilege === 'OWNER') ||
+            manager.std_privilege === 'MAINTAINER'
+    );
     return (
         <>
             <Card
@@ -68,17 +86,23 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                         justifyContent="flex-end"
                         gap={1}
                     >
-                        {/* 멤버초대 */}
-                        <Button size="large" variant="outlined">
-                            <UserAddOutlined style={{ fontSize: '1.5rem' }} />
-                        </Button>
+                        {/* 멤버초대 - OWNER */}
+                        {/* Study가 종료상태일 때는 멤버 초대할수 없으므로 버튼 비노출 */}
+                        {isOwner && study.std_status !== 'STD-DONE' && (
+                            <Button size="large" variant="outlined">
+                                <UserAddOutlined style={{ fontSize: '1.5rem' }} />
+                            </Button>
+                        )}
 
-                        {/* 수정 */}
-                        <Button size="large" variant="outlined">
-                            <EditOutlined style={{ fontSize: '1.5rem' }} />
-                        </Button>
+                        {/* 수정 - OWNER, MAINTAINER */}
+                        {isEditable && (
+                            <Button size="large" variant="outlined">
+                                <EditOutlined style={{ fontSize: '1.5rem' }} />
+                            </Button>
+                        )}
 
                         {/* Overview  */}
+                        {/* Study가 배포전일 때는 결과 데이터가 없으므로 버튼 비노출 */}
                         {study.std_status !== 'STD-CREATED' && (
                             <Button
                                 component={Link}
