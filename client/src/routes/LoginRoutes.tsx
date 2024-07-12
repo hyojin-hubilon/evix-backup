@@ -7,6 +7,8 @@ import Invite from '@/pages/authentication/Invite';
 import FindingId from '@/pages/authentication/FindingId';
 import ForgotPassword from '@/pages/authentication/ForgotPassword';
 import ChangePassword from '@pages/authentication/ChangePassword';
+import AuthenticationPasswordForm from '@/pages/authentication/auth-forms/AuthenticationPasswordForm';
+import AuthPassword from '@/pages/authentication/AuthPassword';
 // import AuthLogout from "pages/authentication/auth-forms/AuthLogout";
 // import ApplyFreeTrialForm from "pages/authentication/ApplyFreeTrialForm";
 
@@ -39,6 +41,7 @@ const LoginRoutes = {
         { path: 'finding-id', element: <FindingId /> },
         { path: 'forgot-password', element: <ForgotPassword /> },
         { path: 'change-password', element: <ChangePassword /> },
+        { path: 'authentication-password', element: <AuthPassword /> },
     ],
 };
 
