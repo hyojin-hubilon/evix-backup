@@ -1,6 +1,5 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, Grid, IconButton, List, OutlinedInput, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, Grid, IconButton, List, OutlinedInput, Typography, useTheme } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import { grey } from "@ant-design/colors";
 import SurveyListTable, { SurveyAdd } from "./SurveyListTable";
 import { useState } from "react";
 import { RegistrableSurvey } from "@/apis/survey";
@@ -11,6 +10,8 @@ import { reorder } from "@/utils/helper";
 
 
 const SurveyConnectDialog = ({isOpen, handleClose}) => {
+	const theme = useTheme();
+	const { grey } = theme.palette;
 	const [surveyList, setSurveyList] = useState<RegistrableSurvey[]>([
 		{ survey_no:1, title:'Project_atopic dermatitis_2024', updated_date:'2024-06-05'},
 		{ survey_no:2, title:'forwomen_atopic dermatitis_2024', updated_date:'2024-05-02'},
@@ -87,8 +88,8 @@ const SurveyConnectDialog = ({isOpen, handleClose}) => {
 						
 					</Grid>
 					{
-						selectedSurvey &&
-						<Box>
+						selectedSurvey.length > 0 &&
+						<Box sx={{borderRadius: "5px", backgroundColor: grey[100], p: '0.5rem'}}>
 							<DraggableList items={selectedSurvey} onDragEnd={onDragEnd} />
 						</Box>
 					}
