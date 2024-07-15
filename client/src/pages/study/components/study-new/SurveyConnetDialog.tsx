@@ -6,6 +6,7 @@ import { RegistrableSurvey } from "@/apis/survey";
 import DraggableList from "./DraggableList";
 import { DropResult } from '@hello-pangea/dnd';
 import { reorder } from "@/utils/helper";
+import SurveyPreview from "./SurveyPreview";
 
 
 
@@ -13,6 +14,7 @@ const SurveyConnectDialog = ({isOpen, handleClose}) => {
 	const theme = useTheme();
 	const { grey } = theme.palette;
 	const [ searchText, setSearchText ] = useState("");
+	const [ previewSurveyNo, setPreviewSurveyNo ] = useState<number>();
 
 	const [surveyList, setSurveyList] = useState<RegistrableSurvey[]>([
 		{ survey_no:1, title:'Project_atopic dermatitis_2024', updated_date:'2024-06-05'},
@@ -65,6 +67,11 @@ const SurveyConnectDialog = ({isOpen, handleClose}) => {
 		setSearchText('');
 		setSearchedResult(surveyList);
 	}
+
+	const handleSelectPreview = (surveyNo) => {
+		console.log(surveyNo);
+		setPreviewSurveyNo(surveyNo);
+	}
 	
 
 
@@ -74,14 +81,16 @@ const SurveyConnectDialog = ({isOpen, handleClose}) => {
 			onClose={handleClose}
 			aria-labelledby="survey-connect-title"
 			aria-describedby="survey-connect-description"
-			maxWidth="sm"
+			maxWidth="lg"
 			scroll="body"
-		>
-				<DialogTitle id="survey-connect-title" variant="h4" width={600}>
+		>	
+			<Grid container width={previewSurveyNo ? 1100 : 730}>
+				<Grid item xs={previewSurveyNo ? 8 : 12}>
+				<DialogTitle id="survey-connect-title" variant="h4">
 					Survey 연결
 					<IconButton 
 						size="small"
-						sx={{position: 'absolute', top: "10px", right: '10px'}}
+						sx={{position: 'absolute', top: "10px", left: '680px'}}
 						onClick={handleClose}
 						>
 						<CloseIcon />
@@ -124,12 +133,19 @@ const SurveyConnectDialog = ({isOpen, handleClose}) => {
 					}
 					
 					<Box mt={1}>
-						<SurveyListTable surveyList={searchedResult} selectedSurvey={selectedSurvey} handleSelected={(e) => handleSelectedSurvey(e)}/>
+						<SurveyListTable surveyList={searchedResult} selectedSurvey={selectedSurvey} handleSelected={(e) => handleSelectedSurvey(e)} handleSelectPreview={(studyNo)=>handleSelectPreview(studyNo)}/>
 					</Box>
 
 
 				</DialogContent>
-			</Dialog>
+				</Grid>
+				<Grid item xs={previewSurveyNo ? 4 : 0}>
+				{
+					previewSurveyNo && <SurveyPreview surveyNo={previewSurveyNo} />
+				}
+				</Grid>
+			</Grid>
+		</Dialog>
 	)
 }
 

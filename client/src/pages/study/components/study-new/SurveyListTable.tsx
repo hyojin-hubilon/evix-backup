@@ -12,9 +12,10 @@ export type SurveyAdd = {
 type SurveyListTableProps = {
 	surveyList: RegistrableSurvey[],
 	selectedSurvey: RegistrableSurvey[],
-	handleSelected: (selectedSurvey:SurveyAdd) => void
+	handleSelected: (selectedSurvey:SurveyAdd) => void,
+	handleSelectPreview: (previewSurveyNo: number) => void
 }
-const SurveyListTable = ({surveyList, selectedSurvey, handleSelected}: SurveyListTableProps) => {
+const SurveyListTable = ({surveyList, selectedSurvey, handleSelected, handleSelectPreview}: SurveyListTableProps) => {
 	const theme = useTheme();
 	const { divider } = theme.palette;
 	const ref = useRef({});
@@ -65,7 +66,7 @@ const SurveyListTable = ({surveyList, selectedSurvey, handleSelected}: SurveyLis
 					</TableCell>
 					<TableCell align="center">{dayjs(survey.updated_date).format('YYYY-MM-DD')}</TableCell>
 					<TableCell align="center">
-						<IconButton color="primary">
+						<IconButton color="primary" onClick={() => handleSelectPreview(survey.survey_no)}>
 							<PreviewIcon />
 						</IconButton>
 					</TableCell>
