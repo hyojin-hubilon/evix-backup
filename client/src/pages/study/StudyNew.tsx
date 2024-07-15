@@ -53,7 +53,7 @@ const StudyNew = () => {
     const [disease, setDisease] = useState('');
     const [eicFile, setEicFile] = useState(null);
 	const [ isOpenMember, setIsOpenMemmber ] = useState(false);
-	const [ isOpenSurvey, setIsOpenSurvey ] = useState(true);
+	const [ isOpenSurvey, setIsOpenSurvey ] = useState(false);
 
     const navigate = useNavigate();
 
@@ -339,7 +339,7 @@ const StudyNew = () => {
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
-                            <Button variant="contained">Survey 연결</Button>
+                            <Button variant="contained" onClick={() => setIsOpenSurvey(true)}>Survey 연결</Button>
                         </Grid>
                     </Grid>
 
