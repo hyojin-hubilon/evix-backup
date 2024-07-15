@@ -13,7 +13,7 @@ const surveyApi = {
 	 * @param orderBy
      * @returns
      */
-    mySurveyList: async (pageNum: number, elementSize: number, orderBy:string) => {
+    mySurveyList: async (pageNum: number, elementSize: number, orderBy:'CREATED' | 'UPDATED') => {
         try {
             const responseData = await api<{}>(
                 `${BASE_API_URL}/my-list/${pageNum}/${elementSize}/${orderBy}`,

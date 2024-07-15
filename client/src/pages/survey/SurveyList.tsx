@@ -29,7 +29,7 @@ const SurveyList = () => {
     // Surrvey 데이터 불러오기
     const fetchSurvey = async () => {
         try {
-            const response: SurveyApiResponse = await surveyApi.mySurveyList(1, 100, 'latest'); // TODO: 창덕님께 수정 요청(페이징 필요 없음) OrderBy에 들어가야하는 내용은?
+            const response: SurveyApiResponse = await surveyApi.mySurveyList(1, 100, 'CREATED');
             if (response.result && response.code === 200) {
                 const studyList = response.content?.surveyMyList ?? [];
                 setSurveyList(studyList);
