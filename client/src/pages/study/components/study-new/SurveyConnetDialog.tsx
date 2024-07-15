@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, Grid, IconButton, List, OutlinedInput, Typography, useTheme } from "@mui/material";
+import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, Grid, Hidden, IconButton, List, OutlinedInput, Typography, useTheme } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import SurveyListTable, { SurveyAdd } from "./SurveyListTable";
 import { useState } from "react";
@@ -12,6 +12,8 @@ import { reorder } from "@/utils/helper";
 const SurveyConnectDialog = ({isOpen, handleClose}) => {
 	const theme = useTheme();
 	const { grey } = theme.palette;
+	const [ searchText, setSearchText ] = useState("");
+
 	const [surveyList, setSurveyList] = useState<RegistrableSurvey[]>([
 		{ survey_no:1, title:'Project_atopic dermatitis_2024', updated_date:'2024-06-05'},
 		{ survey_no:2, title:'forwomen_atopic dermatitis_2024', updated_date:'2024-05-02'},
@@ -19,18 +21,19 @@ const SurveyConnectDialog = ({isOpen, handleClose}) => {
 		{ survey_no:4, title:'Survey_abc_20240125', updated_date:'2024-04-25'}
 	]);
 
+	const [ searchedResult, setSearchedResult ] = useState<RegistrableSurvey[]>(surveyList);
+
 	const [selectedSurvey, setSelectedSurvey] = useState<RegistrableSurvey[]>([]);
 
 
 	const handleSelectedSurvey = (addSurvey:SurveyAdd) => {
 		if(addSurvey.type === 'add') {
-			setSelectedSurvey([ ...selectedSurvey, addSurvey.survey]);
+			const newSurveyItem = {...addSurvey.survey, frequency: 'month', times: 1};
+			setSelectedSurvey([...selectedSurvey, newSurveyItem]);
 		} else {
 			const newItems = selectedSurvey.filter(survey => survey.survey_no !== addSurvey.survey.survey_no);
 			setSelectedSurvey(newItems);
 		}
-		
-		console.log(selectedSurvey);
 	}
 
 
@@ -43,6 +46,25 @@ const SurveyConnectDialog = ({isOpen, handleClose}) => {
 	
 		setSelectedSurvey(newItems);
 	};
+
+	const handleChangeSurveyItem = (items: RegistrableSurvey[]) => {
+		setSelectedSurvey(items); 
+	}
+
+	const handleConnectSurvey = () => {
+		console.log(selectedSurvey);
+	}
+
+	const handleSearchSurvey = (e) => {
+		e.preventDefault();
+		const searched = surveyList.filter(survey => survey.title.toLowerCase().includes(searchText.toLowerCase()));
+		setSearchedResult(searched);
+	}
+
+	const handleSeeAll = () => {
+		setSearchText('');
+		setSearchedResult(surveyList);
+	}
 	
 
 
@@ -53,6 +75,7 @@ const SurveyConnectDialog = ({isOpen, handleClose}) => {
 			aria-labelledby="survey-connect-title"
 			aria-describedby="survey-connect-description"
 			maxWidth="sm"
+			scroll="body"
 		>
 				<DialogTitle id="survey-connect-title" variant="h4" width={600}>
 					Survey 연결
@@ -64,7 +87,7 @@ const SurveyConnectDialog = ({isOpen, handleClose}) => {
 						<CloseIcon />
 					</IconButton>
 				</DialogTitle>
-				<DialogContent>						
+				<DialogContent sx={{overflow: 'hidden'}}>						
 					<Typography id="survey-connect-description" sx={{
 						'span' : {
 							display: 'block'
@@ -73,29 +96,35 @@ const SurveyConnectDialog = ({isOpen, handleClose}) => {
 						<span>1개 이상의 Survey를 연결해주세요.</span>
 						<span>Survey가 여러개일 경우, 설정 순서에 따라 진행됩니다.</span>
 					</Typography>
-					<Grid container gap={1} mt="1rem" mb="1rem">
-						<Grid item xs={7.8}>
-							<FormControl size="small" fullWidth>
-								<OutlinedInput placeholder="Survey 제목" />
+					<form onSubmit={handleSearchSurvey}>
+						<Box display="flex" mt="1rem" mb="1rem" gap={1}>
+							<FormControl size="small" sx={{width: "400px"}}>
+								<OutlinedInput placeholder="Survey 제목" value={searchText} onChange={(e) => setSearchText(e.target.value)}/>
 							</FormControl>
-						</Grid>
-						<Grid item xs={4}>
-							<Box display="flex" gap={1}>
-								<Button variant="contained" sx={{flexGrow:1}}>검색</Button>
-								<Button variant="outlined"  sx={{flexGrow:1}}>전체보기</Button>
-							</Box>
-						</Grid>
-						
-					</Grid>
+							<Button variant="contained" sx={{flexGrow:1}} type="submit" onClick={handleSearchSurvey}>검색</Button>
+							<Button variant="outlined"  sx={{flexGrow:1}} onClick={handleSeeAll}>전체보기</Button>
+						</Box>
+					</form>
+					
 					{
 						selectedSurvey.length > 0 &&
-						<Box sx={{borderRadius: "5px", backgroundColor: grey[100], p: '0.5rem'}}>
-							<DraggableList items={selectedSurvey} onDragEnd={onDragEnd} />
+						<Box display="flex" flexDirection="column" gap="0.5rem" alignItems="center">
+							<Box sx={{
+								borderRadius: "5px",
+								backgroundColor: grey[100],
+								p: '0.5rem',
+								'ul': { p: 0 },
+								width: 1
+							}}>
+								<DraggableList items={selectedSurvey} onDragEnd={onDragEnd} itemChanged={handleChangeSurveyItem} />
+							</Box>
+
+							<Button onClick={handleConnectSurvey} variant="contained" sx={{width: "10rem"}}>연결하기</Button>
 						</Box>
 					}
 					
 					<Box mt={1}>
-						<SurveyListTable surveyList={surveyList} handleSelected={(e) => handleSelectedSurvey(e)}/>
+						<SurveyListTable surveyList={searchedResult} selectedSurvey={selectedSurvey} handleSelected={(e) => handleSelectedSurvey(e)}/>
 					</Box>
 
 

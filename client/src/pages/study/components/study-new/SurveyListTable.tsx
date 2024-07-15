@@ -1,7 +1,7 @@
 import { RegistrableSurvey } from "@/apis/survey";
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, useTheme, FormControl, Checkbox, IconButton } from "@mui/material";
 import dayjs from 'dayjs';
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import PreviewIcon from '@mui/icons-material/Preview';
 
 export type SurveyAdd = {
@@ -11,17 +11,32 @@ export type SurveyAdd = {
 
 type SurveyListTableProps = {
 	surveyList: RegistrableSurvey[],
+	selectedSurvey: RegistrableSurvey[],
 	handleSelected: (selectedSurvey:SurveyAdd) => void
 }
-const SurveyListTable = ({surveyList, handleSelected}: SurveyListTableProps) => {
+const SurveyListTable = ({surveyList, selectedSurvey, handleSelected}: SurveyListTableProps) => {
 	const theme = useTheme();
 	const { divider } = theme.palette;
+	const ref = useRef({});
 
-	const handleSelectSurvey = (e:ChangeEvent<HTMLInputElement>, survey) => {
+	const handleSelectSurvey = (e:ChangeEvent<HTMLInputElement>, survey) => {		
 		const checked = e.target.checked;
 		if(checked) handleSelected({type: 'add', survey: survey});
 		else handleSelected({type: 'delete', survey:survey});
 	}
+
+	useEffect(() => {
+		for(let key in ref.current) {
+			if(ref.current[key]) {
+				const numKey = Number(key);
+				const findIndex = selectedSurvey.findIndex(survey => survey.survey_no === numKey);
+				
+				if(findIndex > -1) ref.current[key].checked = true;
+				else ref.current[key].checked = false;
+			}
+			
+		}
+	}, [selectedSurvey, surveyList]);
 
 	return (
 		<TableContainer component={Paper}>
@@ -43,9 +58,7 @@ const SurveyListTable = ({surveyList, handleSelected}: SurveyListTableProps) => 
 					sx={{ 'td, th': {borderBottom: `1px solid ${divider}`}, '&:last-child td, &:last-child th': { border: 0 } }}
 				>
 					<TableCell align="center">
-						<FormControl>
-							<Checkbox onChange={(e) => handleSelectSurvey(e, survey)} />
-						</FormControl>
+						<input type="checkbox" onChange={(e) => handleSelectSurvey(e, survey)} ref={element => ref.current[survey.survey_no] = element} />
 					</TableCell>
 					<TableCell component="th" scope="row">
 						{survey.title}
