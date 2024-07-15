@@ -1,4 +1,4 @@
-import { RegistrableSurvey } from "@/apis/survey";
+import { RegistrableSurvey } from "@/types/survey";
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, useTheme, FormControl, Checkbox, IconButton } from "@mui/material";
 import dayjs from 'dayjs';
 import { ChangeEvent, useEffect, useRef, useState } from "react";

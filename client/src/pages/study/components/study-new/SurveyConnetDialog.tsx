@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, Grid, Hid
 import CloseIcon from '@mui/icons-material/Close';
 import SurveyListTable, { SurveyAdd } from "./SurveyListTable";
 import { useState } from "react";
-import { RegistrableSurvey } from "@/apis/survey";
+import { RegistrableSurvey } from "@/types/survey";
 import DraggableList from "./DraggableList";
 import { DropResult } from '@hello-pangea/dnd';
 import { reorder } from "@/utils/helper";

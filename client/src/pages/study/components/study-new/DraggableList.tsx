@@ -5,7 +5,7 @@ import {
   OnDragEndResponder,
 } from '@hello-pangea/dnd';
 import { List } from '@mui/material';
-import { RegistrableSurvey } from '@/apis/survey';
+import { RegistrableSurvey } from '@/types/survey';
 
 export type DraggableListProps = {
   items: RegistrableSurvey[];

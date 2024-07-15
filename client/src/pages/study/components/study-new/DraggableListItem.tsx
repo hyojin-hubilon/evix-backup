@@ -8,7 +8,7 @@ import {
 	Select,
 	useTheme
 } from '@mui/material';
-import { RegistrableSurvey } from '@/apis/survey';
+import { RegistrableSurvey } from '@/types/survey';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import { useState } from 'react';
 
