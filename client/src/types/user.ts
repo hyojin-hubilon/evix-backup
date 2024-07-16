@@ -8,7 +8,7 @@ export interface UpdateUserData {
     privilege: string;
     active_yn: 'Y' | 'N';
     email_notification_yn: 'Y' | 'N';
-    language: 'KO_KR' | 'EN_US';
+    language: string;
 }
 
 export interface MyProfile {

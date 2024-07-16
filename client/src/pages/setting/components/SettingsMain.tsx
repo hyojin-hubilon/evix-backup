@@ -39,8 +39,8 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
     const navigate = useNavigate();
 
     const [profileImageUrl, setProfileImageUrl] = useState<string>(myProfile.profile_image_url);
-    const [emailAlerts, setEmailAlerts] = useState(myProfile.email_notification_yn === 'Y');
-    const [language, setLanguage] = useState(myProfile.language);
+    const [emailAlerts, setEmailAlerts] = useState<boolean>(myProfile.email_notification_yn === 'Y');
+    const [language, setLanguage] = useState<string>(myProfile.language);
     const [changePasswordModal, setChangePasswordModal] = useState<boolean>(false);
 
     const handleImageUrl = (url: string) => {
@@ -65,7 +65,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                 company_name,
                 job_title,
                 industry,
-                privilege : "PARTICIPANT",
+                privilege,
                 active_yn: 'Y',
                 email_notification_yn: emailAlerts ? 'Y' : 'N',
                 language,
