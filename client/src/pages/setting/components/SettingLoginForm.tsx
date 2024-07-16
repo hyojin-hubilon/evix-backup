@@ -12,7 +12,7 @@ type Props = {
     handleLogin: (status: boolean) => void;
 };
 
-const SettingForm: React.FC<Props> = ({ myProfile, handleLogin }) => {
+const SettingLoginForm: React.FC<Props> = ({ myProfile, handleLogin }) => {
     const initialValues: LoginReq = { email: myProfile.email, password: '' };
 
     const validationSchema = Yup.object({
@@ -88,4 +88,4 @@ const SettingForm: React.FC<Props> = ({ myProfile, handleLogin }) => {
     );
 };
 
-export default SettingForm;
+export default SettingLoginForm;
