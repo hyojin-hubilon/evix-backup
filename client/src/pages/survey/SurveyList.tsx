@@ -9,6 +9,7 @@ import {
     Tab,
     Button,
     IconButton,
+	OutlinedInput,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import SurveyListItem from './components/SurveyListItem';
@@ -29,7 +30,7 @@ const SurveyList = () => {
     // Surrvey 데이터 불러오기
     const fetchSurvey = async () => {
         try {
-            const response: SurveyApiResponse = await surveyApi.mySurveyList(1, 100, 'CREATED');
+            const response: SurveyApiResponse = await surveyApi.mySurveyList(1, 20, 'CREATED'); //20개씩 더보기 추가, 검색추가
             if (response.result && response.code === 200) {
                 const studyList = response.content?.surveyMyList ?? [];
                 setSurveyList(studyList);
@@ -54,6 +55,10 @@ const SurveyList = () => {
         navigate('/survey/new');
     };
 
+	const handleSearch = () => {
+
+	}
+
     return (
         <Container maxWidth="lg">
             <Grid container rowSpacing={3} columnSpacing={2.75}>
@@ -62,6 +67,10 @@ const SurveyList = () => {
                         <Typography variant="h3">Survey 목록</Typography>
                         <Chip label={surveyCount} color="primary" size="small" />
                     </Box>
+					<Button variant="contained" onClick={handleCreateSurvey} sx={{ml:'auto'}}>
+						<PlusOutlined />
+						<Typography sx={{ ml: 1 }}>Survey 생성</Typography>
+					</Button>
                 </Grid>
 
                 {surveyCount !== 0 ? (
@@ -73,7 +82,7 @@ const SurveyList = () => {
                             sx={{ borderBottom: 1, borderColor: 'divider' }}
                             alignItems="center"
                         >
-                            <Grid item xs={10}>
+                            <Grid item xs={8}>
                                 <Tabs
                                     value={activeTab}
                                     onChange={handleChange}
@@ -85,11 +94,13 @@ const SurveyList = () => {
                                     <Tab label="참여중인 Study 설문" value="3" />
                                 </Tabs>
                             </Grid>
-                            <Grid container item xs={2} justifyContent="flex-end">
-                                <Button variant="contained" onClick={handleCreateSurvey}>
-                                    <PlusOutlined />
-                                    <Typography sx={{ ml: 1 }}>Survey 생성</Typography>
-                                </Button>
+                            <Grid container item xs={4} justifyContent="flex-end">
+								<form onSubmit={handleSearch}>
+									<Box display="flex" gap="0.5rem">
+                               			<OutlinedInput size="small" />
+							   			<Button variant="outlined">검색</Button>
+									</Box>
+							   	</form>
                             </Grid>
                         </Grid>
 
@@ -109,6 +120,11 @@ const SurveyList = () => {
                                     <SurveyListItem survey={survey} userNo={userNo} /> 
                                 </Grid>
                             ))}
+						<Grid item xs={12}>
+							<Box display="flex" justifyContent="center" alignContent="center">
+								<Button size="large" variant="contained" color="secondary" sx={{ml: "auto", mr:"auto"}}>더 보기</Button>
+							</Box>
+						</Grid>
                     </>
                 ) : (
                     <>
