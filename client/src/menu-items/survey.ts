@@ -31,7 +31,7 @@ const studies: MenuItem = {
             type: 'item',
             url: '/survey/new',
             icon: icons.AddchartIcon,
-            breadcrumbs: false,
+            breadcrumbs: false
         },
     ],
 };

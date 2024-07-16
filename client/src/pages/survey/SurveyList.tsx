@@ -11,7 +11,7 @@ import {
     IconButton,
 	OutlinedInput,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import SurveyListItem from './components/SurveyListItem';
 import surveyApi from '@/apis/survey';
 import { MySurveyList, SurveyApiResponse } from '@/types/survey';
@@ -21,20 +21,26 @@ import { getDecodedToken } from '@/utils/Cookie';
 const SurveyList = () => {
     const [surveyCount, setSurveyCount] = useState<number>(0); // Survey 개수 상태
     const [activeTab, setActiveTab] = useState<string>('0'); // 활성 탭 상태
-    const [surveyList, setSurveyList] = useState<MySurveyList[]>([]); // 내 Survey 목록 상태
+    const [ surveyList, setSurveyList ] = useState<MySurveyList[]>([]); // 내 Survey 목록 상태
     const navigate = useNavigate();
+	const page = useRef(1);
+	const [ next, setNext ] = useState(false);
+	const [ searchText, setSearchText ] = useState('');
+	
 
 	const decodedToken = getDecodedToken('userInfoToken');
 	const userNo = decodedToken['user-no'];
 
     // Surrvey 데이터 불러오기
-    const fetchSurvey = async () => {
+    const fetchSurvey = async (p, ) => {
         try {
-            const response: SurveyApiResponse = await surveyApi.mySurveyList(1, 20, 'CREATED'); //20개씩 더보기 추가, 검색추가
+            const response = await surveyApi.mySurveyList(p, 10, 'CREATED'); //20개씩? 10개씩? 더보기 추가, 검색추가
             if (response.result && response.code === 200) {
-                const studyList = response.content?.surveyMyList ?? [];
-                setSurveyList(studyList);
-                setSurveyCount(studyList.length);
+                const newSurveyList = response.content.surveyMyList ?? [];
+				setSurveyList(surverList => [...surverList, ...newSurveyList]);
+                setSurveyCount(surveyCount + newSurveyList.length);
+				const next = response.content.next ?? false;
+				setNext(next);
             }
         } catch (error) {
             console.error('Failed to fetch study list:', error);
@@ -43,8 +49,13 @@ const SurveyList = () => {
 
     
     useEffect(() => {
-        fetchSurvey();
+		fetchSurvey(1);	
     }, []);
+
+	const handleSeeMore = () => {
+		page.current = page.current+1;
+		fetchSurvey(page.current);
+	}
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         event.preventDefault();
@@ -56,7 +67,7 @@ const SurveyList = () => {
     };
 
 	const handleSearch = () => {
-
+		//아직 search가 없구나..
 	}
 
     return (
@@ -73,7 +84,7 @@ const SurveyList = () => {
 					</Button>
                 </Grid>
 
-                {surveyCount !== 0 ? (
+                {surveyList.length > 0 ? (
                     <>
                         <Grid
                             container
@@ -97,13 +108,13 @@ const SurveyList = () => {
                             <Grid container item xs={4} justifyContent="flex-end">
 								<form onSubmit={handleSearch}>
 									<Box display="flex" gap="0.5rem">
-                               			<OutlinedInput size="small" />
-							   			<Button variant="outlined">검색</Button>
+                               			<OutlinedInput size="small" value={searchText} onChange={(e) => setSearchText(e.target.value)}/>
+							   			<Button variant="outlined" onClick={handleSearch}>검색</Button>
 									</Box>
 							   	</form>
                             </Grid>
                         </Grid>
-
+						
                         {surveyList
                             // .filter((survey) => { //전체/ 내가 작성한 설문/ 참여설문 api 따로
                             //     if (activeTab === '0') return true;
@@ -115,16 +126,27 @@ const SurveyList = () => {
                             //         return true;
                             //     return false;
                             // })
-                            .map((survey) => (
-                                <Grid item xs={12} key={survey.survey_no}>
+                            .map((survey, index) => (
+                                <Grid item xs={12} key={index}>
                                     <SurveyListItem survey={survey} userNo={userNo} /> 
                                 </Grid>
                             ))}
-						<Grid item xs={12}>
-							<Box display="flex" justifyContent="center" alignContent="center">
-								<Button size="large" variant="contained" color="secondary" sx={{ml: "auto", mr:"auto"}}>더 보기</Button>
-							</Box>
-						</Grid>
+							{
+								next && 
+								<Grid item xs={12}>
+									<Box display="flex" justifyContent="center" alignContent="center">
+										<Button
+											size="large"
+											variant="contained"
+											color="secondary"
+											onClick={handleSeeMore}
+											>
+											더 보기
+										</Button>
+									</Box>
+								</Grid>
+							}
+						
                     </>
                 ) : (
                     <>

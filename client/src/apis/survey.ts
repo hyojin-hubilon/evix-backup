@@ -2,6 +2,7 @@ import {
     ResCommonError,
     api
 } from '@/apis/axios-common';
+import { SurveyApiResponse } from '@/types/survey';
 
 const BASE_API_URL = '/researcher/survey';
 
@@ -15,7 +16,7 @@ const surveyApi = {
      */
     mySurveyList: async (pageNum: number, elementSize: number, orderBy:'CREATED' | 'UPDATED') => {
         try {
-            const responseData = await api<{}>(
+            const responseData = await api<SurveyApiResponse>(
                 `${BASE_API_URL}/my-list/${pageNum}/${elementSize}/${orderBy}`,
                 'get'
             );

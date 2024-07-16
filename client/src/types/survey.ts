@@ -54,12 +54,10 @@ export interface MySurveyList {
 
 
 export interface SurveyApiResponse {
-    result: boolean;
-    code: number;
-    content?: {
-		searchType?: string | null,
-		searchKeyword?: string | null,
-		pageNum?: number,
-        surveyMyList?: MySurveyList[];
-    };
+	next?: boolean,
+	orderBy?: "CREATED" | "UPDATED",
+	searchType?: string | null,
+	searchKeyword?: string | null,
+	pageNum?: number,
+	surveyMyList?: MySurveyList[];
 }
