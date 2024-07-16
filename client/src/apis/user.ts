@@ -1,5 +1,5 @@
 import { ResCommonError, api, file_api } from '@/apis/axios-common';
-import { MyProfile, UpdateUserData } from '@/types/user';
+import { ModifyPassword, MyProfile, UpdateUserData } from '@/types/user';
 
 const BASE_API_URL = '/researcher/user';
 
@@ -43,11 +43,20 @@ const userApi = {
     },
     uploadProfileImage: async (file: FormData) => {
         try {
-            const responseData = await file_api<{ content: number }>(
+            const responseData = await file_api<string>(
                 `${BASE_API_URL}/my-profile/image-upload`,
                 'post',
-                file,
+                file
             );
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+    modifyPassword: async (body: ModifyPassword) => {
+        try {
+            const responseData = await api<number>(`${BASE_API_URL}/password/modify`, 'put', body);
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;

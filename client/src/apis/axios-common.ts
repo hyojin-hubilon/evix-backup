@@ -130,7 +130,7 @@ export async function file_api<T>(
     try {
         if (method === 'post')
             res = await axios_file_instance.post<ResCommonSuccess<T>>(url, data, config);
-        else res = await axios_file_instance.get(url);
+        else if (method == 'put') res = await axios_instance.put<ResCommonSuccess<T>>(url, data);
         // if (loadingEle) {
         //     loadingEle.style.display = 'none';
         // }

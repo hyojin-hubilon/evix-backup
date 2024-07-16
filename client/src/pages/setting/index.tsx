@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import SettingForm from './components/SettingForm';
 import SettingsMain from './components/SettingsMain';
 import userApi from '@/apis/user';
 import { ResCommonError } from '@/apis/axios-common';
 import { MyProfile } from '@/types/user';
+import SettingLoginForm from './components/SettingLoginForm';
 
+// TODO : 초대받은 study 목록, 업데이트 시 (privilege, language) 추가하기
 const Settings = () => {
     const [loginIsSuccess, setLoginIsSucess] = useState<boolean>(false);
     const [myProfile, setMyProfile] = useState<MyProfile>({
@@ -27,6 +28,11 @@ const Settings = () => {
         last_login: '',
         active_yn: '',
         delete_yn: '',
+        language: '',
+        email_notification_yn: '',
+        unauthorized_number: 0,
+        study_number: 0,
+        survey_number: 0,
     });
 
     const handleSuccessLogin = (status: boolean) => {
@@ -50,7 +56,7 @@ const Settings = () => {
     return (
         <>
             {!loginIsSuccess ? (
-                <SettingForm myProfile={myProfile} handleLogin={handleSuccessLogin}/>
+                <SettingLoginForm myProfile={myProfile} handleLogin={handleSuccessLogin} />
             ) : (
                 <SettingsMain myProfile={myProfile} />
             )}
