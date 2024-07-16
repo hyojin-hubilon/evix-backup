@@ -9,6 +9,7 @@ import {
     Tab,
     Button,
     IconButton,
+	OutlinedInput,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import StudyListItem from './components/StudyListItem';
@@ -88,6 +89,10 @@ const StudyList = () => {
                         <Typography variant="h3">Study 목록</Typography>
                         <Chip label={studyCount} color="primary" size="small" />
                     </Box>
+					<Button variant="contained" onClick={handleCreateStudy} sx={{ml:'auto'}}>
+						<PlusOutlined />
+						<Typography sx={{ ml: 1 }}>Study 생성</Typography>
+					</Button>
                 </Grid>
 
                 {studyCount !== 0 ? (
@@ -99,7 +104,7 @@ const StudyList = () => {
                             sx={{ borderBottom: 1, borderColor: 'divider' }}
                             alignItems="center"
                         >
-                            <Grid item xs={10}>
+                            <Grid item xs={8}>
                                 <Tabs
                                     value={activeTab}
                                     onChange={handleChange}
@@ -111,11 +116,13 @@ const StudyList = () => {
                                     <Tab label="Developer" value="3" />
                                 </Tabs>
                             </Grid>
-                            <Grid container item xs={2} justifyContent="flex-end">
-                                <Button variant="contained" onClick={handleCreateStudy}>
-                                    <PlusOutlined />
-                                    <Typography sx={{ ml: 1 }}>Study 생성</Typography>
-                                </Button>
+							<Grid container item xs={4} justifyContent="flex-end">
+                                <form>
+                                    <Box display="flex" gap="0.5rem">
+										<OutlinedInput size="small" />
+										<Button variant="outlined">검색</Button>
+                                    </Box>
+								</form>
                             </Grid>
                         </Grid>
 
@@ -135,6 +142,11 @@ const StudyList = () => {
                                     <StudyListItem study={study} />
                                 </Grid>
                             ))}
+						<Grid item xs={12}>
+                            <Box display="flex" justifyContent="center" alignContent="center">
+                                <Button size="large" variant="contained" color="secondary" sx={{ml: "auto", mr:"auto"}}>더 보기</Button>
+                            </Box>
+                        </Grid>
                     </>
                 ) : (
                     <>
