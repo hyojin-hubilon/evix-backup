@@ -1,6 +1,13 @@
+import { Typography } from "@mui/material";
+import FormBuilder from "./components/FormBuilder";
+
 const SurveyNew = () => {
 	return (
-		<>Survey New</>
+		<>
+			<Typography variant="h4">Survey 생성</Typography>
+			<FormBuilder />
+		</>
+
 	)
 }
 
