@@ -7,6 +7,8 @@ export interface UpdateUserData {
     country: string;
     privilege: string;
     active_yn: 'Y' | 'N';
+    email_notification_yn: 'Y' | 'N';
+    language: string;
 }
 
 export interface MyProfile {
@@ -29,8 +31,19 @@ export interface MyProfile {
     last_login: string;
     active_yn: string;
     delete_yn: string;
+    language: string;
+    email_notification_yn: string;
+    unauthorized_number: number;
+    study_number: number;
+    survey_number: number;
 }
 
 export interface Number {
     content: number;
+}
+
+export interface ModifyPassword {
+    user_no: number;
+    origin_password: string;
+    new_password: string;
 }

@@ -19,7 +19,8 @@ import { MyProfile, UpdateUserData } from '@/types/user';
 import { ResCommonError } from '@/apis/axios-common';
 import userApi from '@/apis/user';
 import { useNavigate } from 'react-router-dom';
-import authApi from '@/apis/auth';
+import ProfileImage from './ProfileImage';
+import SettingChangePasswordForm from './SettingChangePasswordForm';
 
 const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
     const initialValues = {
@@ -37,11 +38,14 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
     };
     const navigate = useNavigate();
 
-    const [invitationCount, setInvitationCount] = useState<number>(0);
-    const [studyCount, setStudyCount] = useState<number>(0);
-    const [surveyCount, setServeyCount] = useState<number>(0);
-    const [emailAlerts, setEmailAlerts] = useState(true);
-    const [language, setLanguage] = useState('English');
+    const [profileImageUrl, setProfileImageUrl] = useState<string>(myProfile.profile_image_url);
+    const [emailAlerts, setEmailAlerts] = useState<boolean>(myProfile.email_notification_yn === 'Y');
+    const [language, setLanguage] = useState<string>(myProfile.language);
+    const [changePasswordModal, setChangePasswordModal] = useState<boolean>(false);
+
+    const handleImageUrl = (url: string) => {
+        setProfileImageUrl(() => url);
+    };
 
     const validationSchema = Yup.object({
         mobile: Yup.string().required('전화번호를 입력해주세요'),
@@ -63,23 +67,15 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                 industry,
                 privilege,
                 active_yn: 'Y',
+                email_notification_yn: emailAlerts ? 'Y' : 'N',
+                language,
             };
             handleUpdateUser(requestData);
         },
     });
 
-    // 비밀번호 재설정 토큰 발급 및 인증번호 이메일 발송
-    const handleChangePassword = async () => {
-        try {
-            const { content } = await authApi.sendPasswordResetLink({ email: myProfile.email });
-            if (content.email && content.reset_token) {
-                alert('비밀번호 변경안내 이메일이 발송되었습니다. 이메일을 확인해주세요.');
-            }
-        } catch (error) {
-            if (error instanceof ResCommonError) {
-                alert(error.message);
-            }
-        }
+    const handleChangePasswordModal = () => {
+        setChangePasswordModal((prev) => !prev);
     };
 
     const handleUpdateUser = async (props: UpdateUserData) => {
@@ -96,26 +92,6 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
         }
     };
 
-    const handleUploadProfileImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFile: File | undefined = event.target.files?.[0];
-        if (!selectedFile) {
-            return;
-        }
-        const formData = new FormData();
-        formData.append('image_file', selectedFile);
-        
-        try {
-            const { content } = await userApi.uploadProfileImage(formData);
-            if (content) {
-                alert('프로필 사진이 변경되었습니다.');
-            }
-        } catch(error) {
-            if (error instanceof ResCommonError) {
-                alert(error.message);
-            }
-        }
-    };
-
     const handleMovePage = (url: string) => {
         navigate(url);
     };
@@ -124,7 +100,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
         <Grid
             container
             spacing={3}
-            sx={{ padding: '2rem', backgroundColor: '#f0f2f5', minHeight: '100vh' }}
+            sx={{ padding: '2rem', minHeight: '100vh' }}
             justifyContent="center"
         >
             <Box sx={{ width: '100%', maxWidth: 800 }}>
@@ -146,8 +122,13 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                             <Typography variant="h6" color="primary">
                                 내가 받은 Study 초대
                             </Typography>
-                            <Typography variant="h2" color="secondary">
-                                {invitationCount}
+                            <Typography
+                                variant="h2"
+                                color="secondary"
+                                sx={{ cursor: 'pointer' }}
+                                onClick={() => handleMovePage('/study')}
+                            >
+                                {myProfile.unauthorized_number}
                             </Typography>
                         </Paper>
                     </Grid>
@@ -163,8 +144,13 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                             <Typography variant="h6" color="primary">
                                 My Study
                             </Typography>
-                            <Typography variant="h2" color="secondary">
-                                {studyCount}
+                            <Typography
+                                variant="h2"
+                                color="secondary"
+                                sx={{ cursor: 'pointer' }}
+                                onClick={() => handleMovePage('/study')}
+                            >
+                                {myProfile.study_number}
                             </Typography>
                         </Paper>
                     </Grid>
@@ -180,8 +166,13 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                             <Typography variant="h6" color="primary">
                                 My Survey
                             </Typography>
-                            <Typography variant="h2" color="secondary">
-                                {surveyCount}
+                            <Typography
+                                variant="h2"
+                                color="secondary"
+                                sx={{ cursor: 'pointer' }}
+                                onClick={() => handleMovePage('/survey')}
+                            >
+                                {myProfile.survey_number}
                             </Typography>
                         </Paper>
                     </Grid>
@@ -203,30 +194,10 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                         <form onSubmit={formik.handleSubmit}>
                             <Stack spacing={2} sx={{ marginTop: '1rem' }}>
                                 <Box display="flex" alignItems="center">
-                                    <Box
-                                        sx={{
-                                            width: '80px',
-                                            height: '80px',
-                                            backgroundColor: '#bdbdbd',
-                                            borderRadius: '50%',
-                                            marginRight: '1rem',
-                                            backgroundImage: `url(${myProfile.profile_image_url})`,
-                                            backgroundSize: 'cover',
-                                            backgroundPosition: 'center',
-                                        }}
+                                    <ProfileImage
+                                        imageUrl={profileImageUrl}
+                                        handleImageUrl={handleImageUrl}
                                     />
-                                    <input
-                                        accept="image/*"
-                                        style={{ display: 'none' }}
-                                        id="upload-button"
-                                        type="file"
-                                        onChange={handleUploadProfileImage}
-                                    />
-                                    <label htmlFor="upload-button">
-                                        <Button variant="outlined" color="primary" component="span">
-                                            사진 변경
-                                        </Button>
-                                    </label>
                                 </Box>
                                 <TextField
                                     label="Name"
@@ -256,7 +227,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                         variant="contained"
                                         sx={{ marginLeft: '1rem' }}
                                         color="secondary"
-                                        onClick={handleChangePassword}
+                                        onClick={handleChangePasswordModal}
                                     >
                                         변경
                                     </Button>
@@ -334,12 +305,12 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                     onChange={(e) => setLanguage(e.target.value)}
                                 >
                                     <FormControlLabel
-                                        value="English"
+                                        value="EN_US"
                                         control={<Radio color="primary" />}
                                         label="English"
                                     />
                                     <FormControlLabel
-                                        value="Korean"
+                                        value="KO_KR"
                                         control={<Radio color="primary" />}
                                         label="Korean"
                                     />
@@ -355,6 +326,9 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                 수정 완료
                             </Button>
                         </form>
+                        {changePasswordModal && (
+                            <SettingChangePasswordForm user_no={myProfile.user_no} isOpen={changePasswordModal} handleClose={handleChangePasswordModal}/>
+                        )}
                     </Paper>
                 </Grid>
             </Box>

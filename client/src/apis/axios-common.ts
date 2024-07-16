@@ -129,9 +129,14 @@ export async function file_api<T>(
         if (method === 'post') {
             console.log(url, ', ', data);
             res = await axios_file_instance.post<ResCommonSuccess<T>>(url, data, config);
-        } else {
+        } 
+        else if (method == 'put') { res = await axios_instance.put<ResCommonSuccess<T>>(url, data);
+		} else {
             res = await axios_file_instance.get(url);
         }
+        // if (loadingEle) {
+        //     loadingEle.style.display = 'none';
+        // }
         return res.data as ResCommonSuccess<T>;
     } catch (error) {
         if (Axios.isCancel(error)) {
