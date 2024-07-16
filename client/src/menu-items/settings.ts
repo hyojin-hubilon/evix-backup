@@ -10,7 +10,7 @@ const icons = {
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
 
 const settings: MenuItem = {
-    id: 'group-dashboard',
+    id: 'settings',
     title: 'Settings',
     type: 'group',
     children: [

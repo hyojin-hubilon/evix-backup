@@ -47,7 +47,7 @@ const SettingLoginForm: React.FC<Props> = ({ myProfile, handleLogin }) => {
             container
             alignItems="center"
             justifyContent="center"
-            sx={{ minHeight: '80vh', backgroundColor: '#f5f5f5' }}
+            sx={{ minHeight: '80vh' }}
         >
             <Paper elevation={3} sx={{ p: 4, borderRadius: 2, width: '100%', maxWidth: 500 }}>
                 <Stack spacing={3}>
@@ -73,6 +73,7 @@ const SettingLoginForm: React.FC<Props> = ({ myProfile, handleLogin }) => {
                                 value={formik.values.password}
                                 onBlur={formik.handleBlur}
                                 onChange={formik.handleChange}
+								autoComplete="off"
                                 fullWidth
                                 error={formik.touched.password && Boolean(formik.errors.password)}
                                 helperText={formik.touched.password && formik.errors.password}

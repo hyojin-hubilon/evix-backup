@@ -100,7 +100,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
         <Grid
             container
             spacing={3}
-            sx={{ padding: '2rem', backgroundColor: '#f0f2f5', minHeight: '100vh' }}
+            sx={{ padding: '2rem', minHeight: '100vh' }}
             justifyContent="center"
         >
             <Box sx={{ width: '100%', maxWidth: 800 }}>
