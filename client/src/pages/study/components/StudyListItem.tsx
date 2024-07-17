@@ -1,9 +1,13 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { EditOutlined, FundViewOutlined, UserAddOutlined } from '@ant-design/icons';
 import { Avatar, AvatarGroup, Box, Button, Card, Grid, Typography, useTheme } from '@mui/material';
 
 import { ManagerList, StudyListItemProps } from '@/types/study';
 import { getDecodedToken } from '@/utils/Cookie';
+import StudyNew from '../StudyNew';
+import { useState } from 'react';
+import SurveyConnectDialog from './study-new/SurveyConnetDialog';
+import MemberManagement2 from './study-new/MemberManagement2';
 
 // * 진행중인 상태일 경우, 한눈에 알아볼 수 있도록 bg를 다르게 처리함.
 // * 배포전/일시정지/중단: 빨간색 txt 처리
@@ -29,21 +33,37 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
 
     const decodedToken = getDecodedToken('userInfoToken');
 
-    console.log(decodedToken);
-
     const userNo = decodedToken['user-no'];
 
     const isOwner = managerList.some(
         (manager) => manager.user_no === userNo && manager.std_privilege === 'OWNER'
     );
 
-    console.log(isOwner);
-
     const isEditable = managerList.some(
         (manager) =>
             (manager.user_no === userNo && manager.std_privilege === 'OWNER') ||
-            manager.std_privilege === 'MAINTAINER'
+            (manager.user_no === userNo && manager.std_privilege === 'MAINTAINER')
     );
+
+    const navigate = useNavigate();
+
+    const handleEditClick = (std_no: number) => {
+        navigate('/study/new', { state: { mode: 'edit', stdNo: std_no } });
+    };
+
+    const [isOpenMember, setIsOpenMember] = useState(false);
+
+    const handleCloseMember = () => {
+        setIsOpenMember(!isOpenMember);
+    };
+
+    const handleInviteMember = (std_no: number) => {
+        setIsOpenMember(true);
+    };
+
+    const handleMemberManagementClose = () => {
+        setIsOpenMember(false);
+    };
     return (
         <>
             <Card
@@ -89,14 +109,22 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                         {/* 멤버초대 - OWNER */}
                         {/* Study가 종료상태일 때는 멤버 초대할수 없으므로 버튼 비노출 */}
                         {isOwner && study.std_status !== 'STD-DONE' && (
-                            <Button size="large" variant="outlined">
+                            <Button
+                                size="large"
+                                variant="outlined"
+                                onClick={() => handleInviteMember(study.std_no)}
+                            >
                                 <UserAddOutlined style={{ fontSize: '1.5rem' }} />
                             </Button>
                         )}
 
                         {/* 수정 - OWNER, MAINTAINER */}
                         {isEditable && (
-                            <Button size="large" variant="outlined">
+                            <Button
+                                size="large"
+                                variant="outlined"
+                                onClick={() => handleEditClick(study.std_no)}
+                            >
                                 <EditOutlined style={{ fontSize: '1.5rem' }} />
                             </Button>
                         )}
@@ -116,6 +144,11 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                     </Grid>
                 </Grid>
             </Card>
+            <MemberManagement2
+                isOpen={isOpenMember}
+                study={study}
+                handleClose={handleCloseMember}
+            />
         </>
     );
 };

@@ -22,88 +22,51 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect, useState } from 'react';
 import * as yup from 'yup';
-import { ManagerType } from '../study-info/StudyMemberStatus';
 
 import InviteConfirmDialog from './InviteConfirmDialog';
 import MemberListItem from './MemberListItem';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import studyApi from '@/apis/study';
-import userApi from '@/apis/user';
 
 export type MemberTempType = {
-    profile_image_url: string; // 프로필 이미지
-    first_name: string; // 이름
+    profile_image_url: string;
+    first_name: string;
     last_name: string;
-    std_privilege: string; // 권한
-    belong: string; // 소속
-    email: string; // 이메일
-    inviteStatus: string; // 승인 상태
+    std_privilege: string;
+    belong: string;
+    email: string;
+    inviteStatus: string;
 };
 
-const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
+const MemberManagement2 = ({ isOpen, handleClose, study }) => {
     const [activeTab, setActiveTab] = useState('0');
     const [newAuthority, setNewAuthority] = useState<string>('');
 
-    const [emails, setEmails] = useState<string[]>([]); // 초대받을 사람 input의 emails
-    const [emailInput, setEmailInput] = useState(''); // 메일주소 입력 input의 value
-    const [sendingEmails, setSendingEmails] = useState<string[]>([]); // 실제로 초대 보내고 confirm창에서 확인하는 용도
+    const [emails, setEmails] = useState<string[]>([]);
+    const [emailInput, setEmailInput] = useState('');
+    const [sendingEmails, setSendingEmails] = useState<string[]>([]);
 
-    const [openInviteConfirm, setOpenInviteConfirm] = useState(false); // 초대메일 발송 완료 Dialog
+    const [openInviteConfirm, setOpenInviteConfirm] = useState(false);
     const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
 
     const [deleteMember, setDeleteMember] = useState<MemberTempType>();
+    const [membersData, setMembersData] = useState<MemberTempType[]>([]);
 
     const emailSchema = yup.string().email();
 
     const theme = useTheme();
     const { primary, grey } = theme.palette;
 
-    const [ownerProfileImage, setOwnerProfileImage] = useState('');
-    const [ownerName, setOwnerName] = useState('');
-
-    const [members, setMembers] = useState<MemberTempType[]>([]);
-
     const handleChangeTab = (e, newValue) => {
         setActiveTab(newValue);
     };
 
-    // 멤버관리 모달에서 owner 정보를 가져오기 위함
-    const getMyProfile = async () => {
-        try {
-            const response = await userApi.getMyProfile();
-            setOwnerProfileImage(response.content['profile_image_url']);
-            setOwnerName(response.content['first_name'] + ' ' + response.content['last_name']);
-        } catch (error) {
-            console.error('Failed to fetch owner profile:', error);
-        }
-    };
-
-    useEffect(() => {
-        getMyProfile(); // 페이지 진입 시 owner 정보 가져오기
-    }, []);
-
-    const createData = (
-        profile_image_url: string, // 프로필 이미지
-        first_name: string, // 이름
-        last_name: string,
-        std_privilege: string, // 권한
-        belong: string, // 소속
-        email: string, // 이메일
-        inviteStatus: string // 승인 상태
-    ): MemberTempType => {
-        return {
-            profile_image_url,
-            first_name,
-            last_name,
-            std_privilege,
-            belong,
-            email,
-            inviteStatus,
-        };
-    };
+    const ownerManager = study.managerList.find((manager) => manager.std_privilege === 'OWNER');
+    const title = study.title;
+    const stdNo = study.std_no;
 
     const handleSelectMails = (e, value) => {
-        const errorEmail = value.find((email) => !emailSchema.isValidSync(email)); // 메일주소 Valid Check
+        const errorEmail = value.find((email) => !emailSchema.isValidSync(email));
         if (errorEmail) {
             setEmailInput(errorEmail);
         }
@@ -117,16 +80,6 @@ const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
     const handleSendInvite = () => {
         setSendingEmails(emails);
         handleOpenSendInvite();
-    };
-
-    const handleAddMember = () => {
-        if (emailSchema.isValidSync(emailInput) && newAuthority) {
-            const newMember = createData('', '', '', newAuthority, '', emailInput, 'Pending');
-            setMembers([...members, newMember]); // 새로운 멤버를 기존 멤버 리스트에 추가
-            setEmails([]); // 이메일 목록 초기화
-            setEmailInput(''); // 이메일 입력 초기화
-            setNewAuthority(''); // 권한 초기화
-        }
     };
 
     const handleSendReInvite = (member: MemberTempType) => {
@@ -147,6 +100,41 @@ const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
         setOpenDeleteConfirm(!openDeleteConfirm);
     };
 
+    console.log('members Data : ', membersData);
+
+    useEffect(() => {
+        if (isOpen) {
+            const fetchStudyManager = async () => {
+                const response = await studyApi.getStudyManager(study.std_no);
+                const fetchedMembers = Array.isArray(response.content)
+                    ? response.content.map((member) => ({
+                          profile_image_url: member.profile_image_url || '',
+                          first_name: member.first_name || '',
+                          last_name: member.last_name || '',
+                          std_privilege: member.std_privilege || '',
+                          belong: member.company_name || '',
+                          email: member.email || '',
+                          inviteStatus: member.invited_at ? 'Approved' : 'Pending',
+                      }))
+                    : [];
+                setMembersData(fetchedMembers);
+            };
+
+            fetchStudyManager();
+        }
+    }, [isOpen, study.std_no]);
+
+    const memberCount = membersData.length;
+
+    // OWNER는 리스트에서 제외
+    const filteredMembers = membersData.filter((member) => {
+        if (member.std_privilege === 'OWNER') return false;
+        if (activeTab === '0') return true;
+        if (activeTab === '1') return member.std_privilege === 'MAINTAINER';
+        if (activeTab === '2') return member.std_privilege === 'DEVELOPER';
+        if (activeTab === '3') return member.inviteStatus === 'Pending';
+        return false;
+    });
     return (
         <>
             <Dialog
@@ -157,7 +145,7 @@ const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
                 maxWidth="sm"
             >
                 <DialogTitle id="member-management-title" variant="h4" width={600}>
-                    초대하기 <span style={{ color: primary.main }}>({members.length})</span>
+                    멤버관리 <span style={{ color: primary.main }}>({memberCount})</span>
                     <IconButton
                         size="small"
                         sx={{ position: 'absolute', top: '10px', right: '10px' }}
@@ -175,12 +163,14 @@ const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
                         </Grid>
                         <Grid item xs={4}>
                             <Box display="flex" gap={1} justifyContent="flex-end">
-                                <Avatar alt="Owner" src={ownerProfileImage} />
+                                <Avatar alt="Owner" src={ownerManager.profile_image_url} />
                                 <Box>
                                     <Typography variant="caption" sx={{ mb: '0' }}>
                                         Owner
                                     </Typography>
-                                    <Typography color="primary">{ownerName}</Typography>
+                                    <Typography color="primary">
+                                        {ownerManager.first_name} {ownerManager.last_name}
+                                    </Typography>
                                 </Box>
                             </Box>
                         </Grid>
@@ -230,9 +220,9 @@ const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
                             <Button
                                 variant="contained"
                                 sx={{ ml: 'auto' }}
-                                onClick={handleAddMember}
+                                onClick={handleSendInvite}
                             >
-                                추가하기
+                                보내기
                             </Button>
                         </Box>
                     </Box>
@@ -249,14 +239,16 @@ const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
                         </Tabs>
 
                         <List>
-                            {members.map((member, index) => (
-                                <MemberListItem
-                                    member={member}
-                                    key={index}
-                                    sendMailConfirm={handleSendReInvite}
-                                    sendDeleteConfirm={handleMemberDelete}
-                                />
-                            ))}
+                            {filteredMembers.map((member, index) => {
+                                return (
+                                    <MemberListItem
+                                        member={member}
+                                        key={index}
+                                        sendMailConfirm={handleSendReInvite}
+                                        sendDeleteConfirm={handleMemberDelete}
+                                    />
+                                );
+                            })}
                         </List>
                     </Box>
                 </DialogContent>
@@ -278,4 +270,4 @@ const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
     );
 };
 
-export default MemberManagement;
+export default MemberManagement2;

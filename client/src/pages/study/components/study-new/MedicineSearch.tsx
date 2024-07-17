@@ -13,24 +13,28 @@ import {
     OutlinedInput,
     Select,
     SelectChangeEvent,
-    TableContainer,
-    Typography,
     useTheme,
 } from '@mui/material';
-import { DataGrid, GridApi, gridClasses, GridColDef, GridEventListener } from '@mui/x-data-grid';
-import { useState, useEffect } from 'react';
-
+import { DataGrid, gridClasses, GridColDef } from '@mui/x-data-grid';
+import { useState } from 'react';
 type MedicineSearchProps = {
     isOpen: boolean;
     handleClose: () => void;
     selectMedicine: (drug: Drug) => void;
+    country: string;
+    onCountryChange: (country: string) => void;
 };
 
-const MedicineSearch = ({ isOpen, handleClose, selectMedicine }: MedicineSearchProps) => {
+const MedicineSearch = ({
+    isOpen,
+    handleClose,
+    selectMedicine,
+    country,
+    onCountryChange,
+}: MedicineSearchProps) => {
     const theme = useTheme();
     const { grey, primary } = theme.palette;
 
-    const [country, setCountry] = useState('korea');
     const [searchTerm, setSearchTerm] = useState('');
     const [medicines, setMedcines] = useState<Drug[]>([]);
     const [selected, setSelected] = useState<Drug>();
@@ -89,24 +93,16 @@ const MedicineSearch = ({ isOpen, handleClose, selectMedicine }: MedicineSearchP
     };
 
     const handleChangeCountry = (e: SelectChangeEvent) => {
-        setCountry(e.target.value);
+        onCountryChange(e.target.value); // Call handler from props
         setMedcines([]);
     };
 
     const handleSearch = (e) => {
         e.preventDefault();
         if (!searchTerm) return;
-        else if (country == 'korea') getKoreanDrugs();
+        else if (country == 'KO_KR') getKoreanDrugs();
         else getUSDrugs();
     };
-
-    // const handleSelectMedicine: GridEventListener<'rowClick'> = ( row 전체클릭으로 변경해야되면 이것을 사용...
-    // 	params, // GridRowParams
-    // 	event, // MuiEvent<React.MouseEvent<HTMLElement>>
-    // 	details, // GridCallbackDetails
-    //   ) => {
-    // 	setMessage(`Movie "${params.row.title}" clicked`);
-    //   };
 
     return (
         <Dialog
@@ -128,14 +124,14 @@ const MedicineSearch = ({ isOpen, handleClose, selectMedicine }: MedicineSearchP
                     <Grid container columnGap={1}>
                         <Grid item xs={3.8}>
                             <FormControl size="small" fullWidth>
-                                <Select value={country} onChange={(e) => handleChangeCountry(e)}>
-                                    <MenuItem value="korea">한국 약품통합정보시스템</MenuItem>
-                                    <MenuItem value="us">미국 FDA Drug Search</MenuItem>
+                                <Select value={country} onChange={handleChangeCountry}>
+                                    <MenuItem value="KO_KR">한국 약품통합정보시스템</MenuItem>
+                                    <MenuItem value="EN_US">미국 FDA Drug Search</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
                         <Grid item xs={8}>
-                            <form onSubmit={(e) => handleSearch(e)}>
+                            <form onSubmit={handleSearch}>
                                 <Box gap={1} display="flex">
                                     <FormControl size="small" fullWidth>
                                         <OutlinedInput
@@ -166,7 +162,6 @@ const MedicineSearch = ({ isOpen, handleClose, selectMedicine }: MedicineSearchP
                                     disableColumnFilter
                                     disableColumnSelector
                                     disableDensitySelector
-                                    // onRowDoubleClick={handleSelectMedicine}
                                     sx={{
                                         border: '1px solid #ddd',
                                         [`& .${gridClasses.virtualScrollerContent}`]: {

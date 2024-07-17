@@ -22,8 +22,8 @@ const AuthenticationPasswordForm = () => {
     const resetToken = location.state?.resetToken || '';
     const navigate = useNavigate();
 
-    // const [timer, setTimer] = useState(300);
-    const [timer, setTimer] = useState(10);
+    const [timer, setTimer] = useState(300);
+    // const [timer, setTimer] = useState(10);
 
     useEffect(() => {
         if (timer <= 0) {

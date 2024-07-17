@@ -68,7 +68,8 @@ const StudyList = () => {
     };
 
     const handleCreateStudy = () => {
-        navigate('/study/new');
+        navigate('/study/new', { state: { mode: 'write' } });
+        // navigate('/study/new');
     };
 
     // 초대 승인 성공 시,

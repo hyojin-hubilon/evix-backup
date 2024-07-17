@@ -19,8 +19,6 @@ const studyApi = {
      */
     createStudy: async (data: any) => {
         try {
-            console.log('data: ', ...data);
-
             const responseData = await file_api<{}>(`${BASE_API_URL}`, 'post', data);
 
             console.log(responseData);
@@ -39,7 +37,7 @@ const studyApi = {
      */
     updateStudy: async (data: any) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}`, 'put', data);
+            const responseData = await file_api<{}>(`${BASE_API_URL}`, 'put', data);
 
             return responseData;
         } catch (error) {
@@ -53,11 +51,10 @@ const studyApi = {
      * @param deleteData
      * @returns
      */
-    deleteStudy: async (deleteData: number) => {
+    deleteStudy: async (deleteData: { std_no: number }) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}`, 'delete', {
-                data: deleteData,
-            });
+            console.log(deleteData);
+            const responseData = await api<{}>(`${BASE_API_URL}`, 'delete', deleteData);
 
             return responseData;
         } catch (error) {
@@ -86,9 +83,11 @@ const studyApi = {
      * @param stdNo
      * @returns
      */
-    getStudyManager: async (stdNo: any) => {
+    getStudyManager: async (stdNo: number) => {
         try {
             const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/manager`, 'get');
+
+            console.log('dddd: ', responseData);
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;

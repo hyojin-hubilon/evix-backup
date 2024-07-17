@@ -1,13 +1,13 @@
 import { Button, FormControl, Grid, OutlinedInput, Typography, useTheme } from '@mui/material';
 import MedicineSearch from './MedicineSearch';
 import { useState } from 'react';
-import { Drug } from '@/apis/test/drug/drugsAPI_TEST';
 
-const MedicineInfo = ({}) => {
+const MedicineInfo = ({ country, setCountry, drug, setDrug }) => {
     const theme = useTheme();
     const { divider } = theme.palette;
     const [openSearch, setOpenSearch] = useState<boolean>(false);
-    const [drug, setDrug] = useState<Drug>();
+    // const [drug, setDrug] = useState<Drug>();
+    // const [country, setCountry] = useState<string>('korea');
 
     const setSelectedDrug = (e) => {
         console.log(e);
@@ -16,6 +16,10 @@ const MedicineInfo = ({}) => {
 
     const handleSearchClose = () => {
         setOpenSearch(!openSearch);
+    };
+
+    const handleCountryChange = (newCountry: string) => {
+        setCountry(newCountry);
     };
 
     return (
@@ -79,7 +83,7 @@ const MedicineInfo = ({}) => {
                     </FormControl>
                 </Grid>
 
-                <Grid item xs={3}>
+                {/* <Grid item xs={3}>
                     <Typography ml={1}>품목구분</Typography>
                 </Grid>
                 <Grid item xs={3}>
@@ -116,13 +120,15 @@ const MedicineInfo = ({}) => {
                             value={drug?.approvalDate}
                         />
                     </FormControl>
-                </Grid>
+                </Grid> */}
             </Grid>
 
             <MedicineSearch
                 isOpen={openSearch}
                 handleClose={handleSearchClose}
                 selectMedicine={(e) => setSelectedDrug(e)}
+                country={country}
+                onCountryChange={handleCountryChange}
             />
         </>
     );
