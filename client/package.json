@@ -18,6 +18,10 @@
     "@mui/material": "^5.15.20",
     "@mui/x-data-grid": "^7.8.0",
     "@mui/x-date-pickers": "^7.9.0",
+    "@pdfme/common": "^4.0.2",
+    "@pdfme/generator": "^4.0.2",
+    "@pdfme/schemas": "^4.0.2",
+    "@pdfme/ui": "^4.0.2",
     "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.2.5",
     "apexcharts": "^3.49.2",
@@ -43,6 +47,7 @@
     "react-syntax-highlighter": "^15.5.0",
     "redux": "^5.0.1",
     "sass": "^1.77.6",
+    "signature_pad": "^5.0.2",
     "simplebar-react": "^3.2.6",
     "sort-by": "^1.2.0",
     "yup": "^1.4.0"
