@@ -1,4 +1,4 @@
-export interface RegistrableSurvey {
+export interface RegistrableSurvey { //스터디에 등록가능한 서베이
 	survey_no: number;
 	title: string;
 	updated_date: string | Date;///researcher/survey/my-list-registrable 추가해야함
@@ -6,7 +6,7 @@ export interface RegistrableSurvey {
 	times?: number;//반복 횟수
 }
 
-export interface ExampleList {
+export interface ExampleList { //예시목록
 	survey_no: number,
 	question_no: number,
 	example_no: number,
@@ -40,7 +40,7 @@ export interface SurveyDetail {
 	questionList: QuestionList[]
 }
 
-export interface MySurveyList { 
+export interface MySurveyList { //서베이리스트
 	survey_no: number,
 	title: string,
 	question_number: number,
@@ -55,9 +55,35 @@ export interface MySurveyList {
 
 export interface SurveyApiResponse {
 	next?: boolean,
-	orderBy?: "CREATED" | "UPDATED",
-	searchType?: string | null,
-	searchKeyword?: string | null,
+	orderBy?: "CREATED" | "UPDATED", //UPDATED가 Default
+	searchType?: string | null, 
+	searchKeyword?: string | null, //추가예정
 	pageNum?: number,
 	surveyMyList?: MySurveyList[];
+}
+
+
+export interface SurveyExample {//RequestBody Survey 답변
+	example_title: string,
+	example_value: string | number,
+	sort: number
+}
+
+export interface SurveyQuestion {
+	question: string,
+	level: number,
+	sort: number,
+	question_type: string | "PARENT" | "SINGLE" | "MULTIPLE" | "WRITE",
+	questionChildList: SurveyQuestion[], //parent 일때 하위 질문이 있으나 기획엔 없음
+	exampleList: SurveyExample[] //답변목록
+}
+
+export interface SurveyPostReqBody {
+	title: string,
+	diseases_affected_parts: string,
+	description: string, //영문
+	translation: string, //한글변역?
+	sample_yn: string, //Y|N
+	questionList: SurveyQuestion[],
+	required: boolean //아직 없음
 }
