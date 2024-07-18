@@ -59,9 +59,9 @@ const CookieGuide: React.FC<Props> = ({ handleCookiePolicy }) => {
                 aria-labelledby="cookie-modal-title"
                 aria-describedby="cookie-modal-description"
             >
-                <Box sx={style}>
-                    <Box sx={{ flexGrow: 1 }}>
-                        <Typography variant="body2">
+                <Box sx={style} gap={2}>
+                    <Box sx={{ flexGrow: 1 }} gap={2}>
+                        <Typography sx={{ fontSize: '1.0rem' }}>
                             {t('landing.cookie_guide.the_website')}
                             <Link
                                 onClick={handleCookiePolicy}
@@ -72,7 +72,14 @@ const CookieGuide: React.FC<Props> = ({ handleCookiePolicy }) => {
                             </Link>
                         </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1 }}>
+                    <Box
+                        sx={{
+                            flexDirection: 'column',
+                        }}
+                    >
+                        <IconButton aria-label="close" sx={{ position: 'absolute', top: 0, right: 0}} onClick={handleThisClose}>
+                            <CloseIcon />
+                        </IconButton>
                         <Button
                             variant="contained"
                             size="small"
@@ -86,14 +93,12 @@ const CookieGuide: React.FC<Props> = ({ handleCookiePolicy }) => {
                             variant="contained"
                             size="small"
                             color="primary"
+                            sx={{ mb: 1 }}
                             onClick={handleCookieSetting}
                         >
                             Cookie settings
                         </Button>
                     </Box>
-                    <IconButton aria-label="close" sx={{ position: 'absolute', top: 8, right: 8 }}>
-                        <CloseIcon onClick={handleThisClose} />
-                    </IconButton>
                 </Box>
             </Modal>
             <CookieSettings
