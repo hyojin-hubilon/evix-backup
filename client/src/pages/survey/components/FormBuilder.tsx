@@ -1,19 +1,22 @@
-import { ExampleList, QuestiontTypes, SurveyExample, SurveyQuestion } from "@/types/survey";
-import { AppBar, Box, Button, Card, Container, Divider, FormControlLabel, IconButton, Input, List, Menu, MenuItem, Radio, RadioGroup, Select, Switch, TextField, Toolbar, Tooltip, useTheme } from "@mui/material";
+import { QuestionTypes, SurveyQuestion } from "@/types/survey";
+import { Box, Button, Card, TextField, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
-import ClearIcon from '@mui/icons-material/Clear';
 import FormQuestion from "./FormBuilder/FormQuestion";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { reorder } from "@/utils/helper";
+import { useSelector } from "react-redux";
+import { StateProps } from "@/store/reducers/survey";
 
 
 
 const FormBuilder = () => {
 	const theme = useTheme();
 	const { primary } = theme.palette;
-	const preQuestion = { question_type: QuestiontTypes.WRITE, question:"", exampleList: [{example_title: '', example_value: 0, sort: 0 }]} as SurveyQuestion;
+	const preQuestion = { question_type: QuestionTypes.WRITE, question:"", exampleList: [{example_title: '', example_value: 0, sort: 0 }]} as SurveyQuestion;
 	const [ questions, setQuestions ] = useState<SurveyQuestion[]>([preQuestion]);
 	
+
+	// const { cards } = useSelector((state: StateProps) => state);
 
 	const addQuestion = () => {
 		setQuestions(prevList => [...prevList, preQuestion]);

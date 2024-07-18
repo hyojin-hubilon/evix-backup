@@ -1,4 +1,4 @@
-import { QuestiontTypes, SurveyExample, SurveyQuestion } from "@/types/survey";
+import { QuestionTypes, SurveyExample, SurveyQuestion } from "@/types/survey";
 import { Card, Box, TextField, Select, MenuItem, Radio, IconButton, Divider, Tooltip, Switch, useTheme, FormControlLabel } from "@mui/material";
 import { ClearIcon } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
@@ -98,7 +98,7 @@ const FormQuestion = ({ oneQuestion, index, questionChanged, questionDeleted, qu
 					
 					<Box display="flex" flexDirection="column" gap={1}>
 						<Box display="flex" gap={1} alignItems="center">
-							<TextField defaultValue="제목없는 질문" placeholder="질문" variant="standard" sx={{flexGrow: 1}} value={question.question} />
+							<TextField placeholder="질문" variant="standard" sx={{flexGrow: 1}} value={question.question} onChange={(e) => setQuestion({...question, question: e.target.value})}/>
 							<Select 
 								value={question.question_type}
 								onChange={(e) => handleChangeQuestionType(e.target.value)}
@@ -110,7 +110,7 @@ const FormQuestion = ({ oneQuestion, index, questionChanged, questionDeleted, qu
 							</Select>
 						</Box>
 						{
-							question.question_type == QuestiontTypes.WRITE
+							question.question_type == QuestionTypes.WRITE
 							?
 							<TextField placeholder="주관식 답변" variant="standard" fullWidth inputProps={{ readOnly: true }} />
 							:
@@ -121,7 +121,7 @@ const FormQuestion = ({ oneQuestion, index, questionChanged, questionDeleted, qu
 											return (
 												<Box key={index + 1} display="flex" alignItems="center">
 													<Radio readOnly disabled />
-													<TextField placeholder={`옵션 ${index + 1}`} variant="standard" sx={{flexGrow: 1}}/>
+													<TextField placeholder={`옵션 ${index + 1}`} variant="standard" sx={{flexGrow: 1}} value={example.example_title} />
 													{
 														question.exampleList && question.exampleList.length > 1 &&
 														<IconButton onClick={() => handleDeleteExample(example.sort)}>
