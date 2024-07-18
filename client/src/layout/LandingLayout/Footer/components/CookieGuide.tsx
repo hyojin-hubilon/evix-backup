@@ -59,8 +59,8 @@ const CookieGuide: React.FC<Props> = ({ handleCookiePolicy }) => {
                 aria-labelledby="cookie-modal-title"
                 aria-describedby="cookie-modal-description"
             >
-                <Box sx={style}>
-                    <Box sx={{ flexGrow: 1 }}>
+                <Box sx={style} gap={2}>
+                    <Box sx={{ flexGrow: 1 }} gap={2}>
                         <Typography sx={{ fontSize: '1.0rem' }}>
                             {t('landing.cookie_guide.the_website')}
                             <Link
@@ -77,8 +77,8 @@ const CookieGuide: React.FC<Props> = ({ handleCookiePolicy }) => {
                             flexDirection: 'column',
                         }}
                     >
-                        <IconButton aria-label="close" sx={{ position: 'absolute', top: 0, right: 0}}>
-                            <CloseIcon onClick={handleThisClose} />
+                        <IconButton aria-label="close" sx={{ position: 'absolute', top: 0, right: 0}} onClick={handleThisClose}>
+                            <CloseIcon />
                         </IconButton>
                         <Button
                             variant="contained"
