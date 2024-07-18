@@ -69,11 +69,18 @@ export interface SurveyExample {//RequestBody Survey 답변
 	sort: number
 }
 
+export enum QuestiontTypes {
+	PARENT = "PARENT",
+	SINGLE = "SINGLE",
+	MULTIPLE = "MULTIPLE",
+	WRITE = "WRITE"
+}
+
 export interface SurveyQuestion {
 	question: string,
 	level: number,
 	sort: number,
-	question_type: string | "PARENT" | "SINGLE" | "MULTIPLE" | "WRITE",
+	question_type: QuestiontTypes,
 	questionChildList: SurveyQuestion[], //parent 일때 하위 질문이 있으나 기획엔 없음
 	exampleList: SurveyExample[] //답변목록
 }

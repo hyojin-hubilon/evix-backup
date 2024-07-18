@@ -1,9 +1,10 @@
-import { SurveyExample, SurveyQuestion } from "@/types/survey";
-import { Card, Box, TextField, Select, MenuItem, Radio, IconButton, Divider, Tooltip, Switch, useTheme } from "@mui/material";
+import { QuestiontTypes, SurveyExample, SurveyQuestion } from "@/types/survey";
+import { Card, Box, TextField, Select, MenuItem, Radio, IconButton, Divider, Tooltip, Switch, useTheme, FormControlLabel } from "@mui/material";
 import { ClearIcon } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Draggable } from "@hello-pangea/dnd";
 
@@ -12,10 +13,11 @@ type FormQuestionProps = {
 	oneQuestion: SurveyQuestion,
 	index: number,
 	questionChanged: (question:SurveyQuestion) => void,
-	questionDeleted: (index: number) => void
+	questionDeleted: (index: number) => void,
+	questionCopied: (question: SurveyQuestion) => void
 }
 
-const FormQuestion = ({ oneQuestion, index, questionChanged, questionDeleted }:FormQuestionProps) => {
+const FormQuestion = ({ oneQuestion, index, questionChanged, questionDeleted, questionCopied }:FormQuestionProps) => {
 	const theme = useTheme();
 	const { grey, primary } = theme.palette;
 	const [ question, setQuestion ] = useState(oneQuestion);
@@ -58,6 +60,10 @@ const FormQuestion = ({ oneQuestion, index, questionChanged, questionDeleted }:F
 
 	}
 
+	const handleCopyQuestion = () => {
+
+	}
+
 	
 	return (
 		<Draggable draggableId={`question-${index}`} index={index}>
@@ -65,23 +71,38 @@ const FormQuestion = ({ oneQuestion, index, questionChanged, questionDeleted }:F
 				<Card 
 					ref={provided.innerRef}
 					{...provided.draggableProps}
-					{...provided.dragHandleProps}
 					sx={{
-						p: 3,
+						p: '2rem 2rem 1rem 2rem',
 						background : snapshot.isDragging ? 'rgb(235,235,235)' : 'white',
 						borderLeft: snapshot.isDragging ? `5px solid ${primary.main}` : '',
-						borderRadius: "5px", cursor:'pointer',
-						mb: '5px',
+						borderRadius: "5px",
+						mb: '10px',
+						position: 'relative',
 						'&:last-child': {
 							mb: 0
 						}
 					}}>
+					{/* 드래그 핸들 */}
+					<Box display="flex"
+						justifyContent="center"
+						{...provided.dragHandleProps}
+						sx={{
+							position: 'absolute',
+							width: '100%',
+							top: 0,
+							left: 0,
+							pt: '5px'
+						}}>
+						<MoreHorizIcon style={{color: grey[500]}}/>
+					</Box>
+					
 					<Box display="flex" flexDirection="column" gap={1}>
-						<Box display="flex" gap={1}>
-							<TextField defaultValue="제목없는 질문" placeholder="질문" variant="standard"  value={question.question} />
+						<Box display="flex" gap={1} alignItems="center">
+							<TextField defaultValue="제목없는 질문" placeholder="질문" variant="standard" sx={{flexGrow: 1}} value={question.question} />
 							<Select 
 								value={question.question_type}
 								onChange={(e) => handleChangeQuestionType(e.target.value)}
+								size="small"
 							>
 								<MenuItem value="WRITE">주관식 답변</MenuItem>
 								<MenuItem value="SINGLE">객관식 답변(단일응답)</MenuItem>
@@ -89,7 +110,7 @@ const FormQuestion = ({ oneQuestion, index, questionChanged, questionDeleted }:F
 							</Select>
 						</Box>
 						{
-							question.question_type == "WRITE"
+							question.question_type == QuestiontTypes.WRITE
 							?
 							<TextField placeholder="주관식 답변" variant="standard" fullWidth inputProps={{ readOnly: true }} />
 							:
@@ -98,13 +119,13 @@ const FormQuestion = ({ oneQuestion, index, questionChanged, questionDeleted }:F
 									question.exampleList && question.exampleList.map((example, index) => 
 										{
 											return (
-												<Box key={index + 1}>
+												<Box key={index + 1} display="flex" alignItems="center">
 													<Radio readOnly disabled />
-													<TextField placeholder={`옵션 ${index + 1}`} variant="standard" />
+													<TextField placeholder={`옵션 ${index + 1}`} variant="standard" sx={{flexGrow: 1}}/>
 													{
 														question.exampleList && question.exampleList.length > 1 &&
 														<IconButton onClick={() => handleDeleteExample(example.sort)}>
-															<ClearIcon />
+															<ClearIcon style={{fontSize: "1rem"}}/>
 														</IconButton>
 													}
 													
@@ -116,7 +137,7 @@ const FormQuestion = ({ oneQuestion, index, questionChanged, questionDeleted }:F
 								}
 								
 								{/* 옵션추가영역 */}
-								<Box>
+								<Box display="flex" alignItems="center">
 									<Radio readOnly disabled />
 									<TextField placeholder="옵션추가"
 										variant="standard"
@@ -132,10 +153,12 @@ const FormQuestion = ({ oneQuestion, index, questionChanged, questionDeleted }:F
 						}
 						
 						<Divider />
-						<Box display="flex">
+
+						{/* 질문 카드 푸터 */}
+						<Box display="flex" alignItems="center" justifyContent="flex-end" gap={1}>
 							{/* 복사 */}
 							<Tooltip title="질문 복사">
-								<IconButton>
+								<IconButton onClick={handleCopyQuestion}>
 									<ContentCopyIcon />
 								</IconButton>
 							</Tooltip>
@@ -148,13 +171,20 @@ const FormQuestion = ({ oneQuestion, index, questionChanged, questionDeleted }:F
 								</IconButton>
 							</Tooltip>
 
-							{/* 세로 디바이더 */}
-							<Divider flexItem /> 
-							필수
-							<Switch
-								// checked={checked}
-								// onChange={handleChange}
-								inputProps={{ 'aria-label': 'controlled' }}
+						
+							<Divider orientation="vertical" flexItem sx={{height:"40px"}}/> 
+
+							<FormControlLabel
+								value="end"
+								sx={{ml: "0.5rem"}}
+								control={
+								<Switch color="primary"
+									// checked={checked}
+									// onChange={handleChange} 
+									/>
+								}
+								label="필수"
+								labelPlacement="start"
 								/>
 						</Box>
 					</Box>

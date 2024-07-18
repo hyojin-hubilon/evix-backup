@@ -1,4 +1,4 @@
-import { ExampleList, SurveyExample, SurveyQuestion } from "@/types/survey";
+import { ExampleList, QuestiontTypes, SurveyExample, SurveyQuestion } from "@/types/survey";
 import { AppBar, Box, Button, Card, Container, Divider, FormControlLabel, IconButton, Input, List, Menu, MenuItem, Radio, RadioGroup, Select, Switch, TextField, Toolbar, Tooltip, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -11,7 +11,7 @@ import { reorder } from "@/utils/helper";
 const FormBuilder = () => {
 	const theme = useTheme();
 	const { primary } = theme.palette;
-	const preQuestion = { question_type: "WRITE", question:"", exampleList: [{example_title: '', example_value: 0, sort: 0 }]} as SurveyQuestion;
+	const preQuestion = { question_type: QuestiontTypes.WRITE, question:"", exampleList: [{example_title: '', example_value: 0, sort: 0 }]} as SurveyQuestion;
 	const [ questions, setQuestions ] = useState<SurveyQuestion[]>([preQuestion]);
 	
 
@@ -24,18 +24,20 @@ const FormBuilder = () => {
 		if (!destination || !questions) return;
 	
 		const newItems = reorder(questions, source.index, destination.index);
-
-		newItems
-	
+		//sort 저장시에 설정
 		setQuestions(newItems);
 	};
 
 	const handleQuestionChanged = (question) => {
 
 	}
-
+	
 	const handleQuetionDeleted = (index) => {
 		
+	}
+
+	const handleQuestionCopied = (question) => {
+
 	}
 	
 
@@ -58,7 +60,7 @@ const FormBuilder = () => {
 					{(provided) => (
 						<div ref={provided.innerRef} {...provided.droppableProps}>
 							{questions.map((question: SurveyQuestion, index: number) => (
-								<FormQuestion oneQuestion={question} key={index} index={index} questionChanged={(question) => handleQuestionChanged(question)} questionDeleted={(index) => handleQuetionDeleted(index)} />
+								<FormQuestion oneQuestion={question} key={index} index={index} questionChanged={(question) => handleQuestionChanged(question)} questionDeleted={(index) => handleQuetionDeleted(index)} questionCopied={(question) => handleQuestionCopied(question)} />
 							))}
 							{provided.placeholder}
 						</div>
