@@ -7,17 +7,18 @@ export interface StateProps {
 	required: string;
 	_persist: PersistState;
 }
-export interface ItemTypeProps {
+export interface ItemTypeProps { //options
 	id: string;
 	text?: string;
+	example_title?: string;
 	isEtc?: boolean;
   }
   
-export interface CardProps {
+export interface CardProps { //question
 	id: string;
 	cardTitle: string;
-	inputType: string;
-	contents: string | ItemTypeProps[];
+	inputType: QuestionTypes;
+	exampleList: ItemTypeProps[];
 	isFocused: boolean;
 	isRequired: boolean;
 }
@@ -33,8 +34,8 @@ interface ActionProps {
 const initialCards = {
 	id: "TitleCard",
 	cardTitle: "제목 없는 설문지",
-	inputType: "Title",
-	contents: "",
+	inputType: "TITLE",
+	exampleList: [],
 	isFocused: false,
 	isRequired: false,
 };
@@ -42,11 +43,11 @@ const initialCards = {
 const createNewCard = (cardId: string, cardTitle = "") => ({
 	id: cardId,
 	cardTitle,
-	inputType: QuestionTypes.SINGLE,
-	contents: [
+	inputType: QuestionTypes.WRITE,
+	exampleList: [
 		{
 			id: String(Number(cardId) + 1),
-			text: "옵션 1",
+			text: "답변",
 		},
 	],
 	isFocused: true,
@@ -63,6 +64,7 @@ export const requiredSlice = createSlice({
 });
   
 export const cardSlice = createSlice({
+	
 	name: "Reducer",
 	initialState: [initialCards] as CardProps[],
 	reducers: {
@@ -70,14 +72,11 @@ export const cardSlice = createSlice({
 			const copiedState = state.map((card) => ({ ...card, isFocused: false }));
 	
 			if (Number(action.payload.focusedCardIndex) > 0) {
-			copiedState.splice(
-				Number(action.payload.focusedCardIndex) + 1,
-				0,
-				createNewCard(action.payload.cardId, action.payload.cardTitle),
-			);
+				copiedState.splice(Number(action.payload.focusedCardIndex) + 1, 0, createNewCard(action.payload.cardId, action.payload.cardTitle));
 			} else {
-			copiedState.push(createNewCard(action.payload.cardId, action.payload.cardTitle));
+				copiedState.push(createNewCard(action.payload.cardId, action.payload.cardTitle));
 			}
+
 			return copiedState;
 	  	},
   
@@ -86,17 +85,19 @@ export const cardSlice = createSlice({
 			const targetCard = copiedState.find((card) => card.id === action.payload.cardId) as CardProps;
 			const targetCardIndex = copiedState.findIndex((card) => card.id === action.payload.cardId);
 			const copiedCard = {
-			...targetCard,
-			id: action.payload.copiedCardId,
-			isFocused: true,
+				...targetCard,
+				id: action.payload.copiedCardId,
+				isFocused: true,
 			};
-			if (typeof copiedCard.contents === "object") {
-			const itemTypeCopiedCardContents = copiedCard.contents.map((content, index) => ({
-				...content,
-				id: String(Number(action.payload.copiedCardId) + index),
-			}));
-			copiedCard.contents = itemTypeCopiedCardContents;
+			
+			if (typeof copiedCard.exampleList === "object") {
+				const itemTypeCopiedCardContents = copiedCard.exampleList.map((example, index) => ({
+					...example,
+					id: String(Number(action.payload.copiedCardId) + index),
+				}));
+				copiedCard.exampleList = itemTypeCopiedCardContents;
 			}
+
 			copiedState.splice(targetCardIndex + 1, 0, copiedCard);
 			return copiedState;
 		},
@@ -106,14 +107,14 @@ export const cardSlice = createSlice({
 			const targetCardIndex = copiedState.findIndex((card) => card.id === action.payload.cardId);
 			const filteredState = copiedState.filter((card) => card.id !== action.payload.cardId);
 			if (targetCardIndex !== 1) {
-			return filteredState.map((card, index) =>
-				index === targetCardIndex - 1 ? { ...card, isFocused: true } : card,
-			);
+				return filteredState.map((card, index) =>
+					index === targetCardIndex - 1 ? { ...card, isFocused: true } : card,
+				);
 			}
 			if (targetCardIndex === 1) {
-			return filteredState.map((card, index) =>
-				index === targetCardIndex ? { ...card, isFocused: true } : card,
-			);
+				return filteredState.map((card, index) =>
+					index === targetCardIndex ? { ...card, isFocused: true } : card,
+				);
 			}
 	
 			return filteredState;
@@ -138,42 +139,47 @@ export const cardSlice = createSlice({
 			(action.payload.inputType === QuestionTypes.SINGLE ||
 				action.payload.inputType === QuestionTypes.MULTIPLE)
 			) {
-			targetCard.contents = [
-				{
-				id: String(Date.now()),
-				text: "옵션 1",
-				},
-			];
+				targetCard.exampleList = [
+					{
+					id: String(Date.now()),
+					text: "옵션 1",
+					},
+				];
 			} else if (
-			(targetCard.inputType === QuestionTypes.SINGLE ||
-				targetCard.inputType === QuestionTypes.MULTIPLE) &&
-			!(
-				action.payload.inputType === QuestionTypes.SINGLE ||
-				action.payload.inputType === QuestionTypes.MULTIPLE
-			)
+				(targetCard.inputType === QuestionTypes.SINGLE ||
+					targetCard.inputType === QuestionTypes.MULTIPLE) &&
+				!(
+					action.payload.inputType === QuestionTypes.SINGLE ||
+					action.payload.inputType === QuestionTypes.MULTIPLE
+				)
 			) {
-			targetCard.contents = "";
+				targetCard.exampleList = [
+					{
+						id: String(Date.now()),
+						text: "주관식 답변",
+					},
+				];
 			}
 			// if (
 			// targetCard.inputType === QuestionTypes.SINGLE && action.payload.inputType === QuestionTypes.MULTIPLE
 			// ) {
 			// deleteEtcItem(targetCard.contents as ItemTypeProps[]);
 			// }
-			targetCard.inputType = action.payload.inputType as string;
+			targetCard.inputType = action.payload.inputType as QuestionTypes;
 	  	},
   
 		addSelectItem: (state: CardProps[], action: ActionProps) => {
 			const contents = state.find((card) => card.id === action.payload.id)
-			?.contents as ItemTypeProps[];
+			?.exampleList as ItemTypeProps[];
 			contents.push({ id: action.payload.contentId, text: action.payload.text });
 			// sortEtcItem(contents);
 		},
   
 		removeSelectItem: (state: CardProps[], action: ActionProps) => {
 			const targetCard = state.find((card) => card.id === action.payload.cardId) as CardProps;
-			const contents = targetCard.contents as ItemTypeProps[];
+			const contents = targetCard.exampleList as ItemTypeProps[];
 			const filteredContents = contents.filter((item) => item.id !== action.payload.contentId);
-			targetCard.contents = filteredContents;
+			targetCard.exampleList = filteredContents;
 		},
 	
 		setTitle: (state: CardProps[], action: ActionProps) => {
@@ -184,24 +190,24 @@ export const cardSlice = createSlice({
 		setText: (state: CardProps[], action: ActionProps) => {
 			const targetCard = state.find((card) => card.id === action.payload.cardId) as CardProps;
 	
-			// if (targetCard.inputType === QuestionTypes.TITLE) {
-			// targetCard.contents = action.payload.text;
-			// }
+			if (targetCard.inputType === QuestionTypes.TITLE) {
+				targetCard.exampleList = [];
+			}
 			if (
-			targetCard.inputType === QuestionTypes.SINGLE ||
-			targetCard.inputType === QuestionTypes.MULTIPLE
+				targetCard.inputType === QuestionTypes.SINGLE ||
+				targetCard.inputType === QuestionTypes.MULTIPLE
 			) {
-			const contents = targetCard.contents as ItemTypeProps[];
-			const targetContent = contents.find(
-				(content) => content.id === action.payload.contentId,
-			) as ItemTypeProps;
-			targetContent.text = action.payload.text;
+				const contents = targetCard.exampleList as ItemTypeProps[];
+				const targetContent = contents.find(
+					(content) => content.id === action.payload.contentId,
+				) as ItemTypeProps;
+				targetContent.text = action.payload.text;
 			}
 		},
   
 		addEtcItem: (state: CardProps[], action: ActionProps) => {
 			const contents = state.find((card) => card.id === action.payload.id)
-			?.contents as ItemTypeProps[];
+			?.exampleList as ItemTypeProps[];
 			contents.push({ id: action.payload.contentId, isEtc: true });
 		},
 	
@@ -219,9 +225,25 @@ export const cardSlice = createSlice({
   
 		moveContent: (state: CardProps[], action: ActionProps) => {
 			const targetCard = state.find((card) => card.id === action.payload.cardId) as CardProps;
-			const contents = targetCard.contents as ItemTypeProps[];
+			const contents = targetCard.exampleList as ItemTypeProps[];
 			const tmp = contents.splice(Number(action.payload.sourceIndex), 1);
 			contents.splice(Number(action.payload.destinationIndex), 0, ...tmp);
 		},
 	},
 });
+
+export const {
+	addCard,
+	copyCard,
+	removeCard,
+	focus,
+	typeChange,
+	addSelectItem,
+	removeSelectItem,
+	setTitle,
+	setText,
+	addEtcItem,
+	toggleIsRequired,
+	moveCard,
+	moveContent,
+  } = cardSlice.actions;

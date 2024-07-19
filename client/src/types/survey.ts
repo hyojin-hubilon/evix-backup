@@ -70,6 +70,7 @@ export interface SurveyExample {//RequestBody Survey 답변
 }
 
 export enum QuestionTypes {
+	TITLE = "TITLE",
 	PARENT = "PARENT",
 	SINGLE = "SINGLE",
 	MULTIPLE = "MULTIPLE",

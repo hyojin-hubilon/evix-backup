@@ -8,8 +8,7 @@ import { cardSlice, requiredSlice } from './survey';
 // ==============================|| COMBINE REDUCERS ||============================== //
 
 // 여러 리듀서를 하나로 합칩니다.
-// 현재는 menu 리듀서 하나만 합쳐서 사용하고 있습니다.
-// survey card, required 추가
+// menu, survey card, required
 const reducers = combineReducers({ 
 	menu,
 	cards: cardSlice.reducer,
