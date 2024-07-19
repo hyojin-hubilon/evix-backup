@@ -9,20 +9,9 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Draggable } from "@hello-pangea/dnd";
 import { CardProps, InputTypes, StateProps, focus } from "@/store/reducers/survey";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import styled from "@emotion/styled";
 import CardHeader from "./CardHeader";
 import TextFieldSection from "./TextFieldSection";
 import ItemTypeSection from "./ItemTypeSection";
-
-export const ClickHighlight = styled.div<{ isFocused: boolean }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: ${({ isFocused }) => (isFocused ? "#69b1ff": "")};
-  min-height: 100%;
-  width: 6px;
-  z-index: 10;
-`;
 
 export interface extendedCardProps extends CardProps {
 	isTitle: boolean;
@@ -105,7 +94,17 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 							mb: 0
 						}
 					}}>
-					<ClickHighlight isFocused={isFocused} />
+					<Box 
+						sx={{
+							position: 'absolute',
+							top: 0,
+							left: 0,
+							backgroundColor: isFocused ? theme.palette.primary.light : '',
+							minHeight: '100%',
+							width: '6px',
+							zIndex: 10
+						}}
+					></Box>
 					{/* 드래그 핸들 */}
 					{ !isTitle && 
 						<Box display="flex"
