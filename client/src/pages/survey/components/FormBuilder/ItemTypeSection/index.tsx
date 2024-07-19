@@ -1,0 +1,136 @@
+import React from "react";
+import { Draggable, Droppable } from "@hello-pangea/dnd";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+  addSelectItem,
+  CardProps,
+  InputTypes,
+  ItemTypeProps,
+  removeSelectItem,
+  setText,
+  StateProps,
+} from "@store/reducers/survey";
+import * as S from "./styles";
+
+const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
+	const dispatch = useDispatch();
+
+	const inputType = useSelector(
+		(state: StateProps) => state.cards.find((card) => card.id === id)?.inputType,
+	) as string;
+
+	const isFocused = useSelector((state: StateProps) => {
+		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
+		return currentCard.isFocused;
+	});
+
+	const exampleList = useSelector(
+		(state: StateProps) => state.cards.find((card) => card.id === id)?.exampleList,
+	) as ItemTypeProps[];
+
+	// const haveEtc = useSelector((state: StateProps) => {
+	// 	const currentCard = state.cards.find((card) => card.id === id) as CardProps;
+	// 	const contents = currentCard.exampleList as ItemTypeProps[];
+	// 	if (currentCard.inputType === InputTypes.SINGLE) {
+	// 	return true;
+	// 	}
+	// 	return contents.some((content) => content.isEtc);
+	// });
+
+	const handleChangeContentText = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+		contentId: string,
+	) => {
+		dispatch(setText({ cardId: id, contentId, text: e.target.value }));
+	};
+
+  return (
+		<div>
+		<Droppable droppableId={id} type="content">
+			{(provided) => (
+			<div ref={provided.innerRef} {...provided.droppableProps}>
+				{exampleList && exampleList.map((content, idx) => (
+				<Draggable draggableId={content.id} index={idx} key={content.id}>
+					{(provided) => (
+					<S.Container
+						ref={provided.innerRef}
+						{...provided.draggableProps}
+						key={content.id}
+						$isFocused={isFocused}
+					>
+						<S.ContentDndHandle $isFocused={isFocused} {...provided.dragHandleProps} />
+						{inputType === InputTypes.SINGLE ? <S.Circle /> : null}
+						{inputType === InputTypes.MULTIPLE ? <S.Sqare /> : null}
+						<S.TextField
+							id="standard-basic"
+							$isFocused={isFocused}
+							variant="standard"
+							value={content.text}
+							// value={content.isEtc ? "기타..." : content.text}
+							onChange={(e) => {
+							handleChangeContentText(e, content.id);
+							}}
+							// disabled={content.isEtc}
+						/>
+						
+						{isFocused && exampleList.length > 1 ? (
+						<S.DeleteIcon
+							onClick={() => {
+							dispatch(removeSelectItem({ cardId: id, contentId: content.id }));
+							}}
+						/>
+						) : null}
+					</S.Container>
+					)}
+				</Draggable>
+				))}
+				{provided.placeholder}
+			</div>
+			)}
+		</Droppable>
+		{isFocused ? (
+			<S.Container $isFocused={isFocused}>
+			{inputType === InputTypes.SINGLE ? <S.Circle /> : null}
+			{inputType === InputTypes.MULTIPLE ? <S.Sqare /> : null}
+			<S.ItemAddButton
+				type="button"
+				onClick={() => {
+				const contentId = String(Date.now());
+				dispatch(
+					addSelectItem({
+					id,
+					contentId,
+					text: `옵션 ${exampleList.filter((content) => !content.isEtc).length + 1}`,
+					}),
+				);
+				}}
+			>
+				옵션 추가
+			</S.ItemAddButton>
+			{/* {inputType === InputTypes.SINGLE && !haveEtc ? (//기타 임시 제외
+				<>
+				<span>또는</span>
+				<S.EtcAddButton
+					type="button"
+					onClick={() => {
+					const contentId = String(Date.now());
+					dispatch(
+						addEtcItem({
+						id,
+						contentId,
+						}),
+					);
+					}}
+				>
+					기타 추가
+				</S.EtcAddButton>
+				</>
+			) : null} */}
+			</S.Container>
+		) : null}
+		</div>
+  	);
+};
+
+export default ItemTypeSection;

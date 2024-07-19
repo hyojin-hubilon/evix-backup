@@ -5,7 +5,7 @@ import FormQuestion from "./FormBuilder/FormQuestion";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { reorder } from "@/utils/helper";
 import { useSelector } from "react-redux";
-import { CardProps, StateProps } from "@/store/reducers/survey";
+import { CardProps, InputTypes, StateProps } from "@/store/reducers/survey";
 import AddCardBtn from "./FormBuilder/AddCardBtn";
 
 
@@ -16,7 +16,7 @@ const FormBuilder = () => {
 	const [ questions, setQuestions ] = useState<SurveyQuestion[]>([]);
 	
 
-	const { cards } = useSelector((state: StateProps) => state);
+	const cards = useSelector((state: StateProps) => state.cards);
 
 	const onDragEnd = ({ destination, source }: DropResult) => {
 		// dropped outside the list
@@ -39,12 +39,6 @@ const FormBuilder = () => {
 
 	}
 	
-
-	useEffect(() => {
-		console.log(questions)
-	}, [questions]);
-
-
 	return (
 		<Box display="flex" flexDirection="column" gap={2}>
 			<DragDropContext onDragEnd={onDragEnd}>
@@ -52,7 +46,12 @@ const FormBuilder = () => {
 					{(provided) => (
 						<div ref={provided.innerRef} {...provided.droppableProps}>
 							{cards.map((card: CardProps, index: number) => (
-								<FormQuestion oneQuestion={card} key={index} index={index} questionChanged={(question) => handleQuestionChanged(question)} questionDeleted={(index) => handleQuetionDeleted(index)} questionCopied={(question) => handleQuestionCopied(question)} />
+								<FormQuestion 
+									key={card.id}
+									index={index}
+									isTitle={card.inputType === InputTypes.TITLE}
+									{...card}
+								/>
 							))}
 							{provided.placeholder}
 						</div>

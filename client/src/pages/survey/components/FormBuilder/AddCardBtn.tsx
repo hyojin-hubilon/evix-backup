@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddIcon from "@mui/icons-material/Add";
-import { Button, Tooltip } from "@mui/material";
+import { Button } from "@mui/material";
 
 import { addCard, StateProps } from "@store/reducers/survey";
 
 const AddCardButton = () => {
   const dispatch = useDispatch();
-  const { cards } = useSelector((state: StateProps) => state);
+  const cards = useSelector((state: StateProps) => state.cards);
   const focusedCardIndex = useSelector((state: StateProps) =>
-    state.cards.findIndex((card) => card.isFocused),
+    	state.cards.findIndex((card) => card.isFocused),
   );
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const AddCardButton = () => {
 			);
 		}}
 	>
-		질문 추가
+		<AddIcon sx={{fontSize: "1rem", mr: "0.5rem"}}/> <span>질문 추가</span>
 	</Button>
   );
 };
