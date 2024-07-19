@@ -57,7 +57,7 @@ const createNewCard = (cardId: string, cardTitle = "") => ({
 	exampleList: [
 		{
 			id: String(Number(cardId) + 1),
-			text: "답변",
+			text: "주관식 답변",
 		},
 	],
 	isFocused: true,
