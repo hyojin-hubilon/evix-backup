@@ -106,8 +106,7 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 						}}
 					></Box>
 					{/* 드래그 핸들 */}
-					{ !isTitle && 
-						<Box display="flex"
+					<Box display="flex"
 						justifyContent="center"
 						{...provided.dragHandleProps}
 						sx={{
@@ -116,7 +115,8 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 							top: 0,
 							left: 0,
 							pt: '5px',
-							display: 'block',
+							display: isTitle ? 'none' : 'block',
+							zIndex: 20,
 							'.MuiSvgIcon-root' : {
 								opacity: 0
 							},
@@ -125,16 +125,15 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 									opacity: 0.6
 								}
 							}
-						}}>
-							<MoreHorizIcon style={{display: 'block', margin: '0 auto', fontSize:"1.2rem"}}/>
-						</Box>
-					}
+					}}>
+						<MoreHorizIcon style={{display: 'block', margin: '0 auto', fontSize:"1.2rem"}}/>
+					</Box>
 					
 					
 					<Box display="flex" flexDirection="column" gap={1}>
 						<CardHeader isTitle={isTitle} id={id} />
 
-						{inputType === InputTypes.WRITE ? (
+						{(inputType === InputTypes.WRITE || inputType === InputTypes.TITLE) ? (
 							<TextFieldSection id={id} />
 						) : (
 							<ItemTypeSection id={id} />

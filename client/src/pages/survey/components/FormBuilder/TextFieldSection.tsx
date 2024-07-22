@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { CardProps, InputTypes, setText, StateProps } from "@store/reducers/survey";
 import { Input, OutlinedInput, TextField, useTheme } from "@mui/material";
+import { ExampleList } from '../../../../types/survey';
 
 const TextFieldSection = ({ id }: Pick<CardProps, "id">) => {
 	const theme = useTheme();
@@ -12,10 +13,12 @@ const TextFieldSection = ({ id }: Pick<CardProps, "id">) => {
 		return currentCard.inputType;
 	}) as string;
 
-	const contents = useSelector((state: StateProps) => {
+	const exampleListFirst = useSelector((state: StateProps) => {
 		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
 		return currentCard.exampleList[0]
 	})
+
+	console.log(exampleListFirst);
 
 	const isFocused = useSelector((state: StateProps) => {
 		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
@@ -36,19 +39,19 @@ const TextFieldSection = ({ id }: Pick<CardProps, "id">) => {
 			sx={{
 				border:0,
 				borderBottom: `1px dotted ${theme.palette.grey[900]}`,
+				flexGrow: 1,
 				...(isTitle && {
-					flexGrow: 1,
 					borderBottom: isFocused ? `1px solid ${theme.palette.grey[900]}` : 'none',					
 				}),
 				'::before, ::after' : {
 					display: 'none'
 				},
 			}}
-			value={contents.text}
+			value={exampleListFirst?.text}
 			onChange={(e) => {
 				handleDescriptionChange(e);
 			}}
-			placeholder={isTitle ? "설문지 설명" : "단답형 텍스트"}
+			placeholder={isTitle ? "설문지 설명" : "답변"}
 			disabled={!isTitle}
 		/>
 	);

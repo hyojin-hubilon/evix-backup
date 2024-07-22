@@ -43,9 +43,11 @@ interface ActionProps {
 const initialCards = {
 	id: "TitleCard",
 	cardTitle: "제목 없는 설문지",
-	subTitle: "",
 	inputType: "TITLE",
-	exampleList: [],
+	exampleList: [{
+		id: String(Number(0) + 1),
+		text: "설명",
+	}],
 	isFocused: false,
 	isRequired: false,
 };

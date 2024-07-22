@@ -7,8 +7,6 @@ import { extendedCardProps } from "./FormQuestion";
   
 
 const CardHeader = ({ id, isTitle }: Pick<extendedCardProps, "id" | "isTitle">) => {
-
- 	const theme = useTheme();
   	const dispatch = useDispatch();
   
   	const isFocused = useSelector((state: StateProps) => {
@@ -40,6 +38,13 @@ const CardHeader = ({ id, isTitle }: Pick<extendedCardProps, "id" | "isTitle">) 
 			}}
 			placeholder={isTitle ? "설문지 제목" : "질문"}
 			variant="filled"
+			sx={{
+				flexGrow: 1,
+				'input' : {
+					fontSize: isTitle ? "1.7rem" : "1rem"
+				}
+				
+			}}
 		/>
       	{!isTitle && isFocused ? (
 			<Select onChange={handleInputTypeChange} defaultValue={InputTypes.WRITE}>
