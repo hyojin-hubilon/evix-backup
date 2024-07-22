@@ -5,8 +5,9 @@ import FormQuestion from "./FormBuilder/FormQuestion";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { reorder } from "@/utils/helper";
 import { useSelector } from "react-redux";
-import { CardProps, InputTypes, StateProps } from "@/store/reducers/survey";
+import { CardProps, InputTypes, moveCard, moveContent, StateProps } from "@/store/reducers/survey";
 import AddCardBtn from "./FormBuilder/AddCardBtn";
+import { dispatch } from "@/store";
 
 
 
@@ -19,30 +20,35 @@ const FormBuilder = () => {
 	const cards = useSelector((state: StateProps) => state.cards);
 
 	const onDragEnd = ({ destination, source }: DropResult) => {
-		// dropped outside the list
-		if (!destination || !questions) return;
-	
-		const newItems = reorder(questions, source.index, destination.index);
-		//sort 저장시에 설정
-		setQuestions(newItems);
-	};
+		if (!destination) {
+		  return;
+		}
+		if (source.droppableId === "card" && destination.index === 0) {
+		  return;
+		}
+		if (source.droppableId === "card") {
+		  dispatch(
+			moveCard({
+			  sourceIndex: String(source.index),
+			  destinationIndex: String(destination.index),
+			}),
+		  );
+		} else if (destination.droppableId === source.droppableId) {
+		  dispatch(
+			moveContent({
+			  cardId: source.droppableId,
+			  sourceIndex: String(source.index),
+			  destinationIndex: String(destination.index),
+			}),
+		  );
+		}
+	  };
 
-	const handleQuestionChanged = (question) => {
-
-	}
-	
-	const handleQuetionDeleted = (index) => {
-		
-	}
-
-	const handleQuestionCopied = (question) => {
-
-	}
 	
 	return (
 		<Box display="flex" flexDirection="column" gap={2}>
 			<DragDropContext onDragEnd={onDragEnd}>
-				<Droppable droppableId="question-droppable-list">
+				<Droppable droppableId="card">
 					{(provided) => (
 						<div ref={provided.innerRef} {...provided.droppableProps}>
 							{cards.map((card: CardProps, index: number) => (

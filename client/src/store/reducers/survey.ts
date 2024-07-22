@@ -53,12 +53,7 @@ const createNewCard = (cardId: string, cardTitle = "") => ({
 	id: cardId,
 	cardTitle,
 	inputType: InputTypes.WRITE,
-	contents: [
-		{
-			id: String(Number(cardId) + 1),
-			text: "답변",
-		},
-	],
+	contents: "답변",
 	isFocused: true,
 	isRequired: false,
 });

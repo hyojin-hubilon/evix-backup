@@ -55,8 +55,8 @@ export const ContentDndHandle = styled('div')<{ isFocused: boolean}>(({isFocused
 
 
 export const TextField = styled(MuiTextField)<{isFocused: boolean}>(({isFocused}) => ({
-	padding: '12px 8px',
-	height: '3.5rem',
+	padding: '8px',
+	height: '3rem',
 	flexGrow: '1'
 }))
  
@@ -73,47 +73,60 @@ export const DeleteIcon = styled(ClearIcon)(({theme}) => ({
 }))
  
 
-export const Sqare = styled(CropSquareIcon)`
-  width: 23px;
-  height: 23px;
-`;
+export const Sqare = styled(CropSquareIcon)(({theme}) => ({
+	color: theme.palette.grey[500],
+	width: '23px',
+	height: '23px',
+}))
 
-export const Circle = styled(CircleOutlinedIcon)`
-  width: 23px;
-  height: 23px;
-`;
+
+export const Circle = styled(CircleOutlinedIcon)(({theme}) => ({
+	color: theme.palette.grey[500],
+	width: '23px',
+	height: '23px',
+}))
 
 export const NumberSpan = styled('span')`
-  width: 23px;
-  height: 23px;
-  text-align: center;
-  box-sizing: border-box;
-  padding-top: 5px;
+	width: 23px;
+	height: 23px;
+	text-align: center;
+	box-sizing: border-box;
+	padding-top: 5px;
 `;
 
 export const ItemAddButton = styled('button')(({theme}) => ({
 	backgroundColor: 'transparent',
 	border: 'none',
 	cursor: 'pointer',
-	padding: '12px 8px 0px 8px',
-	height: '3.5rem',
+	padding: '8px 8px 0px 8px',
+	height: '3rem',
 	fontSize:'1rem',
 	marginBottom: '12px',
 	color: theme.palette.grey[900],
+	position: 'relative',
 	':hover' : {
-		borderBottom: `1px solid ${theme.palette.grey[700]}`
+		'::after': {
+			display: 'block',
+			content: '" "',
+			width: '100%',
+			position:'absolute',
+			bottom:0,
+			left: 0,
+			borderBottom: `1px solid ${theme.palette.grey[700]}`
+		}
+		
 	}
 }))
 
 
 export const EtcAddButton = styled('button')`
-  border-radius: 4px;
-  background-color: transparent;
-  border: none;
-  padding: 8px 8px;
-  color: ${({ theme }) => theme.palette.primary.dark};
-  :hover {
-    background-color: ${({ theme }) => theme.palette.primary.lighter};
-  }
+	border-radius: 4px;
+	background-color: transparent;
+	border: none;
+	padding: 8px 8px;
+	color: ${({ theme }) => theme.palette.primary.dark};
+	:hover {
+		background-color: ${({ theme }) => theme.palette.primary.lighter};
+	}
 `;
 

@@ -7,7 +7,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Draggable } from "@hello-pangea/dnd";
-import { CardProps, InputTypes, StateProps, focus } from "@/store/reducers/survey";
+import { CardProps, InputTypes, StateProps, copyCard, focus, removeCard } from "@/store/reducers/survey";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import CardHeader from "./CardHeader";
 import TextFieldSection from "./TextFieldSection";
@@ -38,44 +38,6 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 		if (!isFocused) dispatch(focus({ id }));
 	};
 
-	// const handleChangeQuestionType = (e) => {
-	// 	const questionType = e;
-	// 	const newExampleList:SurveyExample = {
-	// 		example_title: '',
-	// 		example_value: 1,
-	// 		sort: 1
-	// 	};
-	// 	setQuestion((prevState) => ({...prevState, question_type : questionType, exampleList: [newExampleList] }))
-	// }
-
-	// const handleAddExample = () => {
-	// 	const exampleListLength = question.exampleList.length + 1;
-	// 	const newExample:SurveyExample = {
-	// 		example_title: '',
-	// 		example_value: exampleListLength,
-	// 		sort: exampleListLength
-	// 	};
-
-	// 	setQuestion((prevState) => ({...prevState, exampleList: [...prevState.exampleList, newExample] }))
-	// }
-
-	// const handleDeleteExample = (sort) => {
-	// 	const newExample = question.exampleList.filter(example => example.sort !== sort);
-	// 	newExample.map((example, index) => {
-	// 		example.sort = index+1;
-	// 		example.example_value = index + 1
-	// 	});
-	// 	setQuestion((prevState) => ({...prevState, exampleList: [...newExample] }))
-	// }
-
-	const handleAddEtc = () => {
-
-	}
-
-	const handleCopyQuestion = () => {
-
-	}
-
 	
 	return (
 		<Draggable draggableId={id} index={index} key={id}>
@@ -96,17 +58,20 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 							mb: 0
 						}
 					}}>
-					<Box 
-						sx={{
-							position: 'absolute',
-							top: 0,
-							left: 0,
-							backgroundColor: isFocused ? theme.palette.primary.light : '',
-							minHeight: '100%',
-							width: '6px',
-							zIndex: 10
-						}}
-					></Box>
+					{
+						!snapshot.isDragging && <Box 
+							sx={{
+								position: 'absolute',
+								top: 0,
+								left: 0,
+								backgroundColor: isFocused ? theme.palette.primary.light : '',
+								minHeight: '100%',
+								width: '5px',
+								zIndex: 10
+							}}
+						></Box>
+					}
+					
 					{/* 드래그 핸들 */}
 					<Box display="flex"
 						justifyContent="center"
@@ -150,7 +115,10 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 								<Box display="flex" alignItems="center" justifyContent="flex-end" gap={1}>
 								{/* 복사 */}
 								<Tooltip title="질문 복사">
-									<IconButton onClick={handleCopyQuestion}>
+									<IconButton onClick={(e) => {
+										e.stopPropagation();
+										dispatch(copyCard({ cardId: id, copiedCardId: String(Date.now()) }));
+									}}>
 										<ContentCopyIcon />
 									</IconButton>
 								</Tooltip>
@@ -158,7 +126,10 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 
 								{/* 삭제 */}
 								<Tooltip title="질문 삭제">
-									<IconButton>
+									<IconButton  onClick={(e) => {
+										e.stopPropagation();
+										dispatch(removeCard({ cardId: id }));
+									}}>
 										<DeleteOutlineIcon />
 									</IconButton>
 								</Tooltip>

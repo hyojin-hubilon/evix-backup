@@ -43,17 +43,17 @@ const CardHeader = ({ id, isTitle }: Pick<extendedCardProps, "id" | "isTitle">) 
 				flexGrow: 1,
 				'div': {
 					fontSize: isTitle ? "24px" : "16px",
-					padding: isFocused ? (isTitle ? '5px 0' : '16px') : '5px 0',
+					padding: isFocused ? (isTitle ? '5px' : '16px') : '5px 0',
 					backgroundColor: isFocused ? (isTitle ? 'transparent' : theme.palette.grey[50]) : 'transparent',
 					'::before': {
-					  'borderBottom': isFocused ? `1px solid ${theme.palette.grey[700]}` : "none"
+					  	borderBottom: isFocused ? `1px solid ${theme.palette.grey[700]}` : "none"
 					},
 					'::after' : {
-					  borderBottom: `2px solid ${theme.palette.grey[700]}`
+					 	borderBottom: `2px solid ${theme.palette.grey[700]}`
 					}
 				  },
 				  'input' : {
-					padding: 0
+						padding: 0
 				  }				
 			}}
 		/>
