@@ -7,7 +7,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Draggable } from "@hello-pangea/dnd";
-import { CardProps, InputTypes, StateProps, copyCard, focus, removeCard } from "@/store/reducers/survey";
+import { CardProps, InputTypes, StateProps, copyCard, focus, removeCard, toggleIsRequired } from "@/store/reducers/survey";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import CardHeader from "./CardHeader";
 import TextFieldSection from "./TextFieldSection";
@@ -36,6 +36,15 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 
 	const setIsFocused = () => {
 		if (!isFocused) dispatch(focus({ id }));
+	};
+
+	const isRequired = useSelector((state: StateProps) => {
+		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
+		return currentCard.isRequired;
+	});
+
+	const handleChangeRequired = () => {
+		dispatch(toggleIsRequired({ id }));
 	};
 
 	
@@ -140,14 +149,12 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 								<FormControlLabel
 									value="end"
 									sx={{ml: "0.5rem"}}
-									control={
-									<Switch color="primary"
-										// checked={checked}
-										// onChange={handleChange} 
-										/>
-									}
+									control={<Switch name="required" checked={isRequired} onChange={handleChangeRequired} />}
 									label="필수"
 									labelPlacement="start"
+									onClick={(e) => {
+										e.stopPropagation();
+									}}
 									/>
 							</Box>
 						</>

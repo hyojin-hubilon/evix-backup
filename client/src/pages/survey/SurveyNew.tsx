@@ -4,20 +4,19 @@ import FormBuilder from "./components/FormBuilder";
 const SurveyNew = () => {
 	return (
 		<Container maxWidth="sm">
-			<Grid container flexDirection="column">
-				<Grid item container>
-					<Typography variant="h4">Survey 생성</Typography>
-					<AppBar position="sticky" sx={{bgcolor: "transparent", boxShadow: "none"}}>
-						<Toolbar>
-							<Box width={1} display="flex" justifyContent="flex-end" gap={1}>
+			<Grid container flexDirection="column" sx={{minHeight: '100vh'}}>
+				<AppBar position="sticky" sx={{bgcolor: "transparent", boxShadow: "none", height: '60px', top: '70px'}}>
+					
+						<Box display="flex" alignItems="center">
+							<Typography variant="h3" color="secondary.dark">Survey 생성</Typography>
+							<Box display="flex" justifyContent="flex-end" gap={1} sx={{ml: 'auto'}}>
 								<Button variant="outlined">미리보기</Button>
 								<Button variant="outlined">임시저장</Button>
 								<Button variant="contained">저장</Button>
 							</Box>
-						</Toolbar>
-					</AppBar>
-				</Grid>
-				
+						</Box>
+					
+				</AppBar>	
 				<FormBuilder />
 			</Grid>
 		</Container>

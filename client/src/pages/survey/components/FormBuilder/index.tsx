@@ -1,12 +1,12 @@
 import { QuestionTypes, SurveyQuestion } from "@/types/survey";
 import { Box, Button, Card, TextField, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
-import FormQuestion from "./FormBuilder/FormQuestion";
+import FormQuestion from "./FormQuestion";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { reorder } from "@/utils/helper";
 import { useSelector } from "react-redux";
 import { CardProps, InputTypes, moveCard, moveContent, StateProps } from "@/store/reducers/survey";
-import AddCardBtn from "./FormBuilder/AddCardBtn";
+import AddCardBtn from "./AddCardBtn";
 import { dispatch } from "@/store";
 
 

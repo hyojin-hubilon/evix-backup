@@ -3,6 +3,7 @@ import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
+	addEtcItem,
   addSelectItem,
   CardProps,
   InputTypes,
@@ -31,14 +32,14 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 		(state: StateProps) => state.cards.find((card) => card.id === id)?.contents,
 	) as ItemTypeProps[];
 
-	// const haveEtc = useSelector((state: StateProps) => {
-	// 	const currentCard = state.cards.find((card) => card.id === id) as CardProps;
-	// 	const contents = currentCard.exampleList as ItemTypeProps[];
-	// 	if (currentCard.inputType === InputTypes.SINGLE) {
-	// 	return true;
-	// 	}
-	// 	return contents.some((content) => content.isEtc);
-	// });
+	const haveEtc = useSelector((state: StateProps) => {
+		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
+		const contents = currentCard.contents as ItemTypeProps[];
+		if (currentCard.inputType === InputTypes.MULTIPLE) {
+			return true;
+		}
+		return contents.some((content) => content.isEtc);
+	});
 
 	const handleChangeContentText = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -58,12 +59,11 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 							<S.Container
 								ref={provided.innerRef}
 								key={content.id}
-								isFocused={isFocused}
-								theme={theme}
+								$isfocused={isFocused}
 								{...provided.draggableProps}
 							>
 								{/* 옵션 드래그 핸들 */}
-								<S.ContentDndHandle isFocused={isFocused} theme={theme} {...provided.dragHandleProps}/>
+								<S.ContentDndHandle $isfocused={isFocused} {...provided.dragHandleProps}/>
 
 								{inputType === InputTypes.SINGLE ? <S.Circle /> : null}
 
@@ -71,14 +71,12 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 								
 								<S.TextField
 									id="standard-basic"
-									isFocused={isFocused}
 									variant="standard"
-									value={content.text}
 									onChange={(e) => {
 										handleChangeContentText(e, content.id);
 									}}
-									// value={content.isEtc ? "기타..." : content.text}
-									// disabled={content.isEtc}
+									value={content.isEtc ? "기타 : " : content.text}
+									disabled={content.isEtc}
 								/>
 								
 								{
@@ -119,25 +117,25 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 				>
 					옵션 추가
 				</S.ItemAddButton>
-				{/* {inputType === InputTypes.SINGLE && !haveEtc ? (//기타 임시 제외
+				{inputType === InputTypes.SINGLE && !haveEtc ? (
 					<>
-					<span>또는</span>
-					<S.EtcAddButton
-						type="button"
-						onClick={() => {
-						const contentId = String(Date.now());
-						dispatch(
-							addEtcItem({
-							id,
-							contentId,
-							}),
-						);
-						}}
-					>
-						기타 추가
-					</S.EtcAddButton>
+						<span style={{marginLeft: '4px'}}>또는</span>
+						<S.EtcAddButton
+							type="button"
+							onClick={() => {
+								const contentId = String(Date.now());
+								dispatch(
+									addEtcItem({
+										id,
+										contentId,
+									}),
+								);
+							}}
+						>
+							기타 추가
+						</S.EtcAddButton>
 					</>
-				) : null} */}
+				) : null}
 			</S.Container>
 		) : null}
 		</div>

@@ -66,9 +66,26 @@ export const requiredSlice = createSlice({
 		removeRequiredCardId: () => "",
 	},
 });
+
+const sortEtcItem = (currentContents: ItemTypeProps[]) => {
+	const etcIndex = currentContents.findIndex((content) => content.isEtc);
+	if (etcIndex !== -1) {
+	  const etcItem = { ...currentContents[etcIndex] };
+	  currentContents.splice(etcIndex, 1);
+	  currentContents.push(etcItem);
+	}
+	return currentContents;
+  };
+  
+  const deleteEtcItem = (currentContents: ItemTypeProps[]) => {
+	const etcIndex = currentContents.findIndex((content) => content.isEtc);
+	if (etcIndex !== -1) {
+	  currentContents.splice(etcIndex, 1);
+	}
+	return currentContents;
+  };
   
 export const cardSlice = createSlice({
-	
 	name: "Reducer",
 	initialState: [initialCards] as CardProps[],
 	reducers: {
@@ -159,11 +176,11 @@ export const cardSlice = createSlice({
 			) {
 				targetCard.contents = "";
 			}
-			// if (
-			// targetCard.inputType === QuestionTypes.SINGLE && action.payload.inputType === QuestionTypes.MULTIPLE
-			// ) {
-			// deleteEtcItem(targetCard.contents as ItemTypeProps[]);
-			// }
+			if (
+			targetCard.inputType === InputTypes.SINGLE && action.payload.inputType === InputTypes.MULTIPLE
+			) {
+				deleteEtcItem(targetCard.contents as ItemTypeProps[]);
+			}
 			targetCard.inputType = action.payload.inputType as InputTypes;
 	  	},
   
@@ -171,7 +188,7 @@ export const cardSlice = createSlice({
 			const contents = state.find((card) => card.id === action.payload.id)
 			?.contents as ItemTypeProps[];
 			contents.push({ id: action.payload.contentId, text: action.payload.text });
-			// sortEtcItem(contents);
+			sortEtcItem(contents);
 		},
   
 		removeSelectItem: (state: CardProps[], action: ActionProps) => {

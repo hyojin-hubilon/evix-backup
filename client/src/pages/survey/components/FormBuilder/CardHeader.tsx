@@ -11,7 +11,6 @@ const CardHeader = ({ id, isTitle }: Pick<extendedCardProps, "id" | "isTitle">) 
   	const dispatch = useDispatch();
   
   	const isFocused = useSelector((state: StateProps) => {
-		
     const currentCard = state.cards.find((card) => card.id === id) as CardProps;
     	return currentCard.isFocused;
   	}, shallowEqual);
@@ -29,42 +28,42 @@ const CardHeader = ({ id, isTitle }: Pick<extendedCardProps, "id" | "isTitle">) 
 		dispatch(typeChange({ id, inputType: e.target.value as string }));
 	};
 
-  return (
-    <Box display="flex" gap={1} alignItems="center">
-		<TextField
-			id="filled-basic"
-			value={cardTitle}
-			onChange={(e) => {
-				handleCardTitleChange(e);
-			}}
-			placeholder={isTitle ? "설문지 제목" : "질문"}
-			variant="filled"
-			sx={{
-				flexGrow: 1,
-				'div': {
-					fontSize: isTitle ? "24px" : "16px",
-					padding: isFocused ? (isTitle ? '5px' : '16px') : '5px 0',
-					backgroundColor: isFocused ? (isTitle ? 'transparent' : theme.palette.grey[50]) : 'transparent',
-					'::before': {
-					  	borderBottom: isFocused ? `1px solid ${theme.palette.grey[700]}` : "none"
+  	return (
+		<Box display="flex" gap={1} alignItems="center">
+			<TextField
+				id="filled-basic"
+				value={cardTitle}
+				onChange={(e) => {
+					handleCardTitleChange(e);
+				}}
+				placeholder={isTitle ? "설문지 제목" : "질문"}
+				variant="filled"
+				sx={{
+					flexGrow: 1,
+					'div': {
+						fontSize: isTitle ? "24px" : "16px",
+						padding: isFocused ? (isTitle ? '5px' : '16px') : '5px 0',
+						backgroundColor: isFocused ? (isTitle ? 'transparent' : theme.palette.grey[50]) : 'transparent',
+						'::before': {
+							borderBottom: isFocused ? `1px solid ${theme.palette.grey[700]}` : "none"
+						},
+						'::after' : {
+							borderBottom: `2px solid ${theme.palette.grey[700]}`
+						}
 					},
-					'::after' : {
-					 	borderBottom: `2px solid ${theme.palette.grey[700]}`
-					}
-				  },
-				  'input' : {
-						padding: 0
-				  }				
-			}}
-		/>
-      	{!isTitle && isFocused ? (
-			<Select onChange={handleInputTypeChange} defaultValue={InputTypes.WRITE}>
-				<MenuItem value={InputTypes.WRITE}>주관식 답변</MenuItem>
-				<MenuItem value={InputTypes.SINGLE}>객관식 답변(단일응답)</MenuItem>
-				<MenuItem value={InputTypes.MULTIPLE}>객관식 답변(복수응답)</MenuItem>
-			</Select>
-      	) : null}
-    </Box>
+					'input' : {
+							padding: 0
+					}				
+				}}
+			/>
+			{!isTitle && isFocused ? (
+				<Select onChange={handleInputTypeChange} defaultValue={InputTypes.WRITE} value={inputType}>
+					<MenuItem value={InputTypes.WRITE}>주관식 답변</MenuItem>
+					<MenuItem value={InputTypes.SINGLE}>객관식 답변(단일응답)</MenuItem>
+					<MenuItem value={InputTypes.MULTIPLE}>객관식 답변(복수응답)</MenuItem>
+				</Select>
+			) : null}
+		</Box>
   	);
 };
 

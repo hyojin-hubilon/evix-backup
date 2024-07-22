@@ -1,11 +1,13 @@
 
-import { Box, TextField as MuiTextField, styled, Theme } from '@mui/material';
+import { Box, TextField as MuiTextField, styled } from '@mui/material';
 
 import ClearIcon from '@mui/icons-material/Clear';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 
-export const Container = styled(Box)<{isFocused?: boolean}>(({isFocused, theme}) => ({
+export const Container = styled(Box, {
+	shouldForwardProp: (prop) => prop !== "$isfocused"
+})<{$isfocused?: boolean}>(({$isfocused, theme}) => ({
 	position: 'relative',
 	display: 'flex',
 	width: '100%',
@@ -18,10 +20,10 @@ export const Container = styled(Box)<{isFocused?: boolean}>(({isFocused, theme})
 				borderBottom: "1px solid transparent !important"
 			},
 			':not(.Mui-disabled)' : {
-				'borderBottom': isFocused ? `1px solid ${theme.palette.grey[700]}!important` : "1px solid transparent !important"
+				'borderBottom': $isfocused ? `1px solid ${theme.palette.grey[700]}!important` : "1px solid transparent !important"
 			},
 			'.Mui-disabled' : {
-				'borderBottom': isFocused ? `1px dotted ${theme.palette.grey[700]} !important` : "1px solid transparent !important"
+				'borderBottom': $isfocused ? `1px dotted ${theme.palette.grey[700]} !important` : "1px solid transparent !important"
 			}
 		}
 	},
@@ -37,8 +39,10 @@ export const Container = styled(Box)<{isFocused?: boolean}>(({isFocused, theme})
 }))
 
 
-export const ContentDndHandle = styled('div')<{ isFocused: boolean}>(({isFocused, theme}) => ({
-	display: isFocused ? "flex" : "none",
+export const ContentDndHandle = styled(Box, {
+	shouldForwardProp: (prop) => prop !== "$isfocused"
+})<{ $isfocused: boolean}>(({$isfocused, theme}) => ({
+	display: $isfocused ? "flex" : "none",
 	position: 'absolute',
 	left: 0,
 	minHeight: '60%',
@@ -52,9 +56,7 @@ export const ContentDndHandle = styled('div')<{ isFocused: boolean}>(({isFocused
 	}
 }));
 
-
-
-export const TextField = styled(MuiTextField)<{isFocused: boolean}>(({isFocused}) => ({
+export const TextField = styled(MuiTextField)(({theme}) => ({
 	padding: '8px',
 	height: '3rem',
 	flexGrow: '1'
@@ -100,7 +102,6 @@ export const ItemAddButton = styled('button')(({theme}) => ({
 	cursor: 'pointer',
 	padding: '8px 8px 0px 8px',
 	height: '3rem',
-	fontSize:'1rem',
 	marginBottom: '12px',
 	color: theme.palette.grey[900],
 	position: 'relative',
@@ -124,6 +125,8 @@ export const EtcAddButton = styled('button')`
 	background-color: transparent;
 	border: none;
 	padding: 8px 8px;
+	margin-left: 4px;
+	cursor: pointer;
 	color: ${({ theme }) => theme.palette.primary.dark};
 	:hover {
 		background-color: ${({ theme }) => theme.palette.primary.lighter};
