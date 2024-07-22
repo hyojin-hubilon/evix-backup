@@ -3,7 +3,6 @@ import { Box, Button, Card, TextField, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import FormQuestion from "./FormQuestion";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
-import { reorder } from "@/utils/helper";
 import { useSelector } from "react-redux";
 import { CardProps, InputTypes, moveCard, moveContent, StateProps } from "@/store/reducers/survey";
 import AddCardBtn from "./AddCardBtn";
@@ -46,25 +45,26 @@ const FormBuilder = () => {
 
 	
 	return (
-		<Box display="flex" flexDirection="column" gap={2}>
-			<DragDropContext onDragEnd={onDragEnd}>
-				<Droppable droppableId="card">
-					{(provided) => (
-						<div ref={provided.innerRef} {...provided.droppableProps}>
-							{cards.map((card: CardProps, index: number) => (
-								<FormQuestion 
-									key={card.id}
-									index={index}
-									isTitle={card.inputType === InputTypes.TITLE}
-									{...card}
-								/>
-							))}
-							{provided.placeholder}
-						</div>
-					)}
-				</Droppable>
-			</DragDropContext>
-			
+		<Box display="flex" flexDirection="row" width={1}>
+			<Box width="89%">
+				<DragDropContext onDragEnd={onDragEnd}>
+					<Droppable droppableId="card">
+						{(provided) => (
+							<div ref={provided.innerRef} {...provided.droppableProps}>
+								{cards.map((card: CardProps, index: number) => (
+									<FormQuestion 
+										key={card.id}
+										index={index}
+										isTitle={card.inputType === InputTypes.TITLE}
+										{...card}
+									/>
+								))}
+								{provided.placeholder}
+							</div>
+						)}
+					</Droppable>
+				</DragDropContext>
+			</Box>
 			<AddCardBtn />
 		</Box>
 	)
