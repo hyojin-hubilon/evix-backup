@@ -65,8 +65,6 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                 company_name,
                 job_title,
                 industry,
-                privilege,
-                active_yn: 'Y',
                 email_notification_yn: emailAlerts ? 'Y' : 'N',
                 language,
             };
