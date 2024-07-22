@@ -87,8 +87,7 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 					}}
 					{...provided.draggableProps}
 					sx={{
-						p: '2.2rem 2rem 1rem 2rem',
-						background : snapshot.isDragging ? 'rgb(235,235,235)' : 'white',
+						p: isFocused ? '2.2rem 2rem 1rem 2rem' : '2.2rem 2rem 2rem 2rem',
 						borderLeft: snapshot.isDragging ? `5px solid ${primary.main}` : '',
 						borderRadius: "5px",
 						mb: '10px',
@@ -141,41 +140,48 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 						) : (
 							<ItemTypeSection id={id} />
 						)}
-						<Divider />
+						
 
 						{/* 질문 카드 푸터 */}
-						<Box display="flex" alignItems="center" justifyContent="flex-end" gap={1}>
-							{/* 복사 */}
-							<Tooltip title="질문 복사">
-								<IconButton onClick={handleCopyQuestion}>
-									<ContentCopyIcon />
-								</IconButton>
-							</Tooltip>
+						{
+							!isTitle && isFocused &&
+							<>
+								<Divider />
+								<Box display="flex" alignItems="center" justifyContent="flex-end" gap={1}>
+								{/* 복사 */}
+								<Tooltip title="질문 복사">
+									<IconButton onClick={handleCopyQuestion}>
+										<ContentCopyIcon />
+									</IconButton>
+								</Tooltip>
+								
+
+								{/* 삭제 */}
+								<Tooltip title="질문 삭제">
+									<IconButton>
+										<DeleteOutlineIcon />
+									</IconButton>
+								</Tooltip>
+
 							
+								<Divider orientation="vertical" flexItem sx={{height:"40px"}}/> 
 
-							{/* 삭제 */}
-							<Tooltip title="질문 삭제">
-								<IconButton>
-									<DeleteOutlineIcon />
-								</IconButton>
-							</Tooltip>
-
-						
-							<Divider orientation="vertical" flexItem sx={{height:"40px"}}/> 
-
-							<FormControlLabel
-								value="end"
-								sx={{ml: "0.5rem"}}
-								control={
-								<Switch color="primary"
-									// checked={checked}
-									// onChange={handleChange} 
+								<FormControlLabel
+									value="end"
+									sx={{ml: "0.5rem"}}
+									control={
+									<Switch color="primary"
+										// checked={checked}
+										// onChange={handleChange} 
+										/>
+									}
+									label="필수"
+									labelPlacement="start"
 									/>
-								}
-								label="필수"
-								labelPlacement="start"
-								/>
-						</Box>
+							</Box>
+						</>
+						}
+						
 					</Box>
 				</Card>
 			)}

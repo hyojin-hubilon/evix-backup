@@ -7,6 +7,7 @@ import { extendedCardProps } from "./FormQuestion";
   
 
 const CardHeader = ({ id, isTitle }: Pick<extendedCardProps, "id" | "isTitle">) => {
+	const theme = useTheme();
   	const dispatch = useDispatch();
   
   	const isFocused = useSelector((state: StateProps) => {
@@ -40,10 +41,20 @@ const CardHeader = ({ id, isTitle }: Pick<extendedCardProps, "id" | "isTitle">) 
 			variant="filled"
 			sx={{
 				flexGrow: 1,
-				'input' : {
-					fontSize: isTitle ? "1.7rem" : "1rem"
-				}
-				
+				'div': {
+					fontSize: isTitle ? "24px" : "16px",
+					padding: isFocused ? (isTitle ? '5px 0' : '16px') : '5px 0',
+					backgroundColor: isFocused ? (isTitle ? 'transparent' : theme.palette.grey[50]) : 'transparent',
+					'::before': {
+					  'borderBottom': isFocused ? `1px solid ${theme.palette.grey[700]}` : "none"
+					},
+					'::after' : {
+					  borderBottom: `2px solid ${theme.palette.grey[700]}`
+					}
+				  },
+				  'input' : {
+					padding: 0
+				  }				
 			}}
 		/>
       	{!isTitle && isFocused ? (

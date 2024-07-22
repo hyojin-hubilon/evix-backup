@@ -1,61 +1,77 @@
 
-import { TextField as MuiTextField, styled } from "@mui/material";
+import { Box, TextField as MuiTextField, styled, Theme } from '@mui/material';
 
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ClearIcon from '@mui/icons-material/Clear';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 
+export const Container = styled(Box)<{isFocused?: boolean}>(({isFocused, theme}) => ({
+	position: 'relative',
+	display: 'flex',
+	width: '100%',
+	alignItems: 'center',
+	fontSize: '0.9rem',
+	paddingLeft: '1rem',
+	':hover': {
+		'& .MuiInputBase-root': {
+			'::before' : {
+				borderBottom: "1px solid transparent !important"
+			},
+			':not(.Mui-disabled)' : {
+				'borderBottom': isFocused ? `1px solid ${theme.palette.grey[700]}!important` : "1px solid transparent !important"
+			},
+			'.Mui-disabled' : {
+				'borderBottom': isFocused ? `1px dotted ${theme.palette.grey[700]} !important` : "1px solid transparent !important"
+			}
+		}
+	},
+	'& .MuiInputBase-root' : {
+		fontSize: '1rem',
+		'::before' : {
+			'borderBottom': "1px solid transparent !important"
+		},
+		'::after': {
+			'borderBottom': `2px solid ${theme.palette.primary.main}`,
+		}
+	}
+}))
 
-export const Container = styled('div')<{ $isFocused: boolean }>`
-  position: relative;
-  display: flex;
-  width: 100%;
-  align-items: center;
-  font-size: 14px;
-  padding-left: 12px;
-  :hover {
-    & .MuiInputBase-root {
-      ::before {
-        border-bottom: none;
-      }
-      :not(.Mui-disabled) {
-        border-bottom: ${({ $isFocused, theme }) =>
-          $isFocused ? `1px solid ${theme.palette.grey[700]}` : "none"} !important;
-      }
-      .Mui-disabled {
-        border-bottom: ${({ $isFocused, theme }) =>
-          $isFocused ? `1px dotted ${theme.palette.grey[700]}` : "none"} !important;
-      }
-    }
-  }
 
-  & .MuiInputBase-root {
-    font-size: 14px;
-    ::before {
-      border-bottom: none !important;
-    }
-    ::after {
-      border-bottom: ${({ theme }) => `2px solid ${theme.palette.primary.main}`};
-    }
-  }
-`;
+export const ContentDndHandle = styled('div')<{ isFocused: boolean}>(({isFocused, theme}) => ({
+	display: isFocused ? "flex" : "none",
+	position: 'absolute',
+	left: 0,
+	minHeight: '60%',
+	top: '10px',
+	width: '10px',
+	height: '60%',
+	zIndex: 20,
+	borderRadius: '4px',
+	':hover': {
+		backgroundColor: theme.palette.primary.light
+	}
+}));
 
-export const TextField = styled(MuiTextField)<{ $isFocused: boolean }>`
-  width: 637px;
-  height: 30px;
-  padding: 12px 8px;
-`;
 
-export const DeleteIcon = styled(DeleteOutlineIcon)`
-  width: 25px;
-  height: 25px;
-  padding: 8px;
-  cursor: pointer;
-  :hover {
-    border-radius: 100%;
-    background-color: ${({ theme }) => theme.palette.grey[500]};
-  }
-`;
+
+export const TextField = styled(MuiTextField)<{isFocused: boolean}>(({isFocused}) => ({
+	padding: '12px 8px',
+	height: '3.5rem',
+	flexGrow: '1'
+}))
+ 
+
+export const DeleteIcon = styled(ClearIcon)(({theme}) => ({
+	width: '30px',
+	height: '30px',
+	padding: '4px',
+	cursor: 'pointer',
+	':hover' : {
+		borderRadius: '100%',
+		backgroundColor: theme.palette.grey[200]
+	}
+}))
+ 
 
 export const Sqare = styled(CropSquareIcon)`
   width: 23px;
@@ -75,18 +91,20 @@ export const NumberSpan = styled('span')`
   padding-top: 5px;
 `;
 
-export const ItemAddButton = styled('button')`
-  background-color: transparent;
-  border: none;
-  height: 30px;
-  padding: 4px 0 5px 0;
-  margin: 12px 8px;
-  color: ${({ theme }) => theme.palette.grey[900]};
-  :hover {
-    padding-bottom: 4px;
-    border-bottom: ${({ theme }) => `1px solid ${theme.palette.grey[700]}`};
-  }
-`;
+export const ItemAddButton = styled('button')(({theme}) => ({
+	backgroundColor: 'transparent',
+	border: 'none',
+	cursor: 'pointer',
+	padding: '12px 8px 0px 8px',
+	height: '3.5rem',
+	fontSize:'1rem',
+	marginBottom: '12px',
+	color: theme.palette.grey[900],
+	':hover' : {
+		borderBottom: `1px solid ${theme.palette.grey[700]}`
+	}
+}))
+
 
 export const EtcAddButton = styled('button')`
   border-radius: 4px;
@@ -98,21 +116,4 @@ export const EtcAddButton = styled('button')`
     background-color: ${({ theme }) => theme.palette.primary.lighter};
   }
 `;
-
-export const ContentDndHandle = styled('div')<{ $isFocused: boolean }>`
-  display: ${({ $isFocused }) => ($isFocused ? "flex" : "none")};
-  position: absolute;
-  top: 0;
-  left: 0;
-  min-height: 60%;
-  top: 10px;
-  width: 10px;
-  height: 60%;
-  z-index: 20;
-  border-radius: 4px;
-  :hover {
-    background-color: ${({ theme }) => theme.palette.primary.main};
-  }
-`;
-
 

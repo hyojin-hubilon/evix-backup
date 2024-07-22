@@ -16,11 +16,11 @@ const AddCardButton = () => {
 		if (cards.length < 2)
 			dispatch(
 				addCard({
-				cardTitle: "제목없는 질문",
-				focusedCardIndex: String(focusedCardIndex),
-				cardId: String(Date.now()),
-			}),
-		);
+					cardTitle: "제목없는 질문",
+					focusedCardIndex: String(focusedCardIndex),
+					cardId: String(Date.now()),
+				}),
+			);
 	}, []);
 
 	return (
