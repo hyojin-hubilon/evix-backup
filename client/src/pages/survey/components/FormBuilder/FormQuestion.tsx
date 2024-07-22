@@ -82,6 +82,9 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 			{(provided, snapshot) => (
 				<Card 
 					ref={provided.innerRef}
+					onClick={() => {
+						setIsFocused();
+					}}
 					{...provided.draggableProps}
 					sx={{
 						p: '2.2rem 2rem 1rem 2rem',

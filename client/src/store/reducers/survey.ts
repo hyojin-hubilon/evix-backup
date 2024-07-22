@@ -26,7 +26,7 @@ export interface CardProps { //question
 	id: string;
 	cardTitle: string;
 	inputType: InputTypes;
-	exampleList: ItemTypeProps[];
+	contents: string | ItemTypeProps[];
 	subTitle?: string;
 	isFocused: boolean;
 	isRequired: boolean;
@@ -44,10 +44,7 @@ const initialCards = {
 	id: "TitleCard",
 	cardTitle: "제목 없는 설문지",
 	inputType: "TITLE",
-	exampleList: [{
-		id: String(Number(0) + 1),
-		text: "설명",
-	}],
+	contents: "설명",
 	isFocused: false,
 	isRequired: false,
 };
@@ -56,10 +53,10 @@ const createNewCard = (cardId: string, cardTitle = "") => ({
 	id: cardId,
 	cardTitle,
 	inputType: InputTypes.WRITE,
-	exampleList: [
+	contents: [
 		{
 			id: String(Number(cardId) + 1),
-			text: "주관식 답변",
+			text: "답변",
 		},
 	],
 	isFocused: true,
@@ -102,12 +99,12 @@ export const cardSlice = createSlice({
 				isFocused: true,
 			};
 			
-			if (typeof copiedCard.exampleList === "object") {
-				const itemTypeCopiedCardContents = copiedCard.exampleList.map((example, index) => ({
+			if (typeof copiedCard.contents === "object") {
+				const itemTypeCopiedCardContents = copiedCard.contents.map((example, index) => ({
 					...example,
 					id: String(Number(action.payload.copiedCardId) + index),
 				}));
-				copiedCard.exampleList = itemTypeCopiedCardContents;
+				copiedCard.contents = itemTypeCopiedCardContents;
 			}
 
 			copiedState.splice(targetCardIndex + 1, 0, copiedCard);
@@ -151,7 +148,7 @@ export const cardSlice = createSlice({
 			(action.payload.inputType === InputTypes.SINGLE ||
 				action.payload.inputType === InputTypes.MULTIPLE)
 			) {
-				targetCard.exampleList = [
+				targetCard.contents = [
 					{
 					id: String(Date.now()),
 					text: "옵션 1",
@@ -165,12 +162,7 @@ export const cardSlice = createSlice({
 					action.payload.inputType === InputTypes.MULTIPLE
 				)
 			) {
-				targetCard.exampleList = [
-					{
-						id: String(Date.now()),
-						text: "주관식 답변",
-					},
-				];
+				targetCard.contents = "";
 			}
 			// if (
 			// targetCard.inputType === QuestionTypes.SINGLE && action.payload.inputType === QuestionTypes.MULTIPLE
@@ -182,16 +174,16 @@ export const cardSlice = createSlice({
   
 		addSelectItem: (state: CardProps[], action: ActionProps) => {
 			const contents = state.find((card) => card.id === action.payload.id)
-			?.exampleList as ItemTypeProps[];
+			?.contents as ItemTypeProps[];
 			contents.push({ id: action.payload.contentId, text: action.payload.text });
 			// sortEtcItem(contents);
 		},
   
 		removeSelectItem: (state: CardProps[], action: ActionProps) => {
 			const targetCard = state.find((card) => card.id === action.payload.cardId) as CardProps;
-			const contents = targetCard.exampleList as ItemTypeProps[];
+			const contents = targetCard.contents as ItemTypeProps[];
 			const filteredContents = contents.filter((item) => item.id !== action.payload.contentId);
-			targetCard.exampleList = filteredContents;
+			targetCard.contents = filteredContents;
 		},
 	
 		setTitle: (state: CardProps[], action: ActionProps) => {
@@ -203,13 +195,13 @@ export const cardSlice = createSlice({
 			const targetCard = state.find((card) => card.id === action.payload.cardId) as CardProps;
 	
 			if (targetCard.inputType === InputTypes.TITLE) {
-				targetCard.exampleList = [];
+				targetCard.contents = action.payload.text;
 			}
 			if (
 				targetCard.inputType === InputTypes.SINGLE ||
 				targetCard.inputType === InputTypes.MULTIPLE
 			) {
-				const contents = targetCard.exampleList as ItemTypeProps[];
+				const contents = targetCard.contents as ItemTypeProps[];
 				const targetContent = contents.find(
 					(content) => content.id === action.payload.contentId,
 				) as ItemTypeProps;
@@ -219,7 +211,7 @@ export const cardSlice = createSlice({
   
 		addEtcItem: (state: CardProps[], action: ActionProps) => {
 			const contents = state.find((card) => card.id === action.payload.id)
-			?.exampleList as ItemTypeProps[];
+			?.contents as ItemTypeProps[];
 			contents.push({ id: action.payload.contentId, isEtc: true });
 		},
 	
@@ -237,7 +229,7 @@ export const cardSlice = createSlice({
   
 		moveContent: (state: CardProps[], action: ActionProps) => {
 			const targetCard = state.find((card) => card.id === action.payload.cardId) as CardProps;
-			const contents = targetCard.exampleList as ItemTypeProps[];
+			const contents = targetCard.contents as ItemTypeProps[];
 			const tmp = contents.splice(Number(action.payload.sourceIndex), 1);
 			contents.splice(Number(action.payload.destinationIndex), 0, ...tmp);
 		},

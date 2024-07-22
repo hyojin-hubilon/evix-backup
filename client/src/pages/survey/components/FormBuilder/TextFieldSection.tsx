@@ -13,12 +13,12 @@ const TextFieldSection = ({ id }: Pick<CardProps, "id">) => {
 		return currentCard.inputType;
 	}) as string;
 
-	const exampleListFirst = useSelector((state: StateProps) => {
+	const contents = useSelector((state: StateProps) => {
 		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
-		return currentCard.exampleList[0]
+		return currentCard.contents
 	})
 
-	console.log(exampleListFirst);
+	
 
 	const isFocused = useSelector((state: StateProps) => {
 		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
@@ -47,7 +47,7 @@ const TextFieldSection = ({ id }: Pick<CardProps, "id">) => {
 					display: 'none'
 				},
 			}}
-			value={exampleListFirst?.text}
+			value={contents}
 			onChange={(e) => {
 				handleDescriptionChange(e);
 			}}

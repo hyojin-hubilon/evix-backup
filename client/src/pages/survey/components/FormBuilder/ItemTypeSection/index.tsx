@@ -25,8 +25,8 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 		return currentCard.isFocused;
 	});
 
-	const exampleList = useSelector(
-		(state: StateProps) => state.cards.find((card) => card.id === id)?.exampleList,
+	const contents = useSelector(
+		(state: StateProps) => state.cards.find((card) => card.id === id)?.contents,
 	) as ItemTypeProps[];
 
 	// const haveEtc = useSelector((state: StateProps) => {
@@ -50,7 +50,7 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 		<Droppable droppableId={id} type="content">
 			{(provided) => (
 			<div ref={provided.innerRef} {...provided.droppableProps}>
-				{exampleList && exampleList.map((content, idx) => (
+				{contents && contents.map((content, idx) => (
 				<Draggable draggableId={content.id} index={idx} key={content.id}>
 					{(provided) => (
 					<S.Container
@@ -74,7 +74,7 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 							// disabled={content.isEtc}
 						/>
 						
-						{isFocused && exampleList.length > 1 ? (
+						{isFocused && contents.length > 1 ? (
 						<S.DeleteIcon
 							onClick={() => {
 							dispatch(removeSelectItem({ cardId: id, contentId: content.id }));
@@ -101,7 +101,7 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 					addSelectItem({
 					id,
 					contentId,
-					text: `옵션 ${exampleList.filter((content) => !content.isEtc).length + 1}`,
+					text: `옵션 ${contents.filter((content) => !content.isEtc).length + 1}`,
 					}),
 				);
 				}}
