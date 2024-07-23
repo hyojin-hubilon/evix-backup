@@ -65,8 +65,6 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                 company_name,
                 job_title,
                 industry,
-                privilege,
-                active_yn: 'Y',
                 email_notification_yn: emailAlerts ? 'Y' : 'N',
                 language,
             };
@@ -126,7 +124,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                 variant="h2"
                                 color="secondary"
                                 sx={{ cursor: 'pointer' }}
-                                onClick={() => handleMovePage('/study')}
+                                onClick={() => handleMovePage('unauthorizedstudy')}
                             >
                                 {myProfile.unauthorized_number}
                             </Typography>
