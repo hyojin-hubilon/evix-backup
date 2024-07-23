@@ -47,7 +47,7 @@ const MedicineSearch = ({
             width: 400,
             renderCell: (params) => {
                 const onClickName = (e) => {
-                    e.stopPropagation(); // don't select this row after clicking
+                    e.stopPropagation();
                     setSelected(params.row);
                     selectMedicine(params.row);
                     handleClose();

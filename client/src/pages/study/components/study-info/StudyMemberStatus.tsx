@@ -70,11 +70,9 @@ const StudyMemberStatus = ({ managerList, inviteList }: StudyMemberStatusProps) 
     );
 
     // 초대 리스트(초대 승인 + 초대 승인X)
-    inviteList.forEach((invite) => {
-        // managerList에 있으면 미노출
-        const isExist = managerList.some((manager) => manager.email === invite.user_email);
-
-        if (!isExist) {
+    inviteList
+        .filter((invite) => invite.accepted_at === null)
+        .map((invite) => {
             rows.push(
                 createData(
                     '',
@@ -86,8 +84,7 @@ const StudyMemberStatus = ({ managerList, inviteList }: StudyMemberStatusProps) 
                     'Waiting for approval'
                 )
             );
-        }
-    });
+        });
 
     return (
         <Box>

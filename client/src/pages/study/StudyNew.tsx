@@ -17,7 +17,6 @@ import {
     useTheme,
     Button,
     Divider,
-    Link,
 } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -28,9 +27,7 @@ import MemberManagement from './components/study-new/MemberManagement';
 import studyApi from '@/apis/study';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Drug } from '@/apis/test/drug/drugsAPI_TEST';
-import { getDecodedToken } from '@/utils/Cookie';
 import userApi from '@/apis/user';
-import { ResCommonError } from '@/apis/axios-common';
 import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
 
 const FormTooltip = ({ text }) => {
@@ -65,9 +62,6 @@ const StudyNew = ({}) => {
 
     const state = location.state as { mode: 'write' | 'edit'; stdNo?: number };
     const stdNo = location.state?.stdNo;
-
-    // console.log('startDt: ', dateRange.startDt);
-    // console.log('endDt: ', dateRange.endDt);
 
     const [ownerName, setOwnerName] = useState('');
 
@@ -105,6 +99,8 @@ const StudyNew = ({}) => {
             disease: disease,
             location: country,
             drug_code: drug?.itemCode ?? null,
+            drug_brand_name: drug?.companyName ?? null,
+            drug_manufacturer_name: drug?.productName ?? null,
             studySurveySetList: [],
             inviteList: [],
         };
@@ -162,6 +158,19 @@ const StudyNew = ({}) => {
                 endDt: dayjs(response.content['std_end_date']),
             });
 
+            if (response.content['drug_code']) {
+                setDrug({
+                    itemCode: response.content['drug_code'],
+                    companyName: response.content['drug_brand_name'],
+                    productName: response.content['drug_manufacturer_name'],
+                });
+                setMedicineYOrN('true');
+            }
+
+            // drug_brand_name : "동아제약(주)"
+            // drug_code : "199400202"
+            // drug_manufacturer_name:  "판피린티정"
+
             // setCountry(response.content.location);
             // 나머지 필드들도 필요에 따라 업데이트
         } catch (error) {
@@ -196,8 +205,10 @@ const StudyNew = ({}) => {
             target_number: parseInt(participants),
             description: description,
             disease: disease,
-            location: country,
-            drug_code: drug?.itemCode ?? null,
+            // location: country,   requestDto에 없음
+            drug_code: medicineYOrN === 'true' ? drug?.itemCode ?? null : null,
+            drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
+            drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
             studySurveySetList: [],
             inviteList: [],
         };

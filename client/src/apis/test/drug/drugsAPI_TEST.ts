@@ -4,13 +4,13 @@ const US_API_URL = 'https://api.fda.gov/drug/label.json';
 const KOREA_API_URL = 'https://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList';
 
 export interface Drug {
-    id: number;
+    id?: number;
     productName: string;
     companyName: string;
     itemCode: string;
-    itemType: string;
-    approvalNumber: string;
-    approvalDate: string;
+    // itemType: string;
+    // approvalNumber: string;
+    // approvalDate: string;
 }
 
 /**
@@ -18,7 +18,6 @@ export interface Drug {
  * @param searchTerm
  * @returns
  */
-
 export const fetchKoreanDrugs = async (searchTerm: string): Promise<Drug[]> => {
     try {
         const response = await instance.get(KOREA_API_URL, {
@@ -38,9 +37,9 @@ export const fetchKoreanDrugs = async (searchTerm: string): Promise<Drug[]> => {
                   productName: item.itemName,
                   companyName: item.entpName,
                   itemCode: item.itemSeq,
-                  itemType: item.className,
-                  approvalNumber: item.itemPermit,
-                  approvalDate: item.openDe,
+                  //   itemType: item.className,
+                  //   approvalNumber: item.itemPermit,
+                  //   approvalDate: item.openDe,
                   api_key: import.meta.env.VITE_US_API_KEY,
               }))
             : [];
@@ -71,11 +70,11 @@ export const fetchUSDrugs = async (searchTerm: string): Promise<Drug[]> => {
             itemCode: item.openfda.product_ndc
                 ? item.openfda.product_ndc[0]
                 : item.openfda.package_ndc[0], // itemCode가 NDC 같음
-            itemType: item.openfda.product_type[0],
-            approvalNumber: item.openfda.application_number
-                ? item.openfda.application_number[0]
-                : '',
-            approvalDate: item.effective_time,
+            // itemType: item.openfda.product_type[0],
+            // approvalNumber: item.openfda.application_number
+            //     ? item.openfda.application_number[0]
+            //     : '',
+            // approvalDate: item.effective_time,
         }));
 
         return drugs;

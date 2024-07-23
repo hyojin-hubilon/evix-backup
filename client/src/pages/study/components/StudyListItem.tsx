@@ -146,7 +146,7 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
             </Card>
             <MemberManagement2
                 isOpen={isOpenMember}
-                study={study}
+                studyNo={study.std_no}
                 handleClose={handleCloseMember}
             />
         </>

@@ -87,3 +87,14 @@ export interface StudyInvitedItemProps {
     invitedStudy: any;
     onAcceptInvite: () => void;
 }
+
+export type MemberTempType = {
+    user_no: number;
+    profile_image_url: string;
+    first_name: string;
+    last_name: string;
+    std_privilege: string;
+    belong: string;
+    email: string;
+    inviteStatus: string;
+};

@@ -87,7 +87,6 @@ const studyApi = {
         try {
             const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/manager`, 'get');
 
-            console.log('dddd: ', responseData);
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
@@ -185,10 +184,8 @@ const studyApi = {
     deleteStudyMember: async (std_no: number, user_no: number) => {
         try {
             const responseData = await api<{}>(`${BASE_API_URL}/study-user`, 'delete', {
-                data: {
-                    std_no,
-                    user_no,
-                },
+                std_no,
+                user_no,
             });
             return responseData;
         } catch (error) {

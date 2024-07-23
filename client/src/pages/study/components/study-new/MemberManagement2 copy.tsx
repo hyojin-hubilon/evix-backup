@@ -1,3 +1,7 @@
+/**
+ * Study 목록화면에서 멤버 초대 버튼 누를 때
+ */
+
 import {
     Avatar,
     Box,
@@ -18,8 +22,6 @@ import {
     TextField,
     Chip,
     List,
-    ListItem,
-    FormHelperText,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect, useState } from 'react';
@@ -29,9 +31,18 @@ import InviteConfirmDialog from './InviteConfirmDialog';
 import MemberListItem from './MemberListItem';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import studyApi from '@/apis/study';
-import { MemberTempType } from '@/types/study';
 
-const MemberManagement2 = ({ isOpen, handleClose, studyNo }) => {
+export type MemberTempType = {
+    profile_image_url: string;
+    first_name: string;
+    last_name: string;
+    std_privilege: string;
+    belong: string;
+    email: string;
+    inviteStatus: string;
+};
+
+const MemberManagement2 = ({ isOpen, handleClose, study }) => {
     const [activeTab, setActiveTab] = useState('0');
     const [newAuthority, setNewAuthority] = useState<string>('');
 
@@ -46,13 +57,8 @@ const MemberManagement2 = ({ isOpen, handleClose, studyNo }) => {
     const [membersData, setMembersData] = useState<MemberTempType[]>([]);
     const [invitedMembersData, setInvitedMembersData] = useState<MemberTempType[]>([]);
 
-    const [profileImageUrl, setProfileImageUrl] = useState<string>('');
-    const [ownerName, setOwnerName] = useState<string>('');
-
-    const [title, setTitle] = useState('');
-
-    const [emailError, setEmailError] = useState<string>('');
-    const [authorityError, setAuthorityError] = useState<string>('');
+    console.log('emails: ', emails);
+    console.log('sendingEmails: ', sendingEmails);
 
     const emailSchema = yup.string().email();
 
@@ -63,13 +69,14 @@ const MemberManagement2 = ({ isOpen, handleClose, studyNo }) => {
         setActiveTab(newValue);
     };
 
+    const ownerManager = study.managerList.find((manager) => manager.std_privilege === 'OWNER');
+    const title = study.title;
+    const stdNo = study.std_no;
+
     const handleSelectMails = (e, value) => {
         const errorEmail = value.find((email) => !emailSchema.isValidSync(email));
         if (errorEmail) {
             setEmailInput(errorEmail);
-            setEmailError('이메일을 확인해주세요.');
-        } else {
-            setEmailError('');
         }
         setEmails(value.filter((email) => emailSchema.isValidSync(email)));
     };
@@ -78,29 +85,52 @@ const MemberManagement2 = ({ isOpen, handleClose, studyNo }) => {
         setEmailInput(newValue);
     };
 
+    // 잠만 주석
+    // const handleSendInvite = () => {
+    //     // [
+    //     //     {
+    //     //       "std_no": 1,
+    //     //       "user_email": "changdeok.lee@evidnet.co.kr",
+    //     //       "std_privilege": "DEVELOPER"
+    //     //     }
+    //     //   ]
+
+    //     console.log(emails);
+    //     console.log(newAuthority);
+
+    //     study.std_no;
+
+    //     const response = studyApi.inviteStudyMember();
+
+    //     setSendingEmails(emails);
+    //     handleOpenSendInvite();
+    // };
+
     const handleSendInvite = async () => {
-        if (emails.length === 0) {
-            setEmailError('이메일을 확인해주세요.');
-            return;
-        }
-
-        if (!newAuthority) {
-            setAuthorityError('권한을 설정해주세요.');
-            return;
-        }
-
         try {
             const invites = emails.map((email) => ({
-                std_no: studyNo,
+                std_no: study.std_no,
                 user_email: email,
                 std_privilege: newAuthority,
             }));
 
             const response = await studyApi.inviteStudyMember(invites);
 
+            console.log('response: ', response);
+
             if (response.code === 200) {
+                const newInvitedMembers = emails.map((email) => ({
+                    profile_image_url: '',
+                    first_name: '',
+                    last_name: '',
+                    std_privilege: newAuthority,
+                    belong: '',
+                    email,
+                    inviteStatus: 'Pending',
+                }));
+
+                setInvitedMembersData((prev) => [...prev, ...newInvitedMembers]);
                 setSendingEmails(emails);
-                await fetchMembers();
                 handleOpenSendInvite();
             }
         } catch (error) {
@@ -108,81 +138,13 @@ const MemberManagement2 = ({ isOpen, handleClose, studyNo }) => {
         }
     };
 
-    const fetchMembers = async () => {
-        try {
-            const responseMembers = await studyApi.getStudyManager(studyNo);
-            const fetchedMembers = Array.isArray(responseMembers.content)
-                ? responseMembers.content.map((member) => ({
-                      user_no: member.user_no,
-                      profile_image_url: member.profile_image_url || '',
-                      first_name: member.first_name || '',
-                      last_name: member.last_name || '',
-                      std_privilege: member.std_privilege || '',
-                      belong: member.company_name || '',
-                      email: member.email || '',
-                      inviteStatus: member.invited_at ? 'Approved' : 'Pending',
-                  }))
-                : [];
-            setMembersData(fetchedMembers);
-
-            const responseInvited = await studyApi.getInvitedStudyManager(studyNo);
-            if (responseInvited.code === 200) {
-                const newInvitedMembers = Array.isArray(responseInvited.content)
-                    ? responseInvited.content
-                          .filter((invite) => invite.accepted_at === null)
-                          .map((invite) => ({
-                              user_no: invite.user_no,
-                              profile_image_url: '',
-                              first_name: '',
-                              last_name: '',
-                              std_privilege: invite.std_privilege,
-                              belong: '',
-                              email: invite.user_email,
-                              inviteStatus: invite.accepted_at ? 'Approved' : 'Pending',
-                          }))
-                    : [];
-                setInvitedMembersData(newInvitedMembers);
-            }
-        } catch (error) {
-            console.error('Failed to fetch members:', error);
-        }
-    };
-
     const studyDetail = async () => {
-        const response = await studyApi.getStudyDetail(studyNo);
-        setTitle(response.content['title']);
-        setProfileImageUrl(
-            response.content['managerList'].find((manager) => manager.std_privilege === 'OWNER')
-                .profile_image_url
-        );
-        setOwnerName(
-            response.content['managerList'].find((manager) => manager.std_privilege === 'OWNER')
-                .first_name +
-                response.content['managerList'].find((manager) => manager.std_privilege === 'OWNER')
-                    .last_name
-        );
+        const response = await studyApi.getStudyDetail(study);
     };
 
-    const handleSendReInvite = async (member: MemberTempType) => {
-        try {
-            const invite = {
-                std_no: studyNo,
-                user_email: member.email,
-                std_privilege: member.std_privilege,
-            };
-
-            // 단일 초대 요청
-            const response = await studyApi.inviteStudyMember([invite]); // TODO: 대기멤버 재초대 API 미개발
-
-            console.log(response);
-
-            if (response.code === 200) {
-                setSendingEmails([member.email]);
-                handleOpenSendInvite(); // 초대 확인 다이얼로그 열기
-            }
-        } catch (error) {
-            console.error('Failed to re-invite:', error);
-        }
+    const handleSendReInvite = (member: MemberTempType) => {
+        setSendingEmails([member.email]);
+        handleOpenSendInvite();
     };
 
     const handleOpenSendInvite = () => {
@@ -194,31 +156,53 @@ const MemberManagement2 = ({ isOpen, handleClose, studyNo }) => {
         handleOpenMemberDelete();
     };
 
-    const handleDeleteSuccess = () => {
-        fetchMembers();
-    };
-
     const handleOpenMemberDelete = () => {
         setOpenDeleteConfirm(!openDeleteConfirm);
     };
 
     useEffect(() => {
         if (isOpen) {
-            studyDetail();
-            fetchMembers();
+            const fetchStudyManager = async () => {
+                const response = await studyApi.getStudyManager(study.std_no);
+                const fetchedMembers = Array.isArray(response.content)
+                    ? response.content.map((member) => ({
+                          profile_image_url: member.profile_image_url || '',
+                          first_name: member.first_name || '',
+                          last_name: member.last_name || '',
+                          std_privilege: member.std_privilege || '',
+                          belong: member.company_name || '',
+                          email: member.email || '',
+                          inviteStatus: member.invited_at ? 'Approved' : 'Pending',
+                      }))
+                    : [];
+                setMembersData(fetchedMembers);
+            };
+
+            fetchStudyManager();
         }
-    }, [isOpen, studyNo]);
+    }, [isOpen, study.std_no]);
 
     const memberCount = membersData.length;
 
+    // OWNER는 리스트에서 제외
+    // const filteredMembers = membersData.filter((member) => {
+    //     if (member.std_privilege === 'OWNER') return false;
+    //     if (activeTab === '0') return true;
+    //     if (activeTab === '1') return member.std_privilege === 'MAINTAINER';
+    //     if (activeTab === '2') return member.std_privilege === 'DEVELOPER';
+    //     if (activeTab === '3') return member.inviteStatus === 'Pending';
+    //     return false;
+    // });
+
+    console.log('invitedMembersData: ', invitedMembersData);
+
     const filteredMembers = [...membersData, ...invitedMembersData].filter((member) => {
         if (member.std_privilege === 'OWNER') return false;
-        if (member.inviteStatus === 'Pending') {
-            return activeTab === '0' || activeTab === '3';
-        }
         if (activeTab === '0') return true;
-        if (activeTab === '1') return member.std_privilege === 'MAINTAINER';
+        if (activeTab === '1' && member.std_privilege !== 'Pending')
+            return member.std_privilege === 'MAINTAINER';
         if (activeTab === '2') return member.std_privilege === 'DEVELOPER';
+        if (activeTab === '3') return member.inviteStatus === 'Pending';
         return false;
     });
 
@@ -250,12 +234,14 @@ const MemberManagement2 = ({ isOpen, handleClose, studyNo }) => {
                         </Grid>
                         <Grid item xs={4}>
                             <Box display="flex" gap={1} justifyContent="flex-end">
-                                <Avatar alt="Owner" src={profileImageUrl} />
+                                <Avatar alt="Owner" src={ownerManager.profile_image_url} />
                                 <Box>
                                     <Typography variant="caption" sx={{ mb: '0' }}>
                                         Owner
                                     </Typography>
-                                    <Typography color="primary">{ownerName}</Typography>
+                                    <Typography color="primary">
+                                        {ownerManager.first_name} {ownerManager.last_name}
+                                    </Typography>
                                 </Box>
                             </Box>
                         </Grid>
@@ -288,15 +274,11 @@ const MemberManagement2 = ({ isOpen, handleClose, studyNo }) => {
                                 <TextField {...params} placeholder="메일 주소 입력" />
                             )}
                         />
-                        {emailError && <FormHelperText error>{emailError}</FormHelperText>}
-                        <Box display="flex" mt={1}>
+                        <Box display="flex">
                             <FormControl size="small" sx={{ width: '8rem' }}>
                                 <Select
                                     value={newAuthority}
-                                    onChange={(e) => {
-                                        setNewAuthority(e.target.value);
-                                        setAuthorityError('');
-                                    }}
+                                    onChange={(e) => setNewAuthority(e.target.value)}
                                     sx={{ width: 1, backgroundColor: 'white' }}
                                     displayEmpty
                                 >
@@ -305,6 +287,7 @@ const MemberManagement2 = ({ isOpen, handleClose, studyNo }) => {
                                     <MenuItem value="DEVELOPER">Developer</MenuItem>
                                 </Select>
                             </FormControl>
+
                             <Button
                                 variant="contained"
                                 sx={{ ml: 'auto' }}
@@ -313,7 +296,6 @@ const MemberManagement2 = ({ isOpen, handleClose, studyNo }) => {
                                 보내기
                             </Button>
                         </Box>
-                        {authorityError && <FormHelperText error>{authorityError}</FormHelperText>}
                     </Box>
                     <Box mt={1}>
                         <Tabs
@@ -326,21 +308,18 @@ const MemberManagement2 = ({ isOpen, handleClose, studyNo }) => {
                             <Tab label="Developer" value="2" />
                             <Tab label="대기" value="3" />
                         </Tabs>
+
                         <List>
-                            {filteredMembers.length > 0 ? (
-                                filteredMembers.map((member, index) => (
+                            {filteredMembers.map((member, index) => {
+                                return (
                                     <MemberListItem
                                         member={member}
                                         key={index}
                                         sendMailConfirm={handleSendReInvite}
                                         sendDeleteConfirm={handleMemberDelete}
                                     />
-                                ))
-                            ) : (
-                                <ListItem>
-                                    <Typography variant="body1">멤버가 없습니다.</Typography>
-                                </ListItem>
-                            )}
+                                );
+                            })}
                         </List>
                     </Box>
                 </DialogContent>
@@ -351,14 +330,11 @@ const MemberManagement2 = ({ isOpen, handleClose, studyNo }) => {
                 handleClose={handleOpenSendInvite}
                 emails={sendingEmails}
             />
-
             {deleteMember && (
                 <DeleteConfirmDialog
                     open={openDeleteConfirm}
                     handleClose={handleOpenMemberDelete}
                     member={deleteMember}
-                    studyNo={studyNo}
-                    onDeleteSuccess={handleDeleteSuccess}
                 />
             )}
         </>

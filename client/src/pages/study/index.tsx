@@ -9,7 +9,7 @@ import {
     Tab,
     Button,
     IconButton,
-	OutlinedInput,
+    OutlinedInput,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import StudyListItem from './components/StudyListItem';
@@ -30,7 +30,7 @@ const StudyList = () => {
     // Study 데이터 불러오기
     const fetchStudies = async () => {
         try {
-            const response: StudyApiResponse = await studyApi.myStudyList(1, 100); // TODO: 창덕님께 수정 요청(페이징 필요 없음)
+            const response: StudyApiResponse = await studyApi.myStudyList(1, 100); // TODO: 창덕님께 수정 요청(페이징 필요 없음) -> 페이징 10 으로 수정 -> 더보기 없음
             if (response.result && response.code === 200) {
                 const studyList = response.content?.studyMyList ?? [];
                 setStudies(studyList);
@@ -90,10 +90,10 @@ const StudyList = () => {
                         <Typography variant="h3">Study 목록</Typography>
                         <Chip label={studyCount} color="primary" size="small" />
                     </Box>
-					<Button variant="contained" onClick={handleCreateStudy} sx={{ml:'auto'}}>
-						<PlusOutlined />
-						<Typography sx={{ ml: 1 }}>Study 생성</Typography>
-					</Button>
+                    <Button variant="contained" onClick={handleCreateStudy} sx={{ ml: 'auto' }}>
+                        <PlusOutlined />
+                        <Typography sx={{ ml: 1 }}>Study 생성</Typography>
+                    </Button>
                 </Grid>
 
                 {studyCount !== 0 ? (
@@ -117,13 +117,13 @@ const StudyList = () => {
                                     <Tab label="Developer" value="3" />
                                 </Tabs>
                             </Grid>
-							<Grid container item xs={4} justifyContent="flex-end">
+                            <Grid container item xs={4} justifyContent="flex-end">
                                 <form>
                                     <Box display="flex" gap="0.5rem">
-										<OutlinedInput size="small" />
-										<Button variant="outlined">검색</Button>
+                                        <OutlinedInput size="small" />
+                                        <Button variant="outlined">검색</Button>
                                     </Box>
-								</form>
+                                </form>
                             </Grid>
                         </Grid>
 
@@ -143,11 +143,18 @@ const StudyList = () => {
                                     <StudyListItem study={study} />
                                 </Grid>
                             ))}
-						<Grid item xs={12}>
+                        {/* <Grid item xs={12}>
                             <Box display="flex" justifyContent="center" alignContent="center">
-                                <Button size="large" variant="contained" color="secondary" sx={{ml: "auto", mr:"auto"}}>더 보기</Button>
+                                <Button
+                                    size="large"
+                                    variant="contained"
+                                    color="secondary"
+                                    sx={{ ml: 'auto', mr: 'auto' }}
+                                >
+                                    더 보기
+                                </Button>
                             </Box>
-                        </Grid>
+                        </Grid> */}
                     </>
                 ) : (
                     <>

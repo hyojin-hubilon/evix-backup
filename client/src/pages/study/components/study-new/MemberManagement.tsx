@@ -22,23 +22,22 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect, useState } from 'react';
 import * as yup from 'yup';
-import { ManagerType } from '../study-info/StudyMemberStatus';
 
 import InviteConfirmDialog from './InviteConfirmDialog';
 import MemberListItem from './MemberListItem';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
-import studyApi from '@/apis/study';
 import userApi from '@/apis/user';
+import { MemberTempType } from '@/types/study';
 
-export type MemberTempType = {
-    profile_image_url: string; // 프로필 이미지
-    first_name: string; // 이름
-    last_name: string;
-    std_privilege: string; // 권한
-    belong: string; // 소속
-    email: string; // 이메일
-    inviteStatus: string; // 승인 상태
-};
+// export type MemberTempType = {
+//     profile_image_url: string; // 프로필 이미지
+//     first_name: string; // 이름
+//     last_name: string;
+//     std_privilege: string; // 권한
+//     belong: string; // 소속
+//     email: string; // 이메일
+//     inviteStatus: string; // 승인 상태
+// };
 
 const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
     const [activeTab, setActiveTab] = useState('0');
@@ -89,7 +88,8 @@ const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
         std_privilege: string, // 권한
         belong: string, // 소속
         email: string, // 이메일
-        inviteStatus: string // 승인 상태
+        inviteStatus: string, // 승인 상태
+        user_no: number
     ): MemberTempType => {
         return {
             profile_image_url,
@@ -99,11 +99,12 @@ const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
             belong,
             email,
             inviteStatus,
+            user_no,
         };
     };
 
     const handleSelectMails = (e, value) => {
-        const errorEmail = value.find((email) => !emailSchema.isValidSync(email)); // 메일주소 Valid Check
+        const errorEmail = value.find((email: any) => !emailSchema.isValidSync(email)); // 메일주소 Valid Check
         if (errorEmail) {
             setEmailInput(errorEmail);
         }
@@ -121,7 +122,7 @@ const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
 
     const handleAddMember = () => {
         if (emailSchema.isValidSync(emailInput) && newAuthority) {
-            const newMember = createData('', '', '', newAuthority, '', emailInput, 'Pending');
+            const newMember = createData('', '', '', newAuthority, '', emailInput, 'Pending', 0);
             setMembers([...members, newMember]); // 새로운 멤버를 기존 멤버 리스트에 추가
             setEmails([]); // 이메일 목록 초기화
             setEmailInput(''); // 이메일 입력 초기화
@@ -142,6 +143,8 @@ const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
         setDeleteMember(member);
         handleOpenMemberDelete();
     };
+
+    const handleDeleteSuccess = () => {};
 
     const handleOpenMemberDelete = () => {
         setOpenDeleteConfirm(!openDeleteConfirm);
@@ -262,16 +265,19 @@ const MemberManagement = ({ isOpen, handleClose, title, mode }) => {
                 </DialogContent>
             </Dialog>
 
-            <InviteConfirmDialog
+            {/* <InviteConfirmDialog
                 open={openInviteConfirm}
                 handleClose={handleOpenSendInvite}
                 emails={sendingEmails}
-            />
+                studyNo={0}
+            /> */}
             {deleteMember && (
                 <DeleteConfirmDialog
                     open={openDeleteConfirm}
                     handleClose={handleOpenMemberDelete}
                     member={deleteMember}
+                    studyNo={0}
+                    onDeleteSuccess={handleDeleteSuccess} // 핸들러 추가
                 />
             )}
         </>

@@ -6,8 +6,6 @@ const MedicineInfo = ({ country, setCountry, drug, setDrug }) => {
     const theme = useTheme();
     const { divider } = theme.palette;
     const [openSearch, setOpenSearch] = useState<boolean>(false);
-    // const [drug, setDrug] = useState<Drug>();
-    // const [country, setCountry] = useState<string>('korea');
 
     const setSelectedDrug = (e) => {
         console.log(e);
