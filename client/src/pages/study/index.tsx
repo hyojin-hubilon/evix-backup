@@ -22,6 +22,7 @@ import { getDecodedToken } from '@/utils/Cookie';
 import StudyInvitedItem from './components/StudyInvitedItem';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
+import EastIcon from '@mui/icons-material/East';
 
 const StudyList = () => {
     const [studyCount, setStudyCount] = useState<number>(0); // Study 개수 상태
@@ -142,7 +143,7 @@ const StudyList = () => {
                                     <Tab label="Developer" value="3" />
                                 </Tabs>
                             </Grid> */}
-                            <Grid item xs={6}>
+                            <Grid item xs={activeDateSetting == 'full' ? 6 : 5}>
 								<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
 									startAdornment={
 										<InputAdornment position="start">
@@ -154,7 +155,7 @@ const StudyList = () => {
 									placeholder='타이틀, 질환명, 상태 검색'
 								/>
                             </Grid>
-							<Grid item xs={2}>
+							<Grid item xs={activeDateSetting == 'full' ? 2 : 1.6}>
 								<Select
 									size='small'
 									onChange={(e) => handleChange(e.target.value)}
@@ -167,7 +168,7 @@ const StudyList = () => {
 								</Select>
 								{/* 아직 분류가 정확하지 않음 */}
 							</Grid>
-							<Grid item xs={2}>
+							<Grid item xs={activeDateSetting == 'full' ? 2 : 1.5}>
 								<Select
 									size='small'
 									onChange={(e) => handleChangeDateSetting(e.target.value)}
@@ -178,7 +179,21 @@ const StudyList = () => {
 									<MenuItem value="dates">Date Setting</MenuItem>
 								</Select>
 							</Grid>
-							<Grid item xs={1.7}>
+							{
+								activeDateSetting == 'dates' &&
+								<Grid item xs={2}>
+									<Button
+										fullWidth
+										sx={{textAlign: 'center'}}
+										color="secondary"
+										>
+										<span>Start Date</span>
+										<EastIcon sx={{ml: '5px', mr:'5px', fontSize: '1rem'}}/>
+										<span>End Date</span>
+									</Button>
+								</Grid>
+							}
+							<Grid item xs={activeDateSetting == 'full' ? 1.7 : 1.5}>
 								<Button variant="contained" onClick={handleCreateStudy} sx={{ ml: 'auto' }} fullWidth>
 									<PlusOutlined />
 									<Typography sx={{ ml: 1 }}>Study 생성</Typography>
