@@ -11,11 +11,6 @@ import { dispatch } from "@/store";
 
 
 const FormBuilder = () => {
-	const theme = useTheme();
-	const { primary } = theme.palette;
-	const [ questions, setQuestions ] = useState<SurveyQuestion[]>([]);
-	
-
 	const cards = useSelector((state: StateProps) => state.cards);
 
 	const onDragEnd = ({ destination, source }: DropResult) => {

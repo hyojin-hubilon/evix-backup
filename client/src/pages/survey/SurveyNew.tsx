@@ -2,14 +2,21 @@ import { AppBar, Box, Button, Container, Grid, Toolbar, Typography } from "@mui/
 import FormBuilder from "./components/FormBuilder";
 import useSticky from "@/utils/useSticky";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { InputTypes, StateProps } from "@/store/reducers/survey";
 
 const SurveyNew = () => {
-	
+	//주석 테스트
 	const { ref, isSticky } = useSticky();
+	const cards = useSelector((state: StateProps) => state.cards);
 
-	useEffect(() => {
-		console.log(isSticky)
-	}, [isSticky])
+	const handleSaveSurvey = () => {
+		cards.forEach((card) => {
+			if(card.inputType == InputTypes.TITLE) {
+				
+			}
+		})
+	}
 
 	return (
 		<Container maxWidth="sm">
@@ -28,7 +35,7 @@ const SurveyNew = () => {
 							<Box display="flex" justifyContent="flex-end" gap={1} sx={{ml: 'auto'}}>
 								<Button variant="outlined">미리보기</Button>
 								<Button variant="outlined">임시저장</Button>
-								<Button variant="contained">저장</Button>
+								<Button variant="contained" onClick={handleSaveSurvey}>저장</Button>
 							</Box>
 						</Box>
 					

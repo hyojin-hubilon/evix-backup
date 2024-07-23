@@ -14,7 +14,6 @@ export interface ItemTypeProps { //options
 	isEtc?: boolean;
 }
 
-
 export enum InputTypes {
 	TITLE = "TITLE",
 	SINGLE = "SINGLE",
