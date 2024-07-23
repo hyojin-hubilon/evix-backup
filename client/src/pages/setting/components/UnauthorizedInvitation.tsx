@@ -52,7 +52,7 @@ const UnauthorizedInvitation = () => {
             }
         };
         fetchInvitedStudies();
-    }, [invitedStudies]);
+    }, []);
 
     return (
         <Box sx={{ p: 2 }}>
