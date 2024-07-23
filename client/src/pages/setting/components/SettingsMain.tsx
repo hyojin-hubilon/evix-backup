@@ -124,7 +124,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                 variant="h2"
                                 color="secondary"
                                 sx={{ cursor: 'pointer' }}
-                                onClick={() => handleMovePage('/study')}
+                                onClick={() => handleMovePage('unauthorizedstudy')}
                             >
                                 {myProfile.unauthorized_number}
                             </Typography>
