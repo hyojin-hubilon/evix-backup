@@ -1,4 +1,4 @@
-export interface RegistrableSurvey {
+export interface RegistrableSurvey { //스터디에 등록가능한 서베이
 	survey_no: number;
 	title: string;
 	updated_date: string | Date;///researcher/survey/my-list-registrable 추가해야함
@@ -6,7 +6,7 @@ export interface RegistrableSurvey {
 	times?: number;//반복 횟수
 }
 
-export interface ExampleList {
+export interface ExampleList { //예시목록
 	survey_no: number,
 	question_no: number,
 	example_no: number,
@@ -40,7 +40,7 @@ export interface SurveyDetail {
 	questionList: QuestionList[]
 }
 
-export interface MySurveyList { 
+export interface MySurveyList { //서베이리스트
 	survey_no: number,
 	title: string,
 	question_number: number,
@@ -54,12 +54,71 @@ export interface MySurveyList {
 
 
 export interface SurveyApiResponse {
-    result: boolean;
-    code: number;
-    content?: {
-		searchType?: string | null,
-		searchKeyword?: string | null,
-		pageNum?: number,
-        surveyMyList?: MySurveyList[];
-    };
+	next?: boolean,
+	orderBy?: "CREATED" | "UPDATED", //UPDATED가 Default
+	searchType?: string | null, 
+	searchKeyword?: string | null, //추가예정
+	pageNum?: number,
+	surveyMyList?: MySurveyList[];
+}
+
+export enum ExampleTypes {
+	CHOICE = "CHOICE",
+	WRITE = "WRITE",
+	OTHER = "OTHER" //기타
+}
+//WRITE 타입은 question_type이 주관식답변일 경우 >> 이때 example_title 값을 WRITE로 보냈었는데 example_title = null로 전달 되도록. example_value는 그대로 1 로 전달
+//기타 옵션인 경우에 example_type = OTHER 로, example_title = 기타 or Other
+
+
+export interface SurveyExample {//RequestBody Survey	
+	example_type: ExampleTypes,
+	example_title: string | null | undefined,
+	example_value: string | number | undefined,
+	sort: number
+}
+
+export enum QuestionTypes {
+	TITLE = "TITLE",
+	SINGLE = "SINGLE",
+	MULTIPLE = "MULTIPLE",
+	WRITE = "WRITE"
+}
+// 서베이에서 질문타입이 다중선택일 경우
+// example_value 값을 이진법으로 1,2,4,8,16,32 
+
+export enum QuestionDivision {
+	GENERAL = "GENERAL",
+	PARENT = "PARENT",
+	CHILD = "CHILD"
+} 
+// question_division >> GENERAL - 일반, 
+// PARENT - 부모, CHILD - 자식
+// 상위 질문 - 하위 질문 관계가 아닐 경우에 GENERAL,
+// 상위 질문 - 하위 질문 관계 일 경우 PARENT - 부모, CHILD - 자식
+// question_division이 PARENT 일 경우 question_type = null 로 전달
+
+export interface SurveyQuestion {
+	question: string,
+	question_division: QuestionDivision,
+	level: number,
+	sort: number,
+	question_type: QuestionTypes,
+	required_answer_yn: "Y" | "N",
+	questionChildList?: SurveyQuestion[], //parent 일때 하위 질문이 있으나 기획엔 없음
+	exampleList: SurveyExample[] //답변목록 Child가 있을땐 questionChildList만 있음 (?) 
+}
+
+export interface SurveyPostReqBody {
+	title: string,
+	diseases?: string,
+	description: string, //영문
+	translation?: string, //한글변역?
+	sample_yn: string, //Y|N
+	questionList: SurveyQuestion[],
+}
+
+export interface SurveyPostResponse {
+	questionList: [] | null,
+	survey_no : number
 }
