@@ -7,7 +7,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Draggable } from "@hello-pangea/dnd";
-import { CardProps, InputTypes, StateProps, copyCard, focus, removeCard, toggleIsRequired } from "@/store/reducers/survey";
+import { CardProps, StateProps, copyCard, focus, removeCard, toggleIsRequired } from "@/store/reducers/survey";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import CardHeader from "./CardHeader";
 import TextFieldSection from "./TextFieldSection";
@@ -109,7 +109,7 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 					<Box display="flex" flexDirection="column" gap={1}>
 						<CardHeader isTitle={isTitle} id={id} />
 
-						{(inputType === InputTypes.WRITE || inputType === InputTypes.TITLE) ? (
+						{(inputType === QuestionTypes.WRITE || inputType === QuestionTypes.TITLE) ? (
 							<TextFieldSection id={id} />
 						) : (
 							<ItemTypeSection id={id} />

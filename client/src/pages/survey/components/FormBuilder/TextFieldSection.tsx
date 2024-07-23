@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { CardProps, InputTypes, setText, StateProps } from "@store/reducers/survey";
+import { CardProps, setText, StateProps } from "@store/reducers/survey";
 import { Input, OutlinedInput, TextField, useTheme } from "@mui/material";
-import { ExampleList } from '../../../../types/survey';
+import { ExampleList, QuestionTypes } from '@/types/survey';
 
 const TextFieldSection = ({ id }: Pick<CardProps, "id">) => {
 	const theme = useTheme();
@@ -25,7 +25,7 @@ const TextFieldSection = ({ id }: Pick<CardProps, "id">) => {
 		return currentCard.isFocused;
 	}) as boolean;
 
-	const isTitle = inputType === InputTypes.TITLE;
+	const isTitle = inputType === QuestionTypes.TITLE;
 
 	const handleDescriptionChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

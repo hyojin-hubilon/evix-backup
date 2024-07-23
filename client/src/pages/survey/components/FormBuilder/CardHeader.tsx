@@ -2,8 +2,9 @@ import React from "react";
 import { MenuItem, Select, SelectChangeEvent, TextField as MuiTextField, Theme, useTheme, Box, styled, TextField} from "@mui/material";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
-import { CardProps, InputTypes, setTitle, StateProps, typeChange } from "@/store/reducers/survey";
+import { CardProps, setTitle, StateProps, typeChange } from "@/store/reducers/survey";
 import { extendedCardProps } from "./FormQuestion";
+import { QuestionTypes } from "@/types/survey";
   
 
 const CardHeader = ({ id, isTitle }: Pick<extendedCardProps, "id" | "isTitle">) => {
@@ -57,10 +58,10 @@ const CardHeader = ({ id, isTitle }: Pick<extendedCardProps, "id" | "isTitle">) 
 				}}
 			/>
 			{!isTitle && isFocused ? (
-				<Select onChange={handleInputTypeChange} defaultValue={InputTypes.WRITE} value={inputType}>
-					<MenuItem value={InputTypes.WRITE}>주관식 답변</MenuItem>
-					<MenuItem value={InputTypes.SINGLE}>객관식 답변(단일응답)</MenuItem>
-					<MenuItem value={InputTypes.MULTIPLE}>객관식 답변(복수응답)</MenuItem>
+				<Select onChange={handleInputTypeChange} defaultValue={QuestionTypes.WRITE} value={inputType}>
+					<MenuItem value={QuestionTypes.WRITE}>주관식 답변</MenuItem>
+					<MenuItem value={QuestionTypes.SINGLE}>객관식 답변(단일응답)</MenuItem>
+					<MenuItem value={QuestionTypes.MULTIPLE}>객관식 답변(복수응답)</MenuItem>
 				</Select>
 			) : null}
 		</Box>

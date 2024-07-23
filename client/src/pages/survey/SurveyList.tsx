@@ -32,7 +32,7 @@ const SurveyList = () => {
 	const userNo = decodedToken['user-no'];
 
     // Surrvey 데이터 불러오기
-    const fetchSurvey = async (p, ) => {
+    const fetchSurvey = async (p) => {
         try {
             const response = await surveyApi.mySurveyList(p, 10, 'CREATED'); //20개씩? 10개씩? 더보기 추가, 검색추가
             if (response.result && response.code === 200) {

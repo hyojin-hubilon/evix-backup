@@ -1,21 +1,103 @@
 import { AppBar, Box, Button, Container, Grid, Toolbar, Typography } from "@mui/material";
 import FormBuilder from "./components/FormBuilder";
 import useSticky from "@/utils/useSticky";
-import { useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import { InputTypes, StateProps } from "@/store/reducers/survey";
+import { CardProps, StateProps } from "@/store/reducers/survey";
+import { ExampleTypes, QuestionDivision, QuestionTypes, SurveyPostReqBody, SurveyQuestion } from "@/types/survey";
+import surveyApi from "@/apis/survey";
+import { useNavigate } from "react-router-dom";
 
 const SurveyNew = () => {
 	//주석 테스트
 	const { ref, isSticky } = useSticky();
 	const cards = useSelector((state: StateProps) => state.cards);
+	const navigation = useNavigate();
+	// const [ newSurvey, setNewsurvey ] = useState<SurveyPostReqBody>({
+	// 	title: '',
+	// 	description: '',
+	// 	sample_yn: 'N',
+	// 	questionList: []
+	// })
+
+	const postNewSurvey = async (survey:SurveyPostReqBody) => {
+		try {
+			const response = await surveyApi.postNewSurvey(survey); //20개씩? 10개씩? 더보기 추가, 검색추가
+			if (response.result && response.code === 200) {
+				console.log(response);
+				navigation('/survey');
+			}
+		} catch (error) {
+			console.error('Failed to post survey:', error);
+		}
+	}
 
 	const handleSaveSurvey = () => {
-		cards.forEach((card) => {
-			if(card.inputType == InputTypes.TITLE) {
-				
+
+		//저장전에 유효성 체크..(=설문 제목, 질문 제목 체크하면 됨)
+
+		console.log(cards);
+		const newSurvey : SurveyPostReqBody = {
+			title: '',
+			description: '',
+			sample_yn: 'N',
+			questionList: []
+		}
+		
+		cards.forEach((card : CardProps, index:number) => {
+			const newQuestion : SurveyQuestion = {
+				question: card.cardTitle,
+				question_division: QuestionDivision.GENERAL,
+				level: 1, //1?
+				sort: index,
+				question_type: card.inputType,
+				required_answer_yn: card.isRequired ? "Y" : "N",
+				exampleList: []
+			}
+
+			if(card.inputType == QuestionTypes.TITLE) {
+				newSurvey.title = card.cardTitle;
+				newSurvey.description = card.contents as string;
+			} else if(card.inputType == QuestionTypes.WRITE) {
+				newQuestion.exampleList = [{
+					example_type: ExampleTypes.WRITE,
+					example_title: null,
+					example_value: 1,
+					sort: 1
+				}];
+
+				newSurvey.questionList.push(newQuestion);
+			} else if(card.inputType == QuestionTypes.MULTIPLE) {
+
+
+				let valueNum = 1;
+
+				if(typeof card.contents == 'object') card.contents.forEach((example, i) => {
+					newQuestion.exampleList.push({
+						example_type:  example.isEtc ?	ExampleTypes.OTHER : ExampleTypes.CHOICE,
+						example_title: example.isEtc ? 'Other' : example.text,
+						example_value: valueNum,
+						sort: i + 1
+					});
+					valueNum = valueNum * 2;
+				});
+
+				newSurvey.questionList.push(newQuestion);
+			} else {
+				if(typeof card.contents == 'object') card.contents.forEach((example, j) => {
+					newQuestion.exampleList.push({
+						example_type:  example.isEtc ?	ExampleTypes.OTHER : ExampleTypes.CHOICE,
+						example_title: example.isEtc ? 'Other' : example.text,
+						example_value: j + 1,
+						sort: j + 1
+					});
+				});
+
+				newSurvey.questionList.push(newQuestion);
 			}
 		})
+
+		postNewSurvey(newSurvey);
 	}
 
 	return (

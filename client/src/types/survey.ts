@@ -73,12 +73,13 @@ export enum ExampleTypes {
 
 export interface SurveyExample {//RequestBody Survey	
 	example_type: ExampleTypes,
-	example_title: string,
-	example_value: string | number,
+	example_title: string | null | undefined,
+	example_value: string | number | undefined,
 	sort: number
 }
 
 export enum QuestionTypes {
+	TITLE = "TITLE",
 	SINGLE = "SINGLE",
 	MULTIPLE = "MULTIPLE",
 	WRITE = "WRITE"
@@ -105,14 +106,14 @@ export interface SurveyQuestion {
 	question_type: QuestionTypes,
 	required_answer_yn: "Y" | "N",
 	questionChildList?: SurveyQuestion[], //parent 일때 하위 질문이 있으나 기획엔 없음
-	exampleList?: SurveyExample[] //답변목록 Child가 있을땐 questionChildList만 있음 (?) 
+	exampleList: SurveyExample[] //답변목록 Child가 있을땐 questionChildList만 있음 (?) 
 }
 
 export interface SurveyPostReqBody {
 	title: string,
-	diseases_affected_parts: string,
+	diseases_affected_parts?: string,
 	description: string, //영문
-	translation: string, //한글변역?
+	translation?: string, //한글변역?
 	sample_yn: string, //Y|N
 	questionList: SurveyQuestion[],
 }

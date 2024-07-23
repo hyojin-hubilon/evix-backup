@@ -31,7 +31,7 @@ const surveyApi = {
 	postNewSurvey: async (survey: SurveyPostReqBody) => {
 		try {
 			const responseData = await api<{}>(
-				`${BASE_API_URL}}`,
+				BASE_API_URL,
 				'post',
 				survey
 			);

@@ -13,20 +13,12 @@ export interface ItemTypeProps { //options
 	example_title?: string;
 	isEtc?: boolean;
 }
-
-export enum InputTypes {
-	TITLE = "TITLE",
-	SINGLE = "SINGLE",
-	MULTIPLE = "MULTIPLE",
-	WRITE = "WRITE"
-}
   
 export interface CardProps { //question
 	id: string;
 	cardTitle: string;
-	inputType: InputTypes;
-	contents: string | ItemTypeProps[];
-	subTitle?: string;
+	inputType: QuestionTypes;
+	contents: ItemTypeProps[] | string;
 	isFocused: boolean;
 	isRequired: boolean;
 }
@@ -51,8 +43,8 @@ const initialCards = {
 const createNewCard = (cardId: string, cardTitle = "") => ({
 	id: cardId,
 	cardTitle,
-	inputType: InputTypes.WRITE,
-	contents: "답변",
+	inputType: QuestionTypes.WRITE,
+	contents: "",
 	isFocused: true,
 	isRequired: false,
 });
@@ -153,11 +145,11 @@ export const cardSlice = createSlice({
 			const targetCard = state.find((card) => card.id === action.payload.id) as CardProps;
 			if (
 			!(
-				targetCard.inputType === InputTypes.SINGLE ||
-				targetCard.inputType === InputTypes.MULTIPLE
+				targetCard.inputType === QuestionTypes.SINGLE ||
+				targetCard.inputType === QuestionTypes.MULTIPLE
 			) &&
-			(action.payload.inputType === InputTypes.SINGLE ||
-				action.payload.inputType === InputTypes.MULTIPLE)
+			(action.payload.inputType === QuestionTypes.SINGLE ||
+				action.payload.inputType === QuestionTypes.MULTIPLE)
 			) {
 				targetCard.contents = [
 					{
@@ -166,21 +158,21 @@ export const cardSlice = createSlice({
 					},
 				];
 			} else if (
-				(targetCard.inputType === InputTypes.SINGLE ||
-					targetCard.inputType === InputTypes.MULTIPLE) &&
+				(targetCard.inputType === QuestionTypes.SINGLE ||
+					targetCard.inputType === QuestionTypes.MULTIPLE) &&
 				!(
-					action.payload.inputType === InputTypes.SINGLE ||
-					action.payload.inputType === InputTypes.MULTIPLE
+					action.payload.inputType === QuestionTypes.SINGLE ||
+					action.payload.inputType === QuestionTypes.MULTIPLE
 				)
 			) {
 				targetCard.contents = "";
 			}
 			if (
-			targetCard.inputType === InputTypes.SINGLE && action.payload.inputType === InputTypes.MULTIPLE
+			targetCard.inputType === QuestionTypes.SINGLE && action.payload.inputType === QuestionTypes.MULTIPLE
 			) {
 				deleteEtcItem(targetCard.contents as ItemTypeProps[]);
 			}
-			targetCard.inputType = action.payload.inputType as InputTypes;
+			targetCard.inputType = action.payload.inputType as QuestionTypes;
 	  	},
   
 		addSelectItem: (state: CardProps[], action: ActionProps) => {
@@ -205,12 +197,12 @@ export const cardSlice = createSlice({
 		setText: (state: CardProps[], action: ActionProps) => {
 			const targetCard = state.find((card) => card.id === action.payload.cardId) as CardProps;
 	
-			if (targetCard.inputType === InputTypes.TITLE) {
+			if (targetCard.inputType === QuestionTypes.TITLE) {
 				targetCard.contents = action.payload.text;
 			}
 			if (
-				targetCard.inputType === InputTypes.SINGLE ||
-				targetCard.inputType === InputTypes.MULTIPLE
+				targetCard.inputType === QuestionTypes.SINGLE ||
+				targetCard.inputType === QuestionTypes.MULTIPLE
 			) {
 				const contents = targetCard.contents as ItemTypeProps[];
 				const targetContent = contents.find(

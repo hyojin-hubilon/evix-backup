@@ -6,7 +6,6 @@ import {
 	addEtcItem,
   addSelectItem,
   CardProps,
-  InputTypes,
   ItemTypeProps,
   removeSelectItem,
   setText,
@@ -14,6 +13,7 @@ import {
 } from "@store/reducers/survey";
 import * as S from "./styles";
 import { Box, Container, useTheme } from "@mui/material";
+import { QuestionTypes } from '@/types/survey';
 
 const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 	const theme = useTheme();
@@ -35,7 +35,7 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 	const haveEtc = useSelector((state: StateProps) => {
 		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
 		const contents = currentCard.contents as ItemTypeProps[];
-		if (currentCard.inputType === InputTypes.MULTIPLE) {
+		if (currentCard.inputType === QuestionTypes.MULTIPLE) {
 			return true;
 		}
 		return contents.some((content) => content.isEtc);
@@ -65,9 +65,9 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 								{/* 옵션 드래그 핸들 */}
 								<S.ContentDndHandle $isfocused={isFocused} {...provided.dragHandleProps}/>
 
-								{inputType === InputTypes.SINGLE ? <S.Circle /> : null}
+								{inputType === QuestionTypes.SINGLE ? <S.Circle /> : null}
 
-								{inputType === InputTypes.MULTIPLE ? <S.Sqare /> : null}
+								{inputType === QuestionTypes.MULTIPLE ? <S.Sqare /> : null}
 								
 								<S.TextField
 									id="standard-basic"
@@ -100,8 +100,8 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 		</Droppable>
 		{isFocused ? (
 			<S.Container>
-				{inputType === InputTypes.SINGLE ? <S.Circle /> : null}
-				{inputType === InputTypes.MULTIPLE ? <S.Sqare /> : null}
+				{inputType === QuestionTypes.SINGLE ? <S.Circle /> : null}
+				{inputType === QuestionTypes.MULTIPLE ? <S.Sqare /> : null}
 				<S.ItemAddButton
 					type="button"
 					onClick={() => {
@@ -117,7 +117,7 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 				>
 					옵션 추가
 				</S.ItemAddButton>
-				{inputType === InputTypes.SINGLE && !haveEtc ? (
+				{inputType === QuestionTypes.SINGLE && !haveEtc ? (
 					<>
 						<span style={{marginLeft: '4px'}}>또는</span>
 						<S.EtcAddButton

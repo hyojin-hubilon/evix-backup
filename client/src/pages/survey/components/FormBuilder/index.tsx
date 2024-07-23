@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import FormQuestion from "./FormQuestion";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { useSelector } from "react-redux";
-import { CardProps, InputTypes, moveCard, moveContent, StateProps } from "@/store/reducers/survey";
+import { CardProps, moveCard, moveContent, StateProps } from "@/store/reducers/survey";
 import AddCardBtn from "./AddCardBtn";
 import { dispatch } from "@/store";
 
@@ -50,7 +50,7 @@ const FormBuilder = () => {
 									<FormQuestion 
 										key={card.id}
 										index={index}
-										isTitle={card.inputType === InputTypes.TITLE}
+										isTitle={card.inputType === QuestionTypes.TITLE}
 										{...card}
 									/>
 								))}
