@@ -1,0 +1,106 @@
+import { ResCommonError } from '@/apis/axios-common';
+import studyApi from '@/apis/study';
+import { useEffect, useState } from 'react';
+import { Box, Button, Typography, Paper, Stack, Badge } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { NavLink } from 'react-router-dom';
+import authApi from '@/apis/auth';
+import { invitedStudy } from '@/types/study';
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+        right: 13,
+        top: 13,
+        border: `2px solid ${theme.palette.background.paper}`,
+        padding: '0 4px',
+    },
+}));
+
+const UnauthorizedInvitation = () => {
+    const [invitedStudies, setInvitedStudies] = useState<invitedStudy[]>([]);
+    const [invitedStudyNumber, setInvitedStudyNumber] = useState<number>(0);
+
+    const handleInvitedStudies = (invitedStudies: any[]) => {
+        setInvitedStudies(() => invitedStudies);
+    };
+
+    const handleInvitedStudyNumber = (length: number) => {
+        setInvitedStudyNumber(() => length);
+    };
+
+    const handleAcceptInvite = async (study : invitedStudy) => {
+        try {
+            const response = await authApi.verifyInviteToken(study.invite_token);
+            if (response.code !== 200) {
+                alert("error");
+            }
+        } catch (error) {
+            console.error('Failed to accept invitation:', error);
+        } 
+    };
+
+    useEffect(() => {
+        const fetchInvitedStudies = async () => {
+            try {
+                const response: any = await studyApi.unauthorizedInvitation();
+                handleInvitedStudies(response?.content);
+                handleInvitedStudyNumber(response?.content.length);
+            } catch (error) {
+                if (error instanceof ResCommonError) {
+                    alert(error.message);
+                }
+            }
+        };
+        fetchInvitedStudies();
+    }, [invitedStudies]);
+
+    return (
+        <Box sx={{ p: 2 }}>
+            <Typography variant="h6">
+                Settings {'>'}
+                <NavLink
+                    to="/settings/unauthorizedstudy"
+                    style={({ isActive }) => ({
+                        textDecoration: isActive ? 'underline' : 'none',
+                    })}
+                >
+                    내가 받은 Study 초대 ({invitedStudyNumber})
+                </NavLink>
+            </Typography>
+
+            <Typography variant="body2" sx={{ mt: 1, mb: 2 }}>
+                초대 수락 후 Study에 참여해보세요.
+                <br />
+                ※받은 초대만 조회됩니다.
+            </Typography>
+            <Stack spacing={2}>
+                {invitedStudies.map((study, index) => (
+                    <Paper
+                        key={index}
+                        sx={{
+                            p: 2,
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            bgcolor: '#e3eeff',
+                        }}
+                    >
+                        <Box>
+                            <Typography variant="subtitle1">{study.title}</Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Study Owner: {study.owner_first_name} {study.owner_last_name}
+                            </Typography>
+                        </Box>
+                        <StyledBadge color="primary">
+                            <Button variant="contained" color="primary" onClick={() => handleAcceptInvite(study)}>
+                                Join us now
+                            </Button>
+                        </StyledBadge>
+                    </Paper>
+                ))}
+            </Stack>
+        </Box>
+    );
+};
+
+export default UnauthorizedInvitation;
