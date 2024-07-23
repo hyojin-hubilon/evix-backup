@@ -159,6 +159,23 @@ const studyApi = {
         }
     },
 
+	/**
+     * 내 Study 목록 조회
+     */
+    fullMyStudyList: async () => {
+        try {
+            const responseData = await api<{}>(
+                `${BASE_API_URL}/full-my-list`,
+                'get'
+            );
+
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+
     /**
      * Study 상태 변경
      * @param data
