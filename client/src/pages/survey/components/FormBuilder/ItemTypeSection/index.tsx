@@ -35,9 +35,9 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 	const haveEtc = useSelector((state: StateProps) => {
 		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
 		const contents = currentCard.contents as ItemTypeProps[];
-		if (currentCard.inputType === QuestionTypes.MULTIPLE) {
-			return true;
-		}
+		// if (currentCard.inputType === QuestionTypes.MULTIPLE) {
+		// 	return true;
+		// }
 		return contents.some((content) => content.isEtc);
 	});
 
@@ -117,7 +117,7 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 				>
 					옵션 추가
 				</S.ItemAddButton>
-				{inputType === QuestionTypes.SINGLE && !haveEtc ? (
+				{(inputType === QuestionTypes.SINGLE || inputType === QuestionTypes.MULTIPLE) && !haveEtc ? (
 					<>
 						<span style={{marginLeft: '4px'}}>또는</span>
 						<S.EtcAddButton

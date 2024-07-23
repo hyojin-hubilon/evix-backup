@@ -111,9 +111,14 @@ export interface SurveyQuestion {
 
 export interface SurveyPostReqBody {
 	title: string,
-	diseases_affected_parts?: string,
+	diseases?: string,
 	description: string, //영문
 	translation?: string, //한글변역?
 	sample_yn: string, //Y|N
 	questionList: SurveyQuestion[],
+}
+
+export interface SurveyPostResponse {
+	questionList: [] | null,
+	survey_no : number
 }

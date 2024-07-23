@@ -22,7 +22,7 @@ const SurveyNew = () => {
 
 	const postNewSurvey = async (survey:SurveyPostReqBody) => {
 		try {
-			const response = await surveyApi.postNewSurvey(survey); //20개씩? 10개씩? 더보기 추가, 검색추가
+			const response = await surveyApi.postNewSurvey(survey); 
 			if (response.result && response.code === 200) {
 				console.log(response);
 				navigation('/survey');
@@ -35,7 +35,8 @@ const SurveyNew = () => {
 	const handleSaveSurvey = () => {
 
 		//저장전에 유효성 체크..(=설문 제목, 질문 제목 체크하면 됨)
-
+		//저장후 localStorage에 저장된 서베이 삭제
+		
 		console.log(cards);
 		const newSurvey : SurveyPostReqBody = {
 			title: '',
