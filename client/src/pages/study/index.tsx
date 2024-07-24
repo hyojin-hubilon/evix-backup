@@ -24,6 +24,8 @@ import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import EastIcon from '@mui/icons-material/East';
 import dayjs, { Dayjs } from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+dayjs.extend(isSameOrBefore);
 import DatePicker, { DatePickerProps } from "antd/lib/date-picker";
 const { RangePicker } = DatePicker;
 
@@ -108,6 +110,9 @@ const StudyList = () => {
 
 	const onChangeDate = (date, dateString: string[]) => {
 		console.log(date, dateString)
+		if(date == null) {
+			setActiveDateSetting('full')
+		}
 		setDateSet({
 			startDt: dateString[0],
 			endDt: dateString[1]
@@ -118,8 +123,7 @@ const StudyList = () => {
 	useEffect(() => {
 		let newSearchedList = studies.filter(study => {
 			if(dateSet.startDt && dateSet.endDt) {
-				if(dayjs(dateSet.startDt).isBefore(dayjs(study.std_start_date)) && dayjs(study.std_end_date).isBefore(dayjs(dateSet.endDt))) return true;
-				//isSameOrBefore로 변경
+				if(dayjs(dateSet.startDt).isSameOrBefore(dayjs(study.std_start_date)) && dayjs(study.std_end_date).isSameOrBefore(dayjs(dateSet.endDt))) return true;
 				else return false;
 			} else {
 				return true;
