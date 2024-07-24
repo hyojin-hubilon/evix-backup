@@ -23,6 +23,9 @@ import StudyInvitedItem from './components/StudyInvitedItem';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import EastIcon from '@mui/icons-material/East';
+import dayjs, { Dayjs } from 'dayjs';
+import DatePicker, { DatePickerProps } from "antd/lib/date-picker";
+const { RangePicker } = DatePicker;
 
 const StudyList = () => {
     const [studyCount, setStudyCount] = useState<number>(0); // Study 개수 상태
@@ -33,6 +36,7 @@ const StudyList = () => {
     const [fullName, setFullName] = useState<string>(''); // 사용자 전체 이름 상태
 	const [ searchTerm, setSearchTerm] = useState('');
 	const [activeDateSetting, setActiveDateSetting] = useState('full');
+	const [ dateSet, setDateSet ] = useState<{startDt: string, endDt: string}>({startDt : 'Start Date', endDt: 'End Date'});
     const navigate = useNavigate();
 
     // Study 데이터 불러오기
@@ -108,6 +112,13 @@ const StudyList = () => {
         setActiveDateSetting(newValue);
 	}
 
+	const onChangeDate = (date, dateString: string[]) => {
+		setDateSet({
+			startDt: dateString[0],
+			endDt: dateString[1]
+		});		
+	  };
+
     return (
         <Container maxWidth="lg">
             <Grid container flexDirection="row" rowSpacing={2}>
@@ -143,7 +154,7 @@ const StudyList = () => {
                                     <Tab label="Developer" value="3" />
                                 </Tabs>
                             </Grid> */}
-                            <Grid item xs={activeDateSetting == 'full' ? 6 : 5}>
+                            <Grid item xs={activeDateSetting == 'full' ? 6 : 4.5}>
 								<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
 									startAdornment={
 										<InputAdornment position="start">
@@ -181,16 +192,17 @@ const StudyList = () => {
 							</Grid>
 							{
 								activeDateSetting == 'dates' &&
-								<Grid item xs={2}>
-									<Button
-										fullWidth
-										sx={{textAlign: 'center'}}
-										color="secondary"
-										>
-										<span>Start Date</span>
-										<EastIcon sx={{ml: '5px', mr:'5px', fontSize: '1rem'}}/>
-										<span>End Date</span>
-									</Button>
+								<Grid item xs={2.5}>
+									<RangePicker
+										placement="bottomRight"
+										style={{
+											padding: '6px 11px',
+											borderRadius: '4px',
+											minHeight: '1.4375em',
+											borderColor: 'rgba(0, 0, 0, 0.23)'
+										}}
+										onChange={onChangeDate}
+									/>
 								</Grid>
 							}
 							<Grid item xs={activeDateSetting == 'full' ? 1.7 : 1.5}>
