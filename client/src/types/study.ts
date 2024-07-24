@@ -110,3 +110,15 @@ export type InviteMemberTempType = {
     user_email: string;
     std_privilege: string;
 };
+
+export interface invitedStudy {
+    std_no: number;
+    title: string;
+    owner_first_name: string;
+    owner_last_name: string;
+    user_no: number;
+    user_email: string;
+    invite_url: string;
+    invite_token: string;
+    created_at: string;
+}
