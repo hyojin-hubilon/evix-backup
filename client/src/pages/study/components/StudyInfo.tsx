@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import StudyMemberStatus from './study-info/StudyMemberStatus';
 import { STUDY_STATUS, STUDY_STATUS_KEY } from './StudyListItem';
-import MemberManagement2 from './study-new/MemberManagement2';
+import MemberManagement from './study-new/MemberManagement';
 
 // // Define the types for the props
 // interface StudySurvey {
@@ -330,7 +330,7 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                     />
                 </MainCard>
             </Grid>
-            <MemberManagement2
+            <MemberManagement
                 isOpen={isOpenMember}
                 studyNo={studyDetail.std_no}
                 handleClose={handleCloseMember}

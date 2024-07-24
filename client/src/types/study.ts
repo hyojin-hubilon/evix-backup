@@ -95,6 +95,11 @@ export type MemberTempType = {
     last_name: string;
     std_privilege: string;
     belong: string;
-    email: string;
+    user_email: string;
     inviteStatus: string;
+};
+
+export type InviteMemberTempType = {
+    user_email: string;
+    std_privilege: string;
 };

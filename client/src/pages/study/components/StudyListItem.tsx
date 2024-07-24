@@ -7,7 +7,7 @@ import { getDecodedToken } from '@/utils/Cookie';
 import StudyNew from '../StudyNew';
 import { useState } from 'react';
 import SurveyConnectDialog from './study-new/SurveyConnetDialog';
-import MemberManagement2 from './study-new/MemberManagement2';
+import MemberManagement from './study-new/MemberManagement';
 
 // * 진행중인 상태일 경우, 한눈에 알아볼 수 있도록 bg를 다르게 처리함.
 // * 배포전/일시정지/중단: 빨간색 txt 처리
@@ -144,7 +144,7 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                     </Grid>
                 </Grid>
             </Card>
-            <MemberManagement2
+            <MemberManagement
                 isOpen={isOpenMember}
                 studyNo={study.std_no}
                 handleClose={handleCloseMember}
