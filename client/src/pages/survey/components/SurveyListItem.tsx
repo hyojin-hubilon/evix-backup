@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { EditOutlined, LinkOutlined } from '@ant-design/icons';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box, Button, Card, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, Button, Card, ClickAwayListener, Grid, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Typography, useTheme } from '@mui/material';
 
 import { MySurveyList } from '@/types/survey';
+import dayjs from 'dayjs';
+import { useRef, useState } from 'react';
 
 type SurveyListItemProps = {
 	survey: MySurveyList,
@@ -12,6 +14,25 @@ type SurveyListItemProps = {
 
 const SurveyListItem = ({ survey, userNo }: SurveyListItemProps) => {
     const theme = useTheme();
+	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const subOpen = Boolean(anchorEl);
+	const handleOpenClick = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
+
+	const options = [
+		"미리보기",
+		"설문복사",
+		"삭제"	
+	]
+
+	const handleMenuItemClick = (event, index) => {
+
+	}
+	
 
     return (
         <>
@@ -36,13 +57,14 @@ const SurveyListItem = ({ survey, userNo }: SurveyListItemProps) => {
 							<Typography variant="h6" color="secondary.main">작성중</Typography> 
 						} 
 					
-                        <Typography variant="h4">{survey.title}</Typography>
-                        <Typography variant="caption" sx={{ color: theme.palette.grey[500] }}>
-                            {/* { survey.std_start_date} ~ {study.std_end_date} */}
+                        <Typography variant="h4" mt="0.3rem" mb="0.3rem">{survey.title}</Typography>
+						<Typography>
+							<span style={{fontWeight:600}}>{ survey.created_user_first_name } { survey.created_user_last_name }</span> | <span>{survey.question_number}문항</span>
                         </Typography>
-                        <Box display="flex" mt={1}>
-                           
-                        </Box>
+                        <Typography variant="caption" sx={{ color: theme.palette.grey[500] }} mb="0">
+                            생성일 { dayjs(survey.created_at).format('YYYY.MM.DD') }
+                        </Typography>
+                      
                     </Grid>
                     <Grid
                         item
@@ -60,11 +82,55 @@ const SurveyListItem = ({ survey, userNo }: SurveyListItemProps) => {
 								<EditOutlined style={{ fontSize: '1.5rem' }} />
 							</Button>
 						}
-						
-						<IconButton>
+						<div>
+						<IconButton
+							aria-label="more"
+							id="long-button"
+							aria-controls={subOpen ? 'long-menu' : undefined}
+							aria-expanded={subOpen ? 'true' : undefined}
+							aria-haspopup="true"
+							onClick={handleOpenClick}
+
+						>
 							<MoreVertIcon style={{ fontSize: '1.5rem' }} />
 						</IconButton>
-                        
+						<Popper
+							sx={{
+							zIndex: 1,
+							}}
+							open={subOpen}
+							anchorEl={anchorEl}
+							
+							role={undefined}
+							transition
+							disablePortal
+						>
+							{({ TransitionProps, placement }) => (
+							<Grow
+								{...TransitionProps}
+								style={{
+								transformOrigin:
+									placement === 'bottom' ? 'center top' : 'center bottom',
+								}}
+							>
+								<Paper>
+								<ClickAwayListener onClickAway={handleClose}>
+									<MenuList id="split-button-menu" autoFocusItem>
+									{options.map((option, index) => (
+										<MenuItem
+											key={option}
+											onClick={(event) => handleMenuItemClick(event, index)}
+										>
+										{option}
+										</MenuItem>
+									))}
+									</MenuList>
+								</ClickAwayListener>
+								</Paper>
+							</Grow>
+							)}
+						</Popper>
+						</div>
                     </Grid>
                 </Grid>
             </Card>

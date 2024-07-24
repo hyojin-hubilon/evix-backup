@@ -62,13 +62,20 @@ export interface ManagerList {
 }
 
 export interface MyStudyList {
+    active_yn: 'Y' | 'N';
+    delete_yn: 'Y' | 'N';
+    description: string;
+    disease: string;
+    location: string;
     std_no: number;
+    std_payment_status: string | null;
     title: string;
     std_status: string;
     std_start_date: string;
     std_end_date: string;
     std_privilege: string;
     managerList: ManagerList[];
+    std_type: string;
 }
 
 export interface StudyListItemProps {

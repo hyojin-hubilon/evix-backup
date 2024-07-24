@@ -5,8 +5,6 @@ export interface UpdateUserData {
     job_title: string;
     industry: string;
     country: string;
-    privilege: string;
-    active_yn: 'Y' | 'N';
     email_notification_yn: 'Y' | 'N';
     language: string;
 }

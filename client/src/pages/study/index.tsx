@@ -10,6 +10,9 @@ import {
     Button,
     IconButton,
     OutlinedInput,
+	InputAdornment,
+	Select,
+	MenuItem,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import StudyListItem from './components/StudyListItem';
@@ -18,22 +21,28 @@ import { MyStudyList, StudyApiResponse } from '@/types/study';
 import { getDecodedToken } from '@/utils/Cookie';
 import StudyInvitedItem from './components/StudyInvitedItem';
 import { useNavigate } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
+import EastIcon from '@mui/icons-material/East';
 
 const StudyList = () => {
     const [studyCount, setStudyCount] = useState<number>(0); // Study 개수 상태
     const [activeTab, setActiveTab] = useState<string>('0'); // 활성 탭 상태
     const [studies, setStudies] = useState<MyStudyList[]>([]); // 내 Study 목록 상태
+	const [ searched, setSearched ] = useState<MyStudyList[]>([]);
     const [invitedStudies, setInvitedStudies] = useState<any[]>([]); // 초대 받은 스터디 목록 상태
     const [fullName, setFullName] = useState<string>(''); // 사용자 전체 이름 상태
+	const [ searchTerm, setSearchTerm] = useState('');
+	const [activeDateSetting, setActiveDateSetting] = useState('full');
     const navigate = useNavigate();
 
     // Study 데이터 불러오기
     const fetchStudies = async () => {
         try {
-            const response: StudyApiResponse = await studyApi.myStudyList(1, 100); // TODO: 창덕님께 수정 요청(페이징 필요 없음) -> 페이징 10 으로 수정 -> 더보기 없음
+            const response: StudyApiResponse = await studyApi.fullMyStudyList(); // TODO: 창덕님께 수정 요청(페이징 필요 없음) -> 페이징 10 으로 수정 -> 더보기 없음 > 페이징 뺌
             if (response.result && response.code === 200) {
                 const studyList = response.content?.studyMyList ?? [];
                 setStudies(studyList);
+				setSearched(studyList);
                 setStudyCount(studyList.length);
             }
         } catch (error) {
@@ -62,8 +71,7 @@ const StudyList = () => {
         fetchInvitedStudies();
     }, []);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-        event.preventDefault();
+    const handleChange = (newValue: string) => {
         setActiveTab(newValue);
     };
 
@@ -82,18 +90,33 @@ const StudyList = () => {
         }
     };
 
+	const handleSearchStudy = (text) => {
+		setSearchTerm(text);
+			if(!text) setSearched(studies);
+			else {
+				const newSearchedList = studies.filter(study => {
+					if(study.title.toLowerCase().includes(text.toLowerCase())) return true;
+					else if(study.disease.toLowerCase().includes(text.toLowerCase())) return true;
+					else return false;
+				});//status 정의 후 검색 추가해야함
+
+				setSearched(newSearchedList);
+			}
+	}
+
+	const handleChangeDateSetting = (newValue) => {
+        setActiveDateSetting(newValue);
+	}
+
     return (
         <Container maxWidth="lg">
-            <Grid container rowSpacing={3} columnSpacing={2.75}>
+            <Grid container flexDirection="row" rowSpacing={2}>
                 <Grid container item xs={12}>
                     <Box display="flex" alignItems="center" gap={1}>
                         <Typography variant="h3">Study 목록</Typography>
                         <Chip label={studyCount} color="primary" size="small" />
                     </Box>
-                    <Button variant="contained" onClick={handleCreateStudy} sx={{ ml: 'auto' }}>
-                        <PlusOutlined />
-                        <Typography sx={{ ml: 1 }}>Study 생성</Typography>
-                    </Button>
+                   
                 </Grid>
 
                 {studyCount !== 0 ? (
@@ -104,8 +127,11 @@ const StudyList = () => {
                             xs={12}
                             sx={{ borderBottom: 1, borderColor: 'divider' }}
                             alignItems="center"
+							pb={1}
+							mt={2}
+							columnGap={1}
                         >
-                            <Grid item xs={8}>
+                            {/* <Grid item xs={8}>
                                 <Tabs
                                     value={activeTab}
                                     onChange={handleChange}
@@ -116,18 +142,66 @@ const StudyList = () => {
                                     <Tab label="Maintainer" value="2" />
                                     <Tab label="Developer" value="3" />
                                 </Tabs>
+                            </Grid> */}
+                            <Grid item xs={activeDateSetting == 'full' ? 6 : 5}>
+								<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
+									startAdornment={
+										<InputAdornment position="start">
+											<SearchIcon />
+										</InputAdornment>
+									}
+									value={searchTerm}
+									onChange={(e) => handleSearchStudy(e.target.value)}
+									placeholder='타이틀, 질환명, 상태 검색'
+								/>
                             </Grid>
-                            <Grid container item xs={4} justifyContent="flex-end">
-                                <form>
-                                    <Box display="flex" gap="0.5rem">
-                                        <OutlinedInput size="small" />
-                                        <Button variant="outlined">검색</Button>
-                                    </Box>
-                                </form>
-                            </Grid>
+							<Grid item xs={activeDateSetting == 'full' ? 2 : 1.6}>
+								<Select
+									size='small'
+									onChange={(e) => handleChange(e.target.value)}
+									value={activeTab} fullWidth
+									sx={{bgcolor: 'white'}}
+									>
+									<MenuItem value="0">All Studies</MenuItem>
+									<MenuItem value="1">My Studies</MenuItem>
+									<MenuItem value="2">Included Studies</MenuItem>
+								</Select>
+								{/* 아직 분류가 정확하지 않음 */}
+							</Grid>
+							<Grid item xs={activeDateSetting == 'full' ? 2 : 1.5}>
+								<Select
+									size='small'
+									onChange={(e) => handleChangeDateSetting(e.target.value)}
+									value={activeDateSetting} fullWidth
+									sx={{bgcolor: 'white'}}
+									>
+									<MenuItem value="full">Full Period</MenuItem>
+									<MenuItem value="dates">Date Setting</MenuItem>
+								</Select>
+							</Grid>
+							{
+								activeDateSetting == 'dates' &&
+								<Grid item xs={2}>
+									<Button
+										fullWidth
+										sx={{textAlign: 'center'}}
+										color="secondary"
+										>
+										<span>Start Date</span>
+										<EastIcon sx={{ml: '5px', mr:'5px', fontSize: '1rem'}}/>
+										<span>End Date</span>
+									</Button>
+								</Grid>
+							}
+							<Grid item xs={activeDateSetting == 'full' ? 1.7 : 1.5}>
+								<Button variant="contained" onClick={handleCreateStudy} sx={{ ml: 'auto' }} fullWidth>
+									<PlusOutlined />
+									<Typography sx={{ ml: 1 }}>Study 생성</Typography>
+								</Button>
+							</Grid>
                         </Grid>
 
-                        {studies
+                        {searched
                             .filter((study) => {
                                 if (activeTab === '0') return true;
                                 if (activeTab === '1' && study.std_privilege === 'OWNER')

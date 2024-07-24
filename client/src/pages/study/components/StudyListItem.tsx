@@ -1,6 +1,22 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { EditOutlined, FundViewOutlined, UserAddOutlined } from '@ant-design/icons';
-import { Avatar, AvatarGroup, Box, Button, Card, Grid, Typography, useTheme } from '@mui/material';
+import {
+    Avatar,
+    AvatarGroup,
+    Box,
+    Button,
+    Card,
+    ClickAwayListener,
+    Grid,
+    Grow,
+    IconButton,
+    MenuItem,
+    MenuList,
+    Paper,
+    Popper,
+    Typography,
+    useTheme,
+} from '@mui/material';
 
 import { ManagerList, StudyListItemProps } from '@/types/study';
 import { getDecodedToken } from '@/utils/Cookie';
@@ -8,6 +24,7 @@ import StudyNew from '../StudyNew';
 import { useState } from 'react';
 import SurveyConnectDialog from './study-new/SurveyConnetDialog';
 import MemberManagement from './study-new/MemberManagement';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 // * 진행중인 상태일 경우, 한눈에 알아볼 수 있도록 bg를 다르게 처리함.
 // * 배포전/일시정지/중단: 빨간색 txt 처리
@@ -64,6 +81,17 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
     const handleMemberManagementClose = () => {
         setIsOpenMember(false);
     };
+
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const subOpen = Boolean(anchorEl);
+
+    const handleOpenClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <>
             <Card
@@ -75,7 +103,7 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                     p: '1rem',
                 }}
             >
-                <Grid container>
+                <Grid container alignItems="center">
                     <Grid item xs={8}>
                         {/* 진행중/배포전/진행종료/일시정지/중단/Demo */}
 
@@ -86,8 +114,10 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                         <Typography variant="caption" sx={{ color: theme.palette.grey[500] }}>
                             {study.std_start_date} ~ {study.std_end_date}
                         </Typography>
-                        <Box display="flex" mt={1}>
-                            <AvatarGroup total={managerList.length}>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Box display="flex">
+                            <AvatarGroup total={managerList.length} max={4}>
                                 {managerList.map((manager, index) => (
                                     <Avatar
                                         key={index}
@@ -101,14 +131,78 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                     <Grid
                         item
                         container
-                        xs={4}
+                        xs={1}
                         alignItems="center"
                         justifyContent="flex-end"
                         gap={1}
                     >
+                        <IconButton
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={subOpen ? 'long-menu' : undefined}
+                            aria-expanded={subOpen ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={handleOpenClick}
+                        >
+                            <MoreVertIcon style={{ fontSize: '1.5rem' }} />
+                        </IconButton>
+                        <Popper
+                            sx={{
+                                zIndex: 1,
+                            }}
+                            open={subOpen}
+                            anchorEl={anchorEl}
+                            role={undefined}
+                            transition
+                            disablePortal
+                        >
+                            {({ TransitionProps, placement }) => (
+                                <Grow
+                                    {...TransitionProps}
+                                    style={{
+                                        transformOrigin:
+                                            placement === 'bottom' ? 'center top' : 'center bottom',
+                                    }}
+                                >
+                                    <Paper>
+                                        <ClickAwayListener onClickAway={handleClose}>
+                                            <MenuList id="study-button-menu" autoFocusItem>
+                                                {isOwner && study.std_status !== 'STD-DONE' && (
+                                                    <MenuItem
+                                                        onClick={() =>
+                                                            handleInviteMember(study.std_no)
+                                                        }
+                                                    >
+                                                        Invite members
+                                                    </MenuItem>
+                                                )}
+                                                {study.std_status !== 'STD-CREATED' && (
+                                                    <MenuItem
+                                                        component={Link}
+                                                        to={`/study/detail/${study.std_no}`}
+                                                    >
+                                                        Veiw Results
+                                                    </MenuItem>
+                                                )}
+                                                {isEditable && (
+                                                    <MenuItem
+                                                        onClick={() =>
+                                                            handleEditClick(study.std_no)
+                                                        }
+                                                    >
+                                                        Settings
+                                                    </MenuItem>
+                                                )}
+                                            </MenuList>
+                                        </ClickAwayListener>
+                                    </Paper>
+                                </Grow>
+                            )}
+                        </Popper>
+
                         {/* 멤버초대 - OWNER */}
                         {/* Study가 종료상태일 때는 멤버 초대할수 없으므로 버튼 비노출 */}
-                        {isOwner && study.std_status !== 'STD-DONE' && (
+                        {/* {isOwner && study.std_status !== 'STD-DONE' && (
                             <Button
                                 size="large"
                                 variant="outlined"
@@ -116,10 +210,10 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                             >
                                 <UserAddOutlined style={{ fontSize: '1.5rem' }} />
                             </Button>
-                        )}
+                        )} */}
 
                         {/* 수정 - OWNER, MAINTAINER */}
-                        {isEditable && (
+                        {/* {isEditable && (
                             <Button
                                 size="large"
                                 variant="outlined"
@@ -127,11 +221,11 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                             >
                                 <EditOutlined style={{ fontSize: '1.5rem' }} />
                             </Button>
-                        )}
+                        )} */}
 
                         {/* Overview  */}
                         {/* Study가 배포전일 때는 결과 데이터가 없으므로 버튼 비노출 */}
-                        {study.std_status !== 'STD-CREATED' && (
+                        {/* {study.std_status !== 'STD-CREATED' && (
                             <Button
                                 component={Link}
                                 to={`/study/detail/${study.std_no}`}
@@ -140,7 +234,7 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                             >
                                 <FundViewOutlined style={{ fontSize: '1.5rem' }} />
                             </Button>
-                        )}
+                        )} */}
                     </Grid>
                 </Grid>
             </Card>
