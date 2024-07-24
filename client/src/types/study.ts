@@ -62,20 +62,20 @@ export interface ManagerList {
 }
 
 export interface MyStudyList {
-	active_yn : "Y" | "N",
-	delete_yn : "Y" | "N",
-	description : string;
-	disease: string;
-	location:string;
+    active_yn: 'Y' | 'N';
+    delete_yn: 'Y' | 'N';
+    description: string;
+    disease: string;
+    location: string;
     std_no: number;
-	std_payment_status: string | null;
+    std_payment_status: string | null;
     title: string;
     std_status: string;
     std_start_date: string;
     std_end_date: string;
     std_privilege: string;
     managerList: ManagerList[];
-	std_type: string;
+    std_type: string;
 }
 
 export interface StudyListItemProps {
@@ -102,9 +102,15 @@ export type MemberTempType = {
     last_name: string;
     std_privilege: string;
     belong: string;
-    email: string;
+    user_email: string;
     inviteStatus: string;
 };
+
+export type InviteMemberTempType = {
+    user_email: string;
+    std_privilege: string;
+};
+
 export interface invitedStudy {
     std_no: number;
     title: string;

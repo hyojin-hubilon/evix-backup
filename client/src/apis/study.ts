@@ -266,6 +266,20 @@ const studyApi = {
             throw e;
         }
     },
+
+    /**
+     * Study 배포
+     * @param deployData
+     */
+    deployStudy: async (deployData) => {
+        try {
+            const response = await api<{}>(`${BASE_API_URL}/deploy`, 'put', deployData);
+            return response;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
 };
 
 export default studyApi;

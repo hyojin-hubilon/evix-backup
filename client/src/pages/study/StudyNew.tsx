@@ -19,16 +19,18 @@ import {
     Divider,
 } from '@mui/material';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import DateRangePicker, { DateRage } from './components/study-new/Daterangepicker';
 import MedicineInfo from './components/study-new/MedicineInfo';
-import MemberManagement from './components/study-new/MemberManagement';
 
 import studyApi from '@/apis/study';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Drug } from '@/apis/test/drug/drugsAPI_TEST';
 import userApi from '@/apis/user';
 import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
+import { InviteMemberTempType } from '@/types/study';
+import MemberInvitement from './components/study-new/MemberInvitement';
+import MemberManagement from './components/study-new/MemberManagement';
 
 const FormTooltip = ({ text }) => {
     return (
@@ -40,7 +42,7 @@ const FormTooltip = ({ text }) => {
     );
 };
 
-const StudyNew = ({}) => {
+const StudyNew = () => {
     const theme = useTheme();
     const { divider, primary } = theme.palette;
     const [dateRange, setDateRange] = useState({ startDt: dayjs(), endDt: dayjs() });
@@ -53,6 +55,11 @@ const StudyNew = ({}) => {
     const [eicFile, setEicFile] = useState(null);
     const [isOpenMember, setIsOpenMember] = useState(false);
     const [isOpenSurvey, setIsOpenSurvey] = useState(false);
+    const [inviteList, setInviteList] = useState<InviteMemberTempType[]>([]);
+    const [managerList, setManagerList] = useState<any[]>([]);
+    const [studySurveySetList, setStudySurveySetList] = useState([]);
+
+    const [members, setMembers] = useState<InviteMemberTempType[]>([]);
 
     const [drug, setDrug] = useState<Drug>();
     const [country, setCountry] = useState('KO_KR');
@@ -88,6 +95,8 @@ const StudyNew = ({}) => {
     };
 
     const handleSubmit = async () => {
+        console.log(members);
+
         const studyData = {
             std_status: 'STD-CREATED',
             title: title,
@@ -102,7 +111,7 @@ const StudyNew = ({}) => {
             drug_brand_name: drug?.companyName ?? null,
             drug_manufacturer_name: drug?.productName ?? null,
             studySurveySetList: [],
-            inviteList: [],
+            inviteList: members ?? [],
         };
 
         // FormData 객체 생성 및 데이터 추가
@@ -143,6 +152,29 @@ const StudyNew = ({}) => {
         }
     }, []);
 
+    const getEmailByPrivilege = useMemo(() => {
+        if (mode === 'write') {
+            return (privilege: string): string => {
+                const memberEmails = members
+                    .filter((m) => m.std_privilege === privilege)
+                    .map((m) => m.user_email);
+                return memberEmails.length > 0
+                    ? memberEmails.join(', ')
+                    : '초대하기 팝업에서 설정해주세요.';
+            };
+        } else if (mode === 'edit') {
+            return (privilege: string): string => {
+                const inviteEmails = managerList
+                    .filter((i) => i.std_privilege === privilege)
+                    .map((i) => i.email);
+                return inviteEmails.length > 0
+                    ? inviteEmails.join(', ')
+                    : '초대하기 팝업에서 설정해주세요.';
+            };
+        }
+        return (privilege: string) => '초대하기 팝업에서 설정해주세요.';
+    }, [members, inviteList, mode]);
+
     const fetchStudyDetail = async (stdNo) => {
         try {
             const response = await studyApi.getStudyDetail(stdNo);
@@ -157,6 +189,10 @@ const StudyNew = ({}) => {
                 startDt: dayjs(response.content['std_start_date']),
                 endDt: dayjs(response.content['std_end_date']),
             });
+
+            setStudySurveySetList(response.content['studySurveySetList']);
+            setInviteList(response.content['inviteList']);
+            setManagerList(response.content['managerList']);
 
             if (response.content['drug_code']) {
                 setDrug({
@@ -511,22 +547,46 @@ const StudyNew = ({}) => {
                                         </span>
                                     </Typography>
                                 </li>
-                                <li>
-                                    <Typography>
-                                        Maintainer (Study의 수정, 멤버 초대) :{' '}
-                                        <span style={{ color: 'red' }}>
-                                            초대하기 팝업에서 설정해주세요.
-                                        </span>
-                                    </Typography>
-                                </li>
-                                <li>
-                                    <Typography>
-                                        Developer (Study 조회) :{' '}
-                                        <span style={{ color: 'red' }}>
-                                            초대하기 팝업에서 설정해주세요.
-                                        </span>
-                                    </Typography>
-                                </li>
+
+                                {mode === 'write' ? (
+                                    <>
+                                        <li>
+                                            <Typography>
+                                                초대 멤버(Maintainer) :{' '}
+                                                <span style={{ color: 'red' }}>
+                                                    {getEmailByPrivilege('MAINTAINER')}
+                                                </span>
+                                            </Typography>
+                                        </li>
+                                        <li>
+                                            <Typography>
+                                                초대 멤버(Developer) :{' '}
+                                                <span style={{ color: 'red' }}>
+                                                    {getEmailByPrivilege('DEVELOPER')}
+                                                </span>
+                                            </Typography>
+                                        </li>
+                                    </>
+                                ) : (
+                                    <>
+                                        <li>
+                                            <Typography>
+                                                Maintainer (Study의 수정, 멤버 초대) :{' '}
+                                                <span style={{ color: 'red' }}>
+                                                    {getEmailByPrivilege('MAINTAINER')}
+                                                </span>
+                                            </Typography>
+                                        </li>
+                                        <li>
+                                            <Typography>
+                                                Developer (Study 조회) :{' '}
+                                                <span style={{ color: 'red' }}>
+                                                    {getEmailByPrivilege('DEVELOPER')}
+                                                </span>
+                                            </Typography>
+                                        </li>
+                                    </>
+                                )}
                             </ul>
                         </Grid>
                     </Grid>
@@ -566,12 +626,23 @@ const StudyNew = ({}) => {
                     </Grid>
                 </Grid>
             )}
-            <MemberManagement
-                isOpen={isOpenMember}
-                handleClose={handleCloseMember}
-                title={title}
-                mode={mode}
-            />
+            {mode === 'write' ? (
+                <MemberInvitement
+                    isOpen={isOpenMember}
+                    handleClose={handleCloseMember}
+                    title={title}
+                    mode={mode}
+                    members={members}
+                    setMembers={setMembers}
+                />
+            ) : (
+                <MemberManagement
+                    isOpen={isOpenMember}
+                    handleClose={handleCloseMember}
+                    studyNo={stdNo}
+                ></MemberManagement>
+            )}
+
             <SurveyConnectDialog isOpen={isOpenSurvey} handleClose={handleCloseSurvey} />
         </Container>
     );
