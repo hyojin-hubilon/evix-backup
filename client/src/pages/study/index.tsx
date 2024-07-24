@@ -28,6 +28,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 dayjs.extend(isSameOrBefore);
 import DatePicker, { DatePickerProps } from "antd/lib/date-picker";
+import { paginator } from '@/utils/helper';
 const { RangePicker } = DatePicker;
 
 const StudyList = () => {
@@ -40,8 +41,9 @@ const StudyList = () => {
 	const [ searchTerm, setSearchTerm] = useState('');
 	const [activeDateSetting, setActiveDateSetting] = useState('full');
 	const [ dateSet, setDateSet ] = useState<{startDt: string, endDt: string}>({startDt : '', endDt: ''});
-	const [ pageMax, setPageMax ] = useState(10);
+	const [ pageCount, setPageCount ] = useState(0);
 	const [ page, setPage] = useState(1);
+	const [ itemPerPage, setItemPerPage ] = useState(10);
     const navigate = useNavigate();
 
     // Study 데이터 불러오기
@@ -53,7 +55,7 @@ const StudyList = () => {
                 setStudies(studyList);
 				setSearched(studyList);
                 setStudyCount(studyList.length);
-				setPageMax(Math.round(studyList.length/10));
+				setPageCount(Math.ceil(studyList.length/itemPerPage));
             }
         } catch (error) {
             console.error('Failed to fetch study list:', error);
@@ -119,8 +121,8 @@ const StudyList = () => {
 		});
 	};
 
-	const handleChangePage = (_e, page) => {
-		setPage(page);
+	const handleChangePage = (_e, value) => {
+		setPage(paginator(searched, value, itemPerPage).page);
 	}
 
 
@@ -134,7 +136,6 @@ const StudyList = () => {
 			}
 		});
 
-		console.log(newSearchedList)
 
 		if(searchTerm) {
 			newSearchedList = newSearchedList.filter(study => {
@@ -144,9 +145,7 @@ const StudyList = () => {
 			});
 		}
 
-		console.log(newSearchedList)
-
-		newSearchedList =  newSearchedList.filter((study) => {
+		newSearchedList = newSearchedList.filter((study) => {
 			if (activeTab === '0') return true;
 			if (activeTab === '1' && study.std_privilege === 'OWNER')
 				return true;
@@ -155,8 +154,9 @@ const StudyList = () => {
 			return false;
 		})
 
-		console.log(newSearchedList)
 		setSearched(newSearchedList);
+		setPageCount(Math.ceil(newSearchedList.length/itemPerPage));
+		setPage(1);
 	}, [dateSet, searchTerm, activeTab])
 
     return (
@@ -253,14 +253,16 @@ const StudyList = () => {
 							</Grid>
                         </Grid>
 
-                        {searched.map((study) => (
-                                <Grid item xs={12} key={study.std_no}>
-                                    <StudyListItem study={study} />
-                                </Grid>
-                            ))}
+						{paginator(searched, page, itemPerPage).data.map((study, index) => {
+							return(
+								<Grid item xs={12} key={study.std_no}>
+									<StudyListItem study={study} />
+								</Grid>
+							)
+						})}
                         <Grid item container xs={12} justifyContent="center">
 							<Pagination
-								count={pageMax}
+								count={pageCount}
 								page={page}
 								onChange={handleChangePage}
 								color="primary"
