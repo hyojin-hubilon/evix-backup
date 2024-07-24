@@ -15,15 +15,39 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { MemberTempType } from '@/types/study';
+import studyApi from '@/apis/study';
 
 type MemberListItemProps = {
+    studyNo: number;
     member: MemberTempType;
     sendMailConfirm: (member: MemberTempType) => void;
     sendDeleteConfirm: (member: MemberTempType) => void;
 };
 
-const MemberListItem = ({ member, sendMailConfirm, sendDeleteConfirm }: MemberListItemProps) => {
+const MemberListItem = ({
+    studyNo,
+    member,
+    sendMailConfirm,
+    sendDeleteConfirm,
+}: MemberListItemProps) => {
     const [memberAuth, setMemberAuth] = useState(member.std_privilege.toLowerCase());
+
+    console.log('member: ', member);
+
+    const handleChangePrivilege = async (e) => {
+        const newPrivilege = e.target.value;
+        setMemberAuth(newPrivilege);
+
+        try {
+            await studyApi.updateMemberPrivilege({
+                std_no: studyNo,
+                user_no: member.user_no,
+                std_privilege: newPrivilege.toUpperCase(),
+            });
+        } catch (error) {
+            console.error('Failed to update member privilege:', error);
+        }
+    };
 
     return (
         <ListItem divider>
@@ -52,7 +76,7 @@ const MemberListItem = ({ member, sendMailConfirm, sendDeleteConfirm }: MemberLi
                         secondary={member.belong}
                     />
                 ) : (
-                    <ListItemText>{member.email}</ListItemText>
+                    <ListItemText>{member.user_email}</ListItemText>
                 )}
             </Box>
 
@@ -63,7 +87,8 @@ const MemberListItem = ({ member, sendMailConfirm, sendDeleteConfirm }: MemberLi
                 >
                     <Select
                         value={memberAuth}
-                        onChange={(e) => setMemberAuth(e.target.value)}
+                        // onChange={(e) => setMemberAuth(e.target.value)}
+                        onChange={handleChangePrivilege}
                         sx={{ width: 1, backgroundColor: 'white' }}
                         displayEmpty
                         disabled={member.inviteStatus !== 'Approved' ? true : false}
