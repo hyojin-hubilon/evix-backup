@@ -13,6 +13,7 @@ import {
 	InputAdornment,
 	Select,
 	MenuItem,
+	Pagination,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import StudyListItem from './components/StudyListItem';
@@ -38,7 +39,9 @@ const StudyList = () => {
     const [fullName, setFullName] = useState<string>(''); // 사용자 전체 이름 상태
 	const [ searchTerm, setSearchTerm] = useState('');
 	const [activeDateSetting, setActiveDateSetting] = useState('full');
-	const [ dateSet, setDateSet ] = useState<{startDt: string, endDt: string}>({startDt : 'Start Date', endDt: 'End Date'});
+	const [ dateSet, setDateSet ] = useState<{startDt: string, endDt: string}>({startDt : '', endDt: ''});
+	const [ pageMax, setPageMax ] = useState(10);
+	const [ page, setPage] = useState(1);
     const navigate = useNavigate();
 
     // Study 데이터 불러오기
@@ -50,6 +53,7 @@ const StudyList = () => {
                 setStudies(studyList);
 				setSearched(studyList);
                 setStudyCount(studyList.length);
+				setPageMax(Math.round(studyList.length/10));
             }
         } catch (error) {
             console.error('Failed to fetch study list:', error);
@@ -74,7 +78,7 @@ const StudyList = () => {
 
     useEffect(() => {
         fetchStudies();
-        fetchInvitedStudies();
+        // fetchInvitedStudies();
     }, []);
 
     const handleChange = (newValue: string) => {
@@ -98,10 +102,6 @@ const StudyList = () => {
 
 	const handleSearchStudy = (text) => {
 		setSearchTerm(text);
-			if(!text) setSearched(studies);
-			else {
-				
-			}
 	}
 
 	const handleChangeDateSetting = (newValue) => {
@@ -119,6 +119,10 @@ const StudyList = () => {
 		});
 	};
 
+	const handleChangePage = (_e, page) => {
+		setPage(page);
+	}
+
 
 	useEffect(() => {
 		let newSearchedList = studies.filter(study => {
@@ -130,6 +134,8 @@ const StudyList = () => {
 			}
 		});
 
+		console.log(newSearchedList)
+
 		if(searchTerm) {
 			newSearchedList = newSearchedList.filter(study => {
 				if(study.title.toLowerCase().includes(searchTerm.toLowerCase())) return true;
@@ -137,8 +143,21 @@ const StudyList = () => {
 				else return false;
 			});
 		}
+
+		console.log(newSearchedList)
+
+		newSearchedList =  newSearchedList.filter((study) => {
+			if (activeTab === '0') return true;
+			if (activeTab === '1' && study.std_privilege === 'OWNER')
+				return true;
+			if (activeTab === '2' && study.std_privilege === 'MAINTAINER' || activeTab === '3' && study.std_privilege === 'DEVELOPER')
+				return true;
+			return false;
+		})
+
+		console.log(newSearchedList)
 		setSearched(newSearchedList);
-	}, [dateSet, searchTerm])
+	}, [dateSet, searchTerm, activeTab])
 
     return (
         <Container maxWidth="lg">
@@ -175,7 +194,7 @@ const StudyList = () => {
                                     <Tab label="Developer" value="3" />
                                 </Tabs>
                             </Grid> */}
-                            <Grid item xs={activeDateSetting == 'full' ? 6 : 4.5}>
+                            <Grid item xs={activeDateSetting == 'full' ? 5.9 : 4.5}>
 								<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
 									startAdornment={
 										<InputAdornment position="start">
@@ -234,34 +253,19 @@ const StudyList = () => {
 							</Grid>
                         </Grid>
 
-                        {searched
-                            .filter((study) => {
-                                if (activeTab === '0') return true;
-                                if (activeTab === '1' && study.std_privilege === 'OWNER')
-                                    return true;
-                                if (activeTab === '2' && study.std_privilege === 'MAINTAINER')
-                                    return true;
-                                if (activeTab === '3' && study.std_privilege === 'DEVELOPER')
-                                    return true;
-                                return false;
-                            })
-                            .map((study) => (
+                        {searched.map((study) => (
                                 <Grid item xs={12} key={study.std_no}>
                                     <StudyListItem study={study} />
                                 </Grid>
                             ))}
-                        {/* <Grid item xs={12}>
-                            <Box display="flex" justifyContent="center" alignContent="center">
-                                <Button
-                                    size="large"
-                                    variant="contained"
-                                    color="secondary"
-                                    sx={{ ml: 'auto', mr: 'auto' }}
-                                >
-                                    더 보기
-                                </Button>
-                            </Box>
-                        </Grid> */}
+                        <Grid item container xs={12} justifyContent="center">
+							<Pagination
+								count={pageMax}
+								page={page}
+								onChange={handleChangePage}
+								color="primary"
+							/>
+                        </Grid>
                     </>
                 ) : (
                     <>
@@ -294,7 +298,7 @@ const StudyList = () => {
                     </>
                 )}
 
-                {invitedStudies.length > 0 && (
+                {/* {invitedStudies.length > 0 && (
                     <Grid container item xs={12} direction="column">
                         <Box m={1}>
                             <Typography color="primary" variant="caption">
@@ -310,7 +314,7 @@ const StudyList = () => {
                             />
                         ))}
                     </Grid>
-                )}
+                )} */}
             </Grid>
         </Container>
     );
