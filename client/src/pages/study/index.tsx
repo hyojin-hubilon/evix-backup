@@ -98,13 +98,7 @@ const StudyList = () => {
 		setSearchTerm(text);
 			if(!text) setSearched(studies);
 			else {
-				const newSearchedList = studies.filter(study => {
-					if(study.title.toLowerCase().includes(text.toLowerCase())) return true;
-					else if(study.disease.toLowerCase().includes(text.toLowerCase())) return true;
-					else return false;
-				});//status 정의 후 검색 추가해야함
-
-				setSearched(newSearchedList);
+				
 			}
 	}
 
@@ -113,11 +107,34 @@ const StudyList = () => {
 	}
 
 	const onChangeDate = (date, dateString: string[]) => {
+		console.log(date, dateString)
 		setDateSet({
 			startDt: dateString[0],
 			endDt: dateString[1]
-		});		
-	  };
+		});
+	};
+
+
+	useEffect(() => {
+		let newSearchedList = studies.filter(study => {
+			if(dateSet.startDt && dateSet.endDt) {
+				if(dayjs(dateSet.startDt).isBefore(dayjs(study.std_start_date)) && dayjs(study.std_end_date).isBefore(dayjs(dateSet.endDt))) return true;
+				//isSameOrBefore로 변경
+				else return false;
+			} else {
+				return true;
+			}
+		});
+
+		if(searchTerm) {
+			newSearchedList = newSearchedList.filter(study => {
+				if(study.title.toLowerCase().includes(searchTerm.toLowerCase())) return true;
+				else if(study.disease.toLowerCase().includes(searchTerm.toLowerCase())) return true;
+				else return false;
+			});
+		}
+		setSearched(newSearchedList);
+	}, [dateSet, searchTerm])
 
     return (
         <Container maxWidth="lg">
