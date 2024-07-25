@@ -14,7 +14,6 @@ const useSticky = () => {
             ([event]) => setIsSticky(event.intersectionRatio < 1),//callback
             {threshold: [1], rootMargin: '-80px 0px 0px 0px',}//options
         )
-		console.log(observer);
         observer.observe(ref.current)
 
         return () => observer.disconnect()

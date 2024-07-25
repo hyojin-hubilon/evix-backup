@@ -2,16 +2,16 @@ import { AppBar, Box, Button, Container, Grid, Toolbar, Typography } from "@mui/
 import FormBuilder from "./components/FormBuilder";
 import useSticky from "@/utils/useSticky";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { CardProps, StateProps } from "@/store/reducers/survey";
+import { useDispatch, useSelector } from "react-redux";
+import { CardProps, resetCards, StateProps } from "@/store/reducers/survey";
 import { ExampleTypes, QuestionDivision, QuestionTypes, SurveyPostReqBody, SurveyQuestion } from "@/types/survey";
 import surveyApi from "@/apis/survey";
 import { useNavigate } from "react-router-dom";
 
 const SurveyNew = () => {
-	//주석 테스트
 	const { ref, isSticky } = useSticky();
 	const cards = useSelector((state: StateProps) => state.cards);
+	const dispatch = useDispatch();
 	const navigation = useNavigate();
 	// const [ newSurvey, setNewsurvey ] = useState<SurveyPostReqBody>({
 	// 	title: '',
@@ -25,6 +25,7 @@ const SurveyNew = () => {
 			const response = await surveyApi.postNewSurvey(survey); 
 			if (response.result && response.code === 200) {
 				console.log(response);
+				dispatch(resetCards()); //localStorage에 저장된 설문내용 삭제
 				navigation('/survey');
 			}
 		} catch (error) {
@@ -97,6 +98,9 @@ const SurveyNew = () => {
 				newSurvey.questionList.push(newQuestion);
 			}
 		})
+
+		
+		
 
 		postNewSurvey(newSurvey);
 	}

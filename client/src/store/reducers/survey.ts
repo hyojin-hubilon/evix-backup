@@ -61,20 +61,20 @@ export const requiredSlice = createSlice({
 const sortEtcItem = (currentContents: ItemTypeProps[]) => {
 	const etcIndex = currentContents.findIndex((content) => content.isEtc);
 	if (etcIndex !== -1) {
-	  const etcItem = { ...currentContents[etcIndex] };
-	  currentContents.splice(etcIndex, 1);
-	  currentContents.push(etcItem);
+		const etcItem = { ...currentContents[etcIndex] };
+		currentContents.splice(etcIndex, 1);
+		currentContents.push(etcItem);
 	}
 	return currentContents;
-  };
+};
   
-  const deleteEtcItem = (currentContents: ItemTypeProps[]) => {
+const deleteEtcItem = (currentContents: ItemTypeProps[]) => {
 	const etcIndex = currentContents.findIndex((content) => content.isEtc);
 	if (etcIndex !== -1) {
-	  currentContents.splice(etcIndex, 1);
+	  	currentContents.splice(etcIndex, 1);
 	}
 	return currentContents;
-  };
+};
   
 export const cardSlice = createSlice({
 	name: "Reducer",
@@ -236,6 +236,10 @@ export const cardSlice = createSlice({
 			const tmp = contents.splice(Number(action.payload.sourceIndex), 1);
 			contents.splice(Number(action.payload.destinationIndex), 0, ...tmp);
 		},
+		resetCards: (state: CardProps[]) => {
+			state = [initialCards] as CardProps[]
+			return state;
+		}
 	},
 });
 
@@ -253,4 +257,5 @@ export const {
 	toggleIsRequired,
 	moveCard,
 	moveContent,
+	resetCards,
   } = cardSlice.actions;
