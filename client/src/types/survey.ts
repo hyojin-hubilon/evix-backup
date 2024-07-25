@@ -122,3 +122,7 @@ export interface SurveyPostResponse {
 	questionList: [] | null,
 	survey_no : number
 }
+
+export interface SurveyPutReqBody extends SurveyPostReqBody {
+	survey_no: number
+}

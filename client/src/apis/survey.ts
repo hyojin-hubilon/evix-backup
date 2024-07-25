@@ -41,6 +41,21 @@ const surveyApi = {
 			const e = error as ResCommonError;
 			throw e;
 		}
+	},
+
+	saveSurvey: async (survey: SurveyPutReqBody) => {
+		try {
+			const responseData = await api<SurveyPostResponse>(
+				BASE_API_URL,
+				'put',
+				survey
+			);
+
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
 	}
   
 };
