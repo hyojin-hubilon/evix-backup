@@ -5,16 +5,57 @@ import {
     TextField,
     Typography,
     Checkbox,
-    FormControlLabel,
     FormHelperText,
+    FormControl,
+    Grid,
 } from '@mui/material';
 import { useFormik } from 'formik';
-import * as Yup from 'yup'; // 유효성 검사
-import axios from 'axios';
-import { useNavigate } from 'react-router';
+import * as Yup from 'yup';
+import { useNavigate, useLocation } from 'react-router';
+import { getTokenInfo } from '@/utils/Cookie';
+import { InviteToken } from '@/types/auth';
+import authApi from '@/apis/auth';
+import { useState } from 'react';
+import PrivacyPolicy from '@/components/modal/PrivacyPolicy';
+import Terms from '@/layout/LandingLayout/Footer/components/Terms';
+import SimpleModal from '@/components/ui/SimpleModal';
+
+const modalText = 'Thank you for signing up. Start the evix-DCT service';
+const modalButtonText = 'Log in';
+const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 480,
+    bgcolor: 'white',
+    boxShadow: 24,
+    p: 4,
+};
 
 const SignUp = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const token: string = location.state?.token ?? '';
+    const decodedToken: InviteToken = getTokenInfo(token);
+
+    const [privacyPolicyIsOpen, setPrivacyPolicyIsOpen] = useState<boolean>(false);
+    const [termsIsOpen, setTermsIsOpen] = useState<boolean>(false);
+    const [isComplete, setIsComplete] = useState<boolean>(false);
+
+    const handlePrivacyPolicy = (): void => {
+        setPrivacyPolicyIsOpen((prev) => !prev);
+    };
+    const handleTerms = (): void => {
+        setTermsIsOpen((prev) => !prev);
+    };
+    const handleComplete = () => {
+        setIsComplete((prev) => !prev);
+    };
+    const toLoginPage = () => {
+        navigate("/login")
+    }
+
     const validationSchema = Yup.object({
         first_name: Yup.string().required('First Name is required'),
         last_name: Yup.string().required('Last Name is required'),
@@ -25,12 +66,14 @@ const SignUp = () => {
                 'Combination of English, numbers and special characters'
             )
             .required('Password is required'),
-        confirmPassword: Yup.string()
+        confirm_password: Yup.string()
             .oneOf([Yup.ref('password'), ''], 'Passwords must match')
             .required('Confirm Password is required'),
-        mobile: Yup.string().required('mobile number is required'),
+        mobile: Yup.string()
+            .matches(/^\d+$/, 'Please enter numbers only.')
+            .required('mobile number is required'),
         country: Yup.string().required('Country is required'),
-        company: Yup.string().required('Company is required'),
+        company_name: Yup.string().required('Company is required'),
         job_title: Yup.string().required('Job Position is required'),
         industry: Yup.string().required('Industry is required'),
         terms: Yup.boolean().oneOf(
@@ -42,29 +85,31 @@ const SignUp = () => {
     const formik = useFormik({
         initialValues: {
             password: '',
-            confirmPassword: '',
+            confirm_password: '',
             mobile: '',
             country: '',
-            company: '',
+            company_name: '',
             job_title: '',
             industry: '',
             first_name: '',
             last_name: '',
             terms: false,
-            // token에서 가져올 정보들
-            email: 'mijin3004@gmail.com',
-            privilege: 'DEVELOPER',
+            email: decodedToken.email,
+            privilege: decodedToken['other-information'],
             active_yn: 'Y',
-            token: 'eyJ0eXAiOiJkY3Qtc2VjcmV0LXRva2VuIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkY3Qtc2VjcmV0LXRva2VuIiwiaXNzIjoiZXZpeC1kY3QiLCJ0b2tlbi1raW5kIjoiSU5WSVRFIiwic2VxdWVuY2Utbm8iOjMsImVtYWlsIjoibWlqaW4zMDA0QGdtYWlsLmNvbSIsIm90aGVyLWluZm9ybWF0aW9uIjoiRGV2ZWxvcGVyIiwiaWF0IjoxNzE4MzMwNDU1LCJleHAiOjE3MTk2MjY0NTV9.TX30lKdSyBqEIRSuxwx3xbjb9RHsEWqKeIqvAkXRJ38',
+            token: token,
         },
         validationSchema: validationSchema,
         onSubmit: async (values, { setSubmitting }) => {
             try {
-                console.log(setSubmitting);
-                console.log(values);
-                const response = await axios.post('/api/v1/auth/signup', values);
-                console.log('Form submitted successfully', response.data);
-                navigate('/');
+                const response = await authApi.signUp(values);
+                if (response.code === 200) {
+                    alert('Thank you for signing up.Start the evix-DCT service');
+                    handleComplete();
+                }
+                if (response.code === 400) {
+                    alert(response.message);
+                }
             } catch (error) {
                 console.error('Error submitting the form', error);
             } finally {
@@ -77,7 +122,7 @@ const SignUp = () => {
         <Container maxWidth="sm">
             <Box>
                 <Typography variant="h4" gutterBottom>
-                    Sign Up
+                    {decodedToken.email}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
                     Welcome to evix-DCT! We're so great to you're here, let's start by signing up.
@@ -122,18 +167,21 @@ const SignUp = () => {
                     />
                     <TextField
                         label="Confirm Password"
-                        name="confirmPassword"
+                        name="confirm_password"
                         type="password"
-                        value={formik.values.confirmPassword}
+                        value={formik.values.confirm_password}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         fullWidth
                         margin="normal"
                         required
                         error={
-                            formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)
+                            formik.touched.confirm_password &&
+                            Boolean(formik.errors.confirm_password)
                         }
-                        helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                        helperText={
+                            formik.touched.confirm_password && formik.errors.confirm_password
+                        }
                     />
                     <TextField
                         label="mobile"
@@ -161,15 +209,15 @@ const SignUp = () => {
                     />
                     <TextField
                         label="Company"
-                        name="company"
-                        value={formik.values.company}
+                        name="company_name"
+                        value={formik.values.company_name}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         fullWidth
                         margin="normal"
                         required
-                        error={formik.touched.company && Boolean(formik.errors.company)}
-                        helperText={formik.touched.company && formik.errors.company}
+                        error={formik.touched.company_name && Boolean(formik.errors.company_name)}
+                        helperText={formik.touched.company_name && formik.errors.company_name}
                     />
                     <TextField
                         label="Job Position"
@@ -195,26 +243,42 @@ const SignUp = () => {
                         error={formik.touched.industry && Boolean(formik.errors.industry)}
                         helperText={formik.touched.industry && formik.errors.industry}
                     />
-                    <FormControlLabel
-                        control={
+                    <FormControl>
+                        <Grid container alignItems="center">
                             <Checkbox
                                 name="terms"
-                                color="primary"
+                                size="medium"
                                 checked={formik.values.terms}
                                 onChange={formik.handleChange}
                             />
-                        }
-                        label="I agree to Terms of Service, Privacy Policies"
-                        // error={
-                        //     formik.touched.terms && Boolean(formik.errors.terms)
-                        // }
-                    />
+                            <label>I agree to</label>
+                            <label
+                                style={{
+                                    color: 'blue',
+                                    textDecoration: 'underline',
+                                    marginLeft: '4px',
+                                }}
+                                onClick={handleTerms}
+                            >
+                                Terms of Service
+                            </label>
+                            <label
+                                style={{
+                                    color: 'blue',
+                                    textDecoration: 'underline',
+                                    marginLeft: '4px',
+                                }}
+                                onClick={handlePrivacyPolicy}
+                            >
+                                Privacy Policies
+                            </label>
+                        </Grid>
+                    </FormControl>
                     {formik.touched.terms && formik.errors.terms && (
                         <FormHelperText style={{ color: 'red' }}>
                             {formik.errors.terms}
                         </FormHelperText>
                     )}
-
                     <Button
                         type="submit"
                         variant="contained"
@@ -226,6 +290,16 @@ const SignUp = () => {
                     </Button>
                 </form>
             </Box>
+            <Terms isOpen={termsIsOpen} handleClose={handleTerms} />
+            <PrivacyPolicy isOpen={privacyPolicyIsOpen} handleClose={handlePrivacyPolicy} />
+            <SimpleModal
+                text={modalText}
+                isOpen={isComplete}
+                handleOpen={handleComplete}
+                style={modalStyle}
+                handleClick={toLoginPage}
+                buttonText={modalButtonText}
+            />
         </Container>
     );
 };

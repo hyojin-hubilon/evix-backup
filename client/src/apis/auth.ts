@@ -87,7 +87,7 @@ const authApi = {
      */
     signUp: async (signUpData: AuthApiType.SignUpReq) => {
         try {
-            const responseData = await api<{}>('/auth/signup', 'put', signUpData);
+            const responseData = await api<{}>('/auth/signup', 'post', signUpData);
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
@@ -117,7 +117,7 @@ const authApi = {
      */
     verifyInviteToken: async (token: string) => {
         try {
-            const responseData = await api<{}>(`/auth/invite-verification/${token}`, 'get');
+            const responseData = await api<AuthApiType.VerifyInviteToken>(`/auth/invite-verification/${token}`, 'get');
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
