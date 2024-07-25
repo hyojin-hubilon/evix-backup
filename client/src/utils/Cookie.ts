@@ -53,3 +53,18 @@ export const getDecodedToken = (cookieName:string) => {
         return null;
     }
 };
+
+export const getTokenInfo = (token:string) => {
+    if (token) {
+        try {
+            const payload = token.split('.')[1];
+            const decodedPayload = JSON.parse(decodeURIComponent(escape(base64UrlDecode(payload))));
+            return decodedPayload;
+        } catch (error) {
+            console.error('토큰 복호화 중 에러 발생:', error);
+            return null;
+        }
+    } else {
+        return null;
+    }
+};
