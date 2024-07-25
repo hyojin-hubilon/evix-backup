@@ -90,7 +90,7 @@ export default function LandingPage() {
     }));
 
     return (
-        <Box className="landing">
+        <Box className="landing" sx={{bgcolor: 'white'}}>
             {/* Section 01*/}
             <Box className="section section-01">
                 <Container maxWidth="xl">

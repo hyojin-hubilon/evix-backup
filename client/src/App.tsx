@@ -15,10 +15,9 @@ const App = () => (
     <CookiesProvider>
         <ThemeCustomization>
 			<LocalizationProvider dateAdapter={AdapterDayjs}>
-
-            <ScrollTop>
-                <Routes />
-            </ScrollTop>
+				<ScrollTop>
+					<Routes />
+				</ScrollTop>
 			</LocalizationProvider>
         </ThemeCustomization>
     </CookiesProvider>

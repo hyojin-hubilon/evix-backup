@@ -1,37 +1,57 @@
+import React from 'react';
+import authApi from '@/apis/auth';
 import { Container, Typography, Stack, OutlinedInput, Button } from '@mui/material';
 import { useFormik } from 'formik';
+import { useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 const validationSchema = yup.object({
-    password: yup.string()
+    password: yup
+        .string()
         .min(8, 'Password should be of minimum 8 characters length')
         .matches(
             /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()])[a-zA-Z0-9!@#$%^&*()]{8,16}$/,
             'Combination of English, numbers and special characters'
         )
         .required('Password is required'),
-    newPassword: yup.string()
+    newPassword: yup
+        .string()
         .oneOf([yup.ref('password'), ''], 'Passwords must match')
         .required('Confirm Password is required'),
 });
 
 const ChangePasswordForm = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const user_no = location.state?.user_no || '';
+
     const formik = useFormik({
         initialValues: {
             password: '',
-            newPassword: ''
+            newPassword: '',
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
+        onSubmit: async (values, { setStatus, setSubmitting }) => {
             console.log('Password changed successfully!', values);
-            // Handle password change logic here
-        }
+            try {
+                const response = await authApi.resetPassword({
+                    user_no,
+                    new_password: values.password,
+                });
+                alert('비밀번호 변경 성공');
+                navigate('/login');
+            } catch (error) {
+                console.error('Password reset failed:', error);
+                setStatus({ errorMessage: 'Failed to reset password. Please try again.' });
+            }
+            setSubmitting(false);
+        },
     });
 
     return (
         <Container>
             <Typography variant="h4" gutterBottom>
-                Change password
+                Change Password
             </Typography>
 
             <Stack spacing={1} sx={{ mb: 2 }}>
@@ -69,6 +89,10 @@ const ChangePasswordForm = () => {
                         <Typography color="error">{formik.errors.newPassword}</Typography>
                     )}
 
+                    {formik.status && formik.status.errorMessage && (
+                        <Typography color="error">{formik.status.errorMessage}</Typography>
+                    )}
+
                     <Button
                         disableElevation
                         fullWidth
@@ -76,6 +100,7 @@ const ChangePasswordForm = () => {
                         type="submit"
                         variant="contained"
                         color="primary"
+                        disabled={formik.isSubmitting}
                     >
                         Change Password
                     </Button>

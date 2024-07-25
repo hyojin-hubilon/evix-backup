@@ -1,0 +1,188 @@
+import { PlusOutlined } from '@ant-design/icons';
+import {
+    Grid,
+    Box,
+    Typography,
+    Chip,
+    Container,
+    Tabs,
+    Tab,
+    Button,
+    IconButton,
+	OutlinedInput,
+} from '@mui/material';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import SurveyListItem from './components/SurveyListItem';
+import surveyApi from '@/apis/survey';
+import { MySurveyList, SurveyApiResponse } from '@/types/survey';
+import { useNavigate } from 'react-router-dom';
+import { getDecodedToken } from '@/utils/Cookie';
+
+const SurveyList = () => {
+    const [surveyCount, setSurveyCount] = useState<number>(0); // Survey 개수 상태
+    const [activeTab, setActiveTab] = useState<string>('0'); // 활성 탭 상태
+    const [ surveyList, setSurveyList ] = useState<MySurveyList[]>([]); // 내 Survey 목록 상태
+    const navigate = useNavigate();
+	const page = useRef(1);
+	const [ next, setNext ] = useState(false);
+	const [ searchText, setSearchText ] = useState('');
+	
+
+	const decodedToken = getDecodedToken('userInfoToken');
+	const userNo = decodedToken['user-no'];
+
+    // Surrvey 데이터 불러오기
+    const fetchSurvey = async (p) => {
+        try {
+            const response = await surveyApi.mySurveyList(p, 10, 'CREATED'); //20개씩? 10개씩? 더보기 추가, 검색추가
+            if (response.result && response.code === 200) {
+                const newSurveyList = response.content.surveyMyList ?? [];
+				setSurveyList(surverList => [...surverList, ...newSurveyList]);
+                setSurveyCount(surveyCount + newSurveyList.length);
+				const next = response.content.next ?? false;
+				setNext(next);
+            }
+        } catch (error) {
+            console.error('Failed to fetch study list:', error);
+        }
+    };
+
+    
+    useEffect(() => {
+		fetchSurvey(1);	
+    }, []);
+
+	const handleSeeMore = () => {
+		page.current = page.current+1;
+		fetchSurvey(page.current);
+	}
+
+    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        event.preventDefault();
+        setActiveTab(newValue);
+    };
+
+    const handleCreateSurvey = () => {
+        navigate('/survey/new');
+    };
+
+	const handleSearch = () => {
+		//아직 search가 없구나..
+	}
+
+    return (
+        <Container maxWidth="lg">
+            <Grid container rowSpacing={3} columnSpacing={2.75}>
+                <Grid container item xs={12}>
+                    <Box display="flex" alignItems="center" gap={1}>
+                        <Typography variant="h3">Survey 목록</Typography>
+                        <Chip label={surveyCount} color="primary" size="small" />
+                    </Box>
+					<Button variant="contained" onClick={handleCreateSurvey} sx={{ml:'auto'}}>
+						<PlusOutlined />
+						<Typography sx={{ ml: 1 }}>Survey 생성</Typography>
+					</Button>
+                </Grid>
+
+                {surveyList.length > 0 ? (
+                    <>
+                        <Grid
+                            container
+                            item
+                            xs={12}
+                            sx={{ borderBottom: 1, borderColor: 'divider' }}
+                            alignItems="center"
+                        >
+                            <Grid item xs={8}>
+                                <Tabs
+                                    value={activeTab}
+                                    onChange={handleChange}
+                                    aria-label="survey-status-tab"
+                                >
+                                    <Tab label="전체" value="0" />
+                                    <Tab label="내 설문" value="1" />
+                                    <Tab label="작성중 설문" value="2" />
+                                    <Tab label="참여중인 Study 설문" value="3" />
+                                </Tabs>
+                            </Grid>
+                            <Grid container item xs={4} justifyContent="flex-end">
+								<form onSubmit={handleSearch}>
+									<Box display="flex" gap="0.5rem">
+                               			<OutlinedInput size="small" value={searchText} onChange={(e) => setSearchText(e.target.value)}/>
+							   			<Button variant="outlined" onClick={handleSearch}>검색</Button>
+									</Box>
+							   	</form>
+                            </Grid>
+                        </Grid>
+						
+                        {surveyList
+                            // .filter((survey) => { //전체/ 내가 작성한 설문/ 참여설문 api 따로
+                            //     if (activeTab === '0') return true;
+                            //     if (activeTab === '1' && survey.created_user_no === userNo)
+                            //         return true;
+                            //     if (activeTab === '2' && survey.created_user_no === userNo) //status 추가되어야함
+                            //         return true;
+                            //     if (activeTab === '3' && survey.created_user_no !== userNo)
+                            //         return true;
+                            //     return false;
+                            // })
+                            .map((survey, index) => (
+                                <Grid item xs={12} key={index}>
+                                    <SurveyListItem survey={survey} userNo={userNo} /> 
+                                </Grid>
+                            ))}
+							{
+								next && 
+								<Grid item xs={12}>
+									<Box display="flex" justifyContent="center" alignContent="center">
+										<Button
+											size="large"
+											variant="contained"
+											color="secondary"
+											onClick={handleSeeMore}
+											>
+											더 보기
+										</Button>
+									</Box>
+								</Grid>
+							}
+						
+                    </>
+                ) : (
+                    <>
+                        <Grid
+                            container
+                            item
+                            xs={12}
+                            alignItems="center"
+                            justifyContent="center"
+                            sx={{ pb: 4, borderBottom: 1, borderColor: 'divider' }}
+                        >
+                            <Box display="flex" flexDirection="column" alignItems="center">
+                                <IconButton color="primary" onClick={handleCreateSurvey}>
+                                    <PlusOutlined />
+                                </IconButton>
+                                <Typography
+                                    sx={{
+                                        mt: 1,
+                                        cursor: 'pointer',
+                                        '&:hover': { textDecoration: 'underline' },
+                                    }}
+                                    color="primary"
+                                    variant="h5"
+                                    onClick={handleCreateSurvey}
+                                >
+                                    Survey 생성
+                                </Typography>
+                            </Box>
+                        </Grid>
+                    </>
+                )}
+
+                
+            </Grid>
+        </Container>
+    );
+};
+
+export default SurveyList;

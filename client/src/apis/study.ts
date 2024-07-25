@@ -1,6 +1,12 @@
 // import { handleApiError, instance } from "../commonApi";
 
-import { ResCommonError, api } from '@/apis/axios-common';
+import {
+    ResCommonError,
+    ResCommonSuccess,
+    api,
+    axios_file_instance,
+    file_api,
+} from '@/apis/axios-common';
 import * as StudyApiType from '@/types/study';
 
 const BASE_API_URL = '/researcher/study';
@@ -11,9 +17,11 @@ const studyApi = {
      * @param data
      * @returns
      */
-    createStudy: async (data: StudyApiType.Study) => {
+    createStudy: async (data: any) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}`, 'post', data);
+            const responseData = await file_api<{}>(`${BASE_API_URL}`, 'post', data);
+
+            console.log(responseData);
 
             return responseData;
         } catch (error) {
@@ -29,7 +37,7 @@ const studyApi = {
      */
     updateStudy: async (data: any) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}`, 'put', data);
+            const responseData = await file_api<{}>(`${BASE_API_URL}`, 'put', data);
 
             return responseData;
         } catch (error) {
@@ -43,11 +51,10 @@ const studyApi = {
      * @param deleteData
      * @returns
      */
-    deleteStudy: async (deleteData: number) => {
+    deleteStudy: async (deleteData: { std_no: number }) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}`, 'delete', {
-                data: deleteData,
-            });
+            console.log(deleteData);
+            const responseData = await api<{}>(`${BASE_API_URL}`, 'delete', deleteData);
 
             return responseData;
         } catch (error) {
@@ -76,9 +83,10 @@ const studyApi = {
      * @param stdNo
      * @returns
      */
-    getStudyManager: async (stdNo: any) => {
+    getStudyManager: async (stdNo: number) => {
         try {
             const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/manager`, 'get');
+
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
@@ -151,6 +159,23 @@ const studyApi = {
         }
     },
 
+	/**
+     * 내 Study 목록 조회
+     */
+    fullMyStudyList: async () => {
+        try {
+            const responseData = await api<{}>(
+                `${BASE_API_URL}/full-my-list`,
+                'get'
+            );
+
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+
     /**
      * Study 상태 변경
      * @param data
@@ -176,10 +201,8 @@ const studyApi = {
     deleteStudyMember: async (std_no: number, user_no: number) => {
         try {
             const responseData = await api<{}>(`${BASE_API_URL}/study-user`, 'delete', {
-                data: {
-                    std_no,
-                    user_no,
-                },
+                std_no,
+                user_no,
             });
             return responseData;
         } catch (error) {
@@ -238,6 +261,20 @@ const studyApi = {
                 'get'
             );
             return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+
+    /**
+     * Study 배포
+     * @param deployData
+     */
+    deployStudy: async (deployData) => {
+        try {
+            const response = await api<{}>(`${BASE_API_URL}/deploy`, 'put', deployData);
+            return response;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;

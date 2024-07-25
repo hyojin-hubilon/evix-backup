@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MainCard from '@/components/MainCard';
 import { LinkOutlined } from '@ant-design/icons';
 import moment from 'moment';
@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import StudyMemberStatus from './study-info/StudyMemberStatus';
 import { STUDY_STATUS, STUDY_STATUS_KEY } from './StudyListItem';
+import MemberManagement from './study-new/MemberManagement';
 
 // // Define the types for the props
 // interface StudySurvey {
@@ -59,8 +60,13 @@ interface StudyInfoProps {
         description: string;
         disease: string;
         target_number: number;
+        eic_name: string | null;
+        eic_origin_name: string | null;
         std_status: string;
         updated_at: string;
+        drug_brand_name: string;
+        drug_code: string;
+        drug_manufacturer_name: string;
         studySurveySetList: {
             set_no: number;
             std_no: number;
@@ -83,7 +89,10 @@ interface StudyInfoProps {
             email: string;
             first_name: string;
             last_name: string;
-            profile_image_path: string | null;
+            profile_image_url: string | null;
+            profile_image_name: string | null;
+            company_name: string;
+            invited_at: string;
         }[];
         inviteList: {
             std_no: number;
@@ -102,6 +111,16 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
         return moment(dateString).format('YYYY-MM-DD');
     };
 
+    const [isOpenMember, setIsOpenMember] = useState(false);
+
+    const handleCloseMember = () => {
+        setIsOpenMember(!isOpenMember);
+    };
+
+    const handleInviteMember = (std_no: number) => {
+        setIsOpenMember(true);
+    };
+
     const statusLabel = STUDY_STATUS[studyDetail.std_status as STUDY_STATUS_KEY];
     return (
         <Grid container item rowSpacing={2} className="study-info">
@@ -115,9 +134,11 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                 <Typography variant="h6" color="primary">
                                     {statusLabel}
                                 </Typography>
-                                <Typography>
-                                    (최근 업데이트 {formatDate(studyDetail.updated_at)}){' '}
-                                </Typography>
+                                {studyDetail.updated_at && (
+                                    <Typography>
+                                        (최근 업데이트 {formatDate(studyDetail.updated_at)})
+                                    </Typography>
+                                )}
                             </Box>
                         </ListItem>
                         <ListItem>
@@ -128,7 +149,8 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                 </Typography>
                             </Box>
                         </ListItem>
-                        <ListItem>
+
+                        {/* <ListItem> // TODO: Billing 기능 없음
                             <Typography variant="h5">유료이용기간</Typography>
                             <Box display="flex" gap={1} alignItems="center">
                                 <Typography>2024.05.28 ~ 2024.08.31</Typography>
@@ -140,7 +162,7 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                     지난 결제내역
                                 </Button>
                             </Box>
-                        </ListItem>
+                        </ListItem> */}
                     </List>
                 </MainCard>
             </Grid>
@@ -189,34 +211,38 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                     <Typography>{studyDetail.disease}</Typography>
                                 </Box>
                             </ListItem>
-                            <ListItem sx={{ alignItems: 'flex-start' }}>
-                                <Typography variant="h5">의약품 정보</Typography>
-                                <Box>
-                                    <Typography>더마플라스트스포트(DermaplastSport)</Typography>
-                                    <Card
-                                        sx={{
-                                            backgroundColor: theme.palette.grey[100],
-                                            boxShadow: 'none',
-                                            p: '0.5rem',
-                                            mt: '0.5rem',
-                                        }}
-                                    >
-                                        <ul
-                                            style={{
-                                                margin: 0,
-                                                paddingLeft: '1.5rem',
-                                                listStyle: 'disc',
+                            {studyDetail.drug_code && (
+                                <ListItem sx={{ alignItems: 'flex-start' }}>
+                                    <Typography variant="h5">의약품 정보</Typography>
+                                    <Box>
+                                        <Typography>
+                                            {studyDetail.drug_manufacturer_name}
+                                        </Typography>
+                                        <Card
+                                            sx={{
+                                                backgroundColor: theme.palette.grey[100],
+                                                boxShadow: 'none',
+                                                p: '0.5rem',
+                                                mt: '0.5rem',
                                             }}
                                         >
-                                            <li>업체명: (주)나음케어</li>
-                                            <li>품목기준코드: 200410177</li>
-                                            <li>품목구분: 의약품</li>
-                                            <li>허가번호: 8</li>
-                                            <li>허가일: 2004-06-24</li>
-                                        </ul>
-                                    </Card>
-                                </Box>
-                            </ListItem>
+                                            <ul
+                                                style={{
+                                                    margin: 0,
+                                                    paddingLeft: '1.5rem',
+                                                    listStyle: 'disc',
+                                                }}
+                                            >
+                                                <li>업체명: {studyDetail.drug_brand_name}</li>
+                                                <li>품목기준코드: {studyDetail.drug_code}</li>
+                                                {/* <li>품목구분: 의약품</li>
+                                                <li>허가번호: 8</li>
+                                                <li>허가일: 2004-06-24</li> */}
+                                            </ul>
+                                        </Card>
+                                    </Box>
+                                </ListItem>
+                            )}
                         </List>
                     </MainCard>
                 </Grid>
@@ -234,19 +260,21 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                 },
                             }}
                         >
-                            {studyDetail.studySurveySetList.map((surveySet) =>
-                                surveySet.surveyList.map((survey) => (
-                                    <ListItem key={survey.survey_no}>
-                                        <Box display="flex" gap={1}>
-                                            <Link>{survey.title}</Link>
-                                            <Typography>
-                                                {surveySet.survey_cycle}에{' '}
-                                                {surveySet.number_in_cycle}회 반복
-                                            </Typography>
-                                        </Box>
-                                    </ListItem>
-                                ))
-                            )}
+                            {studyDetail.studySurveySetList &&
+                                studyDetail.studySurveySetList.length > 0 &&
+                                studyDetail.studySurveySetList.map((surveySet) =>
+                                    surveySet.surveyList.map((survey) => (
+                                        <ListItem key={survey.survey_no}>
+                                            <Box display="flex" gap={1}>
+                                                <Link>{survey.title}</Link>
+                                                <Typography>
+                                                    {surveySet.survey_cycle}에{' '}
+                                                    {surveySet.number_in_cycle}회 반복
+                                                </Typography>
+                                            </Box>
+                                        </ListItem>
+                                    ))
+                                )}
                         </List>
 
                         <Divider sx={{ mt: '1rem', mb: '1rem' }} />
@@ -264,7 +292,8 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                             }}
                         >
                             <ListItem>
-                                <Link>개인정보 제공 및 참여 동의서</Link>
+                                {/* <Link>개인정보 제공 및 참여 동의서</Link> */}
+                                <Link>{studyDetail.eic_origin_name ?? ''}</Link>
                             </ListItem>
                         </List>
                     </MainCard>
@@ -283,16 +312,29 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                     </Grid>
                     <Grid item xs={2}>
                         <Box display="flex" justifyContent="flex-end">
-                            <Button size="small" sx={{ mb: '0.3rem' }} variant="contained">
+                            <Button
+                                onClick={() => handleInviteMember(studyDetail.std_no)}
+                                size="small"
+                                sx={{ mb: '0.3rem' }}
+                                variant="contained"
+                            >
                                 멤버관리
                             </Button>
                         </Box>
                     </Grid>
                 </Grid>
                 <MainCard>
-                    <StudyMemberStatus inviteList={studyDetail.inviteList} />
+                    <StudyMemberStatus
+                        managerList={studyDetail.managerList}
+                        inviteList={studyDetail.inviteList}
+                    />
                 </MainCard>
             </Grid>
+            <MemberManagement
+                isOpen={isOpenMember}
+                studyNo={studyDetail.std_no}
+                handleClose={handleCloseMember}
+            />
         </Grid>
     );
 };

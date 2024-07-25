@@ -24,8 +24,7 @@ export interface Study {
     location?: string; // 생성 시에만 필요
     disease: string;
     target_number: number;
-    drug_code: string;
-    eic_file: string | null;
+    drug_code: string | null;
     std_status?: string; // 생성 시에만 필요
     std_payment_status?: string; // 생성 시에만 필요
     deploy_method?: string; // 생성 시에만 필요
@@ -55,6 +54,7 @@ export interface UpdateMemberPrivilegeRequest {
 export interface ManagerList {
     std_no: number;
     user_no: number;
+    std_privilege: string;
     profile_image_url: string;
     profile_image_name: string;
     first_name: string;
@@ -62,13 +62,20 @@ export interface ManagerList {
 }
 
 export interface MyStudyList {
+    active_yn: 'Y' | 'N';
+    delete_yn: 'Y' | 'N';
+    description: string;
+    disease: string;
+    location: string;
     std_no: number;
+    std_payment_status: string | null;
     title: string;
     std_status: string;
     std_start_date: string;
     std_end_date: string;
     std_privilege: string;
     managerList: ManagerList[];
+    std_type: string;
 }
 
 export interface StudyListItemProps {
@@ -86,4 +93,32 @@ export interface StudyApiResponse {
 export interface StudyInvitedItemProps {
     invitedStudy: any;
     onAcceptInvite: () => void;
+}
+
+export type MemberTempType = {
+    user_no: number;
+    profile_image_url: string;
+    first_name: string;
+    last_name: string;
+    std_privilege: string;
+    belong: string;
+    user_email: string;
+    inviteStatus: string;
+};
+
+export type InviteMemberTempType = {
+    user_email: string;
+    std_privilege: string;
+};
+
+export interface invitedStudy {
+    std_no: number;
+    title: string;
+    owner_first_name: string;
+    owner_last_name: string;
+    user_no: number;
+    user_email: string;
+    invite_url: string;
+    invite_token: string;
+    created_at: string;
 }

@@ -1,14 +1,14 @@
 import * as Yup from 'yup';
-import { Container, Typography, Link, Stack,Button, TextField } from '@mui/material';
+import { Container, Typography, Link, Stack, Button, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import authApi from '@/apis/auth';
+import { useNavigate } from 'react-router-dom';
 
 const ForgotPasswordForm = () => {
+    const navigate = useNavigate();
 
     const validationSchema = Yup.object().shape({
-        email: Yup.string()
-            .email('Must be a valid email')
-            .required('Please enter your email'),
+        email: Yup.string().email('Must be a valid email').required('Please enter your email'),
     });
 
     const formik = useFormik({
@@ -18,8 +18,19 @@ const ForgotPasswordForm = () => {
         validationSchema: validationSchema,
         onSubmit: async (values, { setStatus, setSubmitting }) => {
             try {
-                await authApi.sendPasswordResetLink(values);
-                setStatus({ success: true });
+                const response = await authApi.sendPasswordResetLink(values);
+
+                if (response.code === 200) {
+                    console.log('reset_token: ', response.content.reset_token);
+
+                    setStatus({ success: true });
+                    // navigate('/change-password', {
+                    navigate('/authentication-password', {
+                        state: { resetToken: response.content.reset_token },
+                    });
+                } else {
+                    console.log('error message: ', response.message);
+                }
             } catch (error) {
                 console.error('Error sending password reset link:', error);
                 setStatus({ success: false });
@@ -53,8 +64,10 @@ const ForgotPasswordForm = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         error={formik.touched.email && Boolean(formik.errors.email)}
-                        helperText={formik.touched.email && formik.errors.email ? formik.errors.email : ''}
-                        />
+                        helperText={
+                            formik.touched.email && formik.errors.email ? formik.errors.email : ''
+                        }
+                    />
                     <Button
                         disableElevation
                         fullWidth
@@ -63,7 +76,7 @@ const ForgotPasswordForm = () => {
                         variant="contained"
                         color="primary"
                     >
-                    Continue
+                        Continue
                     </Button>
                 </Stack>
             </form>
