@@ -217,7 +217,7 @@ const StudyList = () => {
 									<MenuItem value="1">My Studies</MenuItem>
 									<MenuItem value="2">Included Studies</MenuItem>
 								</Select>
-								{/* 아직 분류가 정확하지 않음 */}
+								{/* My Studies : Owner, Included Studies : MAINTAINER, DEVELOPER */}
 							</Grid>
 							<Grid item xs={activeDateSetting == 'full' ? 2 : 1.5}>
 								<Select

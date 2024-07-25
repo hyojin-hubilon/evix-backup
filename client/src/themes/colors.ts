@@ -1,4 +1,4 @@
-import { Color } from '@mui/material';
+import { Color, Palette, PaletteColor } from '@mui/material';
 
 // ==============================|| PRESET THEME - THEME SELECTOR ||============================== //
 declare module '@mui/material' {
@@ -7,10 +7,22 @@ declare module '@mui/material' {
         A50: string;
         A800: string;
     }
+
+	interface Palette {
+		purple: PaletteColor, 
+		stdStatus: {
+			ongoing : string,
+			completed: string,
+			new: string,
+			pause: string,
+			stop:string,
+			expired: string
+		}
+	}
 }
 
 const ThemeColors = (colors) => {
-    const { blue, red, gold, cyan, green, grey } = colors;
+    const { blue, red, gold, cyan, green, grey, purple } = colors;
     const greyColors: Color = {
         0: grey[0],
         50: grey[1],
@@ -95,6 +107,21 @@ const ThemeColors = (colors) => {
             contrastText,
         },
         grey: greyColors,
+		stdStatus: {
+			ongoing : '#005BFF',
+			completed: '#08A000',
+			new: '#898989',
+			pause: '#898989',
+			stop: '#898989',
+			expired: '#AE2DFF'
+		},
+		purple: {
+			lighter: purple[0],
+            light: purple[3],
+            main: purple[5],
+            dark: purple[7],
+            darker: purple[9],
+		}
     };
 };
 
