@@ -1,4 +1,4 @@
-export interface RegistrableSurvey {
+export interface RegistrableSurvey { //스터디에 등록가능한 서베이
     //스터디에 등록가능한 서베이
     survey_no: number;
     title: string;
@@ -6,6 +6,7 @@ export interface RegistrableSurvey {
     frequency: string; //반복 주기
     times?: number; //반복 횟수
     sort: number; // 순번
+}
 
 export interface ExampleList { //예시목록
 	survey_no: number,
