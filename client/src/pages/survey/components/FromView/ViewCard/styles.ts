@@ -49,5 +49,5 @@ export const RequiredSpan = styled('span')(({theme}) => ({
 export const RequireMark = styled('span')(({theme}) => ({
 	paddingLeft: '4px',
   	fontSize: '16px',
-  	color: theme.palette.warning.main
+  	color: theme.palette.error.main
 }))

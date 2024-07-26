@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { EditOutlined, LinkOutlined } from '@ant-design/icons';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box, Button, Card, ClickAwayListener, Grid, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Typography, useTheme } from '@mui/material';
@@ -15,6 +15,8 @@ type SurveyListItemProps = {
 const SurveyListItem = ({ survey, userNo }: SurveyListItemProps) => {
     const theme = useTheme();
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const navigate = useNavigate();
+	
 	const subOpen = Boolean(anchorEl);
 	const handleOpenClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -23,13 +25,15 @@ const SurveyListItem = ({ survey, userNo }: SurveyListItemProps) => {
 		setAnchorEl(null);
 	};
 
-	const options = [
-		"미리보기",
-		"설문복사",
-		"삭제"	
-	]
+	const handlePreview = () => {
+		navigate(`/survey/preview/${survey.survey_no}`)
+	}
 
-	const handleMenuItemClick = (event, index) => {
+	const handleCopy = () => {
+
+	}
+
+	const handleDelete = () => {
 
 	}
 	
@@ -116,14 +120,9 @@ const SurveyListItem = ({ survey, userNo }: SurveyListItemProps) => {
 								<Paper>
 								<ClickAwayListener onClickAway={handleClose}>
 									<MenuList id="split-button-menu" autoFocusItem>
-									{options.map((option, index) => (
-										<MenuItem
-											key={option}
-											onClick={(event) => handleMenuItemClick(event, index)}
-										>
-										{option}
-										</MenuItem>
-									))}
+										<MenuItem onClick={handlePreview}>미리보기</MenuItem>
+										<MenuItem onClick={handleCopy}>설문복사</MenuItem>
+										<MenuItem onClick={handleDelete}>삭제</MenuItem>
 									</MenuList>
 								</ClickAwayListener>
 								</Paper>

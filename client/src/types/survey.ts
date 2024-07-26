@@ -11,6 +11,7 @@ export interface ExampleList { //예시목록
 	question_no: number,
 	example_no: number,
 	example_title: string,
+	example_type: ExampleTypes,
 	example_value: string,
 	sort: number
 }
