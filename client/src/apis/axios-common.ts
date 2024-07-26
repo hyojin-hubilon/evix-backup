@@ -98,7 +98,7 @@ export async function api<T>(
             });
         // delete 수정
         // else res = await axios_instance.get(url);
-        else res = await axios_instance.get<ResCommonSuccess<T>>(url);
+        else res = await axios_instance.get<ResCommonSuccess<T>>(url, data);
         // if (loadingEle) {
         //     loadingEle.style.display = 'none';
         // }
