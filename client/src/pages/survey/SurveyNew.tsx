@@ -97,8 +97,6 @@ const SurveyNew = () => {
 
 				newSurvey.questionList.push(newQuestion);
 			} else if(card.inputType == QuestionTypes.MULTIPLE) {
-
-
 				let valueNum = 1;
 
 				if(typeof card.contents == 'object') card.contents.forEach((example, i) => {

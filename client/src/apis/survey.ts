@@ -2,7 +2,7 @@ import {
     ResCommonError,
     api
 } from '@/apis/axios-common';
-import { SurveyApiResponse, SurveyPostReqBody, SurveyPostResponse } from '@/types/survey';
+import { SurveyApiResponse, SurveyDetail, SurveyPostReqBody, SurveyPostResponse, SurveyPutReqBody } from '@/types/survey';
 
 const BASE_API_URL = '/researcher/survey';
 
@@ -49,6 +49,20 @@ const surveyApi = {
 				BASE_API_URL,
 				'put',
 				survey
+			);
+
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
+
+	getSurvey: async (survey_no: number) => {
+		try {
+			const responseData = await api<SurveyDetail>(
+				`${BASE_API_URL}/${survey_no}`,
+				'get'
 			);
 
 			return responseData;
