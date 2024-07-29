@@ -9,8 +9,7 @@ type ViewCardProps = {
 	onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
 }
 
-const ViewCard = ({question, onChange}: ViewCardProps) => {
-	console.log(onChange)
+const ViewCard = ({question, onChange, ...field}: ViewCardProps) => {
 	return(
 		<S.SCard needToCompleteRequired={question.required_answer_yn}>
 			<Box mb={1}>
@@ -20,8 +19,8 @@ const ViewCard = ({question, onChange}: ViewCardProps) => {
 				</Typography>
 			</Box>
 			
-			{/* {question.question_type === QuestionTypes.WRITE ? <InputTextField example={question.exampleList[0]} onChange={onChange} /> : null} */}
-			{/* {question.question_type === QuestionTypes.SINGLE ? <InputRadio exampleList={question.exampleList} onChange={onChange} /> : null} */}
+			{question.question_type === QuestionTypes.WRITE ? <InputTextField example={question.exampleList[0]} onChange={onChange} {...field} /> : null} 
+			{question.question_type === QuestionTypes.SINGLE ? <InputRadio exampleList={question.exampleList} onChange={onChange} {...field} /> : null}
 			{/* {question.question_type === QuestionTypes.MULTIPLE ? <InputCheckbox id={id} /> : null} */}
 		</S.SCard>
 	)

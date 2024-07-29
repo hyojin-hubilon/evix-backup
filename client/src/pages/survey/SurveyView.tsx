@@ -1,11 +1,11 @@
 import surveyApi from "@/apis/survey";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { SurveyDetail } from '@/types/survey';
-import { Box, Button, Card, Typography, useTheme } from "@mui/material";
+import { ExampleTypes, QuestionTypes, SurveyDetail } from '@/types/survey';
+import { Box, Button, Card, TextField, Typography, useTheme } from "@mui/material";
 import ViewCard from "./components/FromView/ViewCard";
 import * as S from './components/FromView/ViewCard/styles';
-import { Field, FieldAttributes, Formik } from "formik";
+import { Field, FieldAttributes, Form, Formik, setIn } from "formik";
 
 type SurveyViewProps = {
 	preview: boolean,
@@ -24,6 +24,12 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 
 	console.log(survey_no)
 
+	const changeInitialValues = (survey: SurveyDetail) => {
+		const initial = {};
+		survey.questionList.forEach(quesiton => Object.assign(initial, {[quesiton.question_no] : ''}));
+		setInitialValues(initial);
+	}
+
 	const getSurveyDeatil = async () => {
 		try {
 			const response = await surveyApi.getSurvey(survey_no);
@@ -32,6 +38,7 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 				setSurvey(survey);
 				const hasRequiredCheck = survey.questionList.some((card) => card.required_answer_yn === 'Y');
 				setHasRequired(hasRequiredCheck);
+				changeInitialValues(survey)
 				console.log(survey)
             }
         } catch (error) {
@@ -51,9 +58,16 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 	}, [mobileView])
 
 
-	const handleSumbit = () => {
-
+	const handleSumbit = (event) => {
+		console.log(event, initialValues);
+		event.preventDefault();
+		
 	}
+
+	const onChange = (e) => {
+		console.log(e);
+	}
+
 	
 	  
 	
@@ -68,27 +82,32 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 				}
 				
 			</Card>
-				<Formik initialValues={initialValues}
-				onSubmit={handleSumbit}
-				>
-			{/* {
-				survey.questionList &&
-				survey.questionList.map((question, index) => 
-					<Field>
-						{
-							({
-								field, // { name, value, onChange, onBlur }
-								form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
-								meta,
-							}: FieldAttributes<any>) => (
-								<ViewCard question={question} key={index} onChange={field.onChange} />
-							)
-						}
-					</Field>
-				)
-			} */}
-			<Button variant="contained" color="primary" disabled={preview ? true : false}>제출하기</Button>
+			<Formik initialValues={initialValues} onSubmit={(e)=>handleSumbit(e)}>
+				<Form>
+				{
+					survey.questionList &&
+					survey.questionList.map((question, index) => (
+						<Field key={index}>
+							{
+								({
+									field, // { name, value, onChange, onBlur }
+									form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+									meta,
+								}: FieldAttributes<any>) => (
+									<ViewCard question={question} onChange={field.onChange} {...field} />
+								)
+							}
+						</Field>
+					)
+							
+					)
+				}
+				<Button variant="contained" color="primary" type="submit">제출하기</Button>
+				</Form>
+				
 			</Formik>
+			
+			{/* disabled={preview ? true : false} */}
 		</Box>
 	)
 }

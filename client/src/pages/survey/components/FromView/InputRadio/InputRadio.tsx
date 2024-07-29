@@ -2,12 +2,13 @@ import { ExampleList, ExampleTypes } from "@/types/survey";
 import * as S from './styles';
 import { useRef } from "react";
 import { Formik, useFormik } from "formik";
+import { RadioGroup } from "@mui/material";
 
 type InputRadioProps = {
 	exampleList: ExampleList[],
 	onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
 }
-const InputRadio = ({exampleList, onChange}: InputRadioProps) => {
+const InputRadio = ({exampleList, onChange, ...field}: InputRadioProps) => {
 	const etcRef = useRef<HTMLInputElement>(null);
   	const etcRefRadio = useRef<HTMLInputElement>(null);
 	
@@ -15,7 +16,7 @@ const InputRadio = ({exampleList, onChange}: InputRadioProps) => {
 		
 		<S.RadioContainer>
 			{exampleList.map((example) => (
-				<div key={example.example_no}>
+				<RadioGroup key={example.example_no}>
 					<S.Radio
 						ref={etcRefRadio}
 						type="radio"
@@ -39,7 +40,7 @@ const InputRadio = ({exampleList, onChange}: InputRadioProps) => {
 							example.example_value
 						)}
 					</S.Label>	
-				</div>
+				</RadioGroup>
 			))}
 		</S.RadioContainer>
 		

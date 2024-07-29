@@ -6,9 +6,9 @@ type InputTextFieldProps = {
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const InputTextField = ({example, onChange} : InputTextFieldProps) => {
+const InputTextField = ({example, onChange, ...field} : InputTextFieldProps) => {
 	return(
-		<TextField size="small" onChange={onChange}/>
+		<TextField size="small" onChange={onChange} {...field} />
 	)
 }
 

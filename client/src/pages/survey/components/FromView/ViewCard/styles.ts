@@ -19,6 +19,7 @@ export const SCard = styled(Card, {
 	width: '100%',
   	padding: '1.7rem',
 	boxSizing: 'border-box',
+	marginBottom:'1rem'
 }));
 
 
