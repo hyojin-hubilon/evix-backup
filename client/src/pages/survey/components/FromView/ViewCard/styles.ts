@@ -9,10 +9,10 @@ export const Container = styled('div')`
 
 export const SCard = styled(Card, {
 	shouldForwardProp: (prop) => prop !== "needToCompleteRequired"
-})<{ needToCompleteRequired:boolean}>(({needToCompleteRequired, theme}) => ({
+})<{ needToCompleteRequired:'Y' | 'N'}>(({needToCompleteRequired, theme}) => ({
 	display: 'flex',
   	flexDirection: 'column',
-  	border: needToCompleteRequired ? `1px solid ${theme.palette.error.main}` : 0,
+  	border: needToCompleteRequired == 'Y' ? `1px solid ${theme.palette.error.main}` : 0,
   	borderRadius: '8px',
   	backgroundColor: 'white',
   	minHeight: '131px',

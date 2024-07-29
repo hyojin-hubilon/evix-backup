@@ -21,17 +21,20 @@ const ViewCard = ({id}: ViewCardProps) => {
 		return currentCard.question;
 	}) as string;
 
-	const requiredCardId = useSelector((state: PreviewStateProps) => state.required);
+	const isRequired = useSelector((state: PreviewStateProps) => {
+		const currentCard = state.previewCards.find((card) => card.cardId === id) as PreviewProps;
+		return currentCard.isRequired;
+	}) as string;
 	
-	const needToCompleteRequired = requiredCardId;
+	
 
 	
 	return(
-		<S.SCard needToCompleteRequired={needToCompleteRequired}>
+		<S.SCard needToCompleteRequired={isRequired}>
 			<Box mb={1}>
 				<Typography variant="h4">
 					{cardTitle}
-					{needToCompleteRequired ? <S.RequireMark>*</S.RequireMark> : null}
+					{isRequired == 'Y' ? <S.RequireMark>*</S.RequireMark> : null}
 				</Typography>
 			</Box>
 			
