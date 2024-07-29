@@ -24,7 +24,7 @@ const ViewCard = ({id}: ViewCardProps) => {
 	const isRequired = useSelector((state: PreviewStateProps) => {
 		const currentCard = state.previewCards.find((card) => card.cardId === id) as PreviewProps;
 		return currentCard.isRequired;
-	}) as string;
+	}) as 'Y' | 'N';
 	
 	
 
