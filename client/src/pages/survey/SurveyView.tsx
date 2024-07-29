@@ -1,21 +1,27 @@
 import surveyApi from "@/apis/survey";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ExampleTypes, QuestionTypes, SurveyDetail } from '@/types/survey';
+import { ExampleTypes, QuestionList, QuestionTypes, SurveyDetail } from '@/types/survey';
 import { Box, Button, Card, TextField, Typography, useTheme } from "@mui/material";
 import ViewCard from "./components/FromView/ViewCard";
 import * as S from './components/FromView/ViewCard/styles';
-import { Field, FieldAttributes, Form, Formik, setIn } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { resetAll, PreviewStateProps, addPreview } from "@/store/reducers/preview";
+
 
 type SurveyViewProps = {
 	preview: boolean,
 	mobile?: "Y" | "N" | undefined
 }
 const SurveyView = ({preview, mobile} : SurveyViewProps) => {
+	const previewCards = useSelector((state: PreviewStateProps) => state.previewCards);
+	console.log(previewCards);
+  	const dispatch = useDispatch();
+
 	const { survey_no } = useParams<{ survey_no: any }>();
 	const [ survey, setSurvey ]  = useState<SurveyDetail>({} as SurveyDetail);
 	const [ hasRequired, setHasRequired ] = useState(false);
-	const [ initialValues, setInitialValues ] = useState({});
+	
 	const theme = useTheme();
 
 	const [ mobileView, setMovileView ] = useState(mobile);
@@ -24,12 +30,7 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 
 	console.log(survey_no)
 
-	const changeInitialValues = (survey: SurveyDetail) => {
-		const initial = {};
-		survey.questionList.forEach(quesiton => Object.assign(initial, {[quesiton.question_no] : ''}));
-		setInitialValues(initial);
-	}
-
+	
 	const getSurveyDeatil = async () => {
 		try {
 			const response = await surveyApi.getSurvey(survey_no);
@@ -38,13 +39,27 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 				setSurvey(survey);
 				const hasRequiredCheck = survey.questionList.some((card) => card.required_answer_yn === 'Y');
 				setHasRequired(hasRequiredCheck);
-				changeInitialValues(survey)
+
+				setCards(survey.questionList)
+
 				console.log(survey)
             }
         } catch (error) {
             console.error('Failed to fetch study list:', error);
         }
 	
+	}
+
+	const setCards = (questionList:QuestionList[]) => {
+		dispatch(resetAll());
+		questionList.map(question => dispatch(addPreview({
+			cardId: 'question' + question.question_no,
+			question: question.question,
+			exampleList: question.exampleList,
+			questionType: question.question_type,
+			isRequired: question.required_answer_yn,
+			// contents: question.exampleList | string,
+		})))
 	}
 
 	useEffect(() => {
@@ -59,8 +74,7 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 
 
 	const handleSumbit = (event) => {
-		console.log(event, initialValues);
-		event.preventDefault();
+		console.log(event);
 		
 	}
 
@@ -68,9 +82,6 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 		console.log(e);
 	}
 
-	
-	  
-	
 
 	return(
 		<Box display="flex" flexDirection="column" gap={2}>
@@ -82,34 +93,25 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 				}
 				
 			</Card>
-			<Formik initialValues={initialValues} onSubmit={(e)=>handleSumbit(e)}>
-				<Form>
 				{
-					survey.questionList &&
-					survey.questionList.map((question, index) => (
-						<Field key={index}>
-							{
-								({
-									field, // { name, value, onChange, onBlur }
-									form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
-									meta,
-								}: FieldAttributes<any>) => (
-									<ViewCard question={question} onChange={field.onChange} {...field} />
-								)
-							}
-						</Field>
-					)
-							
+					previewCards &&
+						previewCards.map((card, index) => (
+							<ViewCard key={index} id={card.cardId} />
+						)						
 					)
 				}
-				<Button variant="contained" color="primary" type="submit">제출하기</Button>
-				</Form>
+				<Button variant="contained" color="primary" type="submit" fullWidth>제출하기</Button>{/* disabled={preview ? true : false} */}
 				
-			</Formik>
+				
 			
-			{/* disabled={preview ? true : false} */}
+			
+			
 		</Box>
 	)
 }
 
 export default SurveyView;
+
+function addPreviewCard(arg0: { cardId: string; cardTitle: string; inputType: QuestionTypes; isRequired: boolean; }): any {
+	throw new Error("Function not implemented.");
+}

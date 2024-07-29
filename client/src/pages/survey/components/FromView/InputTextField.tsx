@@ -1,14 +1,14 @@
+import { PreviewProps } from "@/store/reducers/preview";
 import { ExampleList } from "@/types/survey";
 import { TextField } from "@mui/material";
+import { useField, useFormikContext } from "formik";
+import { useEffect } from "react";
 
-type InputTextFieldProps = {
-	example: ExampleList,
-	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-}
-
-const InputTextField = ({example, onChange, ...field} : InputTextFieldProps) => {
+const InputTextField = ({ cardId }: Pick<PreviewProps, "cardId">) => {
+	
+	  
 	return(
-		<TextField size="small" onChange={onChange} {...field} />
+		<TextField size="small"  />
 	)
 }
 

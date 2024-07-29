@@ -3,24 +3,40 @@ import * as S from './styles';
 import { Box, Typography } from "@mui/material";
 import InputTextField from "../InputTextField";
 import InputRadio from "../InputRadio/InputRadio";
+import { useSelector } from "react-redux";
+import { PreviewProps, PreviewStateProps } from "@/store/reducers/preview";
 
 type ViewCardProps = {
-	question: QuestionList,
-	onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+	id: string
 }
 
-const ViewCard = ({question, onChange, ...field}: ViewCardProps) => {
+const ViewCard = ({id}: ViewCardProps) => {
+	const inputType = useSelector((state: PreviewStateProps) => {
+		const currentCard = state.previewCards.find((card) => card.cardId === id) as PreviewProps;
+		return currentCard.questionType;
+	}) as string;
+
+	const cardTitle = useSelector((state: PreviewStateProps) => {
+		const currentCard = state.previewCards.find((card) => card.cardId === id) as PreviewProps;
+		return currentCard.question;
+	}) as string;
+
+	const requiredCardId = useSelector((state: PreviewStateProps) => state.required);
+	
+	const needToCompleteRequired = requiredCardId;
+
+	
 	return(
-		<S.SCard needToCompleteRequired={question.required_answer_yn}>
+		<S.SCard needToCompleteRequired={needToCompleteRequired}>
 			<Box mb={1}>
 				<Typography variant="h4">
-					{question.question}
-					{question.required_answer_yn === 'Y' ? <S.RequireMark>*</S.RequireMark> : null}
+					{cardTitle}
+					{needToCompleteRequired ? <S.RequireMark>*</S.RequireMark> : null}
 				</Typography>
 			</Box>
 			
-			{question.question_type === QuestionTypes.WRITE ? <InputTextField example={question.exampleList[0]} onChange={onChange} {...field} /> : null} 
-			{question.question_type === QuestionTypes.SINGLE ? <InputRadio exampleList={question.exampleList} onChange={onChange} {...field} /> : null}
+			{inputType === QuestionTypes.WRITE ? <InputTextField cardId={id}  /> : null} 
+			{inputType === QuestionTypes.SINGLE ? <InputRadio cardId={id} /> : null}
 			{/* {question.question_type === QuestionTypes.MULTIPLE ? <InputCheckbox id={id} /> : null} */}
 		</S.SCard>
 	)

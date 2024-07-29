@@ -4,7 +4,7 @@ import { PersistState } from "redux-persist/lib/types";
 
 export interface StateProps {
 	cards: CardProps[];
-	required: string;
+	required: boolean;
 	_persist: PersistState;
 }
 export interface ItemTypeProps { //options
@@ -81,6 +81,18 @@ export const cardSlice = createSlice({
 	initialState: [initialCards] as CardProps[],
 	reducers: {
 	 	addCard: (state: CardProps[], action: ActionProps) => {
+			const copiedState = state.map((card) => ({ ...card, isFocused: false }));
+	
+			if (Number(action.payload.focusedCardIndex) > 0) {
+				copiedState.splice(Number(action.payload.focusedCardIndex) + 1, 0, createNewCard(action.payload.cardId, action.payload.cardTitle));
+			} else {
+				copiedState.push(createNewCard(action.payload.cardId, action.payload.cardTitle));
+			}
+
+			return copiedState;
+	  	},
+
+		addPreviewCard: (state: CardProps[], action: ActionProps) => {
 			const copiedState = state.map((card) => ({ ...card, isFocused: false }));
 	
 			if (Number(action.payload.focusedCardIndex) > 0) {
@@ -239,7 +251,11 @@ export const cardSlice = createSlice({
 		resetCards: (state: CardProps[]) => {
 			state = [initialCards] as CardProps[]
 			return state;
-		}
+		},
+		resetAll: (state: CardProps[]) => {
+			state = [] as CardProps[]
+			return state;
+		},
 	},
 });
 
@@ -258,4 +274,5 @@ export const {
 	moveCard,
 	moveContent,
 	resetCards,
+	resetAll
   } = cardSlice.actions;
