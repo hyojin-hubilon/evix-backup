@@ -28,11 +28,11 @@ const InputRadio = ({ cardId }: Pick<PreviewProps, "cardId">) => {
 								ref={etcRefRadio}
 								type="radio"
 								name={field.name}
-								id={`radio-${example.example_no}`}
+								id={`radio-${example.question_no}-${example.example_no}`}
 								value={example.example_type === ExampleTypes.OTHER ? etcRef.current?.value : example.example_title}
 								onChange={(e) => field.onChange(e)}
 							/>
-							<S.Label htmlFor={`radio-${example.example_no}`}>
+							<S.Label htmlFor={`radio-${example.question_no}-${example.example_no}`}>
 								{example.example_type === ExampleTypes.OTHER ? (
 									<>
 									<span>기타: </span>

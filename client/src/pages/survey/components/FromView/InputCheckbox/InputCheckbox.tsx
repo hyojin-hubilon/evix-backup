@@ -33,14 +33,14 @@ const InputCheckbox = ({ cardId }: Pick<PreviewProps, "cardId">) => {
 				<S.CheckboxContainer key={index}>
 					<S.Checkbox
 						type="checkbox"
-						id={`example-${example.example_no}`}
+						id={`checkbox-${example.question_no}-${example.example_no}`}
 						value={example.example_title}
 						name={field.name}
 						onChange={(e) => {
 							field.onChange(e);
 						}}
 					/>
-					<label htmlFor={`example-${example.example_no}`}>
+					<label htmlFor={`checkbox-${example.question_no}-${example.example_no}`}>
 						<span>{example.example_title}</span>
 					</label>
 				</S.CheckboxContainer>

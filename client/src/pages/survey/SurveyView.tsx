@@ -93,12 +93,11 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 				
 			</Card>
 			
-			<Formik initialValues={{}}
+			<Formik
+				initialValues={{}}
 				onSubmit={(values, actions) => {
-					setTimeout(() => {
-					alert(JSON.stringify(values, null, 2));
 					actions.setSubmitting(false);
-					}, 1000);
+					console.log(actions, values);
 				}}
 			>
 				<Form>
@@ -106,7 +105,7 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 						{
 							previewCards && previewCards.map((card, index) => <ViewCard key={index} id={card.cardId} />)
 						}
-					<Button variant="contained" color="primary" type="submit" fullWidth>제출하기</Button>{/* disabled={preview ? true : false} */}
+						<Button variant="contained" color="primary" type="submit" fullWidth>제출하기</Button>{/* disabled={preview ? true : false} */}
 					</Box>
 				</Form>
 			</Formik>
