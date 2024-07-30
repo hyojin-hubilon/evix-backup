@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { PreviewProps, PreviewStateProps } from "@/store/reducers/preview";
 import InputCheckbox from "../InputCheckbox/InputCheckbox";
 import { useFormikContext } from "formik";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type ViewCardProps = {
 	id: string
@@ -28,7 +28,13 @@ const ViewCard = ({id, ...props}: ViewCardProps) => {
 		const currentCard = state.previewCards.find((card) => card.cardId === id) as PreviewProps;
 		return currentCard.isRequired;
 	}) as 'Y' | 'N';
+
+	const [needToCompleteRequired, setNeedToCompleteRequired] = useState(false);
 	
+
+	const changeIsRequired = (e) => {
+		setNeedToCompleteRequired(e);
+	}
 	
 
 	// const { values, submitForm } = useFormikContext();
@@ -38,7 +44,7 @@ const ViewCard = ({id, ...props}: ViewCardProps) => {
   	// }, [submitForm]);
 
 	return(
-		<S.SCard needToCompleteRequired={isRequired}>
+		<S.SCard needToCompleteRequired={needToCompleteRequired}>
 			<Box mb={1}>
 				<Typography variant="h4">
 					{cardTitle}
@@ -46,7 +52,7 @@ const ViewCard = ({id, ...props}: ViewCardProps) => {
 				</Typography>
 			</Box>
 			
-			{ inputType === QuestionTypes.WRITE ? <InputTextField cardId={id} /> : null } 
+			{ inputType === QuestionTypes.WRITE ? <InputTextField cardId={id} changeIsRequired={changeIsRequired}/> : null } 
 			{ inputType === QuestionTypes.SINGLE ? <InputRadio cardId={id} /> : null }
 			{ inputType === QuestionTypes.MULTIPLE ? <InputCheckbox cardId={id} /> : null }
 		</S.SCard>
