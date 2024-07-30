@@ -5,12 +5,13 @@ import InputTextField from "../InputTextField";
 import InputRadio from "../InputRadio/InputRadio";
 import { useSelector } from "react-redux";
 import { PreviewProps, PreviewStateProps } from "@/store/reducers/preview";
+import InputCheckbox from "../InputCheckbox/InputCheckbox";
 
 type ViewCardProps = {
 	id: string
 }
 
-const ViewCard = ({id}: ViewCardProps) => {
+const ViewCard = ({id, ...props}: ViewCardProps) => {
 	const inputType = useSelector((state: PreviewStateProps) => {
 		const currentCard = state.previewCards.find((card) => card.cardId === id) as PreviewProps;
 		return currentCard.questionType;
@@ -38,9 +39,9 @@ const ViewCard = ({id}: ViewCardProps) => {
 				</Typography>
 			</Box>
 			
-			{inputType === QuestionTypes.WRITE ? <InputTextField cardId={id}  /> : null} 
-			{inputType === QuestionTypes.SINGLE ? <InputRadio cardId={id} /> : null}
-			{/* {question.question_type === QuestionTypes.MULTIPLE ? <InputCheckbox id={id} /> : null} */}
+			{ inputType === QuestionTypes.WRITE ? <InputTextField cardId={id} /> : null } 
+			{ inputType === QuestionTypes.SINGLE ? <InputRadio cardId={id} /> : null }
+			{ inputType === QuestionTypes.MULTIPLE ? <InputCheckbox cardId={id} /> : null }
 		</S.SCard>
 	)
 }

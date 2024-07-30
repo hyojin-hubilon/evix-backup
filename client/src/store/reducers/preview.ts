@@ -3,10 +3,9 @@ import { ExampleList, QuestionTypes } from "@/types/survey";
 
 export interface PreviewStateProps {
 	previewCards: PreviewProps[];
-	required: boolean;
 }
   
-export interface PreviewProps { //question
+export interface PreviewProps {
 	cardId: string;
 	question: string;
 	questionType: QuestionTypes;

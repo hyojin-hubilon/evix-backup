@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ExampleTypes, QuestionList, QuestionTypes, SurveyDetail } from '@/types/survey';
 import { Box, Button, Card, TextField, Typography, useTheme } from "@mui/material";
-import ViewCard from "./components/FromView/ViewCard";
+import ViewCard from "./components/FromView/ViewCard/ViewCard";
 import * as S from './components/FromView/ViewCard/styles';
 import { useDispatch, useSelector } from "react-redux";
 import { resetAll, PreviewStateProps, addPreview } from "@/store/reducers/preview";
+import { Formik, Form, FormikProvider, useFormik, FormikProps } from "formik";
 
 
 type SurveyViewProps = {
@@ -15,7 +16,6 @@ type SurveyViewProps = {
 }
 const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 	const previewCards = useSelector((state: PreviewStateProps) => state.previewCards);
-	console.log(previewCards);
   	const dispatch = useDispatch();
 
 	const { survey_no } = useParams<{ survey_no: any }>();
@@ -93,19 +93,26 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 				}
 				
 			</Card>
-				{
-					previewCards &&
-						previewCards.map((card, index) => (
-							<ViewCard key={index} id={card.cardId} />
-						)						
-					)
-				}
-				<Button variant="contained" color="primary" type="submit" fullWidth>제출하기</Button>{/* disabled={preview ? true : false} */}
-				
-				
 			
-			
-			
+			<Formik initialValues={{}}
+				onSubmit={(values, actions) => {
+					setTimeout(() => {
+					alert(JSON.stringify(values, null, 2));
+					actions.setSubmitting(false);
+					}, 1000);
+				}}
+			>
+				<Form>
+					{
+						previewCards &&
+							previewCards.map((card, index) => (
+								<ViewCard key={index} id={card.cardId} />
+							)						
+						)
+					}
+					<Button variant="contained" color="primary" type="submit" fullWidth>제출하기</Button>{/* disabled={preview ? true : false} */}
+				</Form>
+			</Formik>
 		</Box>
 	)
 }
