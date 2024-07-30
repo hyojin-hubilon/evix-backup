@@ -6,6 +6,8 @@ import InputRadio from "../InputRadio/InputRadio";
 import { useSelector } from "react-redux";
 import { PreviewProps, PreviewStateProps } from "@/store/reducers/preview";
 import InputCheckbox from "../InputCheckbox/InputCheckbox";
+import { useFormikContext } from "formik";
+import { useEffect } from "react";
 
 type ViewCardProps = {
 	id: string
@@ -29,7 +31,12 @@ const ViewCard = ({id, ...props}: ViewCardProps) => {
 	
 	
 
-	
+	// const { values, submitForm } = useFormikContext();
+
+  	// useEffect(() => {
+	// 	console.log(values);
+  	// }, [submitForm]);
+
 	return(
 		<S.SCard needToCompleteRequired={isRequired}>
 			<Box mb={1}>

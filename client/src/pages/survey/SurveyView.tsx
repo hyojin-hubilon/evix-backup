@@ -21,6 +21,7 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 	const { survey_no } = useParams<{ survey_no: any }>();
 	const [ survey, setSurvey ]  = useState<SurveyDetail>({} as SurveyDetail);
 	const [ hasRequired, setHasRequired ] = useState(false);
+	const [ initialValues, setInitialValues ] = useState({});
 	
 	const theme = useTheme();
 
@@ -52,13 +53,28 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 
 	const setCards = (questionList:QuestionList[]) => {
 		dispatch(resetAll());
-		questionList.map(question => dispatch(addPreview({
-			cardId: 'question' + question.question_no,
-			question: question.question,
-			exampleList: question.exampleList,
-			questionType: question.question_type,
-			isRequired: question.required_answer_yn
-		})))
+		const newInitialValues = {};
+		questionList.map(question => {
+			dispatch(addPreview({
+				cardId: 'question' + question.question_no,
+				question: question.question,
+				exampleList: question.exampleList,
+				questionType: question.question_type,
+				isRequired: question.required_answer_yn
+			}))
+
+			const newObject = `question${question.question_no}`;
+
+			Object.assign(newInitialValues, { [newObject] : ''});
+
+		})
+
+		console.log(newInitialValues)
+
+		setInitialValues(newInitialValues);
+		
+
+		console.log(initialValues)
 	}
 
 	useEffect(() => {
@@ -93,13 +109,15 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 				
 			</Card>
 			
-			<Formik
-				initialValues={{}}
-				onSubmit={(values, actions) => {
-					actions.setSubmitting(false);
-					console.log(actions, values);
-				}}
-			>
+				<Formik
+					initialValues={initialValues}
+					enableReinitialize={true}
+					validateOnChange={false}
+					onSubmit={(values, actions) => {
+						actions.setSubmitting(false);
+						console.log(actions, values);
+					}}
+				>
 				<Form>
 					<Box display="flex" flexDirection="column" gap={2}>
 						{
@@ -109,6 +127,7 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 					</Box>
 				</Form>
 			</Formik>
+			
 		</Box>
 	)
 }
@@ -118,3 +137,7 @@ export default SurveyView;
 function addPreviewCard(arg0: { cardId: string; cardTitle: string; inputType: QuestionTypes; isRequired: boolean; }): any {
 	throw new Error("Function not implemented.");
 }
+function uesRef(arg0: {}) {
+	throw new Error("Function not implemented.");
+}
+

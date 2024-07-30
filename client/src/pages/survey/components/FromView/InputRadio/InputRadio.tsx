@@ -15,7 +15,7 @@ const InputRadio = ({ cardId }: Pick<PreviewProps, "cardId">) => {
 	}) as ExampleList[];
 
 	return (
-		<Field name={`question${exampleList[0].question_no}`} type="radio">
+		<Field name={cardId} type="radio">
 			{({
 				field,
 				form: { touched, errors },
@@ -23,7 +23,7 @@ const InputRadio = ({ cardId }: Pick<PreviewProps, "cardId">) => {
 			}) => (
 				<S.RadioContainer>
 					{exampleList.map((example) => (
-						<div key={example.example_no}>
+						<S.Container key={example.example_no}>
 							<S.Radio
 								ref={etcRefRadio}
 								type="radio"
@@ -34,20 +34,20 @@ const InputRadio = ({ cardId }: Pick<PreviewProps, "cardId">) => {
 							/>
 							<S.Label htmlFor={`radio-${example.question_no}-${example.example_no}`}>
 								{example.example_type === ExampleTypes.OTHER ? (
-									<>
-									<span>기타: </span>
-									<S.TextField
-										name={cardId}
-										variant="standard"
-										inputRef={etcRef}
-										onChange={(e) => field.onChange(e)}
-									/>
-									</>
+									<S.EtcContainer>
+										<span>기타 : </span>
+										<S.TextField
+											name={cardId}
+											variant="standard"
+											inputRef={etcRef}
+											onChange={(e) => field.onChange(e)}
+										/>
+									</S.EtcContainer>
 								) : (
-									example.example_title
+									<span>{ example.example_title }</span>
 								)}
-							</S.Label>	
-						</div>
+							</S.Label>
+						</S.Container>
 					))}
 				</S.RadioContainer>
 			)}

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import * as S from "./styles";
 import { PreviewProps, PreviewStateProps } from "@/store/reducers/preview";
-import { ExampleList } from "@/types/survey";
+import { ExampleList, ExampleTypes } from "@/types/survey";
 import { Field, useField, useFormikContext } from "formik";
 
 const InputCheckbox = ({ cardId }: Pick<PreviewProps, "cardId">) => {
@@ -22,7 +22,7 @@ const InputCheckbox = ({ cardId }: Pick<PreviewProps, "cardId">) => {
   	// }, [values, submitForm]);
 
   return (
-	<Field name={`question${exampleList[0].question_no}`} type="checkbox">
+	<Field name={cardId} type="checkbox">
 		{({
 		field, // { name, value, onChange, onBlur }
 		form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
@@ -40,9 +40,21 @@ const InputCheckbox = ({ cardId }: Pick<PreviewProps, "cardId">) => {
 							field.onChange(e);
 						}}
 					/>
-					<label htmlFor={`checkbox-${example.question_no}-${example.example_no}`}>
-						<span>{example.example_title}</span>
-					</label>
+
+					<S.Label htmlFor={`checkbox-${example.question_no}-${example.example_no}`}>
+						{example.example_type === ExampleTypes.OTHER ? (
+							<S.EtcContainer>
+								<span>기타 : </span>
+								<S.TextField
+									name={cardId}
+									variant="standard"
+									onChange={(e) => field.onChange(e)}
+								/>
+							</S.EtcContainer>
+						) : (
+							<span>{ example.example_title }</span>
+						)}
+					</S.Label>	
 				</S.CheckboxContainer>
 			))}
 		</S.Container>

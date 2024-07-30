@@ -33,6 +33,7 @@ const SurveyPreview = () => {
 					<Grid item xs={4}>
 						<Box display="flex" justifyContent="flex-end">
 							<Button variant="contained">미리보기 종료</Button>
+							{/* 종료했을때 작성 혹은 목록으로 돌아가기 */}
 						</Box>
 					</Grid>
 				</Grid>

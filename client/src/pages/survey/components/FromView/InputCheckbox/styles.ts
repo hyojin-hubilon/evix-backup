@@ -3,12 +3,13 @@ import { TextField as MuiTextField, styled } from "@mui/material";
 export const Container = styled('div')`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 18px;
+  margin-top: 10px;
 `;
 
 export const TextField = styled(MuiTextField)(({theme}) => ({
-	width: '200px',
-
+	width: '300px',
+	marginLeft: '0.5rem',
   	'div' : {
     fontSize: '14px',
 
@@ -22,8 +23,14 @@ export const TextField = styled(MuiTextField)(({theme}) => ({
   }
 }))
 
+export const Label = styled('label')`
+  cursor: pointer;
+`;
+
+
 export const CheckboxContainer = styled('div')`
-  align-items: center;
+  display: flex;
+  align-items:center;
 `;
 
 export const Checkbox = styled('input')(({theme}) => ({
@@ -61,7 +68,7 @@ export const Checkbox = styled('input')(({theme}) => ({
 				display:'block',
 				position:'absolute',
 				left: '5px',
-				top: '2px',
+				top: '3px',
 				width:'7px',
 				height: '10px',
 				border: 'solid white',
@@ -72,3 +79,10 @@ export const Checkbox = styled('input')(({theme}) => ({
     	}
   }
 }))
+
+
+export const EtcContainer = styled('div')`
+	display: inline-block;
+	align-items: center;
+	padding-left:12px;
+`
