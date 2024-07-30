@@ -15,13 +15,11 @@ const InputCheckbox = ({ cardId }: Pick<PreviewProps, "cardId">) => {
 		console.log(e);
   	}
 
-  	const { values, submitForm } = useFormikContext();
+  	// const { values, submitForm } = useFormikContext();
 
-	  
-
-  	useEffect(() => {
-		console.log(values);
-  	}, [values, submitForm]);
+  	// useEffect(() => {
+	// 	console.log(values);
+  	// }, [values, submitForm]);
 
   return (
 	<Field name={`question${exampleList[0].question_no}`} type="checkbox">

@@ -57,8 +57,7 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 			question: question.question,
 			exampleList: question.exampleList,
 			questionType: question.question_type,
-			isRequired: question.required_answer_yn,
-			// contents: question.exampleList | string,
+			isRequired: question.required_answer_yn
 		})))
 	}
 
@@ -103,14 +102,12 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 				}}
 			>
 				<Form>
-					{
-						previewCards &&
-							previewCards.map((card, index) => (
-								<ViewCard key={index} id={card.cardId} />
-							)						
-						)
-					}
+					<Box display="flex" flexDirection="column" gap={2}>
+						{
+							previewCards && previewCards.map((card, index) => <ViewCard key={index} id={card.cardId} />)
+						}
 					<Button variant="contained" color="primary" type="submit" fullWidth>제출하기</Button>{/* disabled={preview ? true : false} */}
+					</Box>
 				</Form>
 			</Formik>
 		</Box>

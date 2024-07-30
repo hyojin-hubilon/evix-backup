@@ -3,6 +3,7 @@ import * as S from './styles';
 import { useRef } from "react";
 import { PreviewProps, PreviewStateProps } from "@/store/reducers/preview";
 import { useSelector } from "react-redux";
+import { Field } from "formik";
 
 const InputRadio = ({ cardId }: Pick<PreviewProps, "cardId">) => {
 	const etcRef = useRef<HTMLInputElement>(null);
@@ -13,42 +14,44 @@ const InputRadio = ({ cardId }: Pick<PreviewProps, "cardId">) => {
 		return currentCard.exampleList;
 	}) as ExampleList[];
 
-	const onChange = (e) => {
-		console.log(e);
-	}
-	
 	return (
-		
-		<S.RadioContainer>
-			{exampleList.map((example) => (
-				<div key={example.example_no}>
-					<S.Radio
-						ref={etcRefRadio}
-						type="radio"
-						name={cardId}
-						id={`radio-${example.example_no}`}
-						value={example.example_type === ExampleTypes.OTHER ? etcRef.current?.value : example.example_title}
-						onChange={(e) => onChange(e)}
-					/>
-					<S.Label htmlFor={`radio-${example.example_no}`}>
-						{example.example_type === ExampleTypes.OTHER ? (
-							<>
-							<span>기타: </span>
-							<S.TextField
-								name={cardId}
-								variant="standard"
-								inputRef={etcRef}
-								onChange={(e) => onChange(e)}
+		<Field name={`question${exampleList[0].question_no}`} type="radio">
+			{({
+				field,
+				form: { touched, errors },
+				meta,
+			}) => (
+				<S.RadioContainer>
+					{exampleList.map((example) => (
+						<div key={example.example_no}>
+							<S.Radio
+								ref={etcRefRadio}
+								type="radio"
+								name={field.name}
+								id={`radio-${example.example_no}`}
+								value={example.example_type === ExampleTypes.OTHER ? etcRef.current?.value : example.example_title}
+								onChange={(e) => field.onChange(e)}
 							/>
-							</>
-						) : (
-							example.example_title
-						)}
-					</S.Label>	
-				</div>
-			))}
-		</S.RadioContainer>
-		
+							<S.Label htmlFor={`radio-${example.example_no}`}>
+								{example.example_type === ExampleTypes.OTHER ? (
+									<>
+									<span>기타: </span>
+									<S.TextField
+										name={cardId}
+										variant="standard"
+										inputRef={etcRef}
+										onChange={(e) => field.onChange(e)}
+									/>
+									</>
+								) : (
+									example.example_title
+								)}
+							</S.Label>	
+						</div>
+					))}
+				</S.RadioContainer>
+			)}
+		</Field>
 	)
 }
 
