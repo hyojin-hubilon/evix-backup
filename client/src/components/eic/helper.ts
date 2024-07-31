@@ -10,16 +10,6 @@ const fontObjList = [
         label: 'Freesentation',
         url: '/fonts/Freesentation.ttf',
     },
-    {
-        fallback: false,
-        label: 'NotoSerifJP-Regular',
-        url: '/fonts/NotoSerifJP-Regular.otf',
-    },
-    {
-        fallback: false,
-        label: 'NotoSansJP-Regular',
-        url: '/fonts/NotoSansJP-Regular.otf',
-    },
 ];
 
 export const getFontsData = async () => {
@@ -110,17 +100,32 @@ export const generatePDF = async (currentRef: Designer | Form | Viewer | null) =
         typeof (currentRef as Viewer | Form).getInputs === 'function'
             ? (currentRef as Viewer | Form).getInputs()
             : getInputFromTemplate(template);
+
+    for (const obj of inputs) {
+        for (const key in obj) {
+            if (obj[key] === 'N' || obj[key] === '') {
+                alert('필수 입력을 작성해주세요.');
+                return;
+            }
+        }
+    }
+
     const font = await getFontsData();
 
-    const pdf = await generate({
-        template,
-        inputs,
-        options: { font, title: 'ediv-net' },
-        plugins: getPlugins(),
-    });
+    try {
+        const pdf = await generate({
+            template,
+            inputs,
+            options: { font, title: 'ediv-net' },
+            plugins: getPlugins(),
+        });
 
-    const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
-    window.open(URL.createObjectURL(blob));
+        const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
+        window.open(URL.createObjectURL(blob));
+    } catch (error) {
+        alert('필수 입력을 작성해주세요.');
+        console.error(error);
+    }
 };
 
 export const isJsonString = (str: string) => {
