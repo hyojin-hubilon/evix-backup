@@ -21,10 +21,10 @@ const surveyApi = {
      * @param orderBy
      * @returns
      */
-    mySurveyList: async (pageNum: number, elementSize: number, orderBy: 'CREATED' | 'UPDATED') => {
+    mySurveyList: async () => {
         try {
             const responseData = await api<SurveyApiResponse>(
-                `${BASE_API_URL}/my-list/${pageNum}/${elementSize}/${orderBy}`,
+                `${BASE_API_URL}/full-my-list`,
                 'get'
             );
 
