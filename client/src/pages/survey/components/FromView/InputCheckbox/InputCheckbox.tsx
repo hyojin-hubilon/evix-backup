@@ -4,12 +4,25 @@ import * as S from "./styles";
 import { PreviewProps, PreviewStateProps } from "@/store/reducers/preview";
 import { ExampleList, ExampleTypes } from "@/types/survey";
 import { Field, useField, useFormikContext } from "formik";
+import { requiredCheck } from "@/utils/helper";
+import { Typography } from "@mui/material";
 
-const InputCheckbox = ({ cardId }: Pick<PreviewProps, "cardId">) => {
+type InputCheckboxProps = {
+	cardId: string,
+	changeIsRequired: (e:boolean) => void
+}
+
+const InputCheckbox = ({ cardId, changeIsRequired }: InputCheckboxProps) => {
   	const exampleList = useSelector((state: PreviewStateProps) => {
     	const currentCard = state.previewCards.find((card) => card.cardId === cardId) as PreviewProps;
     	return currentCard.exampleList;
   	}) as ExampleList[];
+
+	const ieReqired = useSelector((state: PreviewStateProps) => {
+    	const currentCard = state.previewCards.find((card) => card.cardId === cardId) as PreviewProps;
+    	return currentCard.isRequired;
+  	}) as 'Y' | 'N';
+
 
   	const onChange = (e) => {
 		console.log(e);
@@ -22,7 +35,7 @@ const InputCheckbox = ({ cardId }: Pick<PreviewProps, "cardId">) => {
   	// }, [values, submitForm]);
 
   return (
-	<Field name={cardId} type="checkbox">
+	<Field name={cardId} type="checkbox" validate={(value) => requiredCheck(value, ieReqired, changeIsRequired)}>
 		{({
 		field, // { name, value, onChange, onBlur }
 		form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
@@ -57,6 +70,7 @@ const InputCheckbox = ({ cardId }: Pick<PreviewProps, "cardId">) => {
 					</S.Label>	
 				</S.CheckboxContainer>
 			))}
+			{ errors[cardId] && touched[cardId] && <Typography paddingTop="0.5rem" sx={{display:'block', color: 'red'}}>{ errors[cardId] }</Typography>}
 		</S.Container>
 		)}
 	</Field>

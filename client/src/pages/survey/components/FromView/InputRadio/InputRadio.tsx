@@ -4,8 +4,15 @@ import { useRef } from "react";
 import { PreviewProps, PreviewStateProps } from "@/store/reducers/preview";
 import { useSelector } from "react-redux";
 import { Field } from "formik";
+import { requiredCheck } from "@/utils/helper";
+import { Typography } from "@mui/material";
 
-const InputRadio = ({ cardId }: Pick<PreviewProps, "cardId">) => {
+type InputRadioProps = {
+	cardId: string,
+	changeIsRequired: (e:boolean) => void
+}
+
+const InputRadio = ({ cardId, changeIsRequired }: InputRadioProps) => {
 	const etcRef = useRef<HTMLInputElement>(null);
   	const etcRefRadio = useRef<HTMLInputElement>(null);
 
@@ -14,8 +21,15 @@ const InputRadio = ({ cardId }: Pick<PreviewProps, "cardId">) => {
 		return currentCard.exampleList;
 	}) as ExampleList[];
 
+	const ieReqired = useSelector((state: PreviewStateProps) => {
+    	const currentCard = state.previewCards.find((card) => card.cardId === cardId) as PreviewProps;
+    	return currentCard.isRequired;
+  	}) as 'Y' | 'N';
+
+	
+
 	return (
-		<Field name={cardId} type="radio">
+		<Field name={cardId} type="radio" validate={(value) => requiredCheck(value, ieReqired, changeIsRequired)}>
 			{({
 				field,
 				form: { touched, errors },
@@ -49,6 +63,8 @@ const InputRadio = ({ cardId }: Pick<PreviewProps, "cardId">) => {
 							</S.Label>
 						</S.Container>
 					))}
+
+					{ errors[cardId] && touched[cardId] && <Typography paddingTop="0.5rem" sx={{display:'block', color: 'red'}}>{ errors[cardId] }</Typography>}
 				</S.RadioContainer>
 			)}
 		</Field>

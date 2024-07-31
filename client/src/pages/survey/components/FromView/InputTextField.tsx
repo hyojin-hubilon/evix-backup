@@ -1,5 +1,6 @@
 import { PreviewProps, PreviewStateProps } from "@/store/reducers/preview";
 import { ExampleList } from "@/types/survey";
+import { requiredCheck } from "@/utils/helper";
 import { TextField, Typography } from "@mui/material";
 import { Field, useField, useFormikContext } from "formik";
 import { useEffect } from "react";
@@ -23,22 +24,10 @@ const InputTextField = ({ cardId, changeIsRequired }: InputTextFieldProps) => {
   	}) as 'Y' | 'N';
 
 	
-	const requiredCheck = (value) => {
-		let error;
-		if (!value && ieReqired == 'Y') {
-			changeIsRequired(true)
-			error = 'Required';
-		} else {
-			changeIsRequired(false)
-			return false;
-
-		}
-		console.log(error)
-		return error;
-	}
+	
 	  
 	return(
-		<Field name={cardId} type="text" validate={requiredCheck}>
+		<Field name={cardId} type="text" validate={(value) => requiredCheck(value, ieReqired, changeIsRequired)}>
 			{({
 				field,
 				form: { touched, errors },

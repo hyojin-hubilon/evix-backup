@@ -52,9 +52,9 @@ const ViewCard = ({id, ...props}: ViewCardProps) => {
 				</Typography>
 			</Box>
 			
-			{ inputType === QuestionTypes.WRITE ? <InputTextField cardId={id} changeIsRequired={changeIsRequired}/> : null } 
-			{ inputType === QuestionTypes.SINGLE ? <InputRadio cardId={id} /> : null }
-			{ inputType === QuestionTypes.MULTIPLE ? <InputCheckbox cardId={id} /> : null }
+			{ inputType === QuestionTypes.WRITE ? <InputTextField cardId={id} changeIsRequired={changeIsRequired} /> : null } 
+			{ inputType === QuestionTypes.SINGLE ? <InputRadio cardId={id} changeIsRequired={changeIsRequired} /> : null }
+			{ inputType === QuestionTypes.MULTIPLE ? <InputCheckbox cardId={id} changeIsRequired={changeIsRequired} /> : null }
 		</S.SCard>
 	)
 }
