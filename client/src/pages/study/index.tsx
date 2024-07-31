@@ -254,20 +254,24 @@ const StudyList = () => {
                         </Grid>
 
 						{paginator(searched, page, itemPerPage).data.map((study, index) => {
-							return(
+							return (
 								<Grid item xs={12} key={study.std_no}>
 									<StudyListItem study={study} />
 								</Grid>
 							)
 						})}
-                        <Grid item container xs={12} justifyContent="center">
-							<Pagination
-								count={pageCount}
-								page={page}
-								onChange={handleChangePage}
-								color="primary"
-							/>
-                        </Grid>
+						{
+							pageCount > 0 &&  
+							<Grid item container xs={12} justifyContent="center">
+								<Pagination
+									count={pageCount}
+									page={page}
+									onChange={handleChangePage}
+									color="primary"
+								/>
+							</Grid>
+						}
+                       
                     </>
                 ) : (
                     <>
