@@ -108,6 +108,12 @@ const StudyList = () => {
 
 	const handleChangeDateSetting = (newValue) => {
         setActiveDateSetting(newValue);
+		if(newValue == 'full') {
+			setDateSet({
+				startDt: '',
+				endDt: ''
+			});
+		}
 	}
 
 	const onChangeDate = (date, dateString: string[]) => {
