@@ -1,9 +1,14 @@
-import { ResCommonError, api } from '@/apis/axios-common';
+import {
+    ResCommonError,
+    api
+} from '@/apis/axios-common';
 import {
     RegistrableSurvey,
     SurveyApiResponse,
+    SurveyDetail,
     SurveyPostReqBody,
     SurveyPostResponse,
+	SurveyPutReqBody,
 } from '@/types/survey';
 
 const BASE_API_URL = '/researcher/survey';
@@ -34,12 +39,41 @@ const surveyApi = {
         try {
             const responseData = await api<SurveyPostResponse>(BASE_API_URL, 'post', survey);
 
-            return responseData;
-        } catch (error) {
-            const e = error as ResCommonError;
-            throw e;
-        }
-    },
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
+
+	saveSurvey: async (survey: SurveyPutReqBody) => {
+		try {
+			const responseData = await api<SurveyPostResponse>(
+				BASE_API_URL,
+				'put',
+				survey
+			);
+
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
+
+	getSurvey: async (survey_no: number) => {
+		try {
+			const responseData = await api<SurveyDetail>(
+				`${BASE_API_URL}/${survey_no}`,
+				'get'
+			);
+
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
 
     registrableSurvey: async () => {
         try {

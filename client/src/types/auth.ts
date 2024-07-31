@@ -25,6 +25,7 @@ export interface ResetPasswordDataReq {
 export interface SignUpReq {
     email: string;
     password: string;
+    confirm_password: string;
     first_name: string;
     last_name: string;
     mobile: string;
@@ -65,4 +66,24 @@ export interface Email {
 export interface RequestChangePasswordRes {
     email: string;
     reset_token: string;
+}
+
+// Study 초대 토큰 검증
+export interface VerifyInviteToken {
+    std_no: number;
+    std_privilege: string;
+    user_email: string;
+    created_at: string;
+    accepted_at: string;
+}
+
+export interface InviteToken {
+    email: string;
+    iss: string;
+    sub: string;
+    exp: number;
+    iat: number;
+    'other-information': string;
+    'sequence-no': number;
+    'token-kind': string;
 }

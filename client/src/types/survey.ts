@@ -13,6 +13,7 @@ export interface ExampleList { //예시목록
 	question_no: number,
 	example_no: number,
 	example_title: string,
+	example_type: ExampleTypes,
 	example_value: string,
 	sort: number
 }
@@ -23,13 +24,15 @@ export interface QuestionList {
 	parent: string | number | null, //? 확실치 않음
 	level: number,
 	sort: number,
-	question_type: string, //"RADIO"
-	exampleList : ExampleList[]
+	question_type: QuestionTypes,
+	question_division: QuestionDivision,
+	exampleList : ExampleList[],
+	required_answer_yn : "Y"|"N"
 }
 export interface SurveyDetail {
 	survey_no: number,
 	title: string,
-	diseases_affected_parts: string,
+	diseases: string,
 	description: string,
 	translation: string,
 	sample_yn: string, // Y | N?
@@ -123,4 +126,8 @@ export interface SurveyPostReqBody {
 export interface SurveyPostResponse {
 	questionList: [] | null,
 	survey_no : number
+}
+
+export interface SurveyPutReqBody extends SurveyPostReqBody {
+	survey_no: number
 }

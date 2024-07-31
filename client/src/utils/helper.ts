@@ -28,4 +28,18 @@ export const paginator = (items:any, current_page:number, per_page_items:number)
 		total_pages: total_pages,
 		data: paginatedItems
 	};
-  }
+}
+
+export const requiredCheck = (value, ieReqired, changeIsRequired) => {//survey submit validate
+	let error;
+	if (!value && ieReqired == 'Y') {
+		changeIsRequired(true)
+		error = '필수항목 입니다.';
+	} else {
+		changeIsRequired(false)
+		return false;
+
+	}
+	console.log(error)
+	return error;
+}
