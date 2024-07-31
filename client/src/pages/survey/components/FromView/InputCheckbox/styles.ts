@@ -8,7 +8,7 @@ export const Container = styled('div')`
 `;
 
 export const TextField = styled(MuiTextField)(({theme}) => ({
-	width: '300px',
+	width: '90%',
 	marginLeft: '0.5rem',
   	'div' : {
     fontSize: '14px',
@@ -24,7 +24,8 @@ export const TextField = styled(MuiTextField)(({theme}) => ({
 }))
 
 export const Label = styled('label')`
-  cursor: pointer;
+	width: 100%;
+  	cursor: pointer;
 `;
 
 

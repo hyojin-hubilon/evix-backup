@@ -29,13 +29,14 @@ export const Radio = styled('input')(({theme}) => ({
 }))
 
 export const Label = styled('label')`
+	width: 100%;
   cursor: pointer;
   padding-left: 12px;
 
 `;
 
 export const TextField = styled(MuiTextField)(({theme}) => ({
-	width: '300px',
+	width: '80%',
 	marginLeft: '0.5rem',
 	'div' : {
 	  fontSize: '14px',
@@ -49,6 +50,7 @@ export const TextField = styled(MuiTextField)(({theme}) => ({
 }))
  
 export const EtcContainer = styled('div')`
+	width: 80%;
 	display: inline-block;
 	align-items: center
 `

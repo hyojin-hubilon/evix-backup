@@ -39,7 +39,7 @@ const SurveyPreview = () => {
 				</Grid>
 				
 				<Grid item xs={12} justifyContent="center">
-					<Box width={tab == '0' ? '70%' : '390px'} sx={{margin:'0 auto'}}>
+					<Box width={tab == '0' ? '100%' : '390px'} sx={{margin:'0 auto'}}>
 						<SurveyView preview={true}/>
 					</Box>
 				</Grid>

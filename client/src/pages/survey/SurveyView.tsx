@@ -1,13 +1,13 @@
 import surveyApi from "@/apis/survey";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ExampleTypes, QuestionList, QuestionTypes, SurveyDetail } from '@/types/survey';
-import { Box, Button, Card, TextField, Typography, useTheme } from "@mui/material";
+import { QuestionList, SurveyDetail } from '@/types/survey';
+import { Box, Button, Card, Typography, useTheme } from "@mui/material";
 import ViewCard from "./components/FromView/ViewCard/ViewCard";
 import * as S from './components/FromView/ViewCard/styles';
 import { useDispatch, useSelector } from "react-redux";
 import { resetAll, PreviewStateProps, addPreview } from "@/store/reducers/preview";
-import { Formik, Form, FormikProvider, useFormik, FormikProps } from "formik";
+import { Formik, Form } from "formik";
 
 
 type SurveyViewProps = {
@@ -38,6 +38,7 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
             if (response.result && response.code === 200) {
                 const survey = response.content;
 				setSurvey(survey);
+				
 				const hasRequiredCheck = survey.questionList.some((card) => card.required_answer_yn === 'Y');
 				setHasRequired(hasRequiredCheck);
 
@@ -53,7 +54,9 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 
 	const setCards = (questionList:QuestionList[]) => {
 		dispatch(resetAll());
+		
 		const newInitialValues = {};
+
 		questionList.map(question => {
 			dispatch(addPreview({
 				cardId: 'question' + question.question_no,
@@ -93,11 +96,6 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 		
 	}
 
-	const onChange = (e) => {
-		console.log(e);
-	}
-
-
 	return(
 		<Box display="flex" flexDirection="column" gap={2}>
 			<Card sx={{width: '100%', p: '1.5rem', borderRadius:'8px', borderTop: `5px solid ${primary.main}`}}>
@@ -123,7 +121,7 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 						{
 							previewCards && previewCards.map((card, index) => <ViewCard key={index} id={card.cardId} />)
 						}
-						<Button variant="contained" color="primary" type="submit" fullWidth>제출하기</Button>{/* disabled={preview ? true : false} */}
+						<Button variant="contained" color="primary" type="submit" disabled={preview ? true : false} fullWidth>제출하기</Button>
 					</Box>
 				</Form>
 			</Formik>
@@ -134,10 +132,4 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 
 export default SurveyView;
 
-function addPreviewCard(arg0: { cardId: string; cardTitle: string; inputType: QuestionTypes; isRequired: boolean; }): any {
-	throw new Error("Function not implemented.");
-}
-function uesRef(arg0: {}) {
-	throw new Error("Function not implemented.");
-}
 
