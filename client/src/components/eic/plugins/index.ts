@@ -1,7 +1,9 @@
 import { signature } from './signature';
+import { checkbox } from './checkbox';
 
 const plugins = {
-  signature,
+    signature,
+    checkbox
 };
 
 export default plugins;
