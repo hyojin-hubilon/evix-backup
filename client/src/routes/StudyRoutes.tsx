@@ -3,7 +3,6 @@ import { lazy } from 'react';
 // project import
 import Loadable from '@components/Loadable';
 import MainLayout from '@layout/MainLayout';
-import StudyDetailPage from '@/pages/study/StudyPreview';
 
 // render - dashboard
 const StudyList = Loadable(lazy(() => import('@pages/study')));
@@ -27,10 +26,6 @@ const StudyRoutes = {
         {
             path: 'new',
             element: <StudyNew />,
-        },
-        {
-            path: 'preview',
-            element: <StudyDetailPage />,
         },
     ],
 };

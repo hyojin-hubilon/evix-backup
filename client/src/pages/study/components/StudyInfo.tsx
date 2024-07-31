@@ -18,7 +18,6 @@ import {
 import StudyMemberStatus from './study-info/StudyMemberStatus';
 import { STUDY_STATUS, STUDY_STATUS_KEY } from './StudyListItem';
 import MemberManagement from './study-new/MemberManagement';
-import { surveyCycle } from '@/types/study';
 
 // // Define the types for the props
 // interface StudySurvey {
@@ -246,92 +245,67 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                 </Grid>
                 <Grid item xs={5} alignSelf="stretch">
                     <MainCard sx={{ height: '100%' }}>
-                        <Box
-                            sx={{
-                                p: '1rem',
-                                bgcolor: theme.palette.grey[100],
-                                borderRadius: '4px',
-                                mb: '0.5rem',
-                            }}
-                        >
-                            <Box display="flex" alignItems="center" justifyContent="space-between">
-                                <Typography variant="h5">Survey</Typography>
-                                <Button variant="outlined">Edit</Button>
-                            </Box>
-                            <List
-                                sx={{
-                                    listStyle: 'disc',
-                                    pl: '20px',
-                                    'li': {
-                                        display: 'list-item',
-                                        pl: 0,
-                                        pb: 0,
-                                    },
-                                }}
-                            >
-                                {studyDetail.studySurveySetList &&
-                                    studyDetail.studySurveySetList.length > 0 &&
-                                    studyDetail.studySurveySetList.map((surveySet) =>
-                                        surveySet.surveyList.map((survey) => (
-                                            <ListItem
-                                                key={survey.survey_no}
-                                                sx={{ display: 'block' }}
-                                            >
-                                                <Link
-                                                    sx={{
-                                                        display: 'inline-block',
-                                                        marginRight: '0.5rem',
-                                                    }}
-                                                >
-                                                    {survey.title}
-                                                </Link>
-                                                <Typography sx={{ display: 'inline-block' }}>
-                                                    {surveyCycle[surveySet.survey_cycle]}마다{' '}
-                                                    {surveySet.number_in_cycle}회 반복
-                                                </Typography>
-                                            </ListItem>
-                                        ))
-                                    )}
-                            </List>
-                        </Box>
+						<Box sx={{p:'1rem', bgcolor: theme.palette.grey[100], borderRadius: '4px', mb: '0.5rem'}}>
+							<Box display="flex" alignItems="center" justifyContent="space-between">
+                        		<Typography variant="h5">Survey</Typography>
+								<Button variant="outlined">Edit</Button>
+							</Box>
+							<List
+								sx={{
+									listStyle: 'disc',
+									pl: '20px',
+									'li': {
+										display: 'list-item',
+										pl: 0,
+										pb: 0,
+									},
+								}}
+							>
+								{studyDetail.studySurveySetList &&
+									studyDetail.studySurveySetList.length > 0 &&
+									studyDetail.studySurveySetList.map((surveySet) =>
+										surveySet.surveyList.map((survey) => (
+											<ListItem key={survey.survey_no} sx={{display: 'block'}}>
+												<Link sx={{display: "inline-block", marginRight : '0.5rem'}}>{survey.title}</Link>
+												<Typography sx={{display: "inline-block"}}>
+													{surveySet.survey_cycle}에{' '}
+													{surveySet.number_in_cycle}회 반복
+												</Typography>
+											</ListItem>
+										))
+									)}
+							</List>
+						</Box>
                         {/* <Divider sx={{ mt: '1rem', mb: '1rem' }} /> */}
-                        <Box
-                            sx={{
-                                p: '1rem',
-                                bgcolor: theme.palette.grey[100],
-                                borderRadius: '4px',
-                            }}
-                        >
-                            <Box display="flex" alignItems="center" justifyContent="space-between">
-                                <Typography variant="h5">전자동의서</Typography>
-                                <Box display="flex" gap={0.5}>
-                                    {studyDetail.eic_origin_name && (
-                                        <Button variant="outlined" color="error">
-                                            Delete
-                                        </Button>
-                                    )}
-                                    <Button variant="outlined">Edit</Button>
-                                </Box>
-                            </Box>
-                            {studyDetail.eic_origin_name && (
-                                <List
-                                    sx={{
-                                        listStyle: 'disc',
-                                        pl: '20px',
-                                        'li': {
-                                            display: 'list-item',
-                                            pl: 0,
-                                            pb: 0,
-                                        },
-                                    }}
-                                >
-                                    <ListItem>
-                                        {/* <Link>개인정보 제공 및 참여 동의서</Link> */}
-                                        <Link>{studyDetail.eic_origin_name ?? ''}</Link>
-                                    </ListItem>
-                                </List>
-                            )}
-                        </Box>
+						<Box sx={{p:'1rem', bgcolor: theme.palette.grey[100], borderRadius: '4px'}}>
+							<Box display="flex" alignItems="center" justifyContent="space-between">
+                        		<Typography variant="h5">전자동의서</Typography>
+								<Box display="flex" gap={0.5}>
+								 	{ studyDetail.eic_origin_name && <Button variant="outlined" color='error'>Delete</Button> }
+									<Button variant="outlined">Edit</Button>
+									
+								</Box>
+							</Box>
+							{
+								studyDetail.eic_origin_name && <List
+								sx={{
+									listStyle: 'disc',
+									pl: '20px',
+									'li': {
+										display: 'list-item',
+										pl: 0,
+										pb: 0,
+									},
+								}}
+							>
+								<ListItem>
+									{/* <Link>개인정보 제공 및 참여 동의서</Link> */}
+									<Link>{studyDetail.eic_origin_name ?? ''}</Link>
+								</ListItem>
+							</List>
+							}
+							
+						</Box>
                     </MainCard>
                 </Grid>
             </Grid>
@@ -359,10 +333,10 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                         </Box>
                     </Grid>
                 </Grid>
-                <StudyMemberStatus
-                    managerList={studyDetail.managerList}
-                    inviteList={studyDetail.inviteList}
-                />
+				<StudyMemberStatus
+					managerList={studyDetail.managerList}
+					inviteList={studyDetail.inviteList}
+				/>
             </Grid>
             <MemberManagement
                 isOpen={isOpenMember}
