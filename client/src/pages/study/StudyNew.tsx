@@ -18,6 +18,7 @@ import {
     Button,
     Divider,
 } from '@mui/material';
+import * as Yup from 'yup'; // 유효성 검사
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 import DateRangePicker, { DateRage } from './components/study-new/Daterangepicker';
@@ -28,9 +29,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Drug } from '@/apis/test/drug/drugsAPI_TEST';
 import userApi from '@/apis/user';
 import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
-import { InviteMemberTempType } from '@/types/study';
+import { InviteMemberTempType, StudyDetail } from '@/types/study';
 import MemberInvitement from './components/study-new/MemberInvitement';
 import MemberManagement from './components/study-new/MemberManagement';
+import StudyDeleteConfirmDialog from './components/study-new/StudyDeleteConfirmDialog';
+import { MyProfile } from '@/types/user';
+import { useFormik } from 'formik';
+import StudyPreview from './StudyPreview';
 
 const FormTooltip = ({ text }) => {
     return (
@@ -41,6 +46,8 @@ const FormTooltip = ({ text }) => {
         </Tooltip>
     );
 };
+
+type ActionType = 'delete' | 'pause' | 'stop' | 'restart';
 
 const StudyNew = () => {
     const theme = useTheme();
@@ -70,7 +77,14 @@ const StudyNew = () => {
     const state = location.state as { mode: 'write' | 'edit'; stdNo?: number };
     const stdNo = location.state?.stdNo;
 
-    const [ownerName, setOwnerName] = useState('');
+    // const [ownerName, setOwnerName] = useState('');
+    const [stdStatus, setStdStatus] = useState<String>('');
+
+    const [currentUser, setCurrentUser] = useState<MyProfile>();
+
+    const [showPreview, setShowPreview] = useState(false);
+
+    const [studyDetails, setStudyDetails] = useState<StudyDetail>();
 
     const changeDateRange = (e: DateRage) => {
         setDateRange(e);
@@ -84,22 +98,45 @@ const StudyNew = () => {
         setEicFile(e.target.files[0]);
     };
 
+    const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
+
+    const handleDeleteSuccess = () => {
+        navigate('/study');
+    };
+
+    const handleOpenStudyDelete = () => {
+        setOpenDeleteConfirm(!openDeleteConfirm);
+    };
+
+    // const [actionType, setActionType] = useState<ActionType | null>(null);
+    type ActionType = 'delete' | 'pause' | 'stop' | 'progression';
+    const [actionType, setActionType] = useState<ActionType>('delete');
+
+    const handleOpenDialog = (action) => {
+        setActionType(action);
+        setOpenDeleteConfirm(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDeleteConfirm(false);
+    };
+
     // 멤버관리 모달에서 owner 정보를 가져오기 위함
     const getMyProfile = async () => {
         try {
             const response = await userApi.getMyProfile();
-            setOwnerName(response.content['first_name'] + ' ' + response.content['last_name']);
+            setCurrentUser(response.content);
         } catch (error) {
             console.error('Failed to fetch owner profile:', error);
         }
     };
 
+    console.log('currentUser: ', currentUser);
+
     const handleSubmit = async () => {
-        console.log(members);
-
-        console.log('studySurveySetList: ', studySurveySetList);
-
         const studyData = {
+            std_payment_status: 'WAIT',
+            deploy_method: 'IMMEDIATE',
             std_status: 'STD-CREATED',
             title: title,
             std_type: 'E-PRO',
@@ -115,8 +152,6 @@ const StudyNew = () => {
             studySurveySetList: studySurveySetList ?? [],
             inviteList: members ?? [],
         };
-
-        console.log('studyData: ', studyData);
 
         // FormData 객체 생성 및 데이터 추가
         const formData = new FormData();
@@ -179,9 +214,12 @@ const StudyNew = () => {
         return (privilege: string) => '초대하기 팝업에서 설정해주세요.';
     }, [members, inviteList, mode]);
 
+    const [studyDetail, setStudyDetail] = useState<StudyDetail>();
+
     const fetchStudyDetail = async (stdNo) => {
         try {
             const response = await studyApi.getStudyDetail(stdNo);
+            setStudyDetail(response.content as StudyDetail); // `response.content`의 타입이 `StudyDetail`과 일치해야 함
 
             setTitle(response.content['title']);
             setParticipants(response.content['target_number']);
@@ -207,26 +245,9 @@ const StudyNew = () => {
                 setMedicineYOrN('true');
             }
 
-            // 나머지 필드들도 필요에 따라 업데이트
+            setStdStatus(response.content['std_status']);
         } catch (error) {
             console.error('Failed to fetch study detail:', error);
-        }
-    };
-
-    const handleDelete = async () => {
-        try {
-            const requestBody = {
-                std_no: stdNo,
-            };
-
-            const response = await studyApi.deleteStudy(requestBody);
-
-            if (response.code === 200) {
-                alert('삭제 성공');
-                navigate('/study');
-            }
-        } catch (error) {
-            console.error('Failed to Delete Study: ', error);
         }
     };
 
@@ -244,11 +265,10 @@ const StudyNew = () => {
             drug_code: medicineYOrN === 'true' ? drug?.itemCode ?? null : null,
             drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
             drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
+            // 수정 화면에서 Survey, 초대 제외
             // studySurveySetList: [],
             // inviteList: [],
         };
-
-        console.log('studyData: ', studyData);
 
         // FormData 객체 생성 및 데이터 추가
         const formData = new FormData();
@@ -265,7 +285,7 @@ const StudyNew = () => {
         try {
             const response = await studyApi.updateStudy(formData);
             if (response.code === 200) {
-                navigate(-1);
+                navigate('/study');
             }
         } catch (error) {
             console.error('Failed to update study:', error);
@@ -310,6 +330,23 @@ const StudyNew = () => {
             console.error('Failed to deploy study: ', error);
         }
     };
+
+    const userRole = managerList.find(
+        (member) => member.user_no === currentUser?.user_no
+    )?.std_privilege;
+
+    console.log('userRole: ', userRole);
+
+    const handlePreview = () => {
+        // 미리보기 화면 출력
+        // setShowPreview(true);
+
+        navigate('/study/preview', { state: { mode: 'priview', studyDetail: studyDetail } });
+    };
+
+    // if (showPreview) {
+    //     return <StudyPreview studyDetail={studyDetail}></StudyPreview>;
+    // }
 
     return (
         <Container maxWidth="lg">
@@ -609,7 +646,8 @@ const StudyNew = () => {
                                                         color: primary.main,
                                                     }}
                                                 >
-                                                    {ownerName}
+                                                    {currentUser?.first_name}
+                                                    {currentUser?.last_name}
                                                 </span>
                                             </Typography>
                                         </li>
@@ -672,25 +710,114 @@ const StudyNew = () => {
             ) : (
                 // 수정 모드에서 보여질 UI
                 <Grid container pt="1rem">
-                    <Grid item xs={2}>
-                        {/* 오너에게만 표시 */}
-                        <Button variant="outlined" color="error" onClick={handleDelete}>
-                            스터디 삭제
-                        </Button>
-                    </Grid>
-                    <Grid item xs={10}>
-                        <Box justifyContent="flex-end" display="flex" gap={1}>
-                            <Button variant="outlined">취소</Button>
-                            <Button variant="outlined" onClick={handleUpdate}>
-                                수정
-                            </Button>
-                            <Button variant="outlined" color="info">
-                                미리보기
-                            </Button>
-                            <Button variant="contained" onClick={handleDeploy}>
-                                배포
-                            </Button>
-                        </Box>
+                    <Grid container pt="1rem">
+                        {userRole === 'OWNER' && (
+                            <>
+                                <Grid item xs={2}>
+                                    <Button
+                                        variant="outlined"
+                                        color="error"
+                                        onClick={() => handleOpenDialog('delete')}
+                                    >
+                                        스터디 삭제
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={10}>
+                                    <Box justifyContent="flex-end" display="flex" gap={1}>
+                                        <Button
+                                            variant="outlined"
+                                            onClick={() => navigate('/study')}
+                                        >
+                                            취소
+                                        </Button>
+                                        {stdStatus === 'STD-CREATED' && (
+                                            <>
+                                                <Button variant="outlined" onClick={handleUpdate}>
+                                                    수정
+                                                </Button>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="info"
+                                                    onClick={handlePreview}
+                                                >
+                                                    미리보기
+                                                </Button>
+                                                <Button variant="contained" onClick={handleDeploy}>
+                                                    배포
+                                                </Button>
+                                            </>
+                                        )}
+                                        {stdStatus === 'STD-PROGRESSION' && (
+                                            <>
+                                                <Button variant="outlined" onClick={handleUpdate}>
+                                                    수정
+                                                </Button>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="info"
+                                                    onClick={() => handleOpenDialog('pause')}
+                                                >
+                                                    일시중지
+                                                </Button>
+                                                <Button
+                                                    variant="contained"
+                                                    onClick={() => handleOpenDialog('stop')}
+                                                >
+                                                    종료
+                                                </Button>
+                                            </>
+                                        )}
+                                        {(stdStatus === 'STD-PAUSE' ||
+                                            stdStatus === 'STD-STOP') && (
+                                            <>
+                                                <Button variant="outlined" onClick={handleUpdate}>
+                                                    수정
+                                                </Button>
+                                                <Button
+                                                    variant="contained"
+                                                    onClick={() => handleOpenDialog('stop')}
+                                                >
+                                                    종료
+                                                </Button>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="info"
+                                                    onClick={() => handleOpenDialog('progression')}
+                                                >
+                                                    재시작
+                                                </Button>
+                                            </>
+                                        )}
+                                        {stdStatus === 'STD-DONE' && (
+                                            <>
+                                                <Button variant="outlined" onClick={handleUpdate}>
+                                                    수정
+                                                </Button>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="info"
+                                                    onClick={() => handleOpenDialog('progression')}
+                                                >
+                                                    재시작
+                                                </Button>
+                                            </>
+                                        )}
+                                    </Box>
+                                </Grid>
+                            </>
+                        )}
+                        {userRole === 'MAINTAINER' && (
+                            <Grid item xs={12}>
+                                <Box justifyContent="flex-end" display="flex" gap={1}>
+                                    <Button variant="outlined" onClick={() => navigate('/study')}>
+                                        취소
+                                    </Button>
+                                    <Button variant="outlined" onClick={handleUpdate}>
+                                        수정
+                                    </Button>
+                                </Box>
+                            </Grid>
+                        )}
                     </Grid>
                 </Grid>
             )}
@@ -715,6 +842,13 @@ const StudyNew = () => {
                 isOpen={isOpenSurvey}
                 handleClose={handleCloseSurvey}
                 setStudySurveySetList={setStudySurveySetList}
+            />
+            <StudyDeleteConfirmDialog
+                open={openDeleteConfirm}
+                handleClose={handleOpenStudyDelete}
+                studyNo={stdNo}
+                onDeleteSuccess={handleDeleteSuccess}
+                action={actionType}
             />
         </Container>
     );
