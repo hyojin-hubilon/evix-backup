@@ -152,9 +152,9 @@ const SurveyNew = () => {
 							
 							<Box display="flex" justifyContent="flex-end" gap={1} sx={{ml: 'auto'}}>
 								{
-
+									surveyNo && <Button variant="outlined">미리보기</Button>
 								}
-								<Button variant="outlined">미리보기</Button>
+								
 								<Button variant="outlined" onClick={() => handleSaveSurvey(true)}>임시저장</Button>
 								<Button variant="contained" onClick={() => handleSaveSurvey(false)}>저장</Button>
 							</Box>

@@ -253,7 +253,7 @@ export const cardSlice = createSlice({
 			return state;
 		},
 		resetAll: (state: CardProps[]) => {
-			state = [] as CardProps[]
+			state = [initialCards] as CardProps[]
 			return state;
 		},
 	},
