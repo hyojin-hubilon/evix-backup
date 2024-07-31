@@ -142,7 +142,7 @@ const SurveyNew = () => {
 	// }
 
 	return (
-		<Container maxWidth="sm">
+		<Container maxWidth="md">
 					<Grid container flexDirection="column" sx={{minHeight: '100vh'}}>
 					<Formik
 						initialValues={{}}
