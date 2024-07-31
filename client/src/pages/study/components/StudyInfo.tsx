@@ -245,7 +245,7 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                 </Grid>
                 <Grid item xs={5} alignSelf="stretch">
                     <MainCard sx={{ height: '100%' }}>
-						<Box sx={{p:'1rem', bgcolor: theme.palette.grey[100], borderRadius: '1rem', mb: '0.5rem'}}>
+						<Box sx={{p:'1rem', bgcolor: theme.palette.grey[100], borderRadius: '4px', mb: '0.5rem'}}>
 							<Box display="flex" alignItems="center" justifyContent="space-between">
                         		<Typography variant="h5">Survey</Typography>
 								<Button variant="outlined">Edit</Button>
@@ -265,31 +265,29 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
 									studyDetail.studySurveySetList.length > 0 &&
 									studyDetail.studySurveySetList.map((surveySet) =>
 										surveySet.surveyList.map((survey) => (
-											<ListItem key={survey.survey_no}>
-												<Box display="flex" gap={1}>
-													<Link>{survey.title}</Link>
-													<Typography>
-														{surveySet.survey_cycle}에{' '}
-														{surveySet.number_in_cycle}회 반복
-													</Typography>
-												</Box>
+											<ListItem key={survey.survey_no} sx={{display: 'block'}}>
+												<Link sx={{display: "inline-block", marginRight : '0.5rem'}}>{survey.title}</Link>
+												<Typography sx={{display: "inline-block"}}>
+													{surveySet.survey_cycle}에{' '}
+													{surveySet.number_in_cycle}회 반복
+												</Typography>
 											</ListItem>
 										))
 									)}
 							</List>
 						</Box>
                         {/* <Divider sx={{ mt: '1rem', mb: '1rem' }} /> */}
-						<Box sx={{p:'1rem', bgcolor: theme.palette.grey[100], borderRadius: '1rem'}}>
+						<Box sx={{p:'1rem', bgcolor: theme.palette.grey[100], borderRadius: '4px'}}>
 							<Box display="flex" alignItems="center" justifyContent="space-between">
                         		<Typography variant="h5">전자동의서</Typography>
 								<Box display="flex" gap={0.5}>
-									<Button variant="outlined" color='error'>Delete</Button>
+								 	{ studyDetail.eic_origin_name && <Button variant="outlined" color='error'>Delete</Button> }
 									<Button variant="outlined">Edit</Button>
 									
 								</Box>
 							</Box>
-							
-							<List
+							{
+								studyDetail.eic_origin_name && <List
 								sx={{
 									listStyle: 'disc',
 									pl: '20px',
@@ -305,6 +303,8 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
 									<Link>{studyDetail.eic_origin_name ?? ''}</Link>
 								</ListItem>
 							</List>
+							}
+							
 						</Box>
                     </MainCard>
                 </Grid>
