@@ -125,7 +125,7 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
     return (
         <Grid container item rowSpacing={2} className="study-info">
             <Grid item xs={12}>
-                <Typography variant="h5">Study 상태</Typography>
+                <Typography variant="h4">Study 상태</Typography>
                 <MainCard>
                     <List>
                         <ListItem>
@@ -168,14 +168,11 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
             </Grid>
             <Grid container item columnSpacing={1.5}>
                 <Grid item xs={7}>
-                    <Typography variant="h5">Study 개요</Typography>
+                    <Typography variant="h4">Study 개요</Typography>
                 </Grid>
                 <Grid item xs={5}>
                     <Box display="flex" gap={1} alignItems="center">
-                        <LinkOutlined
-                            style={{ marginBottom: '0.5rem', color: theme.palette.grey[500] }}
-                        />
-                        <Typography variant="h5">연결정보</Typography>
+                        <Typography variant="h4">Survey & Electronic consent form</Typography>
                     </Box>
                 </Grid>
                 <Grid item xs={7} alignSelf="stretch">
@@ -222,7 +219,7 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                             sx={{
                                                 backgroundColor: theme.palette.grey[100],
                                                 boxShadow: 'none',
-                                                p: '0.5rem',
+                                                padding: '0.5rem 1rem 0.5rem 0.5rem',
                                                 mt: '0.5rem',
                                             }}
                                         >
@@ -248,54 +245,67 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                 </Grid>
                 <Grid item xs={5} alignSelf="stretch">
                     <MainCard sx={{ height: '100%' }}>
-                        <Typography variant="h5">Survey</Typography>
-                        <List
-                            sx={{
-                                listStyle: 'disc',
-                                pl: '20px',
-                                'li': {
-                                    display: 'list-item',
-                                    pl: 0,
-                                    pb: 0,
-                                },
-                            }}
-                        >
-                            {studyDetail.studySurveySetList &&
-                                studyDetail.studySurveySetList.length > 0 &&
-                                studyDetail.studySurveySetList.map((surveySet) =>
-                                    surveySet.surveyList.map((survey) => (
-                                        <ListItem key={survey.survey_no}>
-                                            <Box display="flex" gap={1}>
-                                                <Link>{survey.title}</Link>
-                                                <Typography>
-                                                    {surveySet.survey_cycle}에{' '}
-                                                    {surveySet.number_in_cycle}회 반복
-                                                </Typography>
-                                            </Box>
-                                        </ListItem>
-                                    ))
-                                )}
-                        </List>
-
-                        <Divider sx={{ mt: '1rem', mb: '1rem' }} />
-
-                        <Typography variant="h5">전자동의서</Typography>
-                        <List
-                            sx={{
-                                listStyle: 'disc',
-                                pl: '20px',
-                                'li': {
-                                    display: 'list-item',
-                                    pl: 0,
-                                    pb: 0,
-                                },
-                            }}
-                        >
-                            <ListItem>
-                                {/* <Link>개인정보 제공 및 참여 동의서</Link> */}
-                                <Link>{studyDetail.eic_origin_name ?? ''}</Link>
-                            </ListItem>
-                        </List>
+						<Box sx={{p:'1rem', bgcolor: theme.palette.grey[100], borderRadius: '1rem', mb: '0.5rem'}}>
+							<Box display="flex" alignItems="center" justifyContent="space-between">
+                        		<Typography variant="h5">Survey</Typography>
+								<Button variant="outlined">Edit</Button>
+							</Box>
+							<List
+								sx={{
+									listStyle: 'disc',
+									pl: '20px',
+									'li': {
+										display: 'list-item',
+										pl: 0,
+										pb: 0,
+									},
+								}}
+							>
+								{studyDetail.studySurveySetList &&
+									studyDetail.studySurveySetList.length > 0 &&
+									studyDetail.studySurveySetList.map((surveySet) =>
+										surveySet.surveyList.map((survey) => (
+											<ListItem key={survey.survey_no}>
+												<Box display="flex" gap={1}>
+													<Link>{survey.title}</Link>
+													<Typography>
+														{surveySet.survey_cycle}에{' '}
+														{surveySet.number_in_cycle}회 반복
+													</Typography>
+												</Box>
+											</ListItem>
+										))
+									)}
+							</List>
+						</Box>
+                        {/* <Divider sx={{ mt: '1rem', mb: '1rem' }} /> */}
+						<Box sx={{p:'1rem', bgcolor: theme.palette.grey[100], borderRadius: '1rem'}}>
+							<Box display="flex" alignItems="center" justifyContent="space-between">
+                        		<Typography variant="h5">전자동의서</Typography>
+								<Box display="flex" gap={0.5}>
+									<Button variant="outlined" color='error'>Delete</Button>
+									<Button variant="outlined">Edit</Button>
+									
+								</Box>
+							</Box>
+							
+							<List
+								sx={{
+									listStyle: 'disc',
+									pl: '20px',
+									'li': {
+										display: 'list-item',
+										pl: 0,
+										pb: 0,
+									},
+								}}
+							>
+								<ListItem>
+									{/* <Link>개인정보 제공 및 참여 동의서</Link> */}
+									<Link>{studyDetail.eic_origin_name ?? ''}</Link>
+								</ListItem>
+							</List>
+						</Box>
                     </MainCard>
                 </Grid>
             </Grid>
@@ -304,8 +314,8 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                 <Grid item container>
                     <Grid item xs={10}>
                         <Box display="flex" alignItems="center" gap={1}>
-                            <Typography variant="h5">Study 멤버현황</Typography>
-                            <Typography variant="caption" sx={{ mb: '0.5rem' }}>
+                            <Typography variant="h4">Study 멤버현황</Typography>
+                            <Typography variant="caption">
                                 *최근 승인일 순으로 보여집니다.
                             </Typography>
                         </Box>
@@ -323,12 +333,10 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                         </Box>
                     </Grid>
                 </Grid>
-                <MainCard>
-                    <StudyMemberStatus
-                        managerList={studyDetail.managerList}
-                        inviteList={studyDetail.inviteList}
-                    />
-                </MainCard>
+				<StudyMemberStatus
+					managerList={studyDetail.managerList}
+					inviteList={studyDetail.inviteList}
+				/>
             </Grid>
             <MemberManagement
                 isOpen={isOpenMember}
