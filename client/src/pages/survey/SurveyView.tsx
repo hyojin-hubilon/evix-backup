@@ -111,6 +111,7 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 					initialValues={initialValues}
 					enableReinitialize={true}
 					validateOnChange={false}
+					validateOnBlur={true}
 					onSubmit={(values, actions) => {
 						actions.setSubmitting(false);
 						console.log(actions, values);
