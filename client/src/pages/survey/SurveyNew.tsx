@@ -179,11 +179,7 @@ const SurveyNew = () => {
 						actions.setSubmitting(false);
 					}}
 				>
-
-{({ values, errors, touched, handleChange, handleSubmit, isSubmitting }) => (
-
 					<Form>
-						
 						<AppBar
 							position="sticky"
 							sx={{bgcolor: isSticky ? `rgba(255, 255, 255, 0.7)` : "transparent", boxShadow: "none", height: '60px', top: '60px', p: '10px', width: '89%'}}
@@ -209,7 +205,6 @@ const SurveyNew = () => {
 						</AppBar>	
 						<FormBuilder />
 					</Form>
-)}
 				</Formik>
 			</Grid>
 		</Container>

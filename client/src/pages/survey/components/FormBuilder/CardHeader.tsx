@@ -15,8 +15,6 @@ type CardHeaderType = {
 const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 	const theme = useTheme();
   	const dispatch = useDispatch();
-
-	const { values, setFieldValue } = useFormikContext<Object>();
   
   	const isFocused = useSelector((state: StateProps) => {
     const currentCard = state.cards.find((card) => card.id === id) as CardProps;
@@ -30,19 +28,13 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 
 	const handleCardTitleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		dispatch(setTitle({ cardId: id, text: e.target.value }));
-		// const filedName = isTitle ? 'title' : id;
-
-		// setFieldValue(filedName, e.target.value);//formik value setting
 	};
 
 	const handleInputTypeChange = (e: SelectChangeEvent<unknown>) => {
 		dispatch(typeChange({ id, inputType: e.target.value as string }));
 	};
 
-	useEffect(() => {
-		console.log(values)
-	}, [values])
-
+	
   	return (
 		<Box display="flex" gap={1} alignItems="center">
 			<Field name={`cards.${cardIndex}.cardTitle`} type="text">
