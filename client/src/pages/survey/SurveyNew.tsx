@@ -1,27 +1,50 @@
 import { AppBar, Box, Button, Container, Grid, Toolbar, Typography } from "@mui/material";
 import FormBuilder from "./components/FormBuilder";
 import useSticky from "@/utils/useSticky";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CardProps, resetCards, StateProps } from "@/store/reducers/survey";
 import { ExampleTypes, QuestionDivision, QuestionTypes, SurveyPostReqBody, SurveyPutReqBody, SurveyQuestion } from "@/types/survey";
 import surveyApi from "@/apis/survey";
 import { useNavigate } from "react-router-dom";
 import { Form, Formik } from "formik";
+import * as Yup from 'yup';
 
 const SurveyNew = () => {
 	const { ref, isSticky } = useSticky();
 	const cards = useSelector((state: StateProps) => state.cards);
+
+	const schema = Yup.object().shape({
+		cards: Yup.array()
+			.of(
+				Yup.object().shape({
+					cardTtile: Yup.string().required('Required'), // these constraints take precedence
+					inputType: Yup.string().required('Required'),
+					contents: Yup.lazy(value => {
+						switch (typeof value) {
+							case 'object':
+							  return Yup.object().shape({
+								id: Yup.string(),
+								text: Yup.string().required()
+							  }); // schema for object
+							case 'string':
+							  return Yup.string().when('inputType', {
+								is: (inputType: string) => inputType === 'TITLE',
+								then: s => s.required(),
+								otherwise: s => s.notRequired(),
+							  })
+							default:
+							  return Yup.mixed();
+						  }
+					})
+				})
+			)
+			.required()
+	});
 	
 	const dispatch = useDispatch();
 	const navigation = useNavigate();
-	// const [ newSurvey, setNewsurvey ] = useState<SurveyPostReqBody>({
-	// 	title: '',
-	// 	description: '',
-	// 	sample_yn: 'N',
-	// 	questionList: []
-	// })
-
+	
 	const [ surveyNo, setSurveyNo ] = useState<number | null>(null)
 
 	const postNewSurvey = async (survey:SurveyPostReqBody, temp:boolean) => {
@@ -133,24 +156,28 @@ const SurveyNew = () => {
 		} else {
 			postNewSurvey(newSurvey, temp);
 		}
-
-		
+	
 	}
 
-	// const submitTest = (values) => {
-	// 	console.log(values)
-	// }
+	
+
+	useEffect(() => {
+		console.log(cards);
+	}, [cards])
 
 	return (
 		<Container maxWidth="md">
-					<Grid container flexDirection="column" sx={{minHeight: '100vh'}}>
-					<Formik
-						initialValues={{}}
-						onSubmit={(values, actions) => {
-							actions.setSubmitting(false);
-							console.log(values);
-						}}>
-						<Form>
+			<Grid container flexDirection="column" sx={{minHeight: '100vh'}}>
+				<Formik
+					initialValues={{cards: cards}}
+					validationSchema={schema}
+					enableReinitialize={true}
+					onSubmit={(values, actions) => {
+						console.log(values);
+						actions.setSubmitting(false);
+					}}
+				>
+					<Form>
 			
 						<AppBar
 							position="sticky"
@@ -178,8 +205,7 @@ const SurveyNew = () => {
 						<FormBuilder />
 					</Form>
 				</Formik>
-			</Grid>					
-				
+			</Grid>
 		</Container>
 
 	)

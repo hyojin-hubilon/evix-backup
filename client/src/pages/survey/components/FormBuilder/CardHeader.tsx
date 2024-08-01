@@ -7,12 +7,16 @@ import { extendedCardProps } from "./FormQuestion";
 import { QuestionTypes } from "@/types/survey";
 import { Field, useFormikContext } from "formik";
   
-
-const CardHeader = ({ id, isTitle }: Pick<extendedCardProps, "id" | "isTitle">) => {
+type CardHeaderType = {
+	id: string,
+	isTitle: boolean,
+	cardIndex: number
+}
+const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 	const theme = useTheme();
   	const dispatch = useDispatch();
 
-	const { setValues } = useFormikContext();
+	const { values, setFieldValue } = useFormikContext<Object>();
   
   	const isFocused = useSelector((state: StateProps) => {
     const currentCard = state.cards.find((card) => card.id === id) as CardProps;
@@ -26,27 +30,22 @@ const CardHeader = ({ id, isTitle }: Pick<extendedCardProps, "id" | "isTitle">) 
 
 	const handleCardTitleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		dispatch(setTitle({ cardId: id, text: e.target.value }));
-		setValues({[id] : e.target.value});
+		// const filedName = isTitle ? 'title' : id;
+
+		// setFieldValue(filedName, e.target.value);//formik value setting
 	};
 
 	const handleInputTypeChange = (e: SelectChangeEvent<unknown>) => {
 		dispatch(typeChange({ id, inputType: e.target.value as string }));
 	};
 
-	const validateCheck = (value) => {//survey submit validate
-		console.log(value)
-		let error;
-		if (!value) {
-			error = '필수항목 입니다.';
-		} else {	
-			return false;
-		}
-		return error;
-	}
+	useEffect(() => {
+		console.log(values)
+	}, [values])
 
   	return (
 		<Box display="flex" gap={1} alignItems="center">
-			<Field name={id} type="text" validate={validateCheck}>
+			<Field name={`cards[${cardIndex}].cardTitle`} type="text">
 			{({
 				field,
 				form: { touched, errors },
@@ -54,9 +53,10 @@ const CardHeader = ({ id, isTitle }: Pick<extendedCardProps, "id" | "isTitle">) 
 			}) => (
 				<TextField
 					id="filled-basic"
-					{...field}
+					name={field.name}
 					value={cardTitle}
 					onChange={(e) => {
+						field.onChange(e.target.value);
 						handleCardTitleChange(e);
 					}}
 					placeholder={isTitle ? "설문지 제목" : "질문"}
@@ -68,10 +68,11 @@ const CardHeader = ({ id, isTitle }: Pick<extendedCardProps, "id" | "isTitle">) 
 							padding: isFocused ? (isTitle ? '5px' : '16px') : '5px 0',
 							backgroundColor: isFocused ? (isTitle ? 'transparent' : theme.palette.grey[50]) : 'transparent',
 							'::before': {
-								borderBottom: isFocused ? ( errors[id] ? `1px solid ${theme.palette.error.main}` : `1px solid ${theme.palette.grey[700]}` ):  `1px solid ${theme.palette.error.main}`
+								borderBottom: isFocused ? ( errors[field.name] ? `1px solid ${theme.palette.error.main}` : `1px solid ${theme.palette.grey[700]}` ): `1px solid ${theme.palette.grey[700]}`
 							},
 							'::after' : {
-								borderBottom: errors[id] ? `2px solid ${theme.palette.error.main}` : `2px solid ${theme.palette.grey[700]}`,
+								borderBottom: errors[field.name] ? `1px solid ${theme.palette.error.main}` : `1px solid ${theme.palette.grey[700]}`,
+								transform: 'scaleX(1)'
 							}
 						},
 						'input' : {

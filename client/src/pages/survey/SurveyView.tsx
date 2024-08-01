@@ -114,7 +114,7 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 					validateOnBlur={true}
 					onSubmit={(values, actions) => {
 						actions.setSubmitting(false);
-						console.log(actions, values);
+						console.log(actions, values); //아직 답변 POST 없음
 					}}
 				>
 				<Form>
