@@ -45,14 +45,15 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 
   	return (
 		<Box display="flex" gap={1} alignItems="center">
-			<Field name={`cards[${cardIndex}].cardTitle`} type="text">
+			<Field name={`cards.${cardIndex}.cardTitle`} type="text">
 			{({
 				field,
-				form: { touched, errors },
+				form : {errors},
 				meta,
 			}) => (
+				
 				<TextField
-					id="filled-basic"
+					id={field.name}
 					name={field.name}
 					value={cardTitle}
 					onChange={(e) => {
@@ -68,17 +69,16 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 							padding: isFocused ? (isTitle ? '5px' : '16px') : '5px 0',
 							backgroundColor: isFocused ? (isTitle ? 'transparent' : theme.palette.grey[50]) : 'transparent',
 							'::before': {
-								borderBottom: isFocused ? ( errors[field.name] ? `1px solid ${theme.palette.error.main}` : `1px solid ${theme.palette.grey[700]}` ): `1px solid ${theme.palette.grey[700]}`
+								borderBottom: isFocused ? ( errors.cards && errors.cards[cardIndex]?.cardTitle ? `1px solid ${theme.palette.error.main}` : `1px solid ${theme.palette.grey[700]}` ): `1px solid ${theme.palette.grey[700]}`
 							},
 							'::after' : {
-								borderBottom: errors[field.name] ? `1px solid ${theme.palette.error.main}` : `1px solid ${theme.palette.grey[700]}`,
+								borderBottom: errors.cards && errors.cards[cardIndex]?.cardTitle ? `1px solid ${theme.palette.error.main}` : `1px solid ${theme.palette.grey[700]}`,
 								transform: 'scaleX(1)'
 							}
 						},
 						'input' : {
 							padding: 0
 						}				
-						 
 					}}
 				/>
 			)}

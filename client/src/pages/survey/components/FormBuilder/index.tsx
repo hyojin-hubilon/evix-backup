@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { CardProps, moveCard, moveContent, StateProps } from "@/store/reducers/survey";
 import AddCardBtn from "./AddCardBtn";
 import { dispatch } from "@/store";
+import { FieldArray } from "formik";
 
 
 
@@ -46,15 +47,21 @@ const FormBuilder = () => {
 					<Droppable droppableId="card">
 						{(provided) => (
 							<div ref={provided.innerRef} {...provided.droppableProps}>
-								{cards.map((card: CardProps, index: number) => (
-									<FormQuestion 
-										key={card.id}
-										index={index}
-										isTitle={card.inputType === QuestionTypes.TITLE}
-										{...card}
-									/>
-								))}
-								{provided.placeholder}
+								<FieldArray name="cards" render={() => 
+									<>
+									{cards.map((card: CardProps, index: number) => (
+										<FormQuestion 
+											key={card.id}
+											index={index}
+											isTitle={card.inputType === QuestionTypes.TITLE}
+											{...card}
+										/>
+									))}
+									{provided.placeholder}
+									</>
+								}>
+									
+								</FieldArray>
 							</div>
 						)}
 					</Droppable>

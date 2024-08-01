@@ -18,7 +18,7 @@ const SurveyNew = () => {
 		cards: Yup.array()
 			.of(
 				Yup.object().shape({
-					cardTtile: Yup.string().required('Required'), // these constraints take precedence
+					cardTitle: Yup.string().required('Required'), // these constraints take precedence
 					inputType: Yup.string().required('Required'),
 					contents: Yup.lazy(value => {
 						switch (typeof value) {
@@ -38,9 +38,10 @@ const SurveyNew = () => {
 						  }
 					})
 				})
-			)
-			.required()
+			).required()
 	});
+
+	const [initialValues, setInitialValues] = useState({cards : [] as CardProps[]});
 	
 	const dispatch = useDispatch();
 	const navigation = useNavigate();
@@ -162,23 +163,27 @@ const SurveyNew = () => {
 	
 
 	useEffect(() => {
-		console.log(cards);
+		setInitialValues({cards: cards})
 	}, [cards])
 
 	return (
 		<Container maxWidth="md">
 			<Grid container flexDirection="column" sx={{minHeight: '100vh'}}>
 				<Formik
-					initialValues={{cards: cards}}
+					initialValues={initialValues}
 					validationSchema={schema}
+					validateOnChange={true}
 					enableReinitialize={true}
 					onSubmit={(values, actions) => {
 						console.log(values);
 						actions.setSubmitting(false);
 					}}
 				>
+
+{({ values, errors, touched, handleChange, handleSubmit, isSubmitting }) => (
+
 					<Form>
-			
+						
 						<AppBar
 							position="sticky"
 							sx={{bgcolor: isSticky ? `rgba(255, 255, 255, 0.7)` : "transparent", boxShadow: "none", height: '60px', top: '60px', p: '10px', width: '89%'}}
@@ -204,6 +209,7 @@ const SurveyNew = () => {
 						</AppBar>	
 						<FormBuilder />
 					</Form>
+)}
 				</Formik>
 			</Grid>
 		</Container>
