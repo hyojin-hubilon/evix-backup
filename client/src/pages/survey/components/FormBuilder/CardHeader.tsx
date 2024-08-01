@@ -43,7 +43,7 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 				form : {errors},
 				meta,
 			}) => (
-				
+				<>
 				<TextField
 					id={field.name}
 					name={field.name}
@@ -73,14 +73,27 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 						}				
 					}}
 				/>
+				{/* {console.log(errors.cards)} */}
+				</>
 			)}
 			</Field>
 			{!isTitle && isFocused ? (
-				<Select onChange={handleInputTypeChange} defaultValue={QuestionTypes.WRITE} value={inputType}>
-					<MenuItem value={QuestionTypes.WRITE}>주관식 답변</MenuItem>
-					<MenuItem value={QuestionTypes.SINGLE}>객관식 답변(단일응답)</MenuItem>
-					<MenuItem value={QuestionTypes.MULTIPLE}>객관식 답변(복수응답)</MenuItem>
-				</Select>
+				<Field name={`cards.${cardIndex}.inputType`}>
+					{({
+						field
+					}) => (
+						<Select onChange={(e) => {
+								field.onChange(e.target.value);
+								handleInputTypeChange(e);
+							}}
+							name={field.name}
+							defaultValue={QuestionTypes.WRITE} value={inputType}>
+							<MenuItem value={QuestionTypes.WRITE}>주관식 답변</MenuItem>
+							<MenuItem value={QuestionTypes.SINGLE}>객관식 답변(단일응답)</MenuItem>
+							<MenuItem value={QuestionTypes.MULTIPLE}>객관식 답변(복수응답)</MenuItem>
+						</Select>
+					)}
+				</Field>
 			) : null}
 		</Box>
   	);

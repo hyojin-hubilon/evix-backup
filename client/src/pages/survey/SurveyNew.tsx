@@ -23,19 +23,18 @@ const SurveyNew = () => {
 					contents: Yup.lazy(value => {
 						switch (typeof value) {
 							case 'object':
-							  return Yup.object().shape({
-								id: Yup.string(),
-								text: Yup.string().required()
-							  }); // schema for object
-							case 'string':
-							  return Yup.string().when('inputType', {
-								is: (inputType: string) => inputType === 'TITLE',
-								then: s => s.required(),
-								otherwise: s => s.notRequired(),
-							  })
+								return Yup.array().of(Yup.object().shape({
+									id: Yup.string(),
+									text: Yup.string().required()
+								}));
+								
 							default:
-							  return Yup.mixed();
-						  }
+								return Yup.string().when('inputType', {
+									is: (inputType: string) => inputType === 'TITLE',
+									then: s => s.required(),
+									otherwise: s => s.notRequired(),
+								})
+						}
 					})
 				})
 			).required()
