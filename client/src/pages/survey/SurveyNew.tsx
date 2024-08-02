@@ -6,13 +6,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { CardProps, resetCards, StateProps } from "@/store/reducers/survey";
 import { ExampleTypes, QuestionDivision, QuestionTypes, SurveyPostReqBody, SurveyPutReqBody, SurveyQuestion } from "@/types/survey";
 import surveyApi from "@/apis/survey";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
 
 const SurveyNew = () => {
 	const { ref, isSticky } = useSticky();
 	const cards = useSelector((state: StateProps) => state.cards);
+
+	const [ locationState, setLocationState ] = useState(''); //edit, copy check
+
+	const locations = useLocation();
+
+	useEffect(() => {
+		if(locations.state) setLocationState(locations.state);
+		else setLocationState('')
+	}, [locations])
 
 	const schema = Yup.object().shape({
 		cards: Yup.array()
@@ -163,7 +172,7 @@ const SurveyNew = () => {
 	}
 
 	const handleButtonClick = (
-		temp: boolean,
+		temp: boolean,//임시저장: true / 저장 : false
 		formikProps: FormikProps<{cards: CardProps[]}>
 	  ) => {
 		

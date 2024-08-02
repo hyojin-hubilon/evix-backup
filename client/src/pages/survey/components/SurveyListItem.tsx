@@ -71,9 +71,13 @@ const SurveyListItem = ({ survey, userNo, refresh }: SurveyListItemProps) => {
 			description: "이 설문을 복제하시겠습니까?"
 		})
 		.then(() => { 
-			getCopyingSurveyDeatil().then(survey => { //설문내용 복사하여 작성중 화면으로 이동
-				console.log(survey);
-			});
+
+			navigate(`/survey/copy/${survey.survey_no}`, {state: 'copy'});
+
+			navigate(`/survey/preview/${survey.survey_no}`)
+			// getCopyingSurveyDeatil().then(survey => { //설문내용 복사하여 작성중 화면으로 이동
+			// 	console.log(survey);
+			// });
 		})
 		.catch(() => {console.log('cancel')});		
 	}
@@ -89,6 +93,10 @@ const SurveyListItem = ({ survey, userNo, refresh }: SurveyListItemProps) => {
 		})
 		.catch(() => {console.log('cancel')});		
 		
+	}
+
+	const handleEdit = () => {
+		navigate(`/survey/edit/${survey.survey_no}`, {state: 'edit'});
 	}
 	
 
@@ -136,7 +144,7 @@ const SurveyListItem = ({ survey, userNo, refresh }: SurveyListItemProps) => {
 
                         {/* 수정 - 설문 참가자가 1명이상일 경우 불가능 - Study 연결후엔 불가능으로 임시 설정 */}
 						{ survey.study_title === null && 
-							<Button size="large" variant="outlined">
+							<Button size="large" variant="outlined" onClick={handleEdit}>
 								<EditOutlined style={{ fontSize: '1.5rem' }} />
 							</Button>
 						}

@@ -30,6 +30,11 @@ const SettingsRoutes = {
 		{
 			path: 'edit/:survey_no',
 			element: <SurveyNew />
+		},
+
+		{
+			path: 'copy/:survey_no',
+			element: <SurveyNew />
 		}
     ],
 };
