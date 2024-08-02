@@ -135,7 +135,7 @@ const SurveyList = () => {
 						{paginator(searched, page, itemPerPage).data.map((survery, index) => {
 							return (
 								<Grid item xs={12} key={index}>
-									<SurveyListItem survey={survery} userNo={userNo} />
+									<SurveyListItem survey={survery} userNo={userNo} refresh={fetchSurvey} />
 								</Grid>
 							)
 						})}

@@ -28,9 +28,6 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 	const [ mobileView, setMovileView ] = useState(mobile);
 
 	const { primary } = theme.palette;
-
-	console.log(survey_no)
-
 	
 	const getSurveyDeatil = async () => {
 		try {
@@ -72,12 +69,7 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 
 		})
 
-		console.log(newInitialValues)
-
 		setInitialValues(newInitialValues);
-		
-
-		console.log(initialValues)
 	}
 
 	useEffect(() => {
@@ -93,7 +85,6 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 
 	const handleSumbit = (event) => {
 		console.log(event);
-		
 	}
 
 	return(

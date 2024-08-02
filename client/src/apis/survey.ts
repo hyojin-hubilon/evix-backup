@@ -87,6 +87,34 @@ const surveyApi = {
             throw e;
         }
     },
+
+	getCopyingSurvey: async (survey_no: number) => {
+		try {
+			const responseData = await api<SurveyDetail>(
+				`${BASE_API_URL}/copy/${survey_no}`,
+				'get'
+			);
+
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
+
+	deleteSurvey: async (survey_no: number) => {
+		try {
+			const responseData = await api<{}>(
+				BASE_API_URL,
+				'delete',
+				{ survey_no: survey_no }
+			)
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	}
 };
 
 export default surveyApi;
