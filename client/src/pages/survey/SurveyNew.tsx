@@ -7,7 +7,7 @@ import { CardProps, resetCards, StateProps } from "@/store/reducers/survey";
 import { ExampleTypes, QuestionDivision, QuestionTypes, SurveyPostReqBody, SurveyPutReqBody, SurveyQuestion } from "@/types/survey";
 import surveyApi from "@/apis/survey";
 import { useNavigate } from "react-router-dom";
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
 
 const SurveyNew = () => {
@@ -153,7 +153,6 @@ const SurveyNew = () => {
 			}
 		})
 
-		
 		if(surveyNo) {
 			const saving: SurveyPutReqBody = {...newSurvey, survey_no: surveyNo}
 			console.log(saving);
@@ -161,10 +160,19 @@ const SurveyNew = () => {
 		} else {
 			postNewSurvey(newSurvey, temp);
 		}
-	
 	}
 
-	
+	const handleButtonClick = (
+		temp: boolean,
+		formikProps: FormikProps<{cards: CardProps[]}>
+	  ) => {
+		
+		const { isValid } = formikProps;
+		
+		if(isValid) {
+			handleSaveSurvey(temp);
+		}
+	};
 
 	useEffect(() => {
 		setInitialValues({cards: cards})
@@ -179,36 +187,41 @@ const SurveyNew = () => {
 					validateOnChange={true}
 					enableReinitialize={true}
 					onSubmit={(values, actions) => {
-						console.log(values);
 						actions.setSubmitting(false);
 					}}
 				>
-					<Form>
-						<AppBar
-							position="sticky"
-							sx={{bgcolor: isSticky ? `rgba(255, 255, 255, 0.7)` : "transparent", boxShadow: "none", height: '60px', top: '60px', p: '10px', width: '89%'}}
-							ref={ref}
-							
-							>
-								<Box display="flex" alignItems="center">
-									{
-										!isSticky && <Typography variant="h3" color="secondary.dark">Survey 생성</Typography>
-									}
+					 {formikProps => {
+						const {
+							isSubmitting,
+						} = formikProps;
+						return (
+							<Form>
+								<AppBar
+									position="sticky"
+									sx={{bgcolor: isSticky ? `rgba(255, 255, 255, 0.7)` : "transparent", boxShadow: "none", height: '60px', top: '60px', p: '10px', width: '89%'}}
+									ref={ref}
 									
-									<Box display="flex" justifyContent="flex-end" gap={1} sx={{ml: 'auto'}}>
-										{
-											surveyNo && <Button variant="outlined">미리보기</Button>
-										}
-										
-										<Button variant="outlined" type="submit">임시저장</Button>
-										{/* handleSaveSurvey(true) */}
-										<Button variant="contained" onClick={() => handleSaveSurvey(false)}>저장</Button>
-									</Box>
-								</Box>
-							
-						</AppBar>	
-						<FormBuilder />
-					</Form>
+									>
+										<Box display="flex" alignItems="center">
+											{
+												!isSticky && <Typography variant="h3" color="secondary.dark">Survey 생성</Typography>
+											}
+											
+											<Box display="flex" justifyContent="flex-end" gap={1} sx={{ml: 'auto'}}>
+												{
+													surveyNo && <Button variant="outlined">미리보기</Button>
+												}
+												
+												<Button variant="outlined" disabled={isSubmitting} onClick={() => handleButtonClick(true, formikProps)}>임시저장</Button>
+												<Button variant="contained" disabled={isSubmitting} onClick={() => handleButtonClick(false, formikProps)}>저장</Button>
+											</Box>
+										</Box>
+									
+								</AppBar>	
+								<FormBuilder />
+							</Form>
+						);
+					}}
 				</Formik>
 			</Grid>
 		</Container>
