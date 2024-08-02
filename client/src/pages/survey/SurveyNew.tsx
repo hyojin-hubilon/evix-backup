@@ -3,25 +3,16 @@ import FormBuilder from "./components/FormBuilder";
 import useSticky from "@/utils/useSticky";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CardProps, resetCards, StateProps } from "@/store/reducers/survey";
-import { ExampleTypes, QuestionDivision, QuestionTypes, SurveyPostReqBody, SurveyPutReqBody, SurveyQuestion } from "@/types/survey";
+import { addCard, CardProps, resetAll, resetCards, StateProps } from "@/store/reducers/survey";
+import { ExampleTypes, QuestionDivision, QuestionList, QuestionTypes, SurveyPostReqBody, SurveyPutReqBody, SurveyQuestion } from "@/types/survey";
 import surveyApi from "@/apis/survey";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
 
 const SurveyNew = () => {
 	const { ref, isSticky } = useSticky();
 	const cards = useSelector((state: StateProps) => state.cards);
-
-	const [ locationState, setLocationState ] = useState(''); //edit, copy check
-
-	const locations = useLocation();
-
-	useEffect(() => {
-		if(locations.state) setLocationState(locations.state);
-		else setLocationState('')
-	}, [locations])
 
 	const schema = Yup.object().shape({
 		cards: Yup.array()
@@ -58,8 +49,57 @@ const SurveyNew = () => {
 	
 	const dispatch = useDispatch();
 	const navigation = useNavigate();
+	const locations = useLocation();
+	const parmas = useParams();
 	
-	const [ surveyNo, setSurveyNo ] = useState<number | null>(null)
+	const [ surveyNo, setSurveyNo ] = useState<number | null>(null);
+	const [ locationState, setLocationState ] = useState<'edit' | 'copy' | null>(null); //edit, copy check
+
+
+	useEffect(() => {
+		if(locations.state) setLocationState(locations.state);
+		else setLocationState(null);
+	}, [locations])
+
+	useEffect(() => {
+		console.log(parmas)
+		if(parmas.survey_no) { 
+			setSurveyNo(Number(parmas.survey_no));
+		}
+	}, [])
+
+
+	useEffect(() => {
+		if(locationState == 'copy' && surveyNo !== null) {
+			const getCopyingSurveyDeatil = async () => {
+				try {
+					const response = await surveyApi.getCopyingSurvey(surveyNo);
+					if (response.result && response.code === 200) {
+						const survey = response.content;
+						// setCards(survey.questionList)
+					}
+				} catch (error) {
+					console.error('Failed to fetch study list:', error);	
+				}
+			}
+
+			getCopyingSurveyDeatil();
+		}
+	}, [locationState])
+
+
+	// const setCards = (questionList:QuestionList[]) => {
+	// 	dispatch(resetAll());
+	// 	questionList.map(question => {
+	// 		dispatch(addCard({
+	// 			cardTitle: question.question,
+	// 			inputType: question.question_type,
+	// 			contents: '',
+	// 			isRequired: question.required_answer_yn
+	// 		}));
+	// 	})
+	// }
+
 
 	const postNewSurvey = async (survey:SurveyPostReqBody, temp:boolean) => {
 		try {

@@ -26,7 +26,7 @@ export interface QuestionList {
 	sort: number,
 	question_type: QuestionTypes,
 	question_division: QuestionDivision,
-	exampleList : ExampleList[],
+	exampleList : ExampleList[] | string,
 	required_answer_yn : "Y"|"N"
 }
 export interface SurveyDetail {

@@ -34,19 +34,6 @@ const SurveyListItem = ({ survey, userNo, refresh }: SurveyListItemProps) => {
 		navigate(`/survey/preview/${survey.survey_no}`)
 	}
 
-	
-	const getCopyingSurveyDeatil = async () => {
-		try {
-			const response = await surveyApi.getCopyingSurvey(survey.survey_no);
-            if (response.result && response.code === 200) {
-                const survey = response.content;
-				return survey;
-            }
-        } catch (error) {
-            console.error('Failed to fetch study list:', error);	
-        }
-	}
-
 	const deleteThisSurvey = async () => {
 		try {
 			const response = await surveyApi.deleteSurvey(survey.survey_no);
@@ -71,13 +58,7 @@ const SurveyListItem = ({ survey, userNo, refresh }: SurveyListItemProps) => {
 			description: "이 설문을 복제하시겠습니까?"
 		})
 		.then(() => { 
-
 			navigate(`/survey/copy/${survey.survey_no}`, {state: 'copy'});
-
-			navigate(`/survey/preview/${survey.survey_no}`)
-			// getCopyingSurveyDeatil().then(survey => { //설문내용 복사하여 작성중 화면으로 이동
-			// 	console.log(survey);
-			// });
 		})
 		.catch(() => {console.log('cancel')});		
 	}
