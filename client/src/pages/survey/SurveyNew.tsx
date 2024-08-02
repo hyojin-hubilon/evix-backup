@@ -25,7 +25,12 @@ const SurveyNew = () => {
 							case 'object':
 								return Yup.array().of(Yup.object().shape({
 									id: Yup.string(),
-									text: Yup.string().required()
+									isEtc: Yup.boolean(),
+									text: Yup.string().when('isEtc', {
+										is: (isEtc: boolean) => isEtc,
+										then: s => s.notRequired(),
+										otherwise: s => s.required()
+									})
 								}));
 								
 							default:

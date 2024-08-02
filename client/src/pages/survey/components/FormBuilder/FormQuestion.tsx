@@ -112,7 +112,7 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 						{(inputType === QuestionTypes.WRITE || inputType === QuestionTypes.TITLE) ? (
 							<TextFieldSection id={id} cardIndex={index} />
 						) : (
-							<ItemTypeSection id={id} />
+							<ItemTypeSection id={id} cardIndex={index} />
 						)}
 						
 

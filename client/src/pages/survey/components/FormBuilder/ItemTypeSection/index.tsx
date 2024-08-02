@@ -14,8 +14,14 @@ import {
 import * as S from "./styles";
 import { Box, Container, useTheme } from "@mui/material";
 import { QuestionTypes } from '@/types/survey';
+import { Field } from "formik";
 
-const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
+type ItemTypeSectionProps = {
+	id: string,
+	cardIndex: number
+}
+
+const ItemTypeSection = ({ id, cardIndex }: ItemTypeSectionProps) => {
 	const theme = useTheme();
 	const dispatch = useDispatch();
 
@@ -68,16 +74,30 @@ const ItemTypeSection = ({ id }: Pick<CardProps, "id">) => {
 								{inputType === QuestionTypes.SINGLE ? <S.Circle /> : null}
 
 								{inputType === QuestionTypes.MULTIPLE ? <S.Sqare /> : null}
-								
-								<S.TextField
-									id="standard-basic"
-									variant="standard"
-									onChange={(e) => {
-										handleChangeContentText(e, content.id);
-									}}
-									value={content.isEtc ? "기타 : " : content.text}
-									disabled={content.isEtc}
-								/>
+								<Field name={`cards.${cardIndex}.contents.${idx}.text`}>
+									{({
+										field,
+										form: {errors}
+									}) => (
+									<S.TextField
+										id={field.name}
+										name={field.name}
+										variant="standard"
+										onChange={(e) => {
+											field.onChange(e.target.value);
+											handleChangeContentText(e, content.id);
+										}}
+										sx={{
+											input : {
+												borderBottom: ( errors.cards && errors.cards[cardIndex]?.contents && errors.cards[cardIndex].contents[idx] ? `1px solid ${theme.palette.error.main}` : 'none' )
+											}
+											
+										}}
+										value={content.isEtc ? "기타 : " : content.text}
+										disabled={content.isEtc}
+									/>
+									)}
+								</Field>
 								
 								{
 									isFocused && contents.length > 1 ? (
