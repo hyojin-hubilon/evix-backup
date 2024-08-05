@@ -34,11 +34,13 @@ const SurveyNew = () => {
 								}));
 								
 							default:
-								return Yup.string().when('inputType', {
-									is: (inputType: string) => inputType === 'TITLE',
-									then: s => s.required(),
-									otherwise: s => s.notRequired(),
-								})
+								return Yup
+									.string()
+									.when('inputType', {
+										is: 'TITLE',
+										then: s => s.required(),
+										otherwise: s => s.notRequired(),
+									})
 						}
 					})
 				})
@@ -85,7 +87,9 @@ const SurveyNew = () => {
 							contents: survey.description,
 							isFocused: true
 						}));
-						setCards(survey)
+						setCards(survey);
+
+						setSurveyNo(null);
 					}
 				} catch (error) {
 					console.error('Failed to fetch study list:', error);	
@@ -116,7 +120,7 @@ const SurveyNew = () => {
 				cardId: question.question_no + String(Date.now()),
 				cardTitle: question.question,
 				inputType: question.question_type,
-				contents: exampleList.length === 1 ? exampleList[0].example_title : exampleList,
+				contents: exampleList.length === 1 ? '' : exampleList,
 				isRequired: question.required_answer_yn
 			}));
 		})
@@ -238,7 +242,8 @@ const SurveyNew = () => {
 		formikProps: FormikProps<{cards: CardProps[]}>
 	  ) => {
 		
-		const { isValid } = formikProps;
+		const { isValid, values, errors } = formikProps;
+		console.log(isValid, values, errors);
 		
 		if(isValid) {
 			handleSaveSurvey(temp);
