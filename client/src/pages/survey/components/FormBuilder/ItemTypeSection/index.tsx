@@ -41,10 +41,7 @@ const ItemTypeSection = ({ id, cardIndex }: ItemTypeSectionProps) => {
 	const haveEtc = useSelector((state: StateProps) => {
 		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
 		const contents = currentCard.contents as ItemTypeProps[];
-		// if (currentCard.inputType === QuestionTypes.MULTIPLE) {
-		// 	return true;
-		// }
-		return contents.some((content) => content.isEtc);
+		return contents ? contents.some((content) => content.isEtc) : false;
 	});
 
 	const handleChangeContentText = (

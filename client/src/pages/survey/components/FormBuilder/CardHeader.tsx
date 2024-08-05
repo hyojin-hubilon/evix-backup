@@ -77,7 +77,7 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 				</>
 			)}
 			</Field>
-			{!isTitle && isFocused ? (
+			{/* {!isTitle && isFocused ? (
 				<Field name={`cards.${cardIndex}.inputType`}>
 					{({
 						field
@@ -94,7 +94,7 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 						</Select>
 					)}
 				</Field>
-			) : null}
+			) : null} */}
 		</Box>
   	);
 };

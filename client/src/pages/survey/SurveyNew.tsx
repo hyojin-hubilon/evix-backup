@@ -121,7 +121,7 @@ const SurveyNew = () => {
 				cardTitle: question.question,
 				inputType: question.question_type,
 				contents: exampleList.length === 1 ? '' : exampleList,
-				isRequired: question.required_answer_yn
+				isRequired: question.required_answer_yn == 'Y' ? true : false
 			}));
 		})
 	}
@@ -148,7 +148,7 @@ const SurveyNew = () => {
 	const putSurvey = async (survey:SurveyPutReqBody, temp:boolean) => {
 		
 		try {
-			const response = await surveyApi.postNewSurvey(survey); 
+			const response = await surveyApi.saveSurvey(survey); 
 			if (response.result && response.code === 200) {
 				console.log(response);
 
