@@ -343,7 +343,7 @@ const SurveyNew = () => {
 		{
 			surveyNo && isPreview &&
 				<Dialog open={isPreview} maxWidth="lg" onClose={handleClosePreview} fullWidth>
-					<SurveyPreview surveyNo={surveyNo} handleClose={handleClosePreview} />
+					<SurveyPreview surveyNo={surveyNo} handleClose={handleClosePreview} isDialog={true} />
 				</Dialog>
 		}
 		
