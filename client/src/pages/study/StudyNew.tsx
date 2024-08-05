@@ -31,6 +31,8 @@ import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
 import { InviteMemberTempType } from '@/types/study';
 import MemberInvitement from './components/study-new/MemberInvitement';
 import MemberManagement from './components/study-new/MemberManagement';
+import UploadEic from './components/eic/UploadEic';
+import CreateEic from './components/eic/CreateEic';
 
 const FormTooltip = ({ text }) => {
     return (
@@ -52,7 +54,7 @@ const StudyNew = () => {
     const [participants, setParticipants] = useState('');
     const [description, setDescription] = useState('');
     const [disease, setDisease] = useState('');
-    const [eicFile, setEicFile] = useState(null);
+    const [eicFile, setEicFile] = useState<File | null>(null);
     const [isOpenMember, setIsOpenMember] = useState(false);
     const [isOpenSurvey, setIsOpenSurvey] = useState(false);
     const [inviteList, setInviteList] = useState<InviteMemberTempType[]>([]);
@@ -63,6 +65,8 @@ const StudyNew = () => {
 
     const [drug, setDrug] = useState<Drug>();
     const [country, setCountry] = useState('KO_KR');
+    const [isDialogOpen, setIsDialogOpen] = useState(false); //EIC 연결
+    const [isCreateEicOpen, setIsCreateEicOpen] = useState(false); //EIC 생성
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -80,10 +84,6 @@ const StudyNew = () => {
         setMedicineYOrN(e);
     };
 
-    const handleFileChange = (e) => {
-        setEicFile(e.target.files[0]);
-    };
-
     // 멤버관리 모달에서 owner 정보를 가져오기 위함
     const getMyProfile = async () => {
         try {
@@ -94,54 +94,33 @@ const StudyNew = () => {
         }
     };
 
-    const handleSubmit = async () => {
-        console.log(members);
-
-        const studyData = {
-            std_status: 'STD-CREATED',
-            title: title,
-            std_type: 'E-PRO',
-            std_start_date: dateRange.startDt.format('YYYY-MM-DD'),
-            std_end_date: dateRange.endDt.format('YYYY-MM-DD'),
-            target_number: parseInt(participants),
-            description: description,
-            disease: disease,
-            location: country,
-            drug_code: drug?.itemCode ?? null,
-            drug_brand_name: drug?.companyName ?? null,
-            drug_manufacturer_name: drug?.productName ?? null,
-            studySurveySetList: [],
-            inviteList: members ?? [],
-        };
-
-        // FormData 객체 생성 및 데이터 추가
-        const formData = new FormData();
-
-        const json = JSON.stringify(studyData);
-        const blob = new Blob([json], { type: 'application/json' });
-
-        formData.append('requestDto', blob);
-        // 전자동의서 파일이 있는 경우 FormData에 추가
-        if (eicFile) {
-            formData.append('eic_file', eicFile);
-        }
-
-        try {
-            const response = await studyApi.createStudy(formData);
-            if (response.code === 200) {
-                navigate(-1);
-            }
-        } catch (error) {
-            console.error('Failed to Create study:', error);
-        }
-    };
-
     const handleCloseMember = () => {
         setIsOpenMember(!isOpenMember);
     };
 
     const handleCloseSurvey = () => {
         setIsOpenSurvey(!isOpenSurvey);
+    };
+
+    const handleOpenDialog = () => {
+        setIsDialogOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setIsDialogOpen(false);
+    };
+
+    const handleConfirm = (file: File) => {
+        setEicFile(file);
+        setIsDialogOpen(false);
+    };
+
+    const handleOpenCreateEic = () => {
+        setIsCreateEicOpen(true);
+    };
+
+    const handleCloseCreateEic = () => {
+        setIsCreateEicOpen(false);
     };
 
     useEffect(() => {
@@ -228,6 +207,46 @@ const StudyNew = () => {
             }
         } catch (error) {
             console.error('Failed to Delete Study: ', error);
+        }
+    };
+
+    const handleSubmit = async () => {
+        const studyData = {
+            std_status: 'STD-CREATED',
+            title: title,
+            std_type: 'E-PRO',
+            std_start_date: dateRange.startDt.format('YYYY-MM-DD'),
+            std_end_date: dateRange.endDt.format('YYYY-MM-DD'),
+            target_number: parseInt(participants),
+            description: description,
+            disease: disease,
+            location: country,
+            drug_code: drug?.itemCode ?? null,
+            drug_brand_name: drug?.companyName ?? null,
+            drug_manufacturer_name: drug?.productName ?? null,
+            studySurveySetList: [],
+            inviteList: members ?? [],
+        };
+
+        // FormData 객체 생성 및 데이터 추가
+        const formData = new FormData();
+
+        const json = JSON.stringify(studyData);
+        const blob = new Blob([json], { type: 'application/json' });
+
+        formData.append('requestDto', blob);
+        // 전자동의서 파일이 있는 경우 FormData에 추가
+        if (eicFile) {
+            formData.append('eic_file', eicFile);
+        }
+
+        try {
+            const response = await studyApi.createStudy(formData);
+            if (response.code === 200) {
+                navigate(-1);
+            }
+        } catch (error) {
+            console.error('Failed to Create study:', error);
         }
     };
 
@@ -498,8 +517,15 @@ const StudyNew = () => {
                                 <FormTooltip text="Connect the EIC before Study deployment." />
                             </Box>
                         </Grid>
-                        <Grid item xs={9}>
-                            <Button variant="contained">EIC 연결</Button>
+                        <Grid item xs={1}>
+                            <Button variant="contained" onClick={handleOpenDialog}>
+                                EIC 연결
+                            </Button>
+                        </Grid>
+                        <Grid item xs={1}>
+                            <Button variant="contained" onClick={handleOpenCreateEic}>
+                                EIC 생성
+                            </Button>
                         </Grid>
                     </Grid>
 
@@ -642,8 +668,9 @@ const StudyNew = () => {
                     studyNo={stdNo}
                 ></MemberManagement>
             )}
-
             <SurveyConnectDialog isOpen={isOpenSurvey} handleClose={handleCloseSurvey} />
+            <UploadEic open={isDialogOpen} onClose={handleCloseDialog} onConfirm={handleConfirm} />
+            <CreateEic open={isCreateEicOpen} onClose={handleCloseCreateEic} />
         </Container>
     );
 };

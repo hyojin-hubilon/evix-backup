@@ -70,7 +70,6 @@ function DesignerView() {
                     },
                     plugins: getPlugins(),
                 });
-                designer.current.onSaveTemplate(onSaveTemplate);
                 designer.current.onChangeTemplate(() => {
                     setTemplatePreset(customTemplatePresetKey);
                 });
@@ -111,16 +110,6 @@ function DesignerView() {
         }
     };
 
-    const onSaveTemplate = (template?: Template) => {
-        if (designer.current) {
-            localStorage.setItem(
-                'template',
-                JSON.stringify(template || designer.current.getTemplate())
-            );
-            alert('Saved!');
-        }
-    };
-
     if (designerRef != prevDesignerRef) {
         if (prevDesignerRef && designer.current) {
             designer.current.destroy();
@@ -140,7 +129,7 @@ function DesignerView() {
                     fontSize: 'small',
                 }}
             >
-                <strong>Designer</strong>
+                <strong>Create EIC</strong>
                 <label>
                     Lang:{' '}
                     <select
@@ -175,7 +164,6 @@ function DesignerView() {
                     />
                 </label>
                 <button onClick={onDownloadTemplate}>Download Template</button>
-                <button onClick={() => onSaveTemplate()}>Save Template</button>
             </header>
             <div
                 ref={designerRef}
