@@ -12,9 +12,10 @@ import { Formik, Form } from "formik";
 
 type SurveyViewProps = {
 	preview: boolean,
-	mobile?: "Y" | "N" | undefined
+	mobile?: "Y" | "N" | undefined,
+	surveyNo? : string | number
 }
-const SurveyView = ({preview, mobile} : SurveyViewProps) => {
+const SurveyView = ({preview, mobile, surveyNo} : SurveyViewProps) => {
 	const previewCards = useSelector((state: PreviewStateProps) => state.previewCards);
   	const dispatch = useDispatch();
 
@@ -73,7 +74,8 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 	}
 
 	useEffect(() => {
-		if(survey_no) getSurveyDeatil();
+		const surveyNumber = survey_no ? survey_no : surveyNo;
+		if(surveyNumber) getSurveyDeatil();
 	}, []);
 
 	useEffect(() => {

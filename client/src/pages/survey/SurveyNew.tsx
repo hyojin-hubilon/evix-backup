@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Container, Grid, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Container, Dialog, Grid, Toolbar, Typography } from "@mui/material";
 import FormBuilder from "./components/FormBuilder";
 import useSticky from "@/utils/useSticky";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import surveyApi from "@/apis/survey";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
+import SurveyPreview from "./SurveyPreview";
 
 const SurveyNew = () => {
 	const { ref, isSticky } = useSticky();
@@ -54,8 +55,9 @@ const SurveyNew = () => {
 	const locations = useLocation();
 	const parmas = useParams();
 	
-	const [ surveyNo, setSurveyNo ] = useState<number | null>(null);
+	const [ surveyNo, setSurveyNo ] = useState<string | number | null>(null);
 	const [ locationState, setLocationState ] = useState<'edit' | 'copy' | null>(null); //edit, copy check
+	const [ isPreview, setIsPreview ] = useState(false);
 
 
 	useEffect(() => {
@@ -282,11 +284,15 @@ const SurveyNew = () => {
 	}, [cards])
 
 	const handlePreview = () => {
-		//다른 방법으로...
-		// navigation(`/survey/preview/${surveyNo}`)
+		setIsPreview(true);
+	}
+
+	const handleClosePreview = () => {
+		setIsPreview(false);
 	}
 
 	return (
+		<>
 		<Container maxWidth="md">
 			<Grid container flexDirection="column" sx={{minHeight: '100vh'}}>
 				<Formik
@@ -332,7 +338,16 @@ const SurveyNew = () => {
 					}}
 				</Formik>
 			</Grid>
+			
 		</Container>
+		{
+			surveyNo && isPreview &&
+				<Dialog open={isPreview} maxWidth="lg" onClose={handleClosePreview} fullWidth>
+					<SurveyPreview surveyNo={surveyNo} handleClose={handleClosePreview} />
+				</Dialog>
+		}
+		
+		</>
 
 	)
 }

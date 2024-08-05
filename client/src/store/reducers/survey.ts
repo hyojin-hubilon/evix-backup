@@ -87,7 +87,7 @@ const deleteEtcItem = (currentContents: ItemTypeProps[]) => {
 };
   
 export const cardSlice = createSlice({
-	name: "Reducer",
+	name: "Cards",
 	initialState: [initialCards] as CardProps[],
 	reducers: {
 	 	addCard: (state: CardProps[], action: ActionProps) => {

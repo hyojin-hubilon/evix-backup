@@ -129,5 +129,5 @@ export interface SurveyPostResponse {
 }
 
 export interface SurveyPutReqBody extends SurveyPostReqBody {
-	survey_no: number
+	survey_no: number | string;
 }

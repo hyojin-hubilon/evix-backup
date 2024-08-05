@@ -61,7 +61,7 @@ const surveyApi = {
 		}
 	},
 
-	getSurvey: async (survey_no: number) => {
+	getSurvey: async (survey_no: number|string) => {
 		try {
 			const responseData = await api<SurveyDetail>(
 				`${BASE_API_URL}/${survey_no}`,
@@ -88,7 +88,7 @@ const surveyApi = {
         }
     },
 
-	getCopyingSurvey: async (survey_no: number) => {
+	getCopyingSurvey: async (survey_no: number|string) => {
 		try {
 			const responseData = await api<SurveyDetail>(
 				`${BASE_API_URL}/copy/${survey_no}`,
