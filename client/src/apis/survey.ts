@@ -4,6 +4,7 @@ import {
 } from '@/apis/axios-common';
 import {
     RegistrableSurvey,
+    SampleSurveyList,
     SurveyApiResponse,
     SurveyDetail,
     SurveyPostReqBody,
@@ -108,6 +109,18 @@ const surveyApi = {
 				BASE_API_URL,
 				'delete',
 				{ survey_no: survey_no }
+			)
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
+	getSamples : async() => {
+		try {
+			const responseData = await api<SampleSurveyList[]>(
+				`${BASE_API_URL}/sample-list`,
+				'get',
 			)
 			return responseData;
 		} catch (error) {

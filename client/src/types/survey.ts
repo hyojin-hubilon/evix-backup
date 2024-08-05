@@ -57,6 +57,15 @@ export interface MySurveyList { //서베이리스트
 	study_title: string
 }
 
+export interface SampleSurveyList {
+	created_at: string | Date;
+	disease: string;
+	question_number: number;
+	sample_yn: "Y" | "N";
+	survey_no : number;
+	title: string;
+}
+
 
 export interface SurveyApiResponse {
 	next?: boolean,

@@ -8,6 +8,7 @@ import MainLayout from '@layout/MainLayout';
 const SurveyList = Loadable(lazy(() => import('@pages/survey/SurveyList')));
 const SurveyNew = Loadable(lazy(() => import('@pages/survey/SurveyNew')));
 import SurveyPreview from '@pages/survey/SurveyPreview';
+import SampleList from '@/pages/survey/SampleList';
 
 // ==============================|| STUDY ROUTING ||============================== //
 
@@ -35,6 +36,10 @@ const SettingsRoutes = {
 		{
 			path: 'copy/:survey_no',
 			element: <SurveyNew />
+		},
+		{
+			path: 'samples',
+			element: <SampleList />
 		}
     ],
 };
