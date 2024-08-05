@@ -59,9 +59,9 @@ const FormBuilder = () => {
 									))}
 									{provided.placeholder}
 									</>
-								}>
+								}/>
 									
-								</FieldArray>
+								
 							</div>
 						)}
 					</Droppable>

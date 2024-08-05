@@ -3,8 +3,8 @@ import FormBuilder from "./components/FormBuilder";
 import useSticky from "@/utils/useSticky";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addCard, CardProps, resetAll, resetCards, StateProps } from "@/store/reducers/survey";
-import { ExampleTypes, QuestionDivision, QuestionList, QuestionTypes, SurveyPostReqBody, SurveyPutReqBody, SurveyQuestion } from "@/types/survey";
+import { addCard, addExistCard, CardProps, ItemTypeProps, resetAll, resetCards, StateProps } from "@/store/reducers/survey";
+import { ExampleTypes, QuestionDivision, QuestionList, QuestionTypes, SurveyDetail, SurveyPostReqBody, SurveyPutReqBody, SurveyQuestion } from "@/types/survey";
 import surveyApi from "@/apis/survey";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Form, Formik, FormikProps } from "formik";
@@ -76,7 +76,16 @@ const SurveyNew = () => {
 					const response = await surveyApi.getCopyingSurvey(surveyNo);
 					if (response.result && response.code === 200) {
 						const survey = response.content;
-						// setCards(survey.questionList)
+						dispatch(resetAll());
+
+						dispatch(addExistCard({
+							cardId: "TitleCard",
+							cardTitle: '[Copy]' + survey.title,
+							inputType: QuestionTypes.TITLE,
+							contents: survey.description,
+							isFocused: true
+						}));
+						setCards(survey)
 					}
 				} catch (error) {
 					console.error('Failed to fetch study list:', error);	
@@ -88,17 +97,30 @@ const SurveyNew = () => {
 	}, [locationState])
 
 
-	// const setCards = (questionList:QuestionList[]) => {
-	// 	dispatch(resetAll());
-	// 	questionList.map(question => {
-	// 		dispatch(addCard({
-	// 			cardTitle: question.question,
-	// 			inputType: question.question_type,
-	// 			contents: '',
-	// 			isRequired: question.required_answer_yn
-	// 		}));
-	// 	})
-	// }
+	const setCards = (survey:SurveyDetail) => {
+		
+
+		survey.questionList.forEach(question => {
+			const exampleList: ItemTypeProps[] = [];
+			
+			question.exampleList.forEach(example => {
+			exampleList.push({
+					id: String(example.example_no),
+					text: example.example_title,
+					example_title: example.example_title,
+					isEtc: example.example_type === 'OTHER' ? true : false,
+				})
+			});
+
+			dispatch(addExistCard({
+				cardId: question.question_no + String(Date.now()),
+				cardTitle: question.question,
+				inputType: question.question_type,
+				contents: exampleList.length === 1 ? exampleList[0].example_title : exampleList,
+				isRequired: question.required_answer_yn
+			}));
+		})
+	}
 
 
 	const postNewSurvey = async (survey:SurveyPostReqBody, temp:boolean) => {
