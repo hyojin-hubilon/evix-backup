@@ -135,10 +135,12 @@ const SurveyNew = () => {
 
 		survey.questionList.forEach(question => {
 			const exampleList: ItemTypeProps[] = [];
+
+			const cardId = question.question_no + String(Date.now());
 			
 			question.exampleList.forEach(example => {
 			exampleList.push({
-					id: String(example.example_no),
+					id: cardId + example.example_no,
 					text: example.example_title,
 					example_title: example.example_title,
 					isEtc: example.example_type === 'OTHER' ? true : false,

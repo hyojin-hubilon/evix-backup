@@ -3,8 +3,8 @@ import SurveyView from "./SurveyView";
 import { Box, Button, Card, Container, Dialog, Grid, Tab, Tabs } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 type SurveyPreviewTypes = {
-	surveyNo: string | number| undefined,
-	handleClose: () => void,
+	surveyNo?: string | number| undefined,
+	handleClose?: () => void,
 	isDialog?: boolean | undefined
 }
 const SurveyPreview = ({surveyNo, handleClose, isDialog} : SurveyPreviewTypes) => {
@@ -21,7 +21,7 @@ const SurveyPreview = ({surveyNo, handleClose, isDialog} : SurveyPreviewTypes) =
     };
 
 	const handleEndPreview = () => {
-		if(isDialog) handleClose();
+		if(isDialog && handleClose) handleClose();
 		else navigate(-1);
 	}
 
