@@ -297,6 +297,39 @@ const studyApi = {
             throw e;
         }
     },
+
+    /**
+     * 임상시험 - 설문 연결 해제
+     * @param data
+     * @returns
+     */
+    disconnectSurvey: async (data) => {
+        try {
+            const responseData = await api<{}>(
+                `${BASE_API_URL}/study-survey/disconnect`,
+                'delete',
+                data
+            );
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+    /**
+     * 임상시험 - 설문 설정 등록
+     * @param data
+     * @returns
+     */
+    postSurvey: async (data) => {
+        try {
+            const responseData = await api<{}>(`${BASE_API_URL}/study-survey-set`, 'post', data);
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
 };
 
 export default studyApi;

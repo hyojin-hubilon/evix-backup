@@ -3,7 +3,9 @@ import {
     Box,
     Button,
     Dialog,
+    DialogActions,
     DialogContent,
+    DialogContentText,
     DialogTitle,
     FormControl,
     Grid,
@@ -24,8 +26,33 @@ import { DropResult } from '@hello-pangea/dnd';
 import { reorder } from '@/utils/helper';
 import SurveyPreview from './SurveyPreview';
 import surveyApi from '@/apis/survey';
+import studyApi from '@/apis/study';
+import SurveyDeleteDialog from './SurveyDeleteDialog';
 
-const SurveyConnectDialog = ({ isOpen, handleClose, setStudySurveySetList }) => {
+interface SurveyConnectDialogProps {
+    isOpen: boolean;
+    handleClose: () => void;
+    setStudySurveySetList: (list: any[]) => void;
+    initialSurveySetList: any[] | null;
+    mode: 'create' | 'edit';
+    studyNo?: number;
+}
+
+interface StudySurveySet {
+    survey_cycle: string;
+    number_in_cycle: number;
+    sort: number;
+    surveyList: { survey_no: number; sort: number }[];
+}
+
+const SurveyConnectDialog = ({
+    isOpen,
+    handleClose,
+    setStudySurveySetList,
+    initialSurveySetList,
+    mode,
+    studyNo,
+}: SurveyConnectDialogProps) => {
     const theme = useTheme();
     const { grey } = theme.palette;
     const [searchText, setSearchText] = useState('');
@@ -36,6 +63,11 @@ const SurveyConnectDialog = ({ isOpen, handleClose, setStudySurveySetList }) => 
 
     const [successMessage, setSuccessMessage] = useState('');
     const [openAlert, setOpenAlert] = useState<boolean>(false);
+
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [surveyToDelete, setSurveyToDelete] = useState<RegistrableSurvey | null>(null);
+
+    // console.log('initialSurveySetList: ', initialSurveySetList);
 
     const fetchSurvey = async () => {
         try {
@@ -50,9 +82,63 @@ const SurveyConnectDialog = ({ isOpen, handleClose, setStudySurveySetList }) => 
         }
     };
 
+    const handleDeleteClick = (survey: RegistrableSurvey) => {
+        if (mode === 'edit') {
+            setSurveyToDelete(survey);
+            setShowDeleteConfirm(true);
+        } else {
+            // mode가 'create'인 경우 바로 삭제
+            const newSelectedSurvey = selectedSurvey.filter(
+                (s) => s.survey_no !== survey.survey_no
+            );
+            setSelectedSurvey(newSelectedSurvey);
+        }
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (surveyToDelete) {
+            try {
+                await studyApi.disconnectSurvey({
+                    std_no: studyNo,
+                    set_no: surveyToDelete.set_no,
+                    survey_no: surveyToDelete.survey_no,
+                });
+                const newSelectedSurvey = selectedSurvey.filter(
+                    (s) => s.survey_no !== surveyToDelete.survey_no
+                );
+                setSelectedSurvey(newSelectedSurvey);
+                setSuccessMessage('설문이 성공적으로 삭제되었습니다.');
+                setOpenAlert(true);
+            } catch (error) {
+                console.error('Failed to disconnect survey:', error);
+                setSuccessMessage('설문 삭제에 실패했습니다.');
+                setOpenAlert(true);
+            }
+        }
+        setShowDeleteConfirm(false);
+        setSurveyToDelete(null);
+    };
+
+    const handleDeleteCancel = () => {
+        setShowDeleteConfirm(false);
+        setSurveyToDelete(null);
+    };
+
     useEffect(() => {
+        // Study Info -> Survey Edit 시
+        if (initialSurveySetList) {
+            const flattenedSurveys = initialSurveySetList.flatMap((set) =>
+                set.surveyList.map((survey) => ({
+                    ...survey,
+                    frequency: set.survey_cycle.toLowerCase(),
+                    times: set.number_in_cycle,
+                    set_no: set.set_no, // set_no를 추가
+                }))
+            );
+            setSelectedSurvey(flattenedSurveys);
+        }
         fetchSurvey();
-    }, []);
+    }, [initialSurveySetList]);
 
     const handleSelectedSurvey = (addSurvey: SurveyAdd) => {
         if (addSurvey.type === 'add') {
@@ -79,43 +165,132 @@ const SurveyConnectDialog = ({ isOpen, handleClose, setStudySurveySetList }) => 
         setSelectedSurvey(items);
     };
 
-    const handleConnectSurvey = () => {
-        // 원하는 구조로 배열을 다시 만들어야 함...
-        const groupedSurveys = selectedSurvey.reduce((acc, survey) => {
-            const cycleKey = survey.frequency.toUpperCase(); // 주기 (DAILY, WEEKLY, MONTHLY)
-            const timesKey = survey.times; // 횟수
+    const handleConnectSurvey = async () => {
+        if (mode === 'edit') {
+            let newStudySurveySetList: StudySurveySet[];
 
-            const groupKey = `${cycleKey}_${timesKey}`; // MONTHLY_2, WEEKLY_1 이런식으로 묶자
+            if (initialSurveySetList) {
+                // 기존 설문이 있는 경우
+                const newSurveys = selectedSurvey.filter(
+                    (survey) =>
+                        !initialSurveySetList.some((set) =>
+                            set.surveyList.some((s) => s.survey_no === survey.survey_no)
+                        )
+                );
 
-            if (!acc[groupKey]) {
-                acc[groupKey] = [];
+                newStudySurveySetList = newSurveys.reduce(
+                    (acc: StudySurveySet[], survey: RegistrableSurvey) => {
+                        const cycleKey = survey.frequency.toUpperCase();
+                        const timesKey = survey.times ?? 1;
+                        const existingSet = acc.find(
+                            (set) =>
+                                set.survey_cycle === cycleKey && set.number_in_cycle === timesKey
+                        );
+
+                        if (existingSet) {
+                            existingSet.surveyList.push({
+                                survey_no: survey.survey_no,
+                                sort: existingSet.surveyList.length + 1,
+                            });
+                        } else {
+                            acc.push({
+                                survey_cycle: cycleKey,
+                                number_in_cycle: timesKey,
+                                sort: 1,
+                                surveyList: [{ survey_no: survey.survey_no, sort: 1 }],
+                            });
+                        }
+
+                        return acc;
+                    },
+                    []
+                );
+            } else {
+                // initialSurveySetList가 null인 경우 (기존 설문이 없는 경우)
+                newStudySurveySetList = selectedSurvey.reduce(
+                    (acc: StudySurveySet[], survey: RegistrableSurvey) => {
+                        const cycleKey = survey.frequency.toUpperCase();
+                        const timesKey = survey.times ?? 1;
+                        const existingSet = acc.find(
+                            (set) =>
+                                set.survey_cycle === cycleKey && set.number_in_cycle === timesKey
+                        );
+
+                        if (existingSet) {
+                            existingSet.surveyList.push({
+                                survey_no: survey.survey_no,
+                                sort: existingSet.surveyList.length + 1,
+                            });
+                        } else {
+                            acc.push({
+                                survey_cycle: cycleKey,
+                                number_in_cycle: timesKey,
+                                sort: 1,
+                                surveyList: [{ survey_no: survey.survey_no, sort: 1 }],
+                            });
+                        }
+
+                        return acc;
+                    },
+                    []
+                );
             }
 
-            acc[groupKey].push(survey);
-            return acc;
-        }, {});
+            if (newStudySurveySetList.length > 0) {
+                try {
+                    const data = {
+                        std_no: studyNo,
+                        std_start_date: initialSurveySetList
+                            ? initialSurveySetList[0].survey_start_date
+                            : undefined,
+                        std_end_date: initialSurveySetList
+                            ? initialSurveySetList[0].survey_end_date
+                            : undefined,
+                        studySurveySetList: newStudySurveySetList,
+                    };
+                    await studyApi.postSurvey(data);
+                    setSuccessMessage('새로운 설문이 성공적으로 연결되었습니다.');
+                    setOpenAlert(true);
+                } catch (error) {
+                    console.error('Failed to post survey:', error);
+                    setSuccessMessage('설문 연결에 실패했습니다.');
+                    setOpenAlert(true);
+                }
+            } else {
+                setSuccessMessage('새로 추가된 설문이 없습니다.');
+                setOpenAlert(true);
+            }
+        } else if (mode === 'create') {
+            const newStudySurveySetList: StudySurveySet[] = selectedSurvey.reduce(
+                (acc: StudySurveySet[], survey: RegistrableSurvey) => {
+                    const cycleKey = survey.frequency.toUpperCase();
+                    const timesKey = survey.times ?? 1;
+                    const existingSet = acc.find(
+                        (set) => set.survey_cycle === cycleKey && set.number_in_cycle === timesKey
+                    );
 
-        const newStudySurveySetList = Object.keys(groupedSurveys).map((groupKey, index) => {
-            const [cycle, times] = groupKey.split('_');
-            const sortedSurveys = groupedSurveys[groupKey].sort(
-                (a: { sort: number }, b: { sort: number }) => a.sort - b.sort
+                    if (existingSet) {
+                        existingSet.surveyList.push({
+                            survey_no: survey.survey_no,
+                            // sort: 1,
+                            sort: existingSet.surveyList.length + 1,
+                        });
+                    } else {
+                        acc.push({
+                            survey_cycle: cycleKey,
+                            number_in_cycle: timesKey,
+                            sort: 1,
+                            surveyList: [{ survey_no: survey.survey_no, sort: 1 }],
+                        });
+                    }
+
+                    return acc;
+                },
+                []
             );
+            setStudySurveySetList(newStudySurveySetList);
+        }
 
-            return {
-                survey_cycle: cycle,
-                number_in_cycle: times,
-                sort: index + 1,
-                surveyList: sortedSurveys.map((survey: { survey_no: number }, idx: number) => ({
-                    survey_no: survey.survey_no,
-                    sort: idx + 1,
-                })),
-            };
-        });
-
-        console.log(newStudySurveySetList);
-        setStudySurveySetList(newStudySurveySetList);
-        setSuccessMessage('연결되었습니다');
-        setOpenAlert(true);
         handleClose();
     };
 
@@ -133,7 +308,7 @@ const SurveyConnectDialog = ({ isOpen, handleClose, setStudySurveySetList }) => 
     };
 
     const handleSelectPreview = (surveyNo) => {
-        console.log(surveyNo);
+        // console.log(surveyNo);
         setPreviewSurveyNo(surveyNo);
     };
 
@@ -218,6 +393,8 @@ const SurveyConnectDialog = ({ isOpen, handleClose, setStudySurveySetList }) => 
                                             items={selectedSurvey}
                                             onDragEnd={onDragEnd}
                                             itemChanged={handleChangeSurveyItem}
+                                            onDeleteClick={handleDeleteClick}
+                                            mode={mode}
                                         />
                                     </Box>
 
@@ -260,6 +437,12 @@ const SurveyConnectDialog = ({ isOpen, handleClose, setStudySurveySetList }) => 
                     {successMessage}
                 </Alert>
             </Snackbar>
+
+            <SurveyDeleteDialog
+                isOpen={showDeleteConfirm}
+                handleClose={handleDeleteCancel}
+                handleConfirm={handleDeleteConfirm}
+            />
         </>
     );
 };

@@ -8,10 +8,18 @@ export type DraggableItemListProps = {
     item: RegistrableSurvey;
     index: number;
     itemChanged: (item: RegistrableSurvey, index: number) => void;
-    deleteItem: (index: number) => void;
+    // deleteItem: (index: number) => void;
+    deleteItem: (survey: RegistrableSurvey) => void;
+    mode: 'create' | 'edit';
 };
 
-const DraggableListItem = ({ item, index, itemChanged, deleteItem }: DraggableItemListProps) => {
+const DraggableListItem = ({
+    item,
+    index,
+    itemChanged,
+    deleteItem,
+    mode,
+}: DraggableItemListProps) => {
     const [survey, setSurvey] = useState(item);
     const theme = useTheme();
     const { grey } = theme.palette;
@@ -28,9 +36,12 @@ const DraggableListItem = ({ item, index, itemChanged, deleteItem }: DraggableIt
         itemChanged(changedSurvey, index);
     };
 
-    const handleDeleteSurvey = (surveyNo: number) => {
-        deleteItem(surveyNo);
+    const handleDeleteSurvey = () => {
+        deleteItem(survey);
     };
+    // const handleDeleteSurvey = (surveyNo: number) => {
+    //     deleteItem(surveyNo);
+    // };
 
     return (
         <Draggable draggableId={item.title} index={index}>
@@ -75,7 +86,8 @@ const DraggableListItem = ({ item, index, itemChanged, deleteItem }: DraggableIt
                             <MenuItem value={3}>3</MenuItem>
                         </Select>
                         회 반복
-                        <Button color="error" onClick={() => handleDeleteSurvey(item.survey_no)}>
+                        <Button color="error" onClick={() => handleDeleteSurvey()}>
+                            {/* <Button color="error" onClick={() => handleDeleteSurvey(item.survey_no)}> */}
                             삭제
                         </Button>
                     </Grid>

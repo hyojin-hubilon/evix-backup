@@ -19,37 +19,8 @@ import StudyMemberStatus from './study-info/StudyMemberStatus';
 import { STUDY_STATUS, STUDY_STATUS_KEY } from './StudyListItem';
 import MemberManagement from './study-new/MemberManagement';
 import { surveyCycle } from '@/types/study';
-
-// // Define the types for the props
-// interface StudySurvey {
-//     survey_no: number;
-//     title: string;
-// }
-
-// interface StudySurveySet {
-//     surveyList: StudySurvey[];
-//     survey_cycle: string;
-//     number_in_cycle: number;
-// }
-
-// interface StudyDetail {
-//     std_no: number;
-//     std_status: string;
-//     updated_at: string;
-//     std_start_date: string;
-//     std_end_date: string;
-//     std_type: string;
-//     title: string;
-//     target_number: number;
-//     description: string;
-//     disease: string;
-// 	studySurveySetList: StudySurveySet[];
-// 	inviteList:
-// }
-
-// interface StudyInfoProps {
-//     studyDetail: StudyDetail;
-// }
+import SurveyConnectDialog from './study-new/SurveyConnetDialog';
+import studyApi from '@/apis/study';
 
 interface StudyInfoProps {
     studyDetail: {
@@ -106,6 +77,8 @@ interface StudyInfoProps {
 }
 
 const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
+    // console.log(studyDetail);
+
     const theme = useTheme();
 
     const formatDate = (dateString: string): string => {
@@ -122,7 +95,17 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
         setIsOpenMember(true);
     };
 
+    const [isOpenSurvey, setIsOpenSurvey] = useState(false);
+    const [studySurveySetList, setStudySurveySetList] = useState(studyDetail.studySurveySetList);
+
+    const handleCloseSurvey = () => {
+        setIsOpenSurvey(!isOpenSurvey);
+    };
+
+    // console.log('studySurveySetList: ', studySurveySetList);
+
     const statusLabel = STUDY_STATUS[studyDetail.std_status as STUDY_STATUS_KEY];
+
     return (
         <Grid container item rowSpacing={2} className="study-info">
             <Grid item xs={12}>
@@ -256,7 +239,14 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                         >
                             <Box display="flex" alignItems="center" justifyContent="space-between">
                                 <Typography variant="h5">Survey</Typography>
-                                <Button variant="outlined">Edit</Button>
+                                {(statusLabel === 'New' || statusLabel === 'Pause') && (
+                                    <Button
+                                        variant="outlined"
+                                        onClick={() => setIsOpenSurvey(true)}
+                                    >
+                                        Edit
+                                    </Button>
+                                )}
                             </Box>
                             <List
                                 sx={{
@@ -368,6 +358,14 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                 isOpen={isOpenMember}
                 studyNo={studyDetail.std_no}
                 handleClose={handleCloseMember}
+            />
+            <SurveyConnectDialog
+                isOpen={isOpenSurvey}
+                handleClose={handleCloseSurvey}
+                setStudySurveySetList={setStudySurveySetList}
+                initialSurveySetList={studySurveySetList}
+                mode="edit"
+                studyNo={studyDetail.std_no}
             />
         </Grid>
     );

@@ -64,7 +64,7 @@ const StudyNew = () => {
     const [isOpenSurvey, setIsOpenSurvey] = useState(false);
     const [inviteList, setInviteList] = useState<InviteMemberTempType[]>([]);
     const [managerList, setManagerList] = useState<any[]>([]);
-    const [studySurveySetList, setStudySurveySetList] = useState<[]>([]);
+    const [studySurveySetList, setStudySurveySetList] = useState<any[]>([]);
 
     const [members, setMembers] = useState<InviteMemberTempType[]>([]);
 
@@ -341,7 +341,7 @@ const StudyNew = () => {
         // 미리보기 화면 출력
         // setShowPreview(true);
 
-        navigate('/study/preview', { state: { mode: 'priview', studyDetail: studyDetail } });
+        navigate('/study/preview', { state: { mode: 'preview', studyDetail: studyDetail } });
     };
 
     // if (showPreview) {
@@ -842,6 +842,8 @@ const StudyNew = () => {
                 isOpen={isOpenSurvey}
                 handleClose={handleCloseSurvey}
                 setStudySurveySetList={setStudySurveySetList}
+                initialSurveySetList={null}
+                mode="create"
             />
             <StudyDeleteConfirmDialog
                 open={openDeleteConfirm}

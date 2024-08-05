@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material';
 import MainCard from '@/components/MainCard';
 import { surveyCycle } from '@/types/study';
 
-const StudyDetailPage = () => {
+const StudyPreviewPage = () => {
     const theme = useTheme();
     const { divider, primary } = theme.palette;
     const navigate = useNavigate();
@@ -298,4 +298,4 @@ const StudyDetailPage = () => {
     );
 };
 
-export default StudyDetailPage;
+export default StudyPreviewPage;

@@ -3,12 +3,12 @@ import { lazy } from 'react';
 // project import
 import Loadable from '@components/Loadable';
 import MainLayout from '@layout/MainLayout';
-import StudyDetailPage from '@/pages/study/StudyPreview';
 
 // render - dashboard
 const StudyList = Loadable(lazy(() => import('@pages/study')));
 const StudyDetail = Loadable(lazy(() => import('@pages/study/StudyDetail')));
 const StudyNew = Loadable(lazy(() => import('@pages/study/StudyNew')));
+const StudyPreviewPage = Loadable(lazy(() => import('@pages/study/StudyPreview')));
 
 // ==============================|| STUDY ROUTING ||============================== //
 
@@ -30,7 +30,7 @@ const StudyRoutes = {
         },
         {
             path: 'preview',
-            element: <StudyDetailPage />,
+            element: <StudyPreviewPage />,
         },
     ],
 };
