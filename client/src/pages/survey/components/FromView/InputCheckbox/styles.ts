@@ -83,7 +83,8 @@ export const Checkbox = styled('input')(({theme}) => ({
 
 
 export const EtcContainer = styled('div')`
+	width: 80%;
 	display: inline-block;
-	align-items: center;
 	padding-left:12px;
+	align-items: center
 `

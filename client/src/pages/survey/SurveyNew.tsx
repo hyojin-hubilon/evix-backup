@@ -82,7 +82,7 @@ const SurveyNew = () => {
 
 						dispatch(addExistCard({
 							cardId: "TitleCard",
-							cardTitle: '[Copy]' + survey.title,
+							cardTitle: '[Copy] ' + survey.title,
 							inputType: QuestionTypes.TITLE,
 							contents: survey.description,
 							isFocused: true
@@ -90,6 +90,33 @@ const SurveyNew = () => {
 						setCards(survey);
 
 						setSurveyNo(null);
+					}
+				} catch (error) {
+					console.error('Failed to fetch study list:', error);	
+				}
+			}
+
+			getCopyingSurveyDeatil();
+		}
+
+		if(locationState == 'edit' && surveyNo !== null) {
+			const getCopyingSurveyDeatil = async () => {
+				try {
+					const response = await surveyApi.getSurvey(surveyNo);
+					if (response.result && response.code === 200) {
+						const survey = response.content;
+						dispatch(resetAll());
+
+						dispatch(addExistCard({
+							cardId: "TitleCard",
+							cardTitle: survey.title,
+							inputType: QuestionTypes.TITLE,
+							contents: survey.description,
+							isFocused: true
+						}));
+						setCards(survey);
+
+						// setSurveyNo(null);
 					}
 				} catch (error) {
 					console.error('Failed to fetch study list:', error);	
@@ -254,13 +281,18 @@ const SurveyNew = () => {
 		setInitialValues({cards: cards})
 	}, [cards])
 
+	const handlePreview = () => {
+		//다른 방법으로...
+		// navigation(`/survey/preview/${surveyNo}`)
+	}
+
 	return (
 		<Container maxWidth="md">
 			<Grid container flexDirection="column" sx={{minHeight: '100vh'}}>
 				<Formik
 					initialValues={initialValues}
 					validationSchema={schema}
-					validateOnChange={true}
+					validateOnChange={false}
 					enableReinitialize={true}
 					onSubmit={(values, actions) => {
 						actions.setSubmitting(false);
@@ -285,7 +317,7 @@ const SurveyNew = () => {
 											
 											<Box display="flex" justifyContent="flex-end" gap={1} sx={{ml: 'auto'}}>
 												{
-													surveyNo && <Button variant="outlined">미리보기</Button>
+													surveyNo && <Button variant="outlined" onClick={handlePreview}>미리보기</Button>
 												}
 												
 												<Button variant="outlined" disabled={isSubmitting} onClick={() => handleButtonClick(true, formikProps)}>임시저장</Button>
