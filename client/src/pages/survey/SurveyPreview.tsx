@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SurveyView from "./SurveyView";
 import { Box, Button, Card, Container, Dialog, Grid, Tab, Tabs } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 type SurveyPreviewTypes = {
 	surveyNo: string | number| undefined,
 	handleClose: () => void,
@@ -11,13 +12,18 @@ const SurveyPreview = ({surveyNo, handleClose, isDialog} : SurveyPreviewTypes) =
 	//미리보기 : 상단에 PC화면/모바일화면 탭이 있음, 미리보기 종료버튼 있음. 제출 disabled 외에는 그대로?
 	//제출에는 필수 입력사항 등 Validation 필요
 	const [ tab, setTab ] = useState('0');
-	
+	const navigate = useNavigate();
 	
 	
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         event.preventDefault();
         setTab(newValue);
     };
+
+	const handleEndPreview = () => {
+		if(isDialog) handleClose();
+		else navigate(-1);
+	}
 
 	
 	return (
@@ -37,7 +43,7 @@ const SurveyPreview = ({surveyNo, handleClose, isDialog} : SurveyPreviewTypes) =
 					</Grid>
 					<Grid item xs={4}>
 						<Box display="flex" justifyContent="flex-end">
-							<Button variant="contained" sx={{mr: '0.5rem'}} onClick={handleClose}>미리보기 종료</Button>
+							<Button variant="contained" sx={{mr: '0.5rem'}} onClick={handleEndPreview}>미리보기 종료</Button>
 							{/* 종료했을때 작성 혹은 목록으로 돌아가기 */}
 						</Box>
 					</Grid>
