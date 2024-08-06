@@ -300,7 +300,7 @@ const SurveyNew = () => {
 				<Formik
 					initialValues={initialValues}
 					validationSchema={schema}
-					validateOnChange={false}
+					validateOnChange={true}
 					enableReinitialize={true}
 					onSubmit={(values, actions) => {
 						actions.setSubmitting(false);

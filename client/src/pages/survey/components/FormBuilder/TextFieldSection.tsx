@@ -52,7 +52,7 @@ const TextFieldSection = ({ id, cardIndex }:TextFieldSectionType) => {
 						borderBottom: `1px dotted ${theme.palette.grey[900]}`,
 						flexGrow: 1,
 						...(isTitle && {
-							borderBottom: isFocused ? ( errors.cards && errors.cards[cardIndex]?.contents ? `1px solid ${theme.palette.error.main}` : `1px solid ${theme.palette.grey[700]}` ) : 'none'
+							borderBottom: errors.cards && errors.cards[cardIndex]?.contents ? `1px solid ${theme.palette.error.main}` : ( isFocused  ?  `1px solid ${theme.palette.grey[700]}`  : 'none' )
 						}),
 						'::before, ::after' : {
 							display: 'none'

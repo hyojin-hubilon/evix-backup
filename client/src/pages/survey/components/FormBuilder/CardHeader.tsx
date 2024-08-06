@@ -61,10 +61,10 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 							padding: isFocused ? (isTitle ? '5px' : '16px') : '5px 0',
 							backgroundColor: isFocused ? (isTitle ? 'transparent' : theme.palette.grey[50]) : 'transparent',
 							'::before': {
-								borderBottom: isFocused ? ( errors.cards && errors.cards[cardIndex]?.cardTitle ? `1px solid ${theme.palette.error.main}` : `1px solid ${theme.palette.grey[700]}` ): `1px solid ${theme.palette.grey[700]}`
+								borderBottom: isFocused ? ( errors.cards && errors.cards[cardIndex]?.cardTitle ? `1px solid ${theme.palette.error.main}` : `1px solid ${theme.palette.grey[700]}` ): 'none'
 							},
 							'::after' : {
-								borderBottom: errors.cards && errors.cards[cardIndex]?.cardTitle ? `1px solid ${theme.palette.error.main}` : `1px solid ${theme.palette.grey[700]}`,
+								borderBottom: errors.cards && errors.cards[cardIndex]?.cardTitle ? `1px solid ${theme.palette.error.main}` : 'none',
 								transform: 'scaleX(1)'
 							}
 						},
