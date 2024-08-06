@@ -107,12 +107,12 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 					
 					
 					<Box display="flex" flexDirection="column" gap={1}>
-						<CardHeader isTitle={isTitle} id={id} />
+						<CardHeader isTitle={isTitle} id={id} cardIndex={index} />
 
 						{(inputType === QuestionTypes.WRITE || inputType === QuestionTypes.TITLE) ? (
-							<TextFieldSection id={id} />
+							<TextFieldSection id={id} cardIndex={index} />
 						) : (
-							<ItemTypeSection id={id} />
+							<ItemTypeSection id={id} cardIndex={index} />
 						)}
 						
 

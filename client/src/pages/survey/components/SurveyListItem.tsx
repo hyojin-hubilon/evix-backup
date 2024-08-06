@@ -1,21 +1,26 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { EditOutlined, LinkOutlined } from '@ant-design/icons';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box, Button, Card, ClickAwayListener, Grid, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Typography, useTheme } from '@mui/material';
+import { Box, Button, Card, ClickAwayListener, Dialog, Grid, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Typography, useTheme } from '@mui/material';
 
 import { MySurveyList } from '@/types/survey';
 import dayjs from 'dayjs';
 import { useRef, useState } from 'react';
+import surveyApi from '@/apis/survey';
+import { useConfirmation } from '@/components/ui/ConfirmDialog/ConfirmDialogContext';
 
 type SurveyListItemProps = {
 	survey: MySurveyList,
-	userNo: number
+	userNo: number,
+	refresh: () => void
 }
 
-const SurveyListItem = ({ survey, userNo }: SurveyListItemProps) => {
+const SurveyListItem = ({ survey, userNo, refresh }: SurveyListItemProps) => {
     const theme = useTheme();
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	
 	const navigate = useNavigate();
+	const confirm = useConfirmation();
 	
 	const subOpen = Boolean(anchorEl);
 	const handleOpenClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -29,12 +34,50 @@ const SurveyListItem = ({ survey, userNo }: SurveyListItemProps) => {
 		navigate(`/survey/preview/${survey.survey_no}`)
 	}
 
-	const handleCopy = () => {
+	const deleteThisSurvey = async () => {
+		try {
+			const response = await surveyApi.deleteSurvey(survey.survey_no);
+			if (response.result && response.code === 200) {
+                confirm({
+					description: "삭제되었습니다.",
+					variant: 'info'
+				})
+				.then(() => { 
+					refresh();
+				})
+            }
+        } catch (error) {
+            console.error('Failed to fetch study list:', error);	
+        }
+	}
 
+	const handleCopy = () => {
+		confirm({
+			catchOnCancel: true,
+			title: "설문 복제",
+			description: "이 설문을 복제하시겠습니까?"
+		})
+		.then(() => { 
+			navigate(`/survey/copy/${survey.survey_no}`, {state: 'copy'});
+		})
+		.catch(() => {console.log('cancel')});		
 	}
 
 	const handleDelete = () => {
+		confirm({
+			catchOnCancel: true,
+			title: "설문 삭제",
+			description: "이 설문을 삭제하시겠습니까?"
+		})
+		.then(() => { 
+			deleteThisSurvey()
+		})
+		.catch(() => {console.log('cancel')});		
+		
+	}
 
+	const handleEdit = () => {
+		navigate(`/survey/edit/${survey.survey_no}`, {state: 'edit'});
 	}
 	
 
@@ -80,9 +123,9 @@ const SurveyListItem = ({ survey, userNo }: SurveyListItemProps) => {
                     >
                        
 
-                        {/* 수정 - 설문 참가자가 1명이상일 경우 불가능 - Status 추가되어야 함 */}
-                       	{
-							<Button size="large" variant="outlined">
+                        {/* 수정 - 설문 참가자가 1명이상일 경우 불가능 - Study 연결후엔 불가능으로 임시 설정 */}
+						{ survey.study_title === null && 
+							<Button size="large" variant="outlined" onClick={handleEdit}>
 								<EditOutlined style={{ fontSize: '1.5rem' }} />
 							</Button>
 						}
@@ -133,6 +176,8 @@ const SurveyListItem = ({ survey, userNo }: SurveyListItemProps) => {
                     </Grid>
                 </Grid>
             </Card>
+
+			
         </>
     );
 };

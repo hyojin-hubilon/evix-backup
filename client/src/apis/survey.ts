@@ -4,6 +4,7 @@ import {
 } from '@/apis/axios-common';
 import {
     RegistrableSurvey,
+    SampleSurveyList,
     SurveyApiResponse,
     SurveyDetail,
     SurveyPostReqBody,
@@ -21,10 +22,10 @@ const surveyApi = {
      * @param orderBy
      * @returns
      */
-    mySurveyList: async (pageNum: number, elementSize: number, orderBy: 'CREATED' | 'UPDATED') => {
+    mySurveyList: async () => {
         try {
             const responseData = await api<SurveyApiResponse>(
-                `${BASE_API_URL}/my-list/${pageNum}/${elementSize}/${orderBy}`,
+                `${BASE_API_URL}/full-my-list`,
                 'get'
             );
 
@@ -61,7 +62,7 @@ const surveyApi = {
 		}
 	},
 
-	getSurvey: async (survey_no: number) => {
+	getSurvey: async (survey_no: number|string) => {
 		try {
 			const responseData = await api<SurveyDetail>(
 				`${BASE_API_URL}/${survey_no}`,
@@ -87,6 +88,46 @@ const surveyApi = {
             throw e;
         }
     },
+
+	getCopyingSurvey: async (survey_no: number|string) => {
+		try {
+			const responseData = await api<SurveyDetail>(
+				`${BASE_API_URL}/copy/${survey_no}`,
+				'get'
+			);
+
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
+
+	deleteSurvey: async (survey_no: number) => {
+		try {
+			const responseData = await api<{}>(
+				BASE_API_URL,
+				'delete',
+				{ survey_no: survey_no }
+			)
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
+	getSamples : async() => {
+		try {
+			const responseData = await api<SampleSurveyList[]>(
+				`${BASE_API_URL}/sample-list`,
+				'get',
+			)
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	}
 };
 
 export default surveyApi;
