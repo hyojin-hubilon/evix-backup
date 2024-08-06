@@ -77,14 +77,29 @@ const StudyNew = () => {
     const state = location.state as { mode: 'write' | 'edit'; stdNo?: number };
     const stdNo = location.state?.stdNo;
 
-    // const [ownerName, setOwnerName] = useState('');
     const [stdStatus, setStdStatus] = useState<String>('');
-
     const [currentUser, setCurrentUser] = useState<MyProfile>();
 
-    const [showPreview, setShowPreview] = useState(false);
+    // 유효성 검사
+    const [errors, setErrors] = useState({
+        title: '',
+        participants: '',
+        description: '',
+        disease: '',
+    });
 
-    const [studyDetails, setStudyDetails] = useState<StudyDetail>();
+    const validate = () => {
+        let tempErrors = { ...errors };
+
+        tempErrors.title = title ? '' : '제목을 입력해 주세요';
+        tempErrors.participants = participants ? '' : '대상인원을 입력해 주세요';
+        tempErrors.description = description ? '' : '개요를 입력해 주세요';
+        tempErrors.disease = disease ? '' : '질환을 입력해 주세요';
+
+        setErrors(tempErrors);
+
+        return Object.values(tempErrors).every((x) => x === '');
+    };
 
     const changeDateRange = (e: DateRage) => {
         setDateRange(e);
@@ -131,47 +146,47 @@ const StudyNew = () => {
         }
     };
 
-    console.log('currentUser: ', currentUser);
-
     const handleSubmit = async () => {
-        const studyData = {
-            std_payment_status: 'WAIT',
-            deploy_method: 'IMMEDIATE',
-            std_status: 'STD-CREATED',
-            title: title,
-            std_type: 'E-PRO',
-            std_start_date: dateRange.startDt.format('YYYY-MM-DD'),
-            std_end_date: dateRange.endDt.format('YYYY-MM-DD'),
-            target_number: parseInt(participants),
-            description: description,
-            disease: disease,
-            location: country,
-            drug_code: drug?.itemCode ?? null,
-            drug_brand_name: drug?.companyName ?? null,
-            drug_manufacturer_name: drug?.productName ?? null,
-            studySurveySetList: studySurveySetList ?? [],
-            inviteList: members ?? [],
-        };
+        if (validate()) {
+            const studyData = {
+                std_payment_status: 'WAIT',
+                deploy_method: 'IMMEDIATE',
+                std_status: 'STD-CREATED',
+                title: title,
+                std_type: 'E-PRO',
+                std_start_date: dateRange.startDt.format('YYYY-MM-DD'),
+                std_end_date: dateRange.endDt.format('YYYY-MM-DD'),
+                target_number: parseInt(participants),
+                description: description,
+                disease: disease,
+                location: country,
+                drug_code: drug?.itemCode ?? null,
+                drug_brand_name: drug?.companyName ?? null,
+                drug_manufacturer_name: drug?.productName ?? null,
+                studySurveySetList: studySurveySetList ?? [],
+                inviteList: members ?? [],
+            };
 
-        // FormData 객체 생성 및 데이터 추가
-        const formData = new FormData();
+            // FormData 객체 생성 및 데이터 추가
+            const formData = new FormData();
 
-        const json = JSON.stringify(studyData);
-        const blob = new Blob([json], { type: 'application/json' });
+            const json = JSON.stringify(studyData);
+            const blob = new Blob([json], { type: 'application/json' });
 
-        formData.append('requestDto', blob);
-        // 전자동의서 파일이 있는 경우 FormData에 추가
-        if (eicFile) {
-            formData.append('eic_file', eicFile);
-        }
-
-        try {
-            const response = await studyApi.createStudy(formData);
-            if (response.code === 200) {
-                navigate(-1);
+            formData.append('requestDto', blob);
+            // 전자동의서 파일이 있는 경우 FormData에 추가
+            if (eicFile) {
+                formData.append('eic_file', eicFile);
             }
-        } catch (error) {
-            console.error('Failed to Create study:', error);
+
+            try {
+                const response = await studyApi.createStudy(formData);
+                if (response.code === 200) {
+                    navigate(-1);
+                }
+            } catch (error) {
+                console.error('Failed to Create study:', error);
+            }
         }
     };
 
@@ -252,43 +267,45 @@ const StudyNew = () => {
     };
 
     const handleUpdate = async () => {
-        const studyData = {
-            std_no: stdNo,
-            title: title,
-            std_type: 'E-PRO',
-            std_start_date: dateRange.startDt.format('YYYY-MM-DD'),
-            std_end_date: dateRange.endDt.format('YYYY-MM-DD'),
-            target_number: parseInt(participants),
-            description: description,
-            disease: disease,
-            // location: country,   requestDto에 없음
-            drug_code: medicineYOrN === 'true' ? drug?.itemCode ?? null : null,
-            drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
-            drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
-            // 수정 화면에서 Survey, 초대 제외
-            // studySurveySetList: [],
-            // inviteList: [],
-        };
+        if (validate()) {
+            const studyData = {
+                std_no: stdNo,
+                title: title,
+                std_type: 'E-PRO',
+                std_start_date: dateRange.startDt.format('YYYY-MM-DD'),
+                std_end_date: dateRange.endDt.format('YYYY-MM-DD'),
+                target_number: parseInt(participants),
+                description: description,
+                disease: disease,
+                // location: country,   requestDto에 없음
+                drug_code: medicineYOrN === 'true' ? drug?.itemCode ?? null : null,
+                drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
+                drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
+                // 수정 화면에서 Survey, 초대 제외
+                // studySurveySetList: [],
+                // inviteList: [],
+            };
 
-        // FormData 객체 생성 및 데이터 추가
-        const formData = new FormData();
+            // FormData 객체 생성 및 데이터 추가
+            const formData = new FormData();
 
-        const json = JSON.stringify(studyData);
-        const blob = new Blob([json], { type: 'application/json' });
+            const json = JSON.stringify(studyData);
+            const blob = new Blob([json], { type: 'application/json' });
 
-        formData.append('requestDto', blob);
-        // 전자동의서 파일이 있는 경우 FormData에 추가
-        if (eicFile) {
-            formData.append('eic_file', eicFile);
-        }
-
-        try {
-            const response = await studyApi.updateStudy(formData);
-            if (response.code === 200) {
-                navigate('/study');
+            formData.append('requestDto', blob);
+            // 전자동의서 파일이 있는 경우 FormData에 추가
+            if (eicFile) {
+                formData.append('eic_file', eicFile);
             }
-        } catch (error) {
-            console.error('Failed to update study:', error);
+
+            try {
+                const response = await studyApi.updateStudy(formData);
+                if (response.code === 200) {
+                    navigate('/study');
+                }
+            } catch (error) {
+                console.error('Failed to update study:', error);
+            }
         }
     };
 
@@ -408,7 +425,7 @@ const StudyNew = () => {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
-                                <FormHelperText>Helper Text 예시</FormHelperText>
+                                <FormHelperText error>{errors.title}</FormHelperText>
                             </FormControl>
                         </Grid>
                     </Grid>
@@ -456,6 +473,7 @@ const StudyNew = () => {
                                     />
                                     <Typography>명</Typography>
                                 </Box>
+                                <FormHelperText error>{errors.participants}</FormHelperText>
                             </FormControl>
                         </Grid>
                     </Grid>
@@ -475,6 +493,7 @@ const StudyNew = () => {
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
+                                <FormHelperText error>{errors.description}</FormHelperText>
                             </FormControl>
                         </Grid>
                     </Grid>
@@ -496,6 +515,7 @@ const StudyNew = () => {
                                     value={disease}
                                     onChange={(e) => setDisease(e.target.value)}
                                 />
+                                <FormHelperText error>{errors.disease}</FormHelperText>
                             </FormControl>
                         </Grid>
                     </Grid>
@@ -703,6 +723,7 @@ const StudyNew = () => {
                     <Button variant="outlined" size="large" onClick={() => navigate(-1)}>
                         취소
                     </Button>
+                    {/* <Button variant="contained" size="large" onClick={handleSubmitWithValidation}> */}
                     <Button variant="contained" size="large" onClick={handleSubmit}>
                         생성
                     </Button>
