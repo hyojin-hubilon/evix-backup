@@ -1,17 +1,30 @@
 import surveyApi from "@/apis/survey";
 import { SampleSurveyList } from "@/types/survey";
-import { Box, Card, Container, Grid, MenuItem, Typography, Select, useTheme } from "@mui/material";
+import { Box, Container, Grid, MenuItem, Typography, Select, useTheme, Chip, Dialog, Button, Fab } from "@mui/material";
 import { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
+import SpeakerNotesOutlinedIcon from '@mui/icons-material/SpeakerNotesOutlined';
+import CreateIcon from '@mui/icons-material/Create';
+
+import { useNavigate } from "react-router-dom";
+import SurveyPreview from "./SurveyPreview";
+
 
 const SampleList = () => {
-	const [samples, setSamples] = useState<SampleSurveyList[]>([]);
-	const [ searched, setSearched ] = useState<SampleSurveyList[]>([]);
 	const theme = useTheme();
-	const { primary } = theme.palette;
+	const { primary, grey } = theme.palette;
 
+	const navigate = useNavigate();
+
+	const [samples, setSamples] = useState<SampleSurveyList[]>([]);
+	const [ searched, setSearched ] = useState<SampleSurveyList[]>([]);	
 	const [ diseases, setDiseases ] = useState<string[]>([])
 	const [ selectedDisease, setSelectedDisease ] = useState('');
+
+	const [ surveyNo, setSurveyNo ] = useState<number|null>(null);
+	const [ isPreview, setIsPreview ] = useState(false);
+
+	
 
 	const getSampleList = async () => {
 		try {
@@ -27,6 +40,7 @@ const SampleList = () => {
 				const diseasesSelection = Array.from(diseasesList) as string[];
 				setDiseases(diseasesSelection);
 				setSamples(sampleList);
+				setSearched(sampleList);
 			
 			}
 		} catch (error) {
@@ -48,7 +62,26 @@ const SampleList = () => {
 		
 	}, [selectedDisease])
 
+	const handleClickNew = () => {
+		navigate('/survey/new');
+	}
+
+	const handleShowPreview = (survey_no : number) => {
+		setSurveyNo(survey_no);
+		setIsPreview(true);
+	}
+
+	const handleClosePreview = () => {
+		setIsPreview(false);
+		setSurveyNo(null);
+	}
+
+	const handleSelectSample = () => {
+		navigate(`/survey/new/${surveyNo}`, {state: 'new'})
+	}
+
 	return (
+		<>
 		<Container maxWidth="lg">
 			<Grid container rowGap={2}>
 				<Grid item xs={12}>
@@ -62,47 +95,80 @@ const SampleList = () => {
 						>
 							<MenuItem value="">질환별 샘플보기</MenuItem>
 							{
-								diseases.map(disease => <MenuItem value={disease}>{ disease }</MenuItem>)
+								diseases.map((disease, index) => <MenuItem value={disease} key={index}>{ disease }</MenuItem>)
 							}
 						</Select>
 					</Box>
 				</Grid>
 				<Grid item container xs={12} justifyContent="space-between" rowGap={3}>
-					<Grid item xs={3.8}>
-						<Box
-							sx={{height: '200px',
-								border: `2px dashed ${theme.palette.grey[300]}`,
+					<Grid item xs={3.8} alignSelf="stretch">
+						<Box onClick={() => handleClickNew()}
+							sx={{minHeight: '200px',
+								border: `1px dashed ${theme.palette.grey[300]}`,
 								borderRadius: '1rem',
 								cursor: 'pointer',
+								flexDirection: 'column',
 								display: 'flex',
 								alignItems: 'center',
+								alignSelf: 'stretch',
+								height:'100%',
 								justifyContent:'center',
+								backgroundColor: 'rgba(255,255,255,0.5)',
+								gap: 2,
 								'&:hover' : {
 									backgroundColor: 'rgba(255,255,255,0.7)',
 									border: `2px solid ${primary.main}`
 								}
 							 }}>
-								<PlusOutlined style={{fontSize: '0.7rem', marginRight: '1rem'}} />
-							직접 만들기
+								<PlusOutlined style={{fontSize: '2rem', color: primary.main}} />
+								<Typography variant="h5" sx={{color: primary.main}}>직접 만들기</Typography>
 						</Box>
 					</Grid>
 					{
-						searched.map((sample, index) => 
-							<Grid item xs={3.8} key={index}>
+						searched && searched.map((sample, index) => 
+							<Grid item xs={3.8} key={index} alignSelf="stretch">
 								<Box sx={{
-									height: '200px',
+									minHeight: '200px',
+									boxSizing:'border-box',
 									borderRadius: '1rem',
 									cursor: 'pointer',
 									display: 'flex',
 									alignItems: 'center',
-									justifyContent:'center',
+									padding: '2rem',
 									bgcolor: primary.lighter,
+									border: `1px solid ${primary.light}`,
+									position: 'relative',
+									alignSelf: 'stretch',
+									height:'100%',
 									'&:hover' : {
-										border: `2px solid ${primary.main}`,
-										// backgroundColor: 'rgba(255,255,255,0.7)'
+										'&::after' : {
+											display: 'block',
+											content: "''",
+											position:'absolute',
+											left: '-1px',
+											top:'-1px',
+											right: '-1px',
+											bottom: '-1px',
+											borderRadius: '1rem',
+											border: `2px solid ${primary.main}`,
+										}
 									}
-								}}>
-									{sample.title}
+								}}
+								onClick={() => handleShowPreview(sample.survey_no)}
+								>
+									<Box>
+										<Typography variant="h5"># {sample.survey_no}</Typography>
+										<Typography variant="h5" sx={{color: primary.main}}>{sample.disease}</Typography>
+										<Typography variant="h6" mb={'1rem'}>{sample.title}</Typography>
+										<Box
+											display="flex"
+											alignItems="center"
+											gap={0.5}
+											sx={{fontSize: '0.7rem', color: primary.dark}}
+										>
+											<SpeakerNotesOutlinedIcon sx={{fontSize:'1rem', marginLeft:'2px'}} />
+											{sample.question_number}</Box>
+									</Box>
 								</Box>
 							</Grid>
 						)
@@ -110,6 +176,17 @@ const SampleList = () => {
 				</Grid>
 			</Grid>
 		</Container>
+
+		{
+			surveyNo && isPreview &&
+				<Dialog open={isPreview} maxWidth="lg" onClose={handleClosePreview} fullWidth>
+					<SurveyPreview surveyNo={surveyNo} handleClose={handleClosePreview} isDialog={true} />
+					<Fab variant="extended" sx={{position: 'sticky', bottom: '5%', left: '80%', width: '200px', padding: '0.7rem'}} color="primary" onClick={() => handleSelectSample()}>
+						<CreateIcon sx={{ mr: 1 }} />이 샘플로 작성하기
+					</Fab>
+				</Dialog>
+		}
+		</>
 	)
 }
 

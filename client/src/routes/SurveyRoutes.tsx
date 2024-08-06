@@ -25,6 +25,10 @@ const SettingsRoutes = {
 			element: <SurveyNew />
 		},
 		{
+			path: 'new/:survey_no',
+			element: <SurveyNew />
+		},
+		{
 			path: 'preview/:survey_no',
 			element: <SurveyPreview />
 		},

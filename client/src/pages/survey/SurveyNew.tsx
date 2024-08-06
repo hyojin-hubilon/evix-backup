@@ -56,7 +56,7 @@ const SurveyNew = () => {
 	const parmas = useParams();
 	
 	const [ surveyNo, setSurveyNo ] = useState<string | number | null>(null);
-	const [ locationState, setLocationState ] = useState<'edit' | 'copy' | null>(null); //edit, copy check
+	const [ locationState, setLocationState ] = useState<'edit' | 'copy' | 'new' | null>(null); //edit, copy check
 	const [ isPreview, setIsPreview ] = useState(false);
 
 
@@ -67,38 +67,44 @@ const SurveyNew = () => {
 
 	useEffect(() => {
 		console.log(parmas)
-		if(parmas.survey_no) { 
+		if(parmas.survey_no && (locationState == 'edit' || locationState == 'copy')) {
 			setSurveyNo(Number(parmas.survey_no));
 		}
 	}, [])
 
+	const getCopyingSurveyDeatil = async (surveyNo) => {
+		try {
+			const response = await surveyApi.getCopyingSurvey(surveyNo);
+			if (response.result && response.code === 200) {
+				const survey = response.content;
+				dispatch(resetAll());
+
+				dispatch(addExistCard({
+					cardId: "TitleCard",
+					cardTitle: locationState == 'copy' ? '[Copy] ' + survey.title : survey.title,
+					inputType: QuestionTypes.TITLE,
+					contents: survey.description,
+					isFocused: true
+				}));
+				setCards(survey);
+
+				setSurveyNo(null);
+			}
+		} catch (error) {
+			console.error('Failed to fetch study list:', error);	
+		}
+	}
+
 
 	useEffect(() => {
 		if(locationState == 'copy' && surveyNo !== null) {
-			const getCopyingSurveyDeatil = async () => {
-				try {
-					const response = await surveyApi.getCopyingSurvey(surveyNo);
-					if (response.result && response.code === 200) {
-						const survey = response.content;
-						dispatch(resetAll());
+			getCopyingSurveyDeatil(surveyNo);
+			return;
+		}
 
-						dispatch(addExistCard({
-							cardId: "TitleCard",
-							cardTitle: '[Copy] ' + survey.title,
-							inputType: QuestionTypes.TITLE,
-							contents: survey.description,
-							isFocused: true
-						}));
-						setCards(survey);
-
-						setSurveyNo(null);
-					}
-				} catch (error) {
-					console.error('Failed to fetch study list:', error);	
-				}
-			}
-
-			getCopyingSurveyDeatil();
+		if(locationState == 'new' && parmas.survey_no) {
+			getCopyingSurveyDeatil(parmas.survey_no);
+			return;
 		}
 
 		if(locationState == 'edit' && surveyNo !== null) {
@@ -126,6 +132,7 @@ const SurveyNew = () => {
 			}
 
 			getCopyingSurveyDeatil();
+			return;
 		}
 	}, [locationState])
 

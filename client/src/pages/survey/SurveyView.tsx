@@ -30,9 +30,9 @@ const SurveyView = ({preview, mobile, surveyNo} : SurveyViewProps) => {
 
 	const { primary } = theme.palette;
 	
-	const getSurveyDeatil = async () => {
+	const getSurveyDeatil = async (surveyNumber) => {
 		try {
-			const response = await surveyApi.getSurvey(survey_no);
+			const response = await surveyApi.getSurvey(surveyNumber);
             if (response.result && response.code === 200) {
                 const survey = response.content;
 				setSurvey(survey);
@@ -74,8 +74,10 @@ const SurveyView = ({preview, mobile, surveyNo} : SurveyViewProps) => {
 	}
 
 	useEffect(() => {
+		
 		const surveyNumber = survey_no ? survey_no : surveyNo;
-		if(surveyNumber) getSurveyDeatil();
+		console.log(surveyNo);
+		if(surveyNumber) getSurveyDeatil(surveyNumber);
 	}, []);
 
 	useEffect(() => {

@@ -3,7 +3,7 @@ import SurveyView from "./SurveyView";
 import { Box, Button, Card, Container, Dialog, Grid, Tab, Tabs } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 type SurveyPreviewTypes = {
-	surveyNo?: string | number| undefined,
+	surveyNo?: string | number | undefined,
 	handleClose?: () => void,
 	isDialog?: boolean | undefined
 }
