@@ -129,7 +129,7 @@ function DesignerView() {
                     fontSize: 'small',
                 }}
             >
-                <strong>Create EIC</strong>
+                <strong>Register electronic consent form</strong>
                 <label>
                     Lang:{' '}
                     <select
