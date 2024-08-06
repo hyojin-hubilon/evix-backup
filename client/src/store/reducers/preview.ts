@@ -27,7 +27,7 @@ const createNewPreview = (cardId: string, question: string, questionType: Questi
 });
   
 export const previewSlice = createSlice({
-	name: "Reducer",
+	name: "Preview",
 	initialState: [] as PreviewProps[],
 	reducers: {
 	 	addPreview: (state: PreviewProps[], action: ActionProps) => {

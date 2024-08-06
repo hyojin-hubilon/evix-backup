@@ -8,18 +8,21 @@ import ThemeCustomization from '@/themes';
 import { CookiesProvider } from 'react-cookie';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { ConfirmationServiceProvider } from './components/ui/ConfirmDialog/ConfirmDialogContext';
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
 const App = () => (
     <CookiesProvider>
-        <ThemeCustomization>
-			<LocalizationProvider dateAdapter={AdapterDayjs}>
-				<ScrollTop>
-					<Routes />
-				</ScrollTop>
-			</LocalizationProvider>
-        </ThemeCustomization>
+		<ConfirmationServiceProvider>
+			<ThemeCustomization>
+				<LocalizationProvider dateAdapter={AdapterDayjs}>
+					<ScrollTop>
+						<Routes />
+					</ScrollTop>
+				</LocalizationProvider>
+			</ThemeCustomization>
+		</ConfirmationServiceProvider>
     </CookiesProvider>
 );
 

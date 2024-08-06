@@ -22,13 +22,13 @@ export interface CardProps { //question
 	isFocused: boolean;
 	isRequired: boolean;
 }
-interface PayloadProps {
-	[key: string]: string;
+interface PayloadProps<T> {
+	[key: string]: T;
 }
 
 interface ActionProps {
 	type: string;
-	payload: PayloadProps;
+	payload: PayloadProps<any>;
 }
 
 const initialCards = {
@@ -47,6 +47,16 @@ const createNewCard = (cardId: string, cardTitle = "") => ({
 	contents: "",
 	isFocused: true,
 	isRequired: false,
+});
+
+
+const createExistCard = (cardId: string, cardTitle:string, inputType:QuestionTypes, contents: any, isFoucsed?: boolean, isRequired?:boolean) => ({
+	id: cardId,
+	cardTitle: cardTitle,
+	inputType: inputType,
+	contents: contents,
+	isFocused: isFoucsed ? isFoucsed : false,
+	isRequired: isRequired ? isRequired : false,
 });
 
 export const requiredSlice = createSlice({
@@ -77,7 +87,7 @@ const deleteEtcItem = (currentContents: ItemTypeProps[]) => {
 };
   
 export const cardSlice = createSlice({
-	name: "Reducer",
+	name: "Cards",
 	initialState: [initialCards] as CardProps[],
 	reducers: {
 	 	addCard: (state: CardProps[], action: ActionProps) => {
@@ -92,15 +102,9 @@ export const cardSlice = createSlice({
 			return copiedState;
 	  	},
 
-		addPreviewCard: (state: CardProps[], action: ActionProps) => {
-			const copiedState = state.map((card) => ({ ...card, isFocused: false }));
-	
-			if (Number(action.payload.focusedCardIndex) > 0) {
-				copiedState.splice(Number(action.payload.focusedCardIndex) + 1, 0, createNewCard(action.payload.cardId, action.payload.cardTitle));
-			} else {
-				copiedState.push(createNewCard(action.payload.cardId, action.payload.cardTitle));
-			}
-
+		addExistCard: (state: CardProps[], action: ActionProps) => {
+			const copiedState = state.map((card) => ({ ...card, isFocused: false }));	
+			copiedState.push(createExistCard(action.payload.cardId, action.payload.cardTitle, action.payload.inputType, action.payload.contents, action.payload.isFocused, action.payload.isRequired));
 			return copiedState;
 	  	},
   
@@ -261,6 +265,7 @@ export const cardSlice = createSlice({
 
 export const {
 	addCard,
+	addExistCard,
 	copyCard,
 	removeCard,
 	focus,

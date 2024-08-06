@@ -58,6 +58,15 @@ export interface MySurveyList { //서베이리스트
 	study_title: string
 }
 
+export interface SampleSurveyList {
+	created_at: string | Date;
+	disease: string;
+	question_number: number;
+	sample_yn: "Y" | "N";
+	survey_no : number;
+	title: string;
+}
+
 
 export interface SurveyApiResponse {
 	next?: boolean,
@@ -120,7 +129,7 @@ export interface SurveyPostReqBody {
 	diseases?: string,
 	description: string, //영문
 	translation?: string, //한글변역?
-	sample_yn: string, //Y|N
+	sample_yn?: string, //Y|N
 	questionList: SurveyQuestion[],
 }
 
@@ -130,5 +139,5 @@ export interface SurveyPostResponse {
 }
 
 export interface SurveyPutReqBody extends SurveyPostReqBody {
-	survey_no: number
+	survey_no: number | string;
 }

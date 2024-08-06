@@ -46,10 +46,9 @@ export const Checkbox = styled('input')(({theme}) => ({
 
 		'::before' : {
 			content: '""',
-			marginTop:'2px',
 			display: 'inline-block',
-			width: '17px',
-			height: '17px',
+			width: '20px',
+			height: '20px',
 			border: `2px solid ${theme.palette.grey[500]}`,
 			borderRadius: '4px',
 			verticalAlign: 'top'
@@ -68,7 +67,7 @@ export const Checkbox = styled('input')(({theme}) => ({
 				content: '""',
 				display:'block',
 				position:'absolute',
-				left: '5px',
+				left: '6px',
 				top: '3px',
 				width:'7px',
 				height: '10px',
@@ -83,7 +82,8 @@ export const Checkbox = styled('input')(({theme}) => ({
 
 
 export const EtcContainer = styled('div')`
+	width: 80%;
 	display: inline-block;
-	align-items: center;
 	padding-left:12px;
+	align-items: center
 `

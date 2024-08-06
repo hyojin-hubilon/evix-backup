@@ -13,11 +13,6 @@ type InputTextFieldProps = {
 }
 
 const InputTextField = ({ cardId, changeIsRequired }: InputTextFieldProps) => {
-	const example = useSelector((state: PreviewStateProps) => {
-    	const currentCard = state.previewCards.find((card) => card.cardId === cardId) as PreviewProps;
-    	return currentCard.exampleList[0];
-  	}) as ExampleList;
-
 	const ieReqired = useSelector((state: PreviewStateProps) => {
     	const currentCard = state.previewCards.find((card) => card.cardId === cardId) as PreviewProps;
     	return currentCard.isRequired;

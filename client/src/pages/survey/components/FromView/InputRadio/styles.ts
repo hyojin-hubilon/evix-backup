@@ -17,6 +17,8 @@ export const Radio = styled('input')(({theme}) => ({
 	cursor: 'pointer',
 	appearance: 'none',
 	marginTop: '-1px',
+	marginLeft: 0,
+	marginRight: 0,
 	border: `2px solid ${theme.palette.grey[500]}`,
 	borderRadius: '50%',
 	width: '20px',
@@ -36,7 +38,7 @@ export const Label = styled('label')`
 `;
 
 export const TextField = styled(MuiTextField)(({theme}) => ({
-	width: '80%',
+	width: '90%',
 	marginLeft: '0.5rem',
 	'div' : {
 	  fontSize: '14px',

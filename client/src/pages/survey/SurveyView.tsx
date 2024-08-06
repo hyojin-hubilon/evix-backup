@@ -12,9 +12,10 @@ import { Formik, Form } from "formik";
 
 type SurveyViewProps = {
 	preview: boolean,
-	mobile?: "Y" | "N" | undefined
+	mobile?: "Y" | "N" | undefined,
+	surveyNo? : string | number
 }
-const SurveyView = ({preview, mobile} : SurveyViewProps) => {
+const SurveyView = ({preview, mobile, surveyNo} : SurveyViewProps) => {
 	const previewCards = useSelector((state: PreviewStateProps) => state.previewCards);
   	const dispatch = useDispatch();
 
@@ -28,9 +29,6 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 	const [ mobileView, setMovileView ] = useState(mobile);
 
 	const { primary } = theme.palette;
-
-	console.log(survey_no)
-
 	
 	const getSurveyDeatil = async () => {
 		try {
@@ -72,16 +70,12 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 
 		})
 
-		console.log(newInitialValues)
-
 		setInitialValues(newInitialValues);
-		
-
-		console.log(initialValues)
 	}
 
 	useEffect(() => {
-		if(survey_no) getSurveyDeatil();
+		const surveyNumber = survey_no ? survey_no : surveyNo;
+		if(surveyNumber) getSurveyDeatil();
 	}, []);
 
 	useEffect(() => {
@@ -93,7 +87,6 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 
 	const handleSumbit = (event) => {
 		console.log(event);
-		
 	}
 
 	return(
@@ -111,9 +104,10 @@ const SurveyView = ({preview, mobile} : SurveyViewProps) => {
 					initialValues={initialValues}
 					enableReinitialize={true}
 					validateOnChange={false}
+					validateOnBlur={true}
 					onSubmit={(values, actions) => {
 						actions.setSubmitting(false);
-						console.log(actions, values);
+						console.log(actions, values); //아직 답변 POST 없음
 					}}
 				>
 				<Form>

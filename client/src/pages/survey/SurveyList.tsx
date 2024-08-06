@@ -5,42 +5,46 @@ import {
     Typography,
     Chip,
     Container,
-    Tabs,
-    Tab,
     Button,
     IconButton,
 	OutlinedInput,
+	InputAdornment,
+	Pagination,
 } from '@mui/material';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SurveyListItem from './components/SurveyListItem';
 import surveyApi from '@/apis/survey';
 import { MySurveyList, SurveyApiResponse } from '@/types/survey';
 import { useNavigate } from 'react-router-dom';
 import { getDecodedToken } from '@/utils/Cookie';
+import SearchIcon from '@mui/icons-material/Search';
+import { paginator } from '@/utils/helper';
 
 const SurveyList = () => {
     const [surveyCount, setSurveyCount] = useState<number>(0); // Survey 개수 상태
     const [activeTab, setActiveTab] = useState<string>('0'); // 활성 탭 상태
     const [ surveyList, setSurveyList ] = useState<MySurveyList[]>([]); // 내 Survey 목록 상태
+	const [ searched, setSearched ] = useState<MySurveyList[]>([]);
     const navigate = useNavigate();
-	const page = useRef(1);
-	const [ next, setNext ] = useState(false);
-	const [ searchText, setSearchText ] = useState('');
-	
+	const [ searchTerm, setSearchTerm ] = useState('');
+	const [ pageCount, setPageCount ] = useState(0);
+	const [ page, setPage] = useState(1);
+	const [ itemPerPage, setItemPerPage ] = useState(10);
+    
 
 	const decodedToken = getDecodedToken('userInfoToken');
 	const userNo = decodedToken['user-no'];
 
     // Surrvey 데이터 불러오기
-    const fetchSurvey = async (p) => {
+    const fetchSurvey = async () => {
         try {
-            const response = await surveyApi.mySurveyList(p, 10, 'CREATED'); //20개씩? 10개씩? 더보기 추가, 검색추가
+            const response = await surveyApi.mySurveyList();
             if (response.result && response.code === 200) {
-                const newSurveyList = response.content.surveyMyList ?? [];
-				setSurveyList(surverList => [...surverList, ...newSurveyList]);
-                setSurveyCount(surveyCount + newSurveyList.length);
-				const next = response.content.next ?? false;
-				setNext(next);
+				const newSurveyList = response.content.surveyMyList ?? [];
+				setSurveyList(newSurveyList);
+				setSearched(newSurveyList);
+                setSurveyCount(newSurveyList.length);
+				setPageCount(Math.ceil(newSurveyList.length/itemPerPage));
             }
         } catch (error) {
             console.error('Failed to fetch study list:', error);
@@ -49,14 +53,10 @@ const SurveyList = () => {
 
     
     useEffect(() => {
-		fetchSurvey(1);	
+		fetchSurvey();	
     }, []);
 
-	const handleSeeMore = () => {
-		page.current = page.current+1;
-		fetchSurvey(page.current);
-	}
-
+	
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         event.preventDefault();
         setActiveTab(newValue);
@@ -66,22 +66,23 @@ const SurveyList = () => {
         navigate('/survey/new');
     };
 
-	const handleSearch = () => {
-		//아직 search가 없구나..
+	const handleSearch = (text) => {
+		setSearchTerm(text);
 	}
+
+	const handleChangePage = (_e, value) => {
+		setPage(paginator(searched, value, itemPerPage).page);
+	}
+
 
     return (
         <Container maxWidth="lg">
-            <Grid container rowSpacing={3} columnSpacing={2.75}>
-                <Grid container item xs={12}>
+            <Grid container flexDirection="row" rowSpacing={2}>
+                <Grid item xs={12}>
                     <Box display="flex" alignItems="center" gap={1}>
                         <Typography variant="h3">Survey 목록</Typography>
                         <Chip label={surveyCount} color="primary" size="small" />
                     </Box>
-					<Button variant="contained" onClick={handleCreateSurvey} sx={{ml:'auto'}}>
-						<PlusOutlined />
-						<Typography sx={{ ml: 1 }}>Survey 생성</Typography>
-					</Button>
                 </Grid>
 
                 {surveyList.length > 0 ? (
@@ -92,8 +93,12 @@ const SurveyList = () => {
                             xs={12}
                             sx={{ borderBottom: 1, borderColor: 'divider' }}
                             alignItems="center"
+							justifyContent="space-between"
+							pb={1}
+							mt={2}
+							columnGap={1}
                         >
-                            <Grid item xs={8}>
+                            {/* <Grid item xs={8}>
                                 <Tabs
                                     value={activeTab}
                                     onChange={handleChange}
@@ -104,49 +109,48 @@ const SurveyList = () => {
                                     <Tab label="작성중 설문" value="2" />
                                     <Tab label="참여중인 Study 설문" value="3" />
                                 </Tabs>
+                            </Grid> */}
+                            <Grid item xs={6}>
+								<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
+									startAdornment={
+										<InputAdornment position="start">
+											<SearchIcon />
+										</InputAdornment>
+									}
+									value={searchTerm}
+									onChange={(e) => handleSearch(e.target.value)}
+									placeholder='타이틀'
+								/>
                             </Grid>
-                            <Grid container item xs={4} justifyContent="flex-end">
-								<form onSubmit={handleSearch}>
-									<Box display="flex" gap="0.5rem">
-                               			<OutlinedInput size="small" value={searchText} onChange={(e) => setSearchText(e.target.value)}/>
-							   			<Button variant="outlined" onClick={handleSearch}>검색</Button>
-									</Box>
-							   	</form>
-                            </Grid>
+							<Grid item xs={3.8}>
+								<Box display="flex" justifyContent="flex-end" width={1}>
+									<Button variant="contained" onClick={handleCreateSurvey}>
+										<PlusOutlined />
+										<Typography sx={{ ml: 1 }}>Survey 생성</Typography>
+									</Button>
+								</Box>
+							</Grid>
                         </Grid>
-						
-                        {surveyList
-                            // .filter((survey) => { //전체/ 내가 작성한 설문/ 참여설문 api 따로
-                            //     if (activeTab === '0') return true;
-                            //     if (activeTab === '1' && survey.created_user_no === userNo)
-                            //         return true;
-                            //     if (activeTab === '2' && survey.created_user_no === userNo) //status 추가되어야함
-                            //         return true;
-                            //     if (activeTab === '3' && survey.created_user_no !== userNo)
-                            //         return true;
-                            //     return false;
-                            // })
-                            .map((survey, index) => (
-                                <Grid item xs={12} key={index}>
-                                    <SurveyListItem survey={survey} userNo={userNo} /> 
-                                </Grid>
-                            ))}
-							{
-								next && 
-								<Grid item xs={12}>
-									<Box display="flex" justifyContent="center" alignContent="center">
-										<Button
-											size="large"
-											variant="contained"
-											color="secondary"
-											onClick={handleSeeMore}
-											>
-											더 보기
-										</Button>
-									</Box>
+
+						{paginator(searched, page, itemPerPage).data.map((survery, index) => {
+							return (
+								<Grid item xs={12} key={index}>
+									<SurveyListItem survey={survery} userNo={userNo} refresh={fetchSurvey} />
 								</Grid>
-							}
-						
+							)
+						})}
+						{
+							pageCount > 0 &&  
+							<Grid item container xs={12} justifyContent="center">
+								<Pagination
+									count={pageCount}
+									page={page}
+									onChange={handleChangePage}
+									color="primary"
+								/>
+							</Grid>
+						}
+					
                     </>
                 ) : (
                     <>
