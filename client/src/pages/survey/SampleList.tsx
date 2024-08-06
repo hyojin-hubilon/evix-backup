@@ -29,21 +29,21 @@ const SampleList = () => {
 			<Grid container rowGap={2}>
 				<Grid item xs={12}>
 					<Box display="flex" alignItems="center" gap={1}>
-						<Typography variant="h3">Survey 목록</Typography>
+						<Typography variant="h3">Survey 생성</Typography>
 					</Box>
 				</Grid>
-				<Grid item container xs={12} columnGap={1} rowGap={1}>
+				<Grid item container xs={12} columnGap={3} rowGap={3}>
 					<Grid item xs={3.8}>
-						<Card>
+						<Box sx={{height: '200px'}}>
 							직접 만들기
-						</Card>
+						</Box>
 					</Grid>
 					{
 						samples.map(sample => 
 							<Grid item xs={3.8}>
-								<Card>
+								<Box sx={{height: '200px'}}>
 									{sample.title}
-								</Card>
+								</Box>
 							</Grid>
 						)
 					}
