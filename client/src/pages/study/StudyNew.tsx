@@ -606,19 +606,21 @@ const StudyNew = () => {
                                         <FormTooltip text="Connect the EIC before Study deployment." />
                                     </Box>
                                 </Grid>
-                                <Grid item xs={1}>
+                                <Grid item xs={3.5}>
                                     <Button variant="contained" onClick={handleOpenUploadEic}>
                                         EIC 연결
                                     </Button>
                                     <span style={{ color: 'red' }}>
-                                        {'  '}* Study 배포전에 반드시 연결해주세요.
-                                    </span>
+                                    {'  '}* Study 배포전에 반드시 연결해주세요.
+                                </span>
                                 </Grid>
                                 <Grid item xs={1}>
                                     <Button variant="contained" onClick={handleOpenCreateEic}>
                                         EIC 생성
                                     </Button>
                                 </Grid>
+                                
+                                
                             </Grid>
 
                             {/* 멤버 관리 */}
