@@ -63,7 +63,7 @@ const SurveyList = () => {
     };
 
     const handleCreateSurvey = () => {
-        navigate('/survey/new');
+        navigate('/survey/samples');
     };
 
 	const handleSearch = (text) => {
