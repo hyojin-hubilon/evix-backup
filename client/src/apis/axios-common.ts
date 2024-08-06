@@ -98,7 +98,7 @@ export async function api<T>(
             });
         // delete 수정
         // else res = await axios_instance.get(url);
-        else res = await axios_instance.get<ResCommonSuccess<T>>(url);
+        else res = await axios_instance.get<ResCommonSuccess<T>>(url, data);
         // if (loadingEle) {
         //     loadingEle.style.display = 'none';
         // }
@@ -135,9 +135,9 @@ export async function file_api<T>(
         if (method === 'post') {
             console.log(url, ', ', data);
             res = await axios_file_instance.post<ResCommonSuccess<T>>(url, data, config);
-        } 
-        else if (method == 'put') { res = await axios_instance.put<ResCommonSuccess<T>>(url, data);
-		} else {
+        } else if (method == 'put') {
+            res = await axios_file_instance.put<ResCommonSuccess<T>>(url, data);
+        } else {
             res = await axios_file_instance.get(url);
         }
         // if (loadingEle) {

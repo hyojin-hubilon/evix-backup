@@ -94,11 +94,20 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
         }
 
         try {
-            const invites = emails.map((email) => ({
+            // const invites = emails.map((email) => ({
+            //     std_no: studyNo,
+            //     user_email: email,
+            //     std_privilege: newAuthority,
+            // }));
+
+            // 240726 inviteList에 초대 정보 들어가도록 API 수정됨
+            const invites = {
                 std_no: studyNo,
-                user_email: email,
-                std_privilege: newAuthority,
-            }));
+                inviteList: emails.map((email) => ({
+                    user_email: email,
+                    std_privilege: newAuthority,
+                })),
+            };
 
             const response = await studyApi.inviteStudyMember(invites);
 
@@ -176,7 +185,7 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
             };
 
             // 단일 초대 요청
-            const response = await studyApi.inviteStudyMember([invite]); // TODO: 대기멤버 재초대 API 미개발
+            const response = await studyApi.reInviteStudy(invite); // TODO: 대기멤버 재초대 API 미개발
 
             console.log(response);
 
