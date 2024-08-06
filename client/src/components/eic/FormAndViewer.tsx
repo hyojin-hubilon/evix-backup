@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { MutableRefObject, useRef, useState } from 'react';
 import { Template, checkTemplate, getInputFromTemplate } from '@pdfme/common';
 import { Form, Viewer } from '@pdfme/ui';
 import {
@@ -32,7 +32,7 @@ const initTemplate = () => {
 function FormAndViewer() {
     const uiRef = useRef<HTMLDivElement | null>(null);
     const ui = useRef<Form | Viewer | null>(null);
-    const [prevUiRef, setPrevUiRef] = useState<Form | Viewer | null>(null);
+    const [prevUiRef, setPrevUiRef] = useState<MutableRefObject<HTMLDivElement | Form | Viewer |null> | null>(null);
 
     const mode: Mode = 'form';
 

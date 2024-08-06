@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { MutableRefObject, useRef, useState } from 'react';
 import { Template, checkTemplate, Lang } from '@pdfme/common';
 import { Designer } from '@pdfme/ui';
 import {
@@ -28,7 +28,7 @@ function DesignerView() {
     const [templatePreset, setTemplatePreset] = useState<string>(
         localStorage.getItem('templatePreset') || initialTemplatePresetKey
     );
-    const [prevDesignerRef, setPrevDesignerRef] = useState<Designer | null>(null);
+    const [prevDesignerRef, setPrevDesignerRef] = useState<MutableRefObject<HTMLDivElement | null> | null>(null);
 
     const buildDesigner = () => {
         let template: Template = getTemplateByPreset(localStorage.getItem('templatePreset') || '');
