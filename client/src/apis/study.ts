@@ -38,7 +38,8 @@ const studyApi = {
     updateStudy: async (data: any) => {
         try {
             const responseData = await file_api<{}>(`${BASE_API_URL}`, 'put', data);
-
+            console.log('responseData', responseData);
+            console.log('data', data);
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
@@ -159,15 +160,12 @@ const studyApi = {
         }
     },
 
-	/**
+    /**
      * 내 Study 목록 조회
      */
     fullMyStudyList: async () => {
         try {
-            const responseData = await api<{}>(
-                `${BASE_API_URL}/full-my-list`,
-                'get'
-            );
+            const responseData = await api<{}>(`${BASE_API_URL}/full-my-list`, 'get');
 
             return responseData;
         } catch (error) {
@@ -216,7 +214,7 @@ const studyApi = {
      * @param invites
      * @returns
      */
-    inviteStudyMember: async (invites: StudyApiType.StudyUserInvites) => {
+    inviteStudyMember: async (invites: any) => {
         try {
             const responseData = await api<{}>(
                 `${BASE_API_URL}/study-user-invite`,
@@ -273,8 +271,60 @@ const studyApi = {
      */
     deployStudy: async (deployData) => {
         try {
-            const response = await api<{}>(`${BASE_API_URL}/deploy`, 'put', deployData);
+            const response = await file_api<{}>(`${BASE_API_URL}/deploy`, 'put', deployData);
             return response;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+
+    /**
+     * 연구원 재초대
+     * @param data
+     * @returns
+     */
+    reInviteStudy: async (data: StudyApiType.StudyUserInvite) => {
+        try {
+            const responseData = await api<[]>(
+                `${BASE_API_URL}/study-user-invite-again`,
+                'put',
+                data
+            );
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+
+    /**
+     * 임상시험 - 설문 연결 해제
+     * @param data
+     * @returns
+     */
+    disconnectSurvey: async (data) => {
+        try {
+            const responseData = await api<{}>(
+                `${BASE_API_URL}/study-survey/disconnect`,
+                'delete',
+                data
+            );
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+    /**
+     * 임상시험 - 설문 설정 등록
+     * @param data
+     * @returns
+     */
+    postSurvey: async (data) => {
+        try {
+            const responseData = await api<{}>(`${BASE_API_URL}/study-survey-set`, 'post', data);
+            return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;

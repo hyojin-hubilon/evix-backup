@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { CardProps, setText, StateProps } from "@store/reducers/survey";
-import { Input, OutlinedInput, TextField, useTheme } from "@mui/material";
-import { ExampleList, QuestionTypes } from '@/types/survey';
+import { Input, useTheme } from "@mui/material";
+import { QuestionTypes } from '@/types/survey';
 
 const TextFieldSection = ({ id }: Pick<CardProps, "id">) => {
 	const theme = useTheme();

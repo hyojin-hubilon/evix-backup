@@ -13,6 +13,7 @@ import {
 	InputAdornment,
 	Select,
 	MenuItem,
+	Pagination,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import StudyListItem from './components/StudyListItem';
@@ -23,6 +24,12 @@ import StudyInvitedItem from './components/StudyInvitedItem';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import EastIcon from '@mui/icons-material/East';
+import dayjs, { Dayjs } from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+dayjs.extend(isSameOrBefore);
+import DatePicker, { DatePickerProps } from "antd/lib/date-picker";
+import { paginator } from '@/utils/helper';
+const { RangePicker } = DatePicker;
 
 const StudyList = () => {
     const [studyCount, setStudyCount] = useState<number>(0); // Study 개수 상태
@@ -33,6 +40,10 @@ const StudyList = () => {
     const [fullName, setFullName] = useState<string>(''); // 사용자 전체 이름 상태
 	const [ searchTerm, setSearchTerm] = useState('');
 	const [activeDateSetting, setActiveDateSetting] = useState('full');
+	const [ dateSet, setDateSet ] = useState<{startDt: string, endDt: string}>({startDt : '', endDt: ''});
+	const [ pageCount, setPageCount ] = useState(0);
+	const [ page, setPage] = useState(1);
+	const [ itemPerPage, setItemPerPage ] = useState(10);
     const navigate = useNavigate();
 
     // Study 데이터 불러오기
@@ -44,6 +55,7 @@ const StudyList = () => {
                 setStudies(studyList);
 				setSearched(studyList);
                 setStudyCount(studyList.length);
+				setPageCount(Math.ceil(studyList.length/itemPerPage));
             }
         } catch (error) {
             console.error('Failed to fetch study list:', error);
@@ -68,7 +80,7 @@ const StudyList = () => {
 
     useEffect(() => {
         fetchStudies();
-        fetchInvitedStudies();
+        // fetchInvitedStudies();
     }, []);
 
     const handleChange = (newValue: string) => {
@@ -92,21 +104,66 @@ const StudyList = () => {
 
 	const handleSearchStudy = (text) => {
 		setSearchTerm(text);
-			if(!text) setSearched(studies);
-			else {
-				const newSearchedList = studies.filter(study => {
-					if(study.title.toLowerCase().includes(text.toLowerCase())) return true;
-					else if(study.disease.toLowerCase().includes(text.toLowerCase())) return true;
-					else return false;
-				});//status 정의 후 검색 추가해야함
-
-				setSearched(newSearchedList);
-			}
 	}
 
 	const handleChangeDateSetting = (newValue) => {
         setActiveDateSetting(newValue);
+		if(newValue == 'full') {
+			setDateSet({
+				startDt: '',
+				endDt: ''
+			});
+		}
 	}
+
+	const onChangeDate = (date, dateString: string[]) => {
+		console.log(date, dateString)
+		if(date == null) {
+			setActiveDateSetting('full')
+		}
+		setDateSet({
+			startDt: dateString[0],
+			endDt: dateString[1]
+		});
+	};
+
+	const handleChangePage = (_e, value) => {
+		setPage(paginator(searched, value, itemPerPage).page);
+	}
+
+
+	useEffect(() => {
+		let newSearchedList = studies.filter(study => {
+			if(dateSet.startDt && dateSet.endDt) {
+				if(dayjs(dateSet.startDt).isSameOrBefore(dayjs(study.std_start_date)) && dayjs(study.std_end_date).isSameOrBefore(dayjs(dateSet.endDt))) return true;
+				else return false;
+			} else {
+				return true;
+			}
+		});
+
+
+		if(searchTerm) {
+			newSearchedList = newSearchedList.filter(study => {
+				if(study.title.toLowerCase().includes(searchTerm.toLowerCase())) return true;
+				else if(study.disease.toLowerCase().includes(searchTerm.toLowerCase())) return true;
+				else return false;
+			});
+		}
+
+		newSearchedList = newSearchedList.filter((study) => {
+			if (activeTab === '0') return true;
+			if (activeTab === '1' && study.std_privilege === 'OWNER')
+				return true;
+			if (activeTab === '2' && study.std_privilege === 'MAINTAINER' || activeTab === '3' && study.std_privilege === 'DEVELOPER')
+				return true;
+			return false;
+		})
+
+		setSearched(newSearchedList);
+		setPageCount(Math.ceil(newSearchedList.length/itemPerPage));
+		setPage(1);
+	}, [dateSet, searchTerm, activeTab])
 
     return (
         <Container maxWidth="lg">
@@ -143,7 +200,7 @@ const StudyList = () => {
                                     <Tab label="Developer" value="3" />
                                 </Tabs>
                             </Grid> */}
-                            <Grid item xs={activeDateSetting == 'full' ? 6 : 5}>
+                            <Grid item xs={activeDateSetting == 'full' ? 5.9 : 4.5}>
 								<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
 									startAdornment={
 										<InputAdornment position="start">
@@ -166,7 +223,7 @@ const StudyList = () => {
 									<MenuItem value="1">My Studies</MenuItem>
 									<MenuItem value="2">Included Studies</MenuItem>
 								</Select>
-								{/* 아직 분류가 정확하지 않음 */}
+								{/* My Studies : Owner, Included Studies : MAINTAINER, DEVELOPER */}
 							</Grid>
 							<Grid item xs={activeDateSetting == 'full' ? 2 : 1.5}>
 								<Select
@@ -181,16 +238,17 @@ const StudyList = () => {
 							</Grid>
 							{
 								activeDateSetting == 'dates' &&
-								<Grid item xs={2}>
-									<Button
-										fullWidth
-										sx={{textAlign: 'center'}}
-										color="secondary"
-										>
-										<span>Start Date</span>
-										<EastIcon sx={{ml: '5px', mr:'5px', fontSize: '1rem'}}/>
-										<span>End Date</span>
-									</Button>
+								<Grid item xs={2.5}>
+									<RangePicker
+										placement="bottomRight"
+										style={{
+											padding: '6px 11px',
+											borderRadius: '4px',
+											minHeight: '1.4375em',
+											borderColor: 'rgba(0, 0, 0, 0.23)'
+										}}
+										onChange={onChangeDate}
+									/>
 								</Grid>
 							}
 							<Grid item xs={activeDateSetting == 'full' ? 1.7 : 1.5}>
@@ -201,34 +259,25 @@ const StudyList = () => {
 							</Grid>
                         </Grid>
 
-                        {searched
-                            .filter((study) => {
-                                if (activeTab === '0') return true;
-                                if (activeTab === '1' && study.std_privilege === 'OWNER')
-                                    return true;
-                                if (activeTab === '2' && study.std_privilege === 'MAINTAINER')
-                                    return true;
-                                if (activeTab === '3' && study.std_privilege === 'DEVELOPER')
-                                    return true;
-                                return false;
-                            })
-                            .map((study) => (
-                                <Grid item xs={12} key={study.std_no}>
-                                    <StudyListItem study={study} />
-                                </Grid>
-                            ))}
-                        {/* <Grid item xs={12}>
-                            <Box display="flex" justifyContent="center" alignContent="center">
-                                <Button
-                                    size="large"
-                                    variant="contained"
-                                    color="secondary"
-                                    sx={{ ml: 'auto', mr: 'auto' }}
-                                >
-                                    더 보기
-                                </Button>
-                            </Box>
-                        </Grid> */}
+						{paginator(searched, page, itemPerPage).data.map((study, index) => {
+							return (
+								<Grid item xs={12} key={study.std_no}>
+									<StudyListItem study={study} />
+								</Grid>
+							)
+						})}
+						{
+							pageCount > 0 &&  
+							<Grid item container xs={12} justifyContent="center">
+								<Pagination
+									count={pageCount}
+									page={page}
+									onChange={handleChangePage}
+									color="primary"
+								/>
+							</Grid>
+						}
+                       
                     </>
                 ) : (
                     <>
@@ -261,7 +310,7 @@ const StudyList = () => {
                     </>
                 )}
 
-                {invitedStudies.length > 0 && (
+                {/* {invitedStudies.length > 0 && (
                     <Grid container item xs={12} direction="column">
                         <Box m={1}>
                             <Typography color="primary" variant="caption">
@@ -277,7 +326,7 @@ const StudyList = () => {
                             />
                         ))}
                     </Grid>
-                )}
+                )} */}
             </Grid>
         </Container>
     );

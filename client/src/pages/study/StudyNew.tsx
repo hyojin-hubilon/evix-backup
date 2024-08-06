@@ -18,6 +18,7 @@ import {
     Button,
     Divider,
 } from '@mui/material';
+import * as Yup from 'yup'; // 유효성 검사
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 import DateRangePicker, { DateRage } from './components/study-new/Daterangepicker';
@@ -28,9 +29,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Drug } from '@/apis/test/drug/drugsAPI_TEST';
 import userApi from '@/apis/user';
 import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
-import { InviteMemberTempType } from '@/types/study';
+import { InviteMemberTempType, StudyDetail } from '@/types/study';
 import MemberInvitement from './components/study-new/MemberInvitement';
 import MemberManagement from './components/study-new/MemberManagement';
+import StudyDeleteConfirmDialog from './components/study-new/StudyDeleteConfirmDialog';
+import { MyProfile } from '@/types/user';
+import { useFormik } from 'formik';
+import StudyPreview from './StudyPreview';
 
 const FormTooltip = ({ text }) => {
     return (
@@ -41,6 +46,8 @@ const FormTooltip = ({ text }) => {
         </Tooltip>
     );
 };
+
+type ActionType = 'delete' | 'pause' | 'stop' | 'restart';
 
 const StudyNew = () => {
     const theme = useTheme();
@@ -57,7 +64,7 @@ const StudyNew = () => {
     const [isOpenSurvey, setIsOpenSurvey] = useState(false);
     const [inviteList, setInviteList] = useState<InviteMemberTempType[]>([]);
     const [managerList, setManagerList] = useState<any[]>([]);
-    const [studySurveySetList, setStudySurveySetList] = useState([]);
+    const [studySurveySetList, setStudySurveySetList] = useState<any[]>([]);
 
     const [members, setMembers] = useState<InviteMemberTempType[]>([]);
 
@@ -70,7 +77,14 @@ const StudyNew = () => {
     const state = location.state as { mode: 'write' | 'edit'; stdNo?: number };
     const stdNo = location.state?.stdNo;
 
-    const [ownerName, setOwnerName] = useState('');
+    // const [ownerName, setOwnerName] = useState('');
+    const [stdStatus, setStdStatus] = useState<String>('');
+
+    const [currentUser, setCurrentUser] = useState<MyProfile>();
+
+    const [showPreview, setShowPreview] = useState(false);
+
+    const [studyDetails, setStudyDetails] = useState<StudyDetail>();
 
     const changeDateRange = (e: DateRage) => {
         setDateRange(e);
@@ -84,20 +98,45 @@ const StudyNew = () => {
         setEicFile(e.target.files[0]);
     };
 
+    const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
+
+    const handleDeleteSuccess = () => {
+        navigate('/study');
+    };
+
+    const handleOpenStudyDelete = () => {
+        setOpenDeleteConfirm(!openDeleteConfirm);
+    };
+
+    // const [actionType, setActionType] = useState<ActionType | null>(null);
+    type ActionType = 'delete' | 'pause' | 'stop' | 'progression';
+    const [actionType, setActionType] = useState<ActionType>('delete');
+
+    const handleOpenDialog = (action) => {
+        setActionType(action);
+        setOpenDeleteConfirm(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDeleteConfirm(false);
+    };
+
     // 멤버관리 모달에서 owner 정보를 가져오기 위함
     const getMyProfile = async () => {
         try {
             const response = await userApi.getMyProfile();
-            setOwnerName(response.content['first_name'] + ' ' + response.content['last_name']);
+            setCurrentUser(response.content);
         } catch (error) {
             console.error('Failed to fetch owner profile:', error);
         }
     };
 
-    const handleSubmit = async () => {
-        console.log(members);
+    console.log('currentUser: ', currentUser);
 
+    const handleSubmit = async () => {
         const studyData = {
+            std_payment_status: 'WAIT',
+            deploy_method: 'IMMEDIATE',
             std_status: 'STD-CREATED',
             title: title,
             std_type: 'E-PRO',
@@ -110,7 +149,7 @@ const StudyNew = () => {
             drug_code: drug?.itemCode ?? null,
             drug_brand_name: drug?.companyName ?? null,
             drug_manufacturer_name: drug?.productName ?? null,
-            studySurveySetList: [],
+            studySurveySetList: studySurveySetList ?? [],
             inviteList: members ?? [],
         };
 
@@ -175,9 +214,12 @@ const StudyNew = () => {
         return (privilege: string) => '초대하기 팝업에서 설정해주세요.';
     }, [members, inviteList, mode]);
 
+    const [studyDetail, setStudyDetail] = useState<StudyDetail>();
+
     const fetchStudyDetail = async (stdNo) => {
         try {
             const response = await studyApi.getStudyDetail(stdNo);
+            setStudyDetail(response.content as StudyDetail); // `response.content`의 타입이 `StudyDetail`과 일치해야 함
 
             setTitle(response.content['title']);
             setParticipants(response.content['target_number']);
@@ -203,31 +245,9 @@ const StudyNew = () => {
                 setMedicineYOrN('true');
             }
 
-            // drug_brand_name : "동아제약(주)"
-            // drug_code : "199400202"
-            // drug_manufacturer_name:  "판피린티정"
-
-            // setCountry(response.content.location);
-            // 나머지 필드들도 필요에 따라 업데이트
+            setStdStatus(response.content['std_status']);
         } catch (error) {
             console.error('Failed to fetch study detail:', error);
-        }
-    };
-
-    const handleDelete = async () => {
-        try {
-            const requestBody = {
-                std_no: stdNo,
-            };
-
-            const response = await studyApi.deleteStudy(requestBody);
-
-            if (response.code === 200) {
-                alert('삭제 성공');
-                navigate('/study');
-            }
-        } catch (error) {
-            console.error('Failed to Delete Study: ', error);
         }
     };
 
@@ -245,8 +265,9 @@ const StudyNew = () => {
             drug_code: medicineYOrN === 'true' ? drug?.itemCode ?? null : null,
             drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
             drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
-            studySurveySetList: [],
-            inviteList: [],
+            // 수정 화면에서 Survey, 초대 제외
+            // studySurveySetList: [],
+            // inviteList: [],
         };
 
         // FormData 객체 생성 및 데이터 추가
@@ -264,12 +285,68 @@ const StudyNew = () => {
         try {
             const response = await studyApi.updateStudy(formData);
             if (response.code === 200) {
-                navigate(-1);
+                navigate('/study');
             }
         } catch (error) {
             console.error('Failed to update study:', error);
         }
     };
+
+    const handleDeploy = async () => {
+        const studyData = {
+            std_no: stdNo,
+            title: title,
+            std_type: 'E-PRO',
+            std_start_date: dateRange.startDt.format('YYYY-MM-DD'),
+            std_end_date: dateRange.endDt.format('YYYY-MM-DD'),
+            target_number: parseInt(participants),
+            description: description,
+            disease: disease,
+            drug_code: medicineYOrN === 'true' ? drug?.itemCode ?? null : null,
+            drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
+            drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
+            std_status: 'STD-PROGRESSION',
+        };
+
+        // FormData 객체 생성 및 데이터 추가
+        const formData = new FormData();
+
+        const json = JSON.stringify(studyData);
+        const blob = new Blob([json], { type: 'application/json' });
+
+        formData.append('requestDto', blob);
+        // 전자동의서 파일이 있는 경우 FormData에 추가
+        if (eicFile) {
+            formData.append('eic_file', eicFile);
+        }
+
+        try {
+            const response = await studyApi.deployStudy(formData);
+            if (response.code === 200) {
+                alert('Study가 배포되었습니다.');
+                navigate('/study');
+            }
+        } catch (error) {
+            console.error('Failed to deploy study: ', error);
+        }
+    };
+
+    const userRole = managerList.find(
+        (member) => member.user_no === currentUser?.user_no
+    )?.std_privilege;
+
+    console.log('userRole: ', userRole);
+
+    const handlePreview = () => {
+        // 미리보기 화면 출력
+        // setShowPreview(true);
+
+        navigate('/study/preview', { state: { mode: 'preview', studyDetail: studyDetail } });
+    };
+
+    // if (showPreview) {
+    //     return <StudyPreview studyDetail={studyDetail}></StudyPreview>;
+    // }
 
     return (
         <Container maxWidth="lg">
@@ -467,131 +544,158 @@ const StudyNew = () => {
                             />
                         )}
                     </Grid>
+                    {mode === 'write' && ( // 생성시에만 노출
+                        <>
+                            <Divider flexItem />
 
-                    <Divider flexItem />
+                            {/* Survey */}
+                            <Grid container alignItems="flex-start">
+                                <Grid item xs={3}>
+                                    <Box
+                                        display="flex"
+                                        alignItems="center"
+                                        sx={{ pt: '0.2rem' }}
+                                        gap={0.5}
+                                    >
+                                        <Typography variant="h5">Survey</Typography>
+                                        <FormTooltip text="Connect the Survey before Study deployment." />
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={9}>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => {
+                                            setIsOpenSurvey(true);
+                                        }}
+                                    >
+                                        Survey 연결
+                                    </Button>
+                                    <span style={{ color: 'red' }}>
+                                        {'  '}* Study 배포전에 반드시 연결해주세요.
+                                    </span>
+                                </Grid>
+                            </Grid>
 
-                    {/* Survey */}
-                    <Grid container alignItems="flex-start">
-                        <Grid item xs={3}>
-                            <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">Survey</Typography>
-                                <FormTooltip text="Connect the Survey before Study deployment." />
-                            </Box>
-                        </Grid>
-                        <Grid item xs={9}>
-                            <Button
-                                variant="contained"
-                                onClick={() => {
-                                    setIsOpenSurvey(true);
-                                }}
-                            >
-                                Survey 연결
-                            </Button>
-                        </Grid>
-                    </Grid>
+                            {/* EIC(전자동의서) */}
+                            <Grid container alignItems="flex-start">
+                                <Grid item xs={3}>
+                                    <Box
+                                        display="flex"
+                                        alignItems="center"
+                                        sx={{ pt: '0.2rem' }}
+                                        gap={0.5}
+                                    >
+                                        <Typography variant="h5">EIC(전자동의서)</Typography>
+                                        <FormTooltip text="Connect the EIC before Study deployment." />
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={9}>
+                                    <Button variant="contained">EIC 연결</Button>
+                                    <span style={{ color: 'red' }}>
+                                        {'  '}* Study 배포전에 반드시 연결해주세요.
+                                    </span>
+                                </Grid>
+                            </Grid>
 
-                    {/* EIC(전자동의서) */}
-                    <Grid container alignItems="flex-start">
-                        <Grid item xs={3}>
-                            <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">EIC(전자동의서)</Typography>
-                                <FormTooltip text="Connect the EIC before Study deployment." />
-                            </Box>
-                        </Grid>
-                        <Grid item xs={9}>
-                            <Button variant="contained">EIC 연결</Button>
-                        </Grid>
-                    </Grid>
+                            <Divider flexItem />
 
-                    <Divider flexItem />
+                            {/* 멤버 관리 */}
+                            <Grid container alignItems="flex-start">
+                                <Grid item xs={3}>
+                                    <Box
+                                        display="flex"
+                                        alignItems="center"
+                                        sx={{ pt: '0.2rem' }}
+                                        gap={0.5}
+                                    >
+                                        <Typography variant="h5">멤버 관리</Typography>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={9}>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => {
+                                            setIsOpenMember(true);
+                                        }}
+                                    >
+                                        초대하기
+                                    </Button>
+                                </Grid>
+                            </Grid>
 
-                    {/* 멤버 관리 */}
-                    <Grid container alignItems="flex-start">
-                        <Grid item xs={3}>
-                            <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">멤버 관리</Typography>
-                            </Box>
-                        </Grid>
-                        <Grid item xs={9}>
-                            <Button
-                                variant="contained"
-                                onClick={() => {
-                                    setIsOpenMember(true);
-                                }}
-                            >
-                                초대하기
-                            </Button>
-                        </Grid>
-                    </Grid>
-                    {/* {mode === 'edit' && (
-                        <> */}
-                    {/* 멤버 권한 안내 */}
-                    <Grid container alignItems="flex-start">
-                        <Grid item xs={3}>
-                            <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">멤버 권한 안내</Typography>
-                            </Box>
-                        </Grid>
-                        <Grid item xs={9}>
-                            <ul style={{ margin: 0, paddingLeft: '20px' }}>
-                                <li>
-                                    <Typography>
-                                        Owner (Study의 생성, 수정, 배포, 멤버 초대) :{' '}
-                                        <span
-                                            style={{
-                                                fontWeight: 'bold',
-                                                color: primary.main,
-                                            }}
-                                        >
-                                            {ownerName}
-                                        </span>
-                                    </Typography>
-                                </li>
-
-                                {mode === 'write' ? (
-                                    <>
+                            {/* 멤버 권한 안내 */}
+                            <Grid container alignItems="flex-start">
+                                <Grid item xs={3}>
+                                    <Box
+                                        display="flex"
+                                        alignItems="center"
+                                        sx={{ pt: '0.2rem' }}
+                                        gap={0.5}
+                                    >
+                                        <Typography variant="h5">멤버 권한 안내</Typography>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={9}>
+                                    <ul style={{ margin: 0, paddingLeft: '20px' }}>
                                         <li>
                                             <Typography>
-                                                초대 멤버(Maintainer) :{' '}
-                                                <span style={{ color: 'red' }}>
-                                                    {getEmailByPrivilege('MAINTAINER')}
+                                                Owner (Study의 생성, 수정, 배포, 멤버 초대) :{' '}
+                                                <span
+                                                    style={{
+                                                        fontWeight: 'bold',
+                                                        color: primary.main,
+                                                    }}
+                                                >
+                                                    {currentUser?.first_name}
+                                                    {currentUser?.last_name}
                                                 </span>
                                             </Typography>
                                         </li>
-                                        <li>
-                                            <Typography>
-                                                초대 멤버(Developer) :{' '}
-                                                <span style={{ color: 'red' }}>
-                                                    {getEmailByPrivilege('DEVELOPER')}
-                                                </span>
-                                            </Typography>
-                                        </li>
-                                    </>
-                                ) : (
-                                    <>
-                                        <li>
-                                            <Typography>
-                                                Maintainer (Study의 수정, 멤버 초대) :{' '}
-                                                <span style={{ color: 'red' }}>
-                                                    {getEmailByPrivilege('MAINTAINER')}
-                                                </span>
-                                            </Typography>
-                                        </li>
-                                        <li>
-                                            <Typography>
-                                                Developer (Study 조회) :{' '}
-                                                <span style={{ color: 'red' }}>
-                                                    {getEmailByPrivilege('DEVELOPER')}
-                                                </span>
-                                            </Typography>
-                                        </li>
-                                    </>
-                                )}
-                            </ul>
-                        </Grid>
-                    </Grid>
-                    {/* </>
-                    )} */}
+
+                                        {mode === 'write' ? (
+                                            <>
+                                                <li>
+                                                    <Typography>
+                                                        초대 멤버(Maintainer) :{' '}
+                                                        <span style={{ color: 'red' }}>
+                                                            {getEmailByPrivilege('MAINTAINER')}
+                                                        </span>
+                                                    </Typography>
+                                                </li>
+                                                <li>
+                                                    <Typography>
+                                                        초대 멤버(Developer) :{' '}
+                                                        <span style={{ color: 'red' }}>
+                                                            {getEmailByPrivilege('DEVELOPER')}
+                                                        </span>
+                                                    </Typography>
+                                                </li>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <li>
+                                                    <Typography>
+                                                        Maintainer (Study의 수정, 멤버 초대) :{' '}
+                                                        <span style={{ color: 'red' }}>
+                                                            {getEmailByPrivilege('MAINTAINER')}
+                                                        </span>
+                                                    </Typography>
+                                                </li>
+                                                <li>
+                                                    <Typography>
+                                                        Developer (Study 조회) :{' '}
+                                                        <span style={{ color: 'red' }}>
+                                                            {getEmailByPrivilege('DEVELOPER')}
+                                                        </span>
+                                                    </Typography>
+                                                </li>
+                                            </>
+                                        )}
+                                    </ul>
+                                </Grid>
+                            </Grid>
+                        </>
+                    )}
                 </Box>
             </Box>
             {mode === 'write' ? (
@@ -606,23 +710,114 @@ const StudyNew = () => {
             ) : (
                 // 수정 모드에서 보여질 UI
                 <Grid container pt="1rem">
-                    <Grid item xs={2}>
-                        {/* 오너에게만 표시 */}
-                        <Button variant="outlined" color="error" onClick={handleDelete}>
-                            스터디 삭제
-                        </Button>
-                    </Grid>
-                    <Grid item xs={10}>
-                        <Box justifyContent="flex-end" display="flex" gap={1}>
-                            <Button variant="outlined">취소</Button>
-                            <Button variant="outlined" onClick={handleUpdate}>
-                                수정
-                            </Button>
-                            <Button variant="outlined" color="info">
-                                미리보기
-                            </Button>
-                            <Button variant="contained">배포</Button>
-                        </Box>
+                    <Grid container pt="1rem">
+                        {userRole === 'OWNER' && (
+                            <>
+                                <Grid item xs={2}>
+                                    <Button
+                                        variant="outlined"
+                                        color="error"
+                                        onClick={() => handleOpenDialog('delete')}
+                                    >
+                                        스터디 삭제
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={10}>
+                                    <Box justifyContent="flex-end" display="flex" gap={1}>
+                                        <Button
+                                            variant="outlined"
+                                            onClick={() => navigate('/study')}
+                                        >
+                                            취소
+                                        </Button>
+                                        {stdStatus === 'STD-CREATED' && (
+                                            <>
+                                                <Button variant="outlined" onClick={handleUpdate}>
+                                                    수정
+                                                </Button>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="info"
+                                                    onClick={handlePreview}
+                                                >
+                                                    미리보기
+                                                </Button>
+                                                <Button variant="contained" onClick={handleDeploy}>
+                                                    배포
+                                                </Button>
+                                            </>
+                                        )}
+                                        {stdStatus === 'STD-PROGRESSION' && (
+                                            <>
+                                                <Button variant="outlined" onClick={handleUpdate}>
+                                                    수정
+                                                </Button>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="info"
+                                                    onClick={() => handleOpenDialog('pause')}
+                                                >
+                                                    일시중지
+                                                </Button>
+                                                <Button
+                                                    variant="contained"
+                                                    onClick={() => handleOpenDialog('stop')}
+                                                >
+                                                    종료
+                                                </Button>
+                                            </>
+                                        )}
+                                        {(stdStatus === 'STD-PAUSE' ||
+                                            stdStatus === 'STD-STOP') && (
+                                            <>
+                                                <Button variant="outlined" onClick={handleUpdate}>
+                                                    수정
+                                                </Button>
+                                                <Button
+                                                    variant="contained"
+                                                    onClick={() => handleOpenDialog('stop')}
+                                                >
+                                                    종료
+                                                </Button>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="info"
+                                                    onClick={() => handleOpenDialog('progression')}
+                                                >
+                                                    재시작
+                                                </Button>
+                                            </>
+                                        )}
+                                        {stdStatus === 'STD-DONE' && (
+                                            <>
+                                                <Button variant="outlined" onClick={handleUpdate}>
+                                                    수정
+                                                </Button>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="info"
+                                                    onClick={() => handleOpenDialog('progression')}
+                                                >
+                                                    재시작
+                                                </Button>
+                                            </>
+                                        )}
+                                    </Box>
+                                </Grid>
+                            </>
+                        )}
+                        {userRole === 'MAINTAINER' && (
+                            <Grid item xs={12}>
+                                <Box justifyContent="flex-end" display="flex" gap={1}>
+                                    <Button variant="outlined" onClick={() => navigate('/study')}>
+                                        취소
+                                    </Button>
+                                    <Button variant="outlined" onClick={handleUpdate}>
+                                        수정
+                                    </Button>
+                                </Box>
+                            </Grid>
+                        )}
                     </Grid>
                 </Grid>
             )}
@@ -643,7 +838,20 @@ const StudyNew = () => {
                 ></MemberManagement>
             )}
 
-            <SurveyConnectDialog isOpen={isOpenSurvey} handleClose={handleCloseSurvey} />
+            <SurveyConnectDialog
+                isOpen={isOpenSurvey}
+                handleClose={handleCloseSurvey}
+                setStudySurveySetList={setStudySurveySetList}
+                initialSurveySetList={null}
+                mode="create"
+            />
+            <StudyDeleteConfirmDialog
+                open={openDeleteConfirm}
+                handleClose={handleOpenStudyDelete}
+                studyNo={stdNo}
+                onDeleteSuccess={handleDeleteSuccess}
+                action={actionType}
+            />
         </Container>
     );
 };

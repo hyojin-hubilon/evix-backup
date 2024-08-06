@@ -8,6 +8,7 @@ import MainLayout from '@layout/MainLayout';
 const StudyList = Loadable(lazy(() => import('@pages/study')));
 const StudyDetail = Loadable(lazy(() => import('@pages/study/StudyDetail')));
 const StudyNew = Loadable(lazy(() => import('@pages/study/StudyNew')));
+const StudyPreviewPage = Loadable(lazy(() => import('@pages/study/StudyPreview')));
 
 // ==============================|| STUDY ROUTING ||============================== //
 
@@ -26,6 +27,10 @@ const StudyRoutes = {
         {
             path: 'new',
             element: <StudyNew />,
+        },
+        {
+            path: 'preview',
+            element: <StudyPreviewPage />,
         },
     ],
 };

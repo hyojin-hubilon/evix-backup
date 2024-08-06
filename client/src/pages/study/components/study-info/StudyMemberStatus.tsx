@@ -106,9 +106,9 @@ const StudyMemberStatus = ({ managerList, inviteList }: StudyMemberStatusProps) 
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {rows.map((row, index) => (
                             <TableRow
-                                key={row.name}
+                                key={index}
                                 sx={{
                                     'td, th': { borderBottom: `1px solid ${divider}` },
                                     '&:last-child td, &:last-child th': { border: 0 },
