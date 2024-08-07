@@ -118,6 +118,10 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
         setAnchorEl(null);
     };
 
+	const handleShowStudy = () => {
+		navigate(`/study/detail/${study.std_no}`)
+	}
+
     return (
         <>
             <Card
@@ -127,7 +131,9 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
 					...(study.std_status === 'STD-DONE' && {bgcolor: theme.palette.success.lighter}), //Completed
 					...(study.std_status === 'STD-EXPIRATION' && {bgcolor: theme.palette.purple.lighter}), //EXPIRATION
                     p: '1rem',
+					cursor: 'pointer'
                 }}
+				onClick={handleShowStudy}
             >
                 <Grid container alignItems="center">
                     <Grid item xs={8}>

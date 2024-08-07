@@ -8,10 +8,10 @@ import NavItem from './NavItem';
 // ==============================|| DRAWER CONTENT - NAVIGATION ||============================== //
 
 const Navigation = () => {
-    const navGroups = menuItem.items.map((item) => {
+    const navGroups = menuItem.items.map((item, index) => {
 		if(item.type == 'group') {
 			return ( 
-				<>
+				<Box key={index}>
 				{
 					item.children && item.children.map(child => {
 						return <NavItem key={child.id} item={child} level={1} />
@@ -19,7 +19,7 @@ const Navigation = () => {
 				}
 				
 				<Divider sx={{mt: '1rem', mb: '1rem'}}/>
-				</>
+				</Box>
 			)
 		}
 		else return <NavItem key={item.id} item={item} level={1} />

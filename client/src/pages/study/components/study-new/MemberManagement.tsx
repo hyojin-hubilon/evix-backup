@@ -164,16 +164,15 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
     const studyDetail = async () => {
         const response = await studyApi.getStudyDetail(studyNo);
         setTitle(response.content['title']);
-        setProfileImageUrl(
-            response.content['managerList'].find((manager) => manager.std_privilege === 'OWNER')
-                .profile_image_url
-        );
-        setOwnerName(
-            response.content['managerList'].find((manager) => manager.std_privilege === 'OWNER')
-                .first_name +
-                response.content['managerList'].find((manager) => manager.std_privilege === 'OWNER')
-                    .last_name
-        );
+		if(response.content.managerList) {
+			const owner = response.content.managerList.find((manager) => manager.std_privilege === 'OWNER');
+			if(owner) {
+				setProfileImageUrl(owner.profile_image_url);
+				setOwnerName(owner.first_name + owner.last_name);
+			}
+			
+		}
+        
     };
 
     const handleSendReInvite = async (member: MemberTempType) => {

@@ -19,6 +19,7 @@ const StudyDetail = () => {
         const fetchStudyDetail = async () => {
             const response = await studyApi.getStudyDetail(parseInt(std_no, 10));
             setStudyDetail(response.content);
+			if(response.content.std_status === 'STD-CREATED') setActiveTab('1');
         };
 
         fetchStudyDetail();
@@ -69,13 +70,13 @@ const StudyDetail = () => {
                             aria-label="Study Status Tab"
                         >
                             {/* 스터디 결과 요약 정보 */}
-                            <Tab label="Overview " value="0" />
+                            { studyDetail?.std_status !== 'STD-CREATED' && <Tab label="Overview " value="0" /> }
                             {/* 스터디 개요, 연결/과금정보, 멤버관리 */}
                             <Tab label="Study Info " value="1" />
                             {/* 설문 참여자 상세 리스트 */}
-                            <Tab label="Participants " value="2" />
+                            { studyDetail?.std_status !== 'STD-CREATED' && <Tab label="Participants " value="2" />}
                             {/* 설문 결과 상세 */}
-                            <Tab label="Survey Report" value="3" />
+                            { studyDetail?.std_status !== 'STD-CREATED' && <Tab label="Survey Report" value="3" /> }
                         </Tabs>
                     </Grid>
                     <Grid container item xs={2} justifyContent="flex-end">
@@ -97,9 +98,9 @@ const StudyDetail = () => {
                         )}
                     </Grid>
                 </Grid>
-                {activeTab === '0' && <StudyOverView partCompleteRate={partCompleteRate} />}
-                {activeTab === '1' && <StudyInfo studyDetail={studyDetail} />}
-                {activeTab === '2' && <StudyParticipants />}
+                {studyDetail && activeTab === '0' && <StudyOverView partCompleteRate={partCompleteRate} />}
+                {studyDetail && activeTab === '1' && <StudyInfo studyDetail={studyDetail} />}
+                {studyDetail && activeTab === '2' && <StudyParticipants />}
             </Grid>
         </>
     );
