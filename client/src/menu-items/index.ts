@@ -15,29 +15,37 @@ const icons = {
 const menuItems: MenuItems = {
     items: [
 		{
-            id: 'dashboard',
-            title: 'Dashboard',
-            type: 'item',
-            url: '/dashboard',
-            icon: icons.DashboardOutlined,
-            breadcrumbs: false,
-        },
-		{
-			id: 'study-list',
-            title: 'Study',
-            type: 'item',
-            url: '/study',
-            icon: icons.OrderedListOutlined,
-            breadcrumbs: false
+			id: 'evix-dashboard',
+			title: 'evix-dashboard',
+			type: 'group',
+			children: [
+				{
+					id: 'dashboard',
+					title: 'Dashboard',
+					type: 'item',
+					url: '/dashboard',
+					icon: icons.DashboardOutlined,
+					breadcrumbs: false,
+				},
+				{
+					id: 'study-list',
+					title: 'Study',
+					type: 'item',
+					url: '/study',
+					icon: icons.OrderedListOutlined,
+					breadcrumbs: false
+				},
+				{
+					id: 'survey-list',
+					title: 'Survey',
+					type: 'item',
+					url: '/survey',
+					icon: icons.PollIcon,
+					breadcrumbs: false
+				},
+			]	
 		},
-		{
-            id: 'survey-list',
-            title: 'Survey',
-            type: 'item',
-            url: '/survey',
-            icon: icons.PollIcon,
-            breadcrumbs: false
-        },
+		
 		{
             id: 'settings',
             title: 'Settings',
