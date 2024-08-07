@@ -58,7 +58,7 @@ const StudyNew = () => {
     const [medicineYOrN, setMedicineYOrN] = useState<'true' | 'false'>('false');
     const [mode, setMode] = useState<'write' | 'edit'>('write');
     const [title, setTitle] = useState('');
-    const [participants, setParticipants] = useState('');
+    const [participants, setParticipants] = useState<string>('');
     const [description, setDescription] = useState('');
     const [disease, setDisease] = useState('');
     const [eicFile, setEicFile] = useState<File | null>(null);
