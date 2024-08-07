@@ -1,14 +1,10 @@
 // project import
 import { MenuItems } from '@/types/menu';
 import { OrderedListOutlined, AppstoreAddOutlined, DashboardOutlined, BarChartOutlined, SettingOutlined } from '@ant-design/icons';
-import PollIcon from '@mui/icons-material/Poll';
-import SettingsIcon from '@mui/icons-material/Settings';
 const icons = {
     OrderedListOutlined,
     AppstoreAddOutlined,
 	DashboardOutlined,
-	PollIcon,
-	SettingsIcon,
 	BarChartOutlined,
 	SettingOutlined
 };
@@ -49,7 +45,6 @@ const menuItems: MenuItems = {
 				},
 			]	
 		},
-		
 		{
             id: 'settings',
             title: 'Settings',
