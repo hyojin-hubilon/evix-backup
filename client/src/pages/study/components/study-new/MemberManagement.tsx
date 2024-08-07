@@ -164,16 +164,13 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
     const studyDetail = async () => {
         const response = await studyApi.getStudyDetail(studyNo);
         setTitle(response.content['title']);
-        setProfileImageUrl(
-            response.content['managerList'].find((manager) => manager.std_privilege === 'OWNER')
-                .profile_image_url
+
+        const owner = response.content['managerList'].find(
+            (manager) => manager.std_privilege === 'OWNER'
         );
-        setOwnerName(
-            response.content['managerList'].find((manager) => manager.std_privilege === 'OWNER')
-                .first_name +
-                response.content['managerList'].find((manager) => manager.std_privilege === 'OWNER')
-                    .last_name
-        );
+
+        setProfileImageUrl(owner?.profile_image_url ?? '');
+        setOwnerName(`${owner?.first_name ?? ''}${owner?.last_name ?? ''}`);
     };
 
     const handleSendReInvite = async (member: MemberTempType) => {
@@ -185,7 +182,7 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
             };
 
             // 단일 초대 요청
-            const response = await studyApi.reInviteStudy(invite); // TODO: 대기멤버 재초대 API 미개발
+            const response = await studyApi.reInviteStudy(invite);
 
             console.log(response);
 
