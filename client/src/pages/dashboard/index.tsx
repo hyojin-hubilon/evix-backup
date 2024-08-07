@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 const DashboardDefault = () => {
 	const [ participantNumber, setParticipantNumber] = useState<any>();
 	const getNumberParticipant = async () => {
-		const response = await dashboardApi.getNumberOfParicipant();
+		const response = await dashboardApi.getNumOfParticipantByStudy();
 		setParticipantNumber(response.content);
 	}
 
