@@ -186,7 +186,7 @@ export interface StudyDetail {
     description: string;
     location: string;
     disease: string;
-    target_number: string;
+    target_number: number;
     drug_code: string;
     drug_brand_name: string;
     drug_manufacturer_name: string;
