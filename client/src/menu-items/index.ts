@@ -1,12 +1,16 @@
 // project import
 import { MenuItems } from '@/types/menu';
-import { OrderedListOutlined, AppstoreAddOutlined, DashboardOutlined } from '@ant-design/icons';
+import { OrderedListOutlined, AppstoreAddOutlined, DashboardOutlined, BarChartOutlined, SettingOutlined } from '@ant-design/icons';
 import PollIcon from '@mui/icons-material/Poll';
+import SettingsIcon from '@mui/icons-material/Settings';
 const icons = {
     OrderedListOutlined,
     AppstoreAddOutlined,
 	DashboardOutlined,
-	PollIcon
+	PollIcon,
+	SettingsIcon,
+	BarChartOutlined,
+	SettingOutlined
 };
 
 
@@ -40,7 +44,7 @@ const menuItems: MenuItems = {
 					title: 'Survey',
 					type: 'item',
 					url: '/survey',
-					icon: icons.PollIcon,
+					icon: icons.BarChartOutlined,
 					breadcrumbs: false
 				},
 			]	
@@ -51,7 +55,7 @@ const menuItems: MenuItems = {
             title: 'Settings',
             type: 'item',
             url: '/settings',
-            icon: icons.DashboardOutlined,
+            icon: icons.SettingOutlined,
             breadcrumbs: false,
         },
 	],
