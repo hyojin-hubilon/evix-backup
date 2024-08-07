@@ -71,7 +71,7 @@ const studyApi = {
      */
     getStudyDetail: async (stdNo: number) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}`, 'get');
+            const responseData = await api<StudyApiType.StudyDetail>(`${BASE_API_URL}/${stdNo}`, 'get');
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
