@@ -71,4 +71,4 @@ const TextFieldSection = ({ id, cardIndex }:TextFieldSectionType) => {
 	);
 };
 
-export default TextFieldSection;
+export default React.memo(TextFieldSection);

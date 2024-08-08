@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
-import { MenuItem, Select, SelectChangeEvent, TextField as MuiTextField, Theme, useTheme, Box, styled, TextField, Typography} from "@mui/material";
+import React from "react";
+import { MenuItem, Select, SelectChangeEvent, useTheme, Box, TextField } from "@mui/material";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
 import { CardProps, setTitle, StateProps, typeChange } from "@/store/reducers/survey";
-import { extendedCardProps } from "./FormQuestion";
 import { QuestionTypes } from "@/types/survey";
-import { Field, useFormikContext } from "formik";
+import { Field } from "formik";
   
 type CardHeaderType = {
 	id: string,
@@ -87,7 +86,8 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 								handleInputTypeChange(e);
 							}}
 							name={field.name}
-							defaultValue={QuestionTypes.WRITE} value={inputType}>
+							value={inputType ? inputType : "WRITE"}
+						>
 							<MenuItem value={QuestionTypes.WRITE}>주관식 답변</MenuItem>
 							<MenuItem value={QuestionTypes.SINGLE}>객관식 답변(단일응답)</MenuItem>
 							<MenuItem value={QuestionTypes.MULTIPLE}>객관식 답변(복수응답)</MenuItem>

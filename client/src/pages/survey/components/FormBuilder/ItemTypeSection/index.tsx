@@ -159,4 +159,6 @@ const ItemTypeSection = ({ id, cardIndex }: ItemTypeSectionProps) => {
   	);
 };
 
-export default ItemTypeSection;
+
+
+export default React.memo(ItemTypeSection);
