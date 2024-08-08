@@ -146,7 +146,6 @@ const StudyNew = () => {
     };
 
     const handleCloseUploadBasePdf = () => {
-        setBasePdfFile(null);
         setIsUploadBasePdfOpen(false);
     };
 
@@ -155,18 +154,18 @@ const StudyNew = () => {
         setEicFile(file);
     };
 
-    const handleConfirm = (file: File) => {
-        setBasePdfFile(file);
-        handleCloseUploadBasePdf();
-        handleOpenCreateEic();
-    };
-
     const handleOpenCreateEic = () => {
         setIsCreateEicOpen(true);
     };
 
     const handleCloseCreateEic = () => {
         setIsCreateEicOpen(false);
+    };
+
+    const handleConfirm = (file: File) => {
+        setBasePdfFile(file);
+        handleCloseUploadBasePdf();
+        handleOpenCreateEic();
     };
 
     useEffect(() => {
@@ -884,7 +883,7 @@ const StudyNew = () => {
                 isCreateEicOpen={isCreateEicOpen}
                 handleCloseCreateEic={handleCloseCreateEic}
                 handleEicFile={handleEicFile}
-                basePdf={basePdfFile}
+                basePdfFile={basePdfFile}
             />
         </Container>
     );

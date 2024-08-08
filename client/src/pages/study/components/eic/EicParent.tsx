@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import CreateEic from './CreateEic';
 import UploadBasePdf from './UploadBasePdf';
 
@@ -7,7 +8,7 @@ type Props = {
     handleConfirm: (file: File) => void;
     isCreateEicOpen: boolean;
     handleCloseCreateEic: () => void;
-    basePdf: File | null;
+    basePdfFile: File | null;
     handleEicFile: (file: File) => void;
 };
 
@@ -17,7 +18,7 @@ const EicParent: React.FC<Props> = ({
     handleConfirm,
     isCreateEicOpen,
     handleCloseCreateEic,
-    basePdf,
+    basePdfFile,
     handleEicFile,
 }) => {
     return (
@@ -31,7 +32,7 @@ const EicParent: React.FC<Props> = ({
                 open={isCreateEicOpen}
                 onClose={handleCloseCreateEic}
                 handleEicFile={handleEicFile}
-                basePdf={basePdf}
+                basePdfFile={basePdfFile}
             />
         </>
     );

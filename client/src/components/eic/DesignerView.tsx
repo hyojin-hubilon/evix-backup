@@ -1,5 +1,5 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { Template, checkTemplate, Lang } from '@pdfme/common';
+import { Template, checkTemplate, Lang, DesignerProps } from '@pdfme/common';
 import { Designer } from '@pdfme/ui';
 import {
     getFontsData,
@@ -30,7 +30,7 @@ const translations: { label: string; value: string }[] = [
     { value: 'ko', label: 'Korean' },
 ];
 
-function DesignerView({ uploadBasePdf, handleEicFile, onClose }) {
+function DesignerView({ basePdfFile, handleEicFile, onClose }) {
     const designerRef = useRef<HTMLDivElement | null>(null);
     const designer = useRef<Designer | null>(null);
     const [lang, setLang] = useState<Lang>('en');
@@ -154,13 +154,16 @@ function DesignerView({ uploadBasePdf, handleEicFile, onClose }) {
     }
 
     const setUpBasePdf = (basePdf: File) => {
-        if (!basePdf) return;
-        readFile(basePdf, 'dataURL').then(async (basePdfData) => {
+        if (!basePdf) {
+            return;
+        }
+
+        readFile(basePdf, 'dataURL').then(async (basePdf) => {
             if (designer.current) {
                 console.log('Updating template with base PDF...');
                 designer.current.updateTemplate(
                     Object.assign(cloneDeep(designer.current.getTemplate()), {
-                        basePdf: basePdfData,
+                        basePdf,
                     })
                 );
             }
@@ -168,12 +171,8 @@ function DesignerView({ uploadBasePdf, handleEicFile, onClose }) {
     };
 
     useEffect(() => {
-        console.log(designer);
-        console.log(designer.current);
-        if (designer.current) {
-            setUpBasePdf(uploadBasePdf);
-        }
-    }, [uploadBasePdf]);
+        setUpBasePdf(basePdfFile);
+    }, [designer.current]);
 
     return (
         <Box
@@ -228,22 +227,8 @@ function DesignerView({ uploadBasePdf, handleEicFile, onClose }) {
                 ref={designerRef}
                 sx={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }}
             />
-            <Box
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    fontSize: 'small',
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    backgroundColor: 'white',
-                    padding: '1rem',
-                    boxShadow: '0 -1px 10px rgba(0,0,0,0.1)',
-                    zIndex: 1300,
-                }}
-            >
+            <Box>
+                {/**
                 <Box>
                     <input
                         id="base-pdf-upload"
@@ -275,13 +260,22 @@ function DesignerView({ uploadBasePdf, handleEicFile, onClose }) {
                         </Button>
                     </label>
                 </Box>
-                {/** <Button variant="contained" onClick={onDownloadTemplate}>
+                <Button variant="contained" onClick={onDownloadTemplate}>
                     Download Template
                 </Button>*/}
-                <Button variant="contained" onClick={onClose}>
-                    Close
+                <Button
+                    variant="outlined"
+                    sx={{ width: '50%', height: '40px', color: '#344054', borderColor: '#D0D5DD' }}
+                    onClick={onClose}
+                >
+                    Cancel
                 </Button>
-                <Button variant="contained" onClick={onSaveTemplate}>
+                <Button
+                    sx={{ width: '50%', height: '40px' }}
+                    variant="contained"
+                    color="primary"
+                    onClick={onSaveTemplate}
+                >
                     Save
                 </Button>
             </Box>
