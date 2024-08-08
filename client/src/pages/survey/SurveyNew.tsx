@@ -97,8 +97,9 @@ const SurveyNew = () => {
 
 
 	useEffect(() => {
-		if(locationState == 'copy' && surveyNo !== null) {
-			getCopyingSurveyDeatil(surveyNo);
+		if(locationState == 'copy' && parmas.survey_no) {
+			const servey_no = parmas.survey_no;
+			getCopyingSurveyDeatil(servey_no);
 			return;
 		}
 
@@ -107,10 +108,11 @@ const SurveyNew = () => {
 			return;
 		}
 
-		if(locationState == 'edit' && surveyNo !== null) {
+		if(locationState == 'edit' && parmas.survey_no) {
+			const servey_no = parmas.survey_no;
 			const getCopyingSurveyDeatil = async () => {
 				try {
-					const response = await surveyApi.getSurvey(surveyNo);
+					const response = await surveyApi.getSurvey(servey_no);
 					if (response.result && response.code === 200) {
 						const survey = response.content;
 						dispatch(resetAll());
@@ -123,8 +125,6 @@ const SurveyNew = () => {
 							isFocused: true
 						}));
 						setCards(survey);
-
-						// setSurveyNo(null);
 					}
 				} catch (error) {
 					console.error('Failed to fetch study list:', error);	
