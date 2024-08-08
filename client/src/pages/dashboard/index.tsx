@@ -10,6 +10,7 @@ import ParticipantNums from "./ParticipantNums";
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import divider from "antd/es/divider";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -21,6 +22,8 @@ const DashboardDefault = () => {
 	
 	const [ studyGoal, setStudyGoal ] = useState<NumOfParticipantByStudy | null>(null);
 	const [ studyGoalNo, setStudyGoalNo] = useState('');
+
+	const navigate = useNavigate();
 
 	const getNumberParticipant = async () => {
 		const response = await dashboardApi.getNumOfParticipantByStudy();
@@ -213,7 +216,7 @@ const DashboardDefault = () => {
 
 	
     return  (
-		<>
+		<div style={{position:'relative'}}>
             <Grid item container rowSpacing={2} columnSpacing={1} flexDirection="row">
                 <Grid container item xs={12} justifyContent="space-between" alignItems="center">
                     <Box>
@@ -299,7 +302,7 @@ const DashboardDefault = () => {
 									<TableCell>{row.enrollmentDate}</TableCell>
 									<TableCell width="20%">
 										<Box maxWidth="80%">
-											{normalise(row.roundInfo) + '%'} 
+											<Typography color="primary" variant="body2">{normalise(row.roundInfo) + '%'} </Typography>
 											<LinearProgress variant="determinate" value={normalise(row.roundInfo)} />
 										</Box>
 									</TableCell>
@@ -312,7 +315,19 @@ const DashboardDefault = () => {
 					</MainCard>
 				</Grid>
             </Grid>
-        </>
+
+			{/* 아래는 등록한 스터디가 없을 때 */}
+			{/* <Box sx={{position: 'absolute', left: '-24px', top:'-24px', right:'-24px', bottom: '-24px', background: 'rgba(255,255,255,0.8)'}}>
+				<Box sx={{position:'absolute', left: '50%', top:'30%', transform:'translate(-50%, -50%)', width: '100%'}} display="flex" alignItems="center" justifyContent="center" flexDirection="column">
+					<Typography variant="h1">There are no studies created.</Typography>
+					<Typography variant="h1">Start your project by creating a new Study.</Typography>
+					<Box mt="2rem" display="flex" gap={1}>
+						<Button size="large" variant="contained" onClick={() => navigate('/study/new')}>Go to Create Study</Button>
+						<Button size="large" variant="contained" onClick={() => navigate('/apply')}>Request a demo</Button>
+					</Box>
+				</Box>
+			</Box> */}
+        </div>
 	);
 };
 
