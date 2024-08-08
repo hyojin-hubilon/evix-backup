@@ -1,5 +1,5 @@
 import { EditOutlined, SyncOutlined } from "@ant-design/icons";
-import { Box, Button, Container, Grid, MenuItem, Select, Divider, Typography, Toolbar, useTheme } from '@mui/material';
+import { Box, Button, Container, Grid, MenuItem, Select, Divider, Typography, Toolbar, useTheme, TableContainer, Paper, Table, TableBody, TableCell, TableHead, TableRow, LinearProgress } from '@mui/material';
 import MainCard from "@/components/MainCard";
 import CircleChart, { ApexDonutChartSeriesType } from "../study/components/overview/CircleChart";
 import dashboardApi from "@/apis/dashboard";
@@ -9,6 +9,7 @@ import { NumOfParticipantByStudy } from "@/types/dashboard";
 import ParticipantNums from "./ParticipantNums";
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
+import divider from "antd/es/divider";
 
 
 
@@ -188,6 +189,28 @@ const DashboardDefault = () => {
 
 	const [goalPercentage, setGoalPercentage] = useState(0);
 
+	const createData = (
+		study: string,
+		name: string,
+		dateOfBirth: string,
+		enrollmentDate: string,
+		roundInfo: number[],
+		status: string,
+	) =>	
+	{
+		return { study, name, dateOfBirth, enrollmentDate, roundInfo, status };
+	}
+
+	const normalise = (value: number[]) => Math.ceil(value[0]/value[1] * 100);
+
+	const rows = [
+		createData('레켐비 임상 4상', 'Kate Brown', 'Dec 10, 2000', 'Jun 10, 2024', [3,12], 'In Progress'),
+		createData('아토피 부작용 연구', 'Daniel Heny', 'Nov 20, 1999', 'Jun 10, 2024', [12,12], 'Complete'),
+		createData('레켐비 임상 4상', 'Julia hose Yoon', 'Oct 24, 1982', 'Jun 10, 2024', [2,12], 'Pending'),
+		createData('삭센다 임상 4상', 'Clara dew Mio', 'Mar 11, 1988', 'Jun 10, 2024', [11,12], 'Approved'),
+		createData('아토피 삶의 질 연구', 'Lily Kim', 'Jul 01, 1999', 'Jun 10, 2024', [8,12], 'In Progress'),
+	];
+
 	
     return  (
 		<>
@@ -244,7 +267,48 @@ const DashboardDefault = () => {
 
 				<Grid item xs={12}>
 					<MainCard>
-						<Typography variant="h5">Recent participant logs</Typography>
+						<Typography variant="h5" mb={1}>Recent participant logs</Typography>
+
+						<TableContainer>
+							<Table sx={{ minWidth: 650  }} aria-label="simple table" size="small">
+							<TableHead>
+								<TableRow
+									sx={{ 'td, th': {borderBottom: `1px solid ${theme.palette.grey[400]}`}}}
+								>
+									<TableCell>Study</TableCell>
+									<TableCell>Name</TableCell>
+									<TableCell>Date of Birth</TableCell>
+									<TableCell>Enrollment Date</TableCell>
+									<TableCell>Round Info.</TableCell>
+									<TableCell>Status</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{rows.map((row) => (
+								<TableRow
+									key={row.name}
+									sx={{ 'td, th': {borderBottom: `1px solid ${divider}`}, '&:last-child td, &:last-child th': { border: 0 } }}
+								>
+									<TableCell component="th" scope="row">
+									{row.study}
+									</TableCell>
+									<TableCell component="th" scope="row">
+									{row.name}
+									</TableCell>
+									<TableCell>{row.dateOfBirth}</TableCell>
+									<TableCell>{row.enrollmentDate}</TableCell>
+									<TableCell width="20%">
+										<Box maxWidth="80%">
+											{normalise(row.roundInfo) + '%'} 
+											<LinearProgress variant="determinate" value={normalise(row.roundInfo)} />
+										</Box>
+									</TableCell>
+									<TableCell>{row.status}</TableCell>
+								</TableRow>
+								))}
+							</TableBody>
+							</Table>
+						</TableContainer>
 					</MainCard>
 				</Grid>
             </Grid>
