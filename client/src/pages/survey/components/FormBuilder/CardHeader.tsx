@@ -47,6 +47,7 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 					onBlur={(e) => handleCardTitleChange(e)}
 					placeholder={isTitle ? "설문지 제목" : "질문"}
 					variant="filled"
+					key={cardTitle as string}
 					sx={{
 						flexGrow: 1,
 						'div': {

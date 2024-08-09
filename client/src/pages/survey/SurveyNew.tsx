@@ -96,20 +96,11 @@ const SurveyNew = () => {
 		try {
 			const response = await surveyApi.getCopyingSurvey(surveyNo);
 			if (response.result && response.code === 200) {
-				dispatch(resetAll())
+				
 				const survey = response.content;
 				
-				const title = survey.title ? survey.title : '';
 				
-				console.log(title)
 				
-				dispatch(addExistCard({
-					cardId: "TitleCard",
-					cardTitle: locations.state == 'copy' ? '[Copy] ' + title : title,
-					inputType: QuestionTypes.TITLE,
-					contents: survey.description,
-					isFocused: true
-				}));
 				setCards(survey);
 
 			} else {
@@ -122,9 +113,19 @@ const SurveyNew = () => {
 
 
 	const setCards = (survey:SurveyDetail) => {
+		dispatch(resetAll())
 		
+		
+		dispatch(addExistCard({
+			cardId: "TitleCard",
+			cardTitle: locations.state == 'copy' ? '[Copy] ' + survey.title : (survey.title ? survey.title : '!!'),
+			inputType: QuestionTypes.TITLE,
+			contents: survey.description,
+			isFocused: 'Y'
+		}));
 
 		survey.questionList.forEach(question => {
+			
 			const exampleList: ItemTypeProps[] = [];
 
 			const cardId = question.question_no + String(Date.now());
