@@ -77,8 +77,6 @@ interface StudyInfoProps {
 }
 
 const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
-    // console.log(studyDetail);
-
     const theme = useTheme();
 
     const formatDate = (dateString: string): string => {

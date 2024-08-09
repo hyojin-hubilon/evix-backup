@@ -21,7 +21,7 @@ const StudyRoutes = {
             element: <StudyList />,
         },
         {
-            path: 'detail/:std_no',
+            path: 'detail/:stdNo',
             element: <StudyDetail />,
         },
         {
