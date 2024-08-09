@@ -76,18 +76,21 @@ const SurveyNew = () => {
 			return;
 		}
 
-		else if(locations.state == 'copy' && parmas.survey_no) {
+		if(locations.state == 'copy' && parmas.survey_no) {
 			getCopyingSurveyDeatil(parmas.survey_no);
 			setSurveyNo(null);
 			return;
 		}
 
-		else if(locations.state == 'new' && parmas.survey_no) {
-			getCopyingSurveyDeatil(parmas.survey_no);
-			setSurveyNo(null);
-			return;
-		} else {
-			dispatch(resetCards());
+		if(locations.state == 'new') {
+			if(parmas.survey_no) {
+				getCopyingSurveyDeatil(parmas.survey_no);
+				setSurveyNo(null);
+				return;
+			} else {
+				dispatch(resetCards());
+			}
+			
 		}
 	}, [])
 
@@ -95,12 +98,8 @@ const SurveyNew = () => {
 		console.log(locations.state, 'stateCheck')
 		try {
 			const response = await surveyApi.getCopyingSurvey(surveyNo);
-			if (response.result && response.code === 200) {
-				
+			if (response.result && response.code === 200) {				
 				const survey = response.content;
-				
-				
-				
 				setCards(survey);
 
 			} else {
@@ -118,7 +117,7 @@ const SurveyNew = () => {
 		
 		dispatch(addExistCard({
 			cardId: "TitleCard",
-			cardTitle: locations.state == 'copy' ? '[Copy] ' + survey.title : (survey.title ? survey.title : '!!'),
+			cardTitle: locations.state == 'copy' ? '[Copy] ' + survey.title : (survey.title ? survey.title : ''),
 			inputType: QuestionTypes.TITLE,
 			contents: survey.description,
 			isFocused: 'Y'
@@ -193,7 +192,7 @@ const SurveyNew = () => {
 		//저장후 localStorage에 저장된 서베이 삭제
 		
 		console.log(cards);
-		return;
+		
 		const newSurvey : SurveyPostReqBody = {
 			title: '',
 			description: '',

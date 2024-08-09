@@ -39,11 +39,6 @@ const FormBuilder = () => {
 		}
 	};
 
-	useEffect(() => {
-		console.log(cards);
-	}, [cards])
-
-	
 	return (
 		<Box display="flex" flexDirection="row" width={1}>
 			<Box width="89%">

@@ -25,24 +25,14 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 	const theme = useTheme();
 	const { primary } = theme.palette;
 	
-	const isFocused = useSelector((state: StateProps) => {
+	const [isFocused, inputType, isRequired] = useSelector((state: StateProps) => {
 		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
-		return currentCard.isFocused;
-	}, shallowEqual);
-
-	const inputType = useSelector((state: StateProps) => {
-		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
-		return currentCard.inputType;
+		return [currentCard.isFocused, currentCard.inputType, currentCard.isRequired];
 	}, shallowEqual);
 
 	const setIsFocused = () => {
 		if (!isFocused) dispatch(focus({ id }));
 	};
-
-	const isRequired = useSelector((state: StateProps) => {
-		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
-		return currentCard.isRequired;
-	});
 
 	const handleChangeRequired = () => {
 		dispatch(toggleIsRequired({ id }));
@@ -150,7 +140,7 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 								<FormControlLabel
 									value="end"
 									sx={{ml: "0.5rem"}}
-									control={<Switch name="required" checked={isRequired} onChange={handleChangeRequired} />}
+									control={<Switch name="required" checked={isRequired as boolean} onChange={handleChangeRequired} />}
 									label="필수"
 									labelPlacement="start"
 									onClick={(e) => {

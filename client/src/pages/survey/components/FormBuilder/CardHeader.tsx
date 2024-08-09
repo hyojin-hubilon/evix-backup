@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { MenuItem, Select, SelectChangeEvent, useTheme, Box, TextField } from "@mui/material";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
@@ -14,6 +14,7 @@ type CardHeaderType = {
 const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 	const theme = useTheme();
   	const dispatch = useDispatch();
+	const timer = useRef<any>();
   
   	const [ isFocused, cardTitle, inputType ] = useSelector((state: StateProps) => {
     	const currentCard = state.cards.find((card) => card.id === id) as CardProps;
@@ -24,9 +25,16 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 		dispatch(setTitle({ cardId: id, text: e.target.value }));
 	};
 
-	const handleInputTypeChange = (e: SelectChangeEvent<unknown>) => {
-		dispatch(typeChange({ id, inputType: e.target.value as string }));
+	const handleInputTypeChange = (e) => {
+		dispatch(typeChange({ id, inputType: e}));
 	};
+
+	const handleChangeTimeOut = (e) => {
+		clearTimeout(timer.current)
+		timer.current = setTimeout(() => {
+			handleCardTitleChange(e)
+		}, 300)
+	}
 
 	
   	return (
