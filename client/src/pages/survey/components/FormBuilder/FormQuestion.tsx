@@ -22,17 +22,17 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 	const dispatch = useDispatch();
 	
 	const theme = useTheme();
-	const { grey, primary } = theme.palette;
+	const { primary } = theme.palette;
 	
 	const isFocused = useSelector((state: StateProps) => {
 		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
 		return currentCard.isFocused;
 	}, shallowEqual);
 
-	const { inputType } = useSelector(
-		(state: StateProps) => state.cards.find((card) => card.id === id) as CardProps,
-		shallowEqual,
-	);
+	const inputType = useSelector((state: StateProps) => {
+		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
+		return currentCard.inputType;
+	}, shallowEqual);
 
 	const setIsFocused = () => {
 		if (!isFocused) dispatch(focus({ id }));

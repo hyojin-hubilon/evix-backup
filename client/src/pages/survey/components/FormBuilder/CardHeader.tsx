@@ -21,8 +21,7 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
   	}, shallowEqual);
 
 	const { cardTitle, inputType } = useSelector(
-		(state: StateProps) => state.cards.find((card) => card.id === id) as CardProps,
-		shallowEqual,
+		(state: StateProps) => state.cards.find((card) => card.id === id) as CardProps
 	);
 
 	const handleCardTitleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -39,18 +38,17 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 			<Field name={`cards.${cardIndex}.cardTitle`} type="text">
 			{({
 				field,
-				form : {errors},
-				meta,
+				form : {errors}
 			}) => (
 				<>
 				<TextField
 					id={field.name}
 					name={field.name}
-					value={cardTitle}
+					defaultValue={cardTitle ? cardTitle : ''}
 					onChange={(e) => {
 						field.onChange(e.target.value);
-						handleCardTitleChange(e);
 					}}
+					onBlur={(e) => handleCardTitleChange(e)}
 					placeholder={isTitle ? "설문지 제목" : "질문"}
 					variant="filled"
 					sx={{
@@ -77,7 +75,7 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 			)}
 			</Field>
 			{!isTitle && isFocused ? (
-				<Field name={`cards.${cardIndex}.inputType`}>
+				<Field name={`cards.${cardIndex}.inputType`} type="select">
 					{({
 						field
 					}) => (

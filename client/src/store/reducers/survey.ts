@@ -104,6 +104,7 @@ export const cardSlice = createSlice({
 
 		addExistCard: (state: CardProps[], action: ActionProps) => {
 			const copiedState = state.map((card) => ({ ...card, isFocused: false }));	
+			console.log(action.payload)
 			copiedState.push(createExistCard(action.payload.cardId, action.payload.cardTitle, action.payload.inputType, action.payload.contents, action.payload.isFocused, action.payload.isRequired));
 			return copiedState;
 	  	},

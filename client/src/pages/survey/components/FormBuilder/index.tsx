@@ -16,28 +16,32 @@ const FormBuilder = () => {
 
 	const onDragEnd = ({ destination, source }: DropResult) => {
 		if (!destination) {
-		  return;
+			return;
 		}
 		if (source.droppableId === "card" && destination.index === 0) {
-		  return;
+			return;
 		}
 		if (source.droppableId === "card") {
-		  dispatch(
-			moveCard({
-			  sourceIndex: String(source.index),
-			  destinationIndex: String(destination.index),
-			}),
-		  );
+			dispatch(
+				moveCard({
+					sourceIndex: String(source.index),
+					destinationIndex: String(destination.index),
+				}),
+			);
 		} else if (destination.droppableId === source.droppableId) {
-		  dispatch(
-			moveContent({
-			  cardId: source.droppableId,
-			  sourceIndex: String(source.index),
-			  destinationIndex: String(destination.index),
-			}),
-		  );
+			dispatch(
+				moveContent({
+					cardId: source.droppableId,
+					sourceIndex: String(source.index),
+					destinationIndex: String(destination.index),
+				}),
+			);
 		}
-	  };
+	};
+
+	useEffect(() => {
+		console.log(cards);
+	}, [cards])
 
 	
 	return (

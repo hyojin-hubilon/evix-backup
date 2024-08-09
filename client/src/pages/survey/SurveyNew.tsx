@@ -61,80 +61,61 @@ const SurveyNew = () => {
 
 
 	useEffect(() => {
+		console.log(locations, parmas)
+
 		if(locations.state) setLocationState(locations.state);
 		else setLocationState(null);
+
+		
 	}, [locations])
 
 	useEffect(() => {
-		console.log(parmas)
-		if(parmas.survey_no && (locationState == 'edit' || locationState == 'copy')) {
+		if(locations.state == 'edit' && parmas.survey_no) {
 			setSurveyNo(Number(parmas.survey_no));
+			getCopyingSurveyDeatil(parmas.survey_no);
+			return;
+		}
+
+		else if(locations.state == 'copy' && parmas.survey_no) {
+			getCopyingSurveyDeatil(parmas.survey_no);
+			setSurveyNo(null);
+			return;
+		}
+
+		else if(locations.state == 'new' && parmas.survey_no) {
+			getCopyingSurveyDeatil(parmas.survey_no);
+			setSurveyNo(null);
+			return;
+		} else {
+			dispatch(resetCards());
 		}
 	}, [])
 
 	const getCopyingSurveyDeatil = async (surveyNo) => {
+		console.log(locations.state, 'stateCheck')
 		try {
 			const response = await surveyApi.getCopyingSurvey(surveyNo);
 			if (response.result && response.code === 200) {
+				dispatch(resetAll())
 				const survey = response.content;
-				dispatch(resetAll());
-
+				const title = survey.title ? survey.title : '';
+				console.log(title)
 				dispatch(addExistCard({
 					cardId: "TitleCard",
-					cardTitle: locationState == 'copy' ? '[Copy] ' + survey.title : survey.title,
+					cardTitle: locations.state == 'copy' ? '[Copy] ' + title : title,
 					inputType: QuestionTypes.TITLE,
 					contents: survey.description,
 					isFocused: true
 				}));
 				setCards(survey);
 
-				setSurveyNo(null);
+			} else {
+				dispatch(resetCards())
 			}
 		} catch (error) {
 			console.error('Failed to fetch study list:', error);	
 		}
 	}
-
-
-	useEffect(() => {
-		if(locationState == 'copy' && parmas.survey_no) {
-			const servey_no = parmas.survey_no;
-			getCopyingSurveyDeatil(servey_no);
-			return;
-		}
-
-		if(locationState == 'new' && parmas.survey_no) {
-			getCopyingSurveyDeatil(parmas.survey_no);
-			return;
-		}
-
-		if(locationState == 'edit' && parmas.survey_no) {
-			const servey_no = parmas.survey_no;
-			const getCopyingSurveyDeatil = async () => {
-				try {
-					const response = await surveyApi.getSurvey(servey_no);
-					if (response.result && response.code === 200) {
-						const survey = response.content;
-						dispatch(resetAll());
-
-						dispatch(addExistCard({
-							cardId: "TitleCard",
-							cardTitle: survey.title,
-							inputType: QuestionTypes.TITLE,
-							contents: survey.description,
-							isFocused: true
-						}));
-						setCards(survey);
-					}
-				} catch (error) {
-					console.error('Failed to fetch study list:', error);	
-				}
-			}
-
-			getCopyingSurveyDeatil();
-			return;
-		}
-	}, [locationState])
 
 
 	const setCards = (survey:SurveyDetail) => {
@@ -157,7 +138,7 @@ const SurveyNew = () => {
 			dispatch(addExistCard({
 				cardId: question.question_no + String(Date.now()),
 				cardTitle: question.question,
-				inputType: question.question_type,
+				inputType: question.question_type in QuestionTypes ? question.question_type : "WRITE",
 				contents: exampleList.length === 1 ? '' : exampleList,
 				isRequired: question.required_answer_yn == 'Y' ? true : false
 			}));
@@ -208,6 +189,7 @@ const SurveyNew = () => {
 		//저장후 localStorage에 저장된 서베이 삭제
 		
 		console.log(cards);
+		return;
 		const newSurvey : SurveyPostReqBody = {
 			title: '',
 			description: '',
@@ -307,7 +289,6 @@ const SurveyNew = () => {
 				<Formik
 					initialValues={initialValues}
 					validationSchema={schema}
-					validateOnChange={true}
 					enableReinitialize={true}
 					onSubmit={(values, actions) => {
 						actions.setSubmitting(false);
@@ -341,7 +322,10 @@ const SurveyNew = () => {
 										</Box>
 									
 								</AppBar>	
-								<FormBuilder />
+								{
+									cards && <FormBuilder />
+								}
+								
 							</Form>
 						);
 					}}
