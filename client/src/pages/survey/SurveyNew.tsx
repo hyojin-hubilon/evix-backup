@@ -98,8 +98,11 @@ const SurveyNew = () => {
 			if (response.result && response.code === 200) {
 				dispatch(resetAll())
 				const survey = response.content;
+				
 				const title = survey.title ? survey.title : '';
+				
 				console.log(title)
+				
 				dispatch(addExistCard({
 					cardId: "TitleCard",
 					cardTitle: locations.state == 'copy' ? '[Copy] ' + title : title,
@@ -289,6 +292,7 @@ const SurveyNew = () => {
 				<Formik
 					initialValues={initialValues}
 					validationSchema={schema}
+					validateOnChange={true}
 					enableReinitialize={true}
 					onSubmit={(values, actions) => {
 						actions.setSubmitting(false);

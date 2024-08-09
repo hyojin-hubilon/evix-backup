@@ -82,6 +82,8 @@ const ItemTypeSection = ({ id, cardIndex }: ItemTypeSectionProps) => {
 										variant="standard"
 										onChange={(e) => {
 											field.onChange(e.target.value);
+										}}
+										onBlur={(e)=> {
 											handleChangeContentText(e, content.id);
 										}}
 										sx={{
@@ -90,7 +92,7 @@ const ItemTypeSection = ({ id, cardIndex }: ItemTypeSectionProps) => {
 											}
 											
 										}}
-										value={content.isEtc ? "기타 : " : content.text}
+										defaultValue={content.isEtc ? "기타 : " : content.text}
 										disabled={content.isEtc}
 									/>
 									)}

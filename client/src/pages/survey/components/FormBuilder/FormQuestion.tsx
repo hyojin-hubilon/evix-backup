@@ -12,6 +12,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import CardHeader from "./CardHeader";
 import TextFieldSection from "./TextFieldSection";
 import ItemTypeSection from "./ItemTypeSection";
+import React from "react";
 
 export interface extendedCardProps extends CardProps {
 	isTitle: boolean;
@@ -166,4 +167,4 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 		</Draggable>
 	)
 }
-export default FormQuestion;
+export default React.memo(FormQuestion);

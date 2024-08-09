@@ -15,14 +15,10 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 	const theme = useTheme();
   	const dispatch = useDispatch();
   
-  	const isFocused = useSelector((state: StateProps) => {
-    const currentCard = state.cards.find((card) => card.id === id) as CardProps;
-    	return currentCard.isFocused;
+  	const [ isFocused, cardTitle, inputType ] = useSelector((state: StateProps) => {
+    	const currentCard = state.cards.find((card) => card.id === id) as CardProps;
+    	return [ currentCard.isFocused, currentCard.cardTitle, currentCard.inputType ];
   	}, shallowEqual);
-
-	const { cardTitle, inputType } = useSelector(
-		(state: StateProps) => state.cards.find((card) => card.id === id) as CardProps
-	);
 
 	const handleCardTitleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		dispatch(setTitle({ cardId: id, text: e.target.value }));
@@ -70,7 +66,6 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 						}				
 					}}
 				/>
-				{/* {console.log(errors.cards)} */}
 				</>
 			)}
 			</Field>
