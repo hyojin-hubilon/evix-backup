@@ -85,7 +85,7 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 					}) => (
 						<Select onChange={(e) => {
 								field.onChange(e.target.value);
-								handleInputTypeChange(e);
+								handleInputTypeChange(e.target.value);
 							}}
 							name={field.name}
 							value={inputType ? inputType : "WRITE"}
