@@ -417,7 +417,6 @@ const StudyNew = () => {
 									<Box sx={{
 										'span' : {display: 'block'}
 									}}>
-									<span>Study type:</span>
 									<span>- ePRO: ePRO(electronic Patient-Reported Outcome) is a service where patients electronically report their health status and treatment outcomes.</span>
 									<span>- eCOA: eCOA (electronic Clinical Outcome Assessment) refers to patient-reported outcomes and clinical assessment data collected electronically in clinical research.</span>
 									<span>- eCRF: eCRF (electronic Case Report Form) is a system used to collect and manage clinical data of patients electronically in clinical research.</span>
@@ -572,7 +571,7 @@ const StudyNew = () => {
                                     value={medicineYOrN}
                                     onChange={(e) => handleChangeMedicine(e.target.value)}
                                     sx={{
-                                        display: 'flex',
+                                        display: 'flex', 
                                         flexDirection: 'row',
                                     }}
                                 >
