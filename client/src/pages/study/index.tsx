@@ -135,7 +135,7 @@ const StudyList = () => {
 	useEffect(() => {
 		let newSearchedList = studies.filter(study => {
 			if(dateSet.startDt && dateSet.endDt) {
-				if(dayjs(dateSet.startDt).isSameOrBefore(dayjs(study.std_start_date)) && dayjs(study.std_end_date).isSameOrBefore(dayjs(dateSet.endDt))) return true;
+				if(dayjs(dateSet.startDt).isSameOrBefore(dayjs(study.std_start_date),'day') && dayjs(study.std_end_date).isSameOrBefore(dayjs(dateSet.endDt), 'day')) return true;
 				else return false;
 			} else {
 				return true;
