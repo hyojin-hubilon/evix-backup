@@ -42,7 +42,7 @@ const SurveyList = () => {
     
 
 	const decodedToken = getDecodedToken('userInfoToken');
-	const userNo = decodedToken['user-no'];
+	const userNo = decodedToken && decodedToken['user-no'] ? decodedToken['user-no'] : null;
 
     // Surrvey 데이터 불러오기
     const fetchSurvey = async () => {
