@@ -73,7 +73,6 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 									<Typography variant="h3" color="primary">{ study.number_participant }</Typography>
 									<Typography variant="h5" sx={{ml:'0.5rem'}}> / { study.target_number} </Typography>
 								</Box>
-
 								<CircleChart series={getPartCompleteRate(study)} />
 							</Box>
 						</GreyBox>

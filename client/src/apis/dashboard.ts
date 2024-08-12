@@ -18,25 +18,12 @@ const DashboardApi = {
             throw e;
         }
     },
-    // 최근 참여자 로그 (배포 상태인 스터디)
-    getRecentParticipantLogs: async () => {
-        try {
-            const responseData = await api<DashboardApiType.NumOfParticipantByStudy[]>(
-                `${BASE_API_URL}/recent-participant-logs`,
-                'get'
-            );
-
-            return responseData;
-        } catch (error) {
-            const e = error as ResCommonError;
-            throw e;
-        }
-    },
     // 월별 스터디 참여자 수 (배포 상태인 스터디)
-    getStudyGoalByMonthly: async (stdNo: number) => {
+    getStudyGoalByMonthly: async (stdNo: string) => {
+        const std_no = Number(stdNo);
         try {
             const responseData = await api<DashboardApiType.StudyGoalByMonthly[]>(
-                `${BASE_API_URL}/study-goal-by-monthly/${stdNo}`,
+                `${BASE_API_URL}/study-goal-by-monthly/${std_no}`,
                 'get'
             );
 
@@ -49,8 +36,22 @@ const DashboardApi = {
     // 주간 스터디 참여자 수 (배포 상태인 스터디)
     getWeeklyByStudy: async () => {
         try {
-            const responseData = await api<DashboardApiType.NumOfParticipantByStudy[]>(
+            const responseData = await api<DashboardApiType.WeeklyByStudy[]>(
                 `${BASE_API_URL}/weekly-by-study`,
+                'get'
+            );
+
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+    // 최근 참여자 로그 (배포 상태인 스터디)
+    getRecentParticipantLogs: async () => {
+        try {
+            const responseData = await api<DashboardApiType.NumOfParticipantByStudy[]>(
+                `${BASE_API_URL}/recent-participant-logs`,
                 'get'
             );
 
