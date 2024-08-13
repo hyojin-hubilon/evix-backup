@@ -18,7 +18,7 @@ const Navigation = () => {
 					})
 				}
 				
-				<Divider sx={{mt: '1rem', mb: '1rem'}}/>
+				{index + 1 !== menuItem.items.length && <Divider sx={{mt: '1rem', mb: '1rem'}}/>}
 				</Box>
 			)
 		}
