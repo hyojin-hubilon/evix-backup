@@ -27,7 +27,14 @@ import { useState } from 'react';
 import SurveyConnectDialog from './study-new/SurveyConnetDialog';
 import MemberManagement from './study-new/MemberManagement';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { CompletedIcon, ExpirationIcon, NewIcon, OngoingIcon, PauseIcon, StopIcon } from '@/components/StatusIcons';
+import {
+    CompletedIcon,
+    ExpirationIcon,
+    NewIcon,
+    OngoingIcon,
+    PauseIcon,
+    StopIcon,
+} from '@/components/StatusIcons';
 
 // * 진행중인 상태일 경우, 한눈에 알아볼 수 있도록 bg를 다르게 처리함.
 // * 배포전/일시정지/중단: 빨간색 txt 처리
@@ -45,32 +52,29 @@ export const STUDY_STATUS = {
 // 타입으로 추출
 export type STUDY_STATUS_KEY = keyof typeof STUDY_STATUS;
 
-export const TitleStatusIcon = ({status}: {status : string}) => {
-	const theme = useTheme();
-	const { stdStatus } = theme.palette;
-	return (
-		<span>
-			{
-				{
-					'STD-CREATED' : <NewIcon color={stdStatus.new} />,
-					'STD-PROGRESSION' : <OngoingIcon color={stdStatus.ongoing} />,
-					'STD-DONE' : <CompletedIcon color={stdStatus.completed} />,
-					'STD-EXPIRATION' : <ExpirationIcon color={stdStatus.expired} />,
-					'STD-PAUSE' : <PauseIcon color={stdStatus.pause} />,
-					'STD-STOP' : <StopIcon color={stdStatus.stop} />
-				}[status]
-				
-			}
-		
-		</span>
-	)
-	
-}
+export const TitleStatusIcon = ({ status }: { status: string }) => {
+    const theme = useTheme();
+    const { stdStatus } = theme.palette;
+    return (
+        <span>
+            {
+                {
+                    'STD-CREATED': <NewIcon color={stdStatus.new} />,
+                    'STD-PROGRESSION': <OngoingIcon color={stdStatus.ongoing} />,
+                    'STD-DONE': <CompletedIcon color={stdStatus.completed} />,
+                    'STD-EXPIRATION': <ExpirationIcon color={stdStatus.expired} />,
+                    'STD-PAUSE': <PauseIcon color={stdStatus.pause} />,
+                    'STD-STOP': <StopIcon color={stdStatus.stop} />,
+                }[status]
+            }
+        </span>
+    );
+};
 
 const StudyListItem = ({ study }: StudyListItemProps) => {
     const theme = useTheme();
     const statusLabel = STUDY_STATUS[study.std_status as STUDY_STATUS_KEY];
-	const { stdStatus } = theme.palette;
+    const { stdStatus } = theme.palette;
 
     const managerList: ManagerList[] = study.managerList;
 
@@ -118,15 +122,26 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
         setAnchorEl(null);
     };
 
+    const handleShowStudy = () => {
+        navigate(`/study/detail/${study.std_no}`);
+    };
+
     return (
         <>
             <Card
                 sx={{
-					bgcolor: theme.palette.secondary.lighter,
-					...(study.std_status === 'STD-PROGRESSION' && {bgcolor: theme.palette.primary.lighter}), //Ongoing
-					...(study.std_status === 'STD-DONE' && {bgcolor: theme.palette.success.lighter}), //Completed
-					...(study.std_status === 'STD-EXPIRATION' && {bgcolor: theme.palette.purple.lighter}), //EXPIRATION
+                    bgcolor: theme.palette.secondary.lighter,
+                    ...(study.std_status === 'STD-PROGRESSION' && {
+                        bgcolor: theme.palette.primary.lighter,
+                    }), //Ongoing
+                    ...(study.std_status === 'STD-DONE' && {
+                        bgcolor: theme.palette.success.lighter,
+                    }), //Completed
+                    ...(study.std_status === 'STD-EXPIRATION' && {
+                        bgcolor: theme.palette.purple.lighter,
+                    }), //EXPIRATION
                     p: '1rem',
+                    cursor: 'pointer',
                 }}
             >
                 <Grid container alignItems="center">
@@ -134,17 +149,25 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                         {/* 진행중/배포전/진행종료/일시정지/중단/Demo */}
 
                         <Typography
-							sx={{
-								color: stdStatus.new,
-								...(study.std_status === 'STD-PROGRESSION' && {color: stdStatus.ongoing}), //Ongoing
-								...(study.std_status === 'STD-DONE' && {color: stdStatus.completed}), //Completed
-								...(study.std_status === 'STD-EXPIRATION' && {color: stdStatus.expired}), //EXPIRATION
-							}}
-							fontWeight="600"
-						>
-							<TitleStatusIcon status={study.std_status} /> { statusLabel }
+                            sx={{
+                                color: stdStatus.new,
+                                ...(study.std_status === 'STD-PROGRESSION' && {
+                                    color: stdStatus.ongoing,
+                                }), //Ongoing
+                                ...(study.std_status === 'STD-DONE' && {
+                                    color: stdStatus.completed,
+                                }), //Completed
+                                ...(study.std_status === 'STD-EXPIRATION' && {
+                                    color: stdStatus.expired,
+                                }), //EXPIRATION
+                            }}
+                            fontWeight="600"
+                        >
+                            <TitleStatusIcon status={study.std_status} /> {statusLabel}
                         </Typography>
-                        <Typography variant="h4">{study.title}</Typography>
+                        <Typography variant="h4" onClick={handleShowStudy}>
+                            {study.title}
+                        </Typography>
                         <Typography variant="caption" sx={{ color: theme.palette.grey[500] }}>
                             {study.std_start_date} ~ {study.std_end_date}
                         </Typography>

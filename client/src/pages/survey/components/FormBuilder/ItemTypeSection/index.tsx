@@ -82,15 +82,18 @@ const ItemTypeSection = ({ id, cardIndex }: ItemTypeSectionProps) => {
 										variant="standard"
 										onChange={(e) => {
 											field.onChange(e.target.value);
+										}}
+										onBlur={(e)=> {
 											handleChangeContentText(e, content.id);
 										}}
+										key={content.id as string}
 										sx={{
 											input : {
 												borderBottom: ( errors.cards && errors.cards[cardIndex]?.contents && errors.cards[cardIndex].contents[idx] ? `1px solid ${theme.palette.error.main}` : 'none' )
 											}
 											
 										}}
-										value={content.isEtc ? "기타 : " : content.text}
+										defaultValue={content.isEtc ? "기타 : " : content.text}
 										disabled={content.isEtc}
 									/>
 									)}
@@ -159,4 +162,6 @@ const ItemTypeSection = ({ id, cardIndex }: ItemTypeSectionProps) => {
   	);
 };
 
-export default ItemTypeSection;
+
+
+export default React.memo(ItemTypeSection);

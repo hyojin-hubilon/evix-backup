@@ -5,18 +5,18 @@ export const RadioContainer = styled('div')`
   flex-direction: column;
   gap: 18px;
   margin-top: 10px;
+  align-item: center;
 `;
 
 export const Container = styled('div')`
-  display:inline-block;
-  vertical-align: middle;
+  display:flex;
+  align-item: center;
 `;
 
 
 export const Radio = styled('input')(({theme}) => ({
 	cursor: 'pointer',
 	appearance: 'none',
-	marginTop: '-1px',
 	marginLeft: 0,
 	marginRight: 0,
 	border: `2px solid ${theme.palette.grey[500]}`,
@@ -27,18 +27,17 @@ export const Radio = styled('input')(({theme}) => ({
 	':checked': {
 	  	border:  `6px solid ${theme.palette.primary.main}`
 	},
-	verticalAlign: 'middle'
 }))
 
 export const Label = styled('label')`
-	width: 100%;
   cursor: pointer;
   padding-left: 12px;
-
+	width: 90%;
 `;
 
 export const TextField = styled(MuiTextField)(({theme}) => ({
-	width: '90%',
+	display: 'flex',
+	flexGrow: 1,
 	marginLeft: '0.5rem',
 	'div' : {
 	  fontSize: '14px',
@@ -52,7 +51,6 @@ export const TextField = styled(MuiTextField)(({theme}) => ({
 }))
  
 export const EtcContainer = styled('div')`
-	width: 80%;
-	display: inline-block;
+	display: flex;
 	align-items: center
 `

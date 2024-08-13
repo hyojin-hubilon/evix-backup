@@ -143,40 +143,6 @@ interface Invite {
     accepted_at: string | null;
 }
 
-// export interface StudyDetail {
-//     std_no: number;
-//     std_type: string;
-//     title: string;
-//     std_start_date: string;
-//     std_end_date: string;
-//     description: string;
-//     location: string;
-//     disease: string;
-//     target_number: number;
-//     drug_code: string;
-//     drug_brand_name: string;
-//     drug_manufacturer_name: string;
-//     eic_name: string | null;
-//     eic_origin_name: string | null;
-//     eic_extension: string | null;
-//     std_status: string;
-//     std_payment_status: string;
-//     deploy_method: string;
-//     deploy_date: string;
-//     active_yn: string;
-//     delete_yn: string;
-//     created_user_no: number;
-//     created_at: string;
-//     updated_user_no: number;
-//     updated_at: string;
-//     deployed_user_no: number | null;
-//     deployed_at: string | null;
-//     std_privilege: string;
-//     studySurveySetList: any; // 타입 정의 필요
-//     managerList: Manager[];
-//     inviteList: Invite[];
-// }
-
 export interface StudyDetail {
     std_no: number;
     std_type: string;
@@ -186,7 +152,7 @@ export interface StudyDetail {
     description: string;
     location: string;
     disease: string;
-    target_number: number;
+    target_number: string;
     drug_code: string;
     drug_brand_name: string;
     drug_manufacturer_name: string;
@@ -242,3 +208,33 @@ export const actionMessages = {
     stop: '중지',
     progression: '재시작',
 };
+
+// Study 연령별 참여율
+export interface ParticipationRateByAge {
+    std_no: number;
+    num_male: number;
+    num_female: number;
+    num_age_10s_m: number;
+    num_age_10s_f: number;
+    num_age_20s_m: number;
+    num_age_20s_f: number;
+    num_age_30s_m: number;
+    num_age_30s_f: number;
+    num_age_40s_m: number;
+    num_age_40s_f: number;
+    num_age_50s_m: number;
+    num_age_50s_f: number;
+    num_age_60s_m: number;
+    num_age_60s_f: number;
+    num_age_70s_m: number;
+    num_age_70s_f: number;
+}
+
+// Study 누적 참여자 수 & 참여율
+export interface totalParticipants {
+    std_no: number;
+    title: string;
+    target_number: number;
+    number_participant: number;
+    participation_late: number;
+}

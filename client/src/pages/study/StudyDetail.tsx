@@ -9,20 +9,56 @@ import StudyParticipants from './components/StudyParicipations';
 import { useParams } from 'react-router-dom';
 import studyApi from '@/apis/study';
 import { STUDY_STATUS, STUDY_STATUS_KEY } from './components/StudyListItem';
+import { ParticipationRateByAge, totalParticipants } from '@/types/study';
 
 const StudyDetail = () => {
-    const { std_no } = useParams<{ std_no: any }>();
+    const { stdNo } = useParams<{ stdNo: string | undefined }>();
 
-    const [studyDetail, setStudyDetail] = useState<any>(null);
+    const [studyDetail, setStudyDetail] = useState<any>();
+
+    console.log('studyDetail: ', studyDetail);
+
+    const [totalParticipants, setTotalParticipants] = useState<totalParticipants | null>(null);
+    const [participationRateByAge, setParticipationRateByAge] =
+        useState<ParticipationRateByAge | null>(null);
 
     useEffect(() => {
-        const fetchStudyDetail = async () => {
-            const response = await studyApi.getStudyDetail(parseInt(std_no, 10));
-            setStudyDetail(response.content);
-        };
+        if (stdNo) {
+            const stdNoParsed = parseInt(stdNo, 10);
 
-        fetchStudyDetail();
-    }, [std_no]);
+            fetchStudyDetail(stdNoParsed);
+            fetchTotalParticipants(stdNoParsed);
+            fetchOverviewByAge(stdNoParsed);
+        }
+    }, [stdNo]);
+
+    const fetchStudyDetail = async (stdNo: number) => {
+        try {
+            const response = await studyApi.getStudyDetail(stdNo);
+            setStudyDetail(response.content);
+            if (response.content.std_status === 'STD-CREATED') setActiveTab('1');
+        } catch (error) {
+            console.error('Failed to Fetch study detail: ', error);
+        }
+    };
+
+    const fetchTotalParticipants = async (stdNo: number) => {
+        try {
+            const response = await studyApi.getTotalParticipants(stdNo);
+            setTotalParticipants(response.content as totalParticipants);
+        } catch (error) {
+            console.error('Failed to fetch total participants: ', error);
+        }
+    };
+
+    const fetchOverviewByAge = async (stdNo: number) => {
+        try {
+            const response = await studyApi.getParticipationRateByAge(stdNo);
+            setParticipationRateByAge(response.content as ParticipationRateByAge);
+        } catch (error) {
+            console.error('Failed to fetch participation rate by age: ', error);
+        }
+    };
 
     const [activeTab, setActiveTab] = useState('0');
 
@@ -33,7 +69,12 @@ const StudyDetail = () => {
 
     const partCompleteRate: ApexDonutChartSeriesType = {
         labels: ['참여완료율', '미완료율'],
-        series: [75, 25],
+        series: totalParticipants
+            ? [
+                  totalParticipants.participation_late * 100,
+                  100 - totalParticipants.participation_late * 100,
+              ]
+            : [0, 100],
     };
 
     const statusLabel = STUDY_STATUS[studyDetail?.std_status as STUDY_STATUS_KEY];
@@ -69,13 +110,19 @@ const StudyDetail = () => {
                             aria-label="Study Status Tab"
                         >
                             {/* 스터디 결과 요약 정보 */}
-                            <Tab label="Overview " value="0" />
+                            {studyDetail?.std_status !== 'STD-CREATED' && (
+                                <Tab label="Overview " value="0" />
+                            )}
                             {/* 스터디 개요, 연결/과금정보, 멤버관리 */}
                             <Tab label="Study Info " value="1" />
                             {/* 설문 참여자 상세 리스트 */}
-                            <Tab label="Participants " value="2" />
+                            {studyDetail?.std_status !== 'STD-CREATED' && (
+                                <Tab label="Participants " value="2" />
+                            )}
                             {/* 설문 결과 상세 */}
-                            <Tab label="Survey Report" value="3" />
+                            {studyDetail?.std_status !== 'STD-CREATED' && (
+                                <Tab label="Survey Report" value="3" />
+                            )}
                         </Tabs>
                     </Grid>
                     <Grid container item xs={2} justifyContent="flex-end">
@@ -97,9 +144,18 @@ const StudyDetail = () => {
                         )}
                     </Grid>
                 </Grid>
-                {activeTab === '0' && <StudyOverView partCompleteRate={partCompleteRate} />}
-                {activeTab === '1' && <StudyInfo studyDetail={studyDetail} />}
-                {activeTab === '2' && <StudyParticipants />}
+                {studyDetail &&
+                    activeTab === '0' &&
+                    totalParticipants &&
+                    participationRateByAge && (
+                        <StudyOverView
+                            partCompleteRate={partCompleteRate}
+                            totalParticipants={totalParticipants}
+                            participationRateByAge={participationRateByAge}
+                        />
+                    )}
+                {studyDetail && activeTab === '1' && <StudyInfo studyDetail={studyDetail} />}
+                {studyDetail && activeTab === '2' && <StudyParticipants />}
             </Grid>
         </>
     );

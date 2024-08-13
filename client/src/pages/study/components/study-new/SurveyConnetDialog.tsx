@@ -24,7 +24,7 @@ import { RegistrableSurvey } from '@/types/survey';
 import DraggableList from './DraggableList';
 import { DropResult } from '@hello-pangea/dnd';
 import { reorder } from '@/utils/helper';
-import SurveyPreview from './SurveyPreview';
+import SurveyConnectPreview from './SurveyConnectPreview';
 import surveyApi from '@/apis/survey';
 import studyApi from '@/apis/study';
 import SurveyDeleteDialog from './SurveyDeleteDialog';
@@ -308,7 +308,7 @@ const SurveyConnectDialog = ({
     };
 
     const handleSelectPreview = (surveyNo) => {
-        // console.log(surveyNo);
+        console.log(surveyNo);
         setPreviewSurveyNo(surveyNo);
     };
 
@@ -413,13 +413,13 @@ const SurveyConnectDialog = ({
                                     surveyList={searchedResult}
                                     selectedSurvey={selectedSurvey}
                                     handleSelected={(e) => handleSelectedSurvey(e)}
-                                    handleSelectPreview={(studyNo) => handleSelectPreview(studyNo)}
+                                    handleSelectPreview={(surveyNo) => handleSelectPreview(surveyNo)}
                                 />
                             </Box>
                         </DialogContent>
                     </Grid>
                     <Grid item xs={previewSurveyNo ? 4 : 0}>
-                        {previewSurveyNo && <SurveyPreview surveyNo={previewSurveyNo} />}
+                        {previewSurveyNo && <SurveyConnectPreview surveyNo={previewSurveyNo} />}
                     </Grid>
                 </Grid>
             </Dialog>

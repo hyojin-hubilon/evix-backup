@@ -33,6 +33,7 @@ const SimpleBarStyle = styled(SimpleBar)(({ theme }) => ({
         height: 6,
     },
     '& .simplebar-mask': {
+		overflow: 'hidden',
         zIndex: 'inherit',
     },
 }));

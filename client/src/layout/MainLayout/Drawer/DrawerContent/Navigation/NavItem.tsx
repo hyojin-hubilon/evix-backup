@@ -89,6 +89,7 @@ const NavItem = ({ item, level }: CustomProps) => {
                         bgcolor: 'transparent',
                     },
                 }),
+				overflow: 'hidden'
             }}
         >
             {item.icon && (
@@ -113,6 +114,7 @@ const NavItem = ({ item, level }: CustomProps) => {
                                     bgcolor: 'primary.lighter',
                                 },
                             }),
+						overflow: 'hidden'
                     }}
                 >
                     {itemIcon}

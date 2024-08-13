@@ -7,7 +7,6 @@ export interface MenuItem {
     title: string;
     type: string;
     url?: string;
-    collapse?: boolean;
     icon?: JSX.ElementType | ForwardRefExoticComponent<Omit<AntdIconProps, 'ref'>> | string;
     breadcrumbs?: boolean;
     target?: '_self' | '_blank' | true | false;

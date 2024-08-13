@@ -71,7 +71,10 @@ const studyApi = {
      */
     getStudyDetail: async (stdNo: number) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}`, 'get');
+            const responseData = await api<StudyApiType.StudyDetail>(
+                `${BASE_API_URL}/${stdNo}`,
+                'get'
+            );
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
@@ -324,6 +327,42 @@ const studyApi = {
     postSurvey: async (data) => {
         try {
             const responseData = await api<{}>(`${BASE_API_URL}/study-survey-set`, 'post', data);
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+
+    /**
+     * Study 누적 참여자 수 & 참여율
+     * @param stdNo
+     * @returns
+     */
+    getTotalParticipants: async (stdNo: Number) => {
+        try {
+            const responseData = await api<{}>(
+                `${BASE_API_URL}/${stdNo}/overview/number-of-participant-study`,
+                'get'
+            );
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+
+    /**
+     * Study 연령별 참여율
+     * @param stdNo
+     * @returns
+     */
+    getParticipationRateByAge: async (stdNo: Number) => {
+        try {
+            const responseData = await api<{}>(
+                `${BASE_API_URL}/${stdNo}/overview/number-of-participant-study-by-age`,
+                'get'
+            );
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
