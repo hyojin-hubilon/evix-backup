@@ -1,5 +1,5 @@
-import { MutableRefObject, useRef, useState } from 'react';
-import { Template, checkTemplate, Lang } from '@pdfme/common';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { Template, checkTemplate, Lang, DesignerProps } from '@pdfme/common';
 import { Designer } from '@pdfme/ui';
 import {
     getFontsData,
@@ -10,6 +10,15 @@ import {
     handleLoadTemplate,
     downloadJsonFile,
 } from './helper';
+import {
+    Box,
+    Button,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    Typography,
+} from '@mui/material';
 
 const headerHeight = 80;
 
@@ -21,14 +30,15 @@ const translations: { label: string; value: string }[] = [
     { value: 'ko', label: 'Korean' },
 ];
 
-function DesignerView() {
+function DesignerView({ basePdfFile, handleEicFile, onClose }) {
     const designerRef = useRef<HTMLDivElement | null>(null);
     const designer = useRef<Designer | null>(null);
     const [lang, setLang] = useState<Lang>('en');
     const [templatePreset, setTemplatePreset] = useState<string>(
         localStorage.getItem('templatePreset') || initialTemplatePresetKey
     );
-    const [prevDesignerRef, setPrevDesignerRef] = useState<MutableRefObject<HTMLDivElement | null> | null>(null);
+    const [prevDesignerRef, setPrevDesignerRef] =
+        useState<MutableRefObject<HTMLDivElement | null> | null>(null);
 
     const buildDesigner = () => {
         let template: Template = getTemplateByPreset(localStorage.getItem('templatePreset') || '');
@@ -100,13 +110,38 @@ function DesignerView() {
             for (const schema of schemas) {
                 for (const key in schema) {
                     if (seenKeys.has(key)) {
-                        alert(`중복된 필드가 있습니다(${key}) 서로 다른 필드 명을 가지고 있어야합니다.`);
+                        alert(
+                            `중복된 필드가 있습니다(${key}) 서로 다른 필드 명을 가지고 있어야합니다.`
+                        );
                         return;
                     }
                     seenKeys.add(key);
                 }
             }
             downloadJsonFile(template, 'template');
+            handleEicFile(template);
+        }
+    };
+
+    const onSaveTemplate = () => {
+        if (designer.current) {
+            const template = designer.current.getTemplate();
+            const schemas = template?.schemas;
+
+            const seenKeys = new Set();
+            for (const schema of schemas) {
+                for (const key in schema) {
+                    if (seenKeys.has(key)) {
+                        alert(
+                            `중복된 필드가 있습니다 (${key}) 서로 다른 필드 명을 가지고 있어야합니다.`
+                        );
+                        return;
+                    }
+                    seenKeys.add(key);
+                }
+            }
+            handleEicFile(template);
+            onClose();
         }
     };
 
@@ -118,58 +153,133 @@ function DesignerView() {
         setPrevDesignerRef(designerRef);
     }
 
+    const setUpBasePdf = (basePdf: File) => {
+        if (!basePdf) {
+            return;
+        }
+
+        readFile(basePdf, 'dataURL').then(async (basePdf) => {
+            if (designer.current) {
+                console.log('Updating template with base PDF...');
+                designer.current.updateTemplate(
+                    Object.assign(cloneDeep(designer.current.getTemplate()), {
+                        basePdf,
+                    })
+                );
+            }
+        });
+    };
+
+    useEffect(() => {
+        setUpBasePdf(basePdfFile);
+    }, [designer.current]);
+
     return (
-        <div>
-            <header
-                style={{
+        <Box
+            sx={{
+                position: 'relative',
+                width: '100%',
+                height: '100%',
+                bgcolor: 'background.paper',
+                boxShadow: 24,
+                p: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+            }}
+        >
+            <Box
+                sx={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     margin: '0 1rem',
                     fontSize: 'small',
+                    paddingTop: 2,
                 }}
             >
-                <strong>Register electronic consent form</strong>
-                <label>
-                    Lang:{' '}
-                    <select
-                        onChange={(e) => {
+                <Typography variant="h5">Register electronic consent form</Typography>
+                {/* <Box>
+                    <InputLabel id="lang-select-label">Lang</InputLabel>
+                    <Select
+                        labelId="lang-select-label"
+                        value={lang}
+                        onChange={(e: SelectChangeEvent) => {
                             setLang(e.target.value as Lang);
                             if (designer.current) {
                                 designer.current.updateOptions({ lang: e.target.value as Lang });
                             }
                         }}
-                        value={lang}
                     >
                         {translations.map((t) => (
-                            <option key={t.value} value={t.value}>
+                            <MenuItem key={t.value} value={t.value}>
                                 {t.label}
-                            </option>
+                            </MenuItem>
                         ))}
-                    </select>
-                </label>
-                <label style={{ width: 180 }}>
-                    Change BasePDF
-                    <input type="file" accept="application/pdf" onChange={onChangeBasePDF} />
-                </label>
-                <label style={{ width: 180 }}>
-                    Load Template
+                    </Select>
+                </Box> */}
+            </Box>
+            <Typography variant="h6" sx={{ paddingLeft: 2 }}>
+                Upload the electronic consent form in PDF file format to apply functions such as
+                consent and signature.
+            </Typography>
+            <Box
+                ref={designerRef}
+                sx={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }}
+            />
+            <Box>
+                {/**
+                <Box>
                     <input
+                        id="base-pdf-upload"
+                        type="file"
+                        accept="application/pdf"
+                        onChange={onChangeBasePDF}
+                        style={{ display: 'none' }}
+                    />
+                    <label htmlFor="base-pdf-upload">
+                        <Button variant="contained" component="span">
+                            Change
+                        </Button>
+                    </label>
+                </Box>
+                <Box>
+                    <input
+                        id="template-upload"
                         type="file"
                         accept="application/json"
                         onChange={(e) => {
                             handleLoadTemplate(e, designer.current);
                             setTemplatePreset(customTemplatePresetKey);
                         }}
+                        style={{ display: 'none' }}
                     />
-                </label>
-                <button onClick={onDownloadTemplate}>Download Template</button>
-            </header>
-            <div
-                ref={designerRef}
-                style={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }}
-            />
-        </div>
+                    <label htmlFor="template-upload">
+                        <Button variant="contained" component="span">
+                            Load
+                        </Button>
+                    </label>
+                </Box>
+                <Button variant="contained" onClick={onDownloadTemplate}>
+                    Download Template
+                </Button>*/}
+                <Button
+                    variant="outlined"
+                    sx={{ width: '50%', height: '40px', color: '#344054', borderColor: '#D0D5DD' }}
+                    onClick={onClose}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    sx={{ width: '50%', height: '40px' }}
+                    variant="contained"
+                    color="primary"
+                    onClick={onSaveTemplate}
+                >
+                    Save
+                </Button>
+            </Box>
+        </Box>
     );
 }
 

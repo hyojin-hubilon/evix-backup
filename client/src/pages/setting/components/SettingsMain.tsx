@@ -39,7 +39,10 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
     const navigate = useNavigate();
 
     const [profileImageUrl, setProfileImageUrl] = useState<string>(myProfile.profile_image_url);
-    const [emailAlerts, setEmailAlerts] = useState<boolean>(myProfile.email_notification_yn === 'Y');
+    const [emailAlerts, setEmailAlerts] = useState<boolean>(
+        myProfile.email_notification_yn === 'Y'
+    );
+
     const [language, setLanguage] = useState<string>(myProfile.language);
     const [changePasswordModal, setChangePasswordModal] = useState<boolean>(false);
 
@@ -57,7 +60,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
     const formik = useFormik({
         initialValues,
         validationSchema: validationSchema,
-        onSubmit: ({ user_no, mobile, country, company_name, job_title, industry, privilege }) => {
+        onSubmit: ({ user_no, mobile, country, company_name, job_title, industry }) => {
             const requestData: UpdateUserData = {
                 user_no,
                 mobile,
@@ -92,6 +95,10 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
 
     const handleMovePage = (url: string) => {
         navigate(url);
+    };
+
+    const handleEmailAlert = (): void => {
+        setEmailAlerts((prev) => !prev);
     };
 
     return (
@@ -286,7 +293,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                 control={
                                     <Switch
                                         checked={emailAlerts}
-                                        onChange={() => setEmailAlerts(!emailAlerts)}
+                                        onChange={handleEmailAlert}
                                         name="emailAlerts"
                                         color="primary"
                                     />
@@ -325,7 +332,11 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                             </Button>
                         </form>
                         {changePasswordModal && (
-                            <SettingChangePasswordForm user_no={myProfile.user_no} isOpen={changePasswordModal} handleClose={handleChangePasswordModal}/>
+                            <SettingChangePasswordForm
+                                user_no={myProfile.user_no}
+                                isOpen={changePasswordModal}
+                                handleClose={handleChangePasswordModal}
+                            />
                         )}
                     </Paper>
                 </Grid>
