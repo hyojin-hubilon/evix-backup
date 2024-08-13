@@ -24,7 +24,6 @@ import {
 import MainCard from '@components/MainCard';
 import Transitions from '@components/@extended/Transitions';
 import ProfileTab from './ProfileTab';
-import SettingTab from './SettingTab';
 
 // assets
 import avatar1 from '@assets/images/users/avatar-1.png';
@@ -242,66 +241,9 @@ const Profile = () => {
                                                         borderColor: 'divider',
                                                     }}
                                                 >
-                                                    <Tabs
-                                                        variant="fullWidth"
-                                                        value={value}
-                                                        onChange={handleChange}
-                                                        aria-label="profile tabs"
-                                                    >
-                                                        <Tab
-                                                            sx={{
-                                                                display: 'flex',
-                                                                flexDirection: 'row',
-                                                                justifyContent: 'center',
-                                                                alignItems: 'center',
-                                                                textTransform: 'capitalize',
-                                                            }}
-                                                            icon={
-                                                                <UserOutlined
-                                                                    style={{
-                                                                        marginBottom: 0,
-                                                                        marginRight: '10px',
-                                                                    }}
-                                                                />
-                                                            }
-                                                            label="Profile"
-                                                            {...a11yProps(0)}
-                                                        />
-                                                        <Tab
-                                                            sx={{
-                                                                display: 'flex',
-                                                                flexDirection: 'row',
-                                                                justifyContent: 'center',
-                                                                alignItems: 'center',
-                                                                textTransform: 'capitalize',
-                                                            }}
-                                                            icon={
-                                                                <SettingOutlined
-                                                                    style={{
-                                                                        marginBottom: 0,
-                                                                        marginRight: '10px',
-                                                                    }}
-                                                                />
-                                                            }
-                                                            label="Setting"
-                                                            {...a11yProps(1)}
-                                                        />
-                                                    </Tabs>
+                                                        
                                                 </Box>
-                                                <TabPanel
-                                                    value={value}
-                                                    index={0}
-                                                    dir={theme.direction}
-                                                >
-                                                    <ProfileTab onLogout={handleLogout} />
-                                                </TabPanel>
-                                                <TabPanel
-                                                    value={value}
-                                                    index={1}
-                                                    dir={theme.direction}
-                                                >
-                                                    <SettingTab />
-                                                </TabPanel>
+												<ProfileTab onLogout={handleLogout} />
                                             </>
                                         )}
                                     </MainCard>
