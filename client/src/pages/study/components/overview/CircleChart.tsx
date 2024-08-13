@@ -20,10 +20,9 @@ const CircleChart = (props: CircleChartProps) => {
 	const [ chartOptions, setChartOptions ] = useState<ApexOptions>({chart: {type:'donut'}});
 	
 	useEffect(() => {
-		console.log(series);
 		setChartOptions((prevState) => ({
 			...prevState,
-			colors: [theme.palette.primary.main, theme.palette.grey[200]],
+			colors: [theme.palette.primary.main, theme.palette.grey[300]],
 			legend: {
 				show: false
 			},
