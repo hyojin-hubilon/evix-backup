@@ -2,7 +2,7 @@ import surveyApi from "@/apis/survey";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { QuestionList, SurveyDetail } from '@/types/survey';
-import { Box, Button, Card, Typography, useTheme } from "@mui/material";
+import { Box, Button, Card, Container, Typography, useTheme } from "@mui/material";
 import ViewCard from "./components/FromView/ViewCard/ViewCard";
 import * as S from './components/FromView/ViewCard/styles';
 import { useDispatch, useSelector } from "react-redux";
@@ -10,12 +10,7 @@ import { resetAll, PreviewStateProps, addPreview } from "@/store/reducers/previe
 import { Formik, Form } from "formik";
 
 
-type SurveyViewProps = {
-	preview?: boolean,
-	// mobile?: "Y" | "N" | undefined,
-	surveyNo? : string | number
-}
-const SurveyView = ({preview, surveyNo} : SurveyViewProps) => {
+const SurveySubmit = () => {
 	const previewCards = useSelector((state: PreviewStateProps) => state.previewCards);
   	const dispatch = useDispatch();
 
@@ -72,23 +67,17 @@ const SurveyView = ({preview, surveyNo} : SurveyViewProps) => {
 	}
 
 	useEffect(() => {
-		
-		const surveyNumber = survey_no ? survey_no : surveyNo;
-		console.log(surveyNo);
+		const surveyNumber = survey_no;
 		if(surveyNumber) getSurveyDeatil(surveyNumber);
 	}, []);
-
-	useEffect(() => {
-		if(surveyNo) getSurveyDeatil(surveyNo);
-	}, [surveyNo])
-
 
 	const handleSumbit = (event) => {
 		console.log(event);
 	}
 
 	return(
-		<Box display="flex" flexDirection="column" gap={2}>
+		<Container maxWidth="md">
+		<Box display="flex" flexDirection="column" gap={2} p="1rem">
 			<Card sx={{width: '100%', p: '1.5rem', borderRadius:'8px', borderTop: `5px solid ${primary.main}`}}>
 				<Typography variant="h1">{survey.title}</Typography>
 				<Typography mt="1rem">{survey.description}</Typography>
@@ -113,15 +102,16 @@ const SurveyView = ({preview, surveyNo} : SurveyViewProps) => {
 						{
 							previewCards && previewCards.map((card, index) => <ViewCard key={index} id={card.cardId} />)
 						}
-						<Button variant="contained" color="primary" type="submit" disabled={preview ? true : false} fullWidth>제출하기</Button>
+						<Button variant="contained" color="primary" type="submit"  fullWidth>제출하기</Button>
 					</Box>
 				</Form>
 			</Formik>
 			
 		</Box>
+		</Container>
 	)
 }
 
-export default SurveyView;
+export default SurveySubmit;
 
 
