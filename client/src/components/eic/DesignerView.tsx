@@ -13,6 +13,8 @@ import {
 import {
     Box,
     Button,
+    DialogActions,
+    DialogTitle,
     InputLabel,
     MenuItem,
     Select,
@@ -83,6 +85,8 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                 designer.current.onChangeTemplate(() => {
                     setTemplatePreset(customTemplatePresetKey);
                 });
+
+				setUpBasePdf(basePdfFile);
             }
         });
     };
@@ -145,13 +149,7 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
         }
     };
 
-    if (designerRef != prevDesignerRef) {
-        if (prevDesignerRef && designer.current) {
-            designer.current.destroy();
-        }
-        buildDesigner();
-        setPrevDesignerRef(designerRef);
-    }
+
 
     const setUpBasePdf = (basePdf: File) => {
         if (!basePdf) {
@@ -170,9 +168,25 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
         });
     };
 
-    useEffect(() => {
-        setUpBasePdf(basePdfFile);
-    }, [designer.current]);
+    // useEffect(() => {
+	// 	console.log(basePdfFile, designer)
+    //     setUpBasePdf(basePdfFile);
+    // }, [designer.current]);
+
+
+	useEffect(() => {
+		// if (designerRef != prevDesignerRef) {
+			
+			if (designer.current) {
+				designer.current.destroy();
+			}
+			buildDesigner();
+			// setPrevDesignerRef(designerRef);
+			
+		// }
+
+		
+	}, [])
 
     return (
         <Box
@@ -182,22 +196,13 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                 height: '100%',
                 bgcolor: 'background.paper',
                 boxShadow: 24,
-                p: 4,
+                p: 0,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
             }}
         >
-            <Box
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    margin: '0 1rem',
-                    fontSize: 'small',
-                    paddingTop: 2,
-                }}
-            >
+           <DialogTitle>
                 <Typography variant="h5">Register electronic consent form</Typography>
                 {/* <Box>
                     <InputLabel id="lang-select-label">Lang</InputLabel>
@@ -218,11 +223,12 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                         ))}
                     </Select>
                 </Box> */}
-            </Box>
-            <Typography variant="h6" sx={{ paddingLeft: 2 }}>
-                Upload the electronic consent form in PDF file format to apply functions such as
-                consent and signature.
-            </Typography>
+				<Typography variant="h6">
+					Upload the electronic consent form in PDF file format to apply functions such as
+					consent and signature.
+				</Typography>
+			</DialogTitle>
+
             <Box
                 ref={designerRef}
                 sx={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }}
@@ -263,21 +269,23 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                 <Button variant="contained" onClick={onDownloadTemplate}>
                     Download Template
                 </Button>*/}
-                <Button
-                    variant="outlined"
-                    sx={{ width: '50%', height: '40px', color: '#344054', borderColor: '#D0D5DD' }}
-                    onClick={onClose}
-                >
-                    Cancel
-                </Button>
-                <Button
-                    sx={{ width: '50%', height: '40px' }}
-                    variant="contained"
-                    color="primary"
-                    onClick={onSaveTemplate}
-                >
-                    Save
-                </Button>
+				<DialogActions>
+					<Button
+						variant="outlined"
+						sx={{ width: '50%', height: '40px', color: '#344054', borderColor: '#D0D5DD' }}
+						onClick={onClose}
+					>
+						Cancel
+					</Button>
+					<Button
+						sx={{ width: '50%', height: '40px' }}
+						variant="contained"
+						color="primary"
+						onClick={onSaveTemplate}
+					>
+						Save
+					</Button>
+				</DialogActions>
             </Box>
         </Box>
     );
