@@ -18,10 +18,10 @@ type UploadDialogProps = {
 };
 
 const accept = {
-    'application/json': ['.json'],
+    'application/pdf': ['.pdf'],
 };
 
-const UploadEic: React.FC<UploadDialogProps> = ({ open, onClose, onConfirm }) => {
+const UploadBasePdf: React.FC<UploadDialogProps> = ({ open, onClose, onConfirm }) => {
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
 
     const onDrop = React.useCallback((acceptedFiles: File[]) => {
@@ -35,7 +35,7 @@ const UploadEic: React.FC<UploadDialogProps> = ({ open, onClose, onConfirm }) =>
     } = useDropzone({
         onDrop,
         accept: accept,
-        maxSize: 5 * 1024 * 1024, // 5MB
+        maxSize: 10 * 1024 * 1024, // 5MB
         noClick: true,
     });
 
@@ -45,10 +45,15 @@ const UploadEic: React.FC<UploadDialogProps> = ({ open, onClose, onConfirm }) =>
         }
     };
 
+    const handleCloseAndSetFileNull = () => {
+        setSelectedFile(null);
+        onClose();
+    }
+
     return (
         <Dialog
             open={open}
-            onClose={onClose}
+            onClose={handleCloseAndSetFileNull}
             fullWidth
             maxWidth="sm"
             PaperProps={{
@@ -82,7 +87,7 @@ const UploadEic: React.FC<UploadDialogProps> = ({ open, onClose, onConfirm }) =>
                         {selectedFile ? selectedFile.name : 'Choose a file or drag & drop it here'}
                     </Typography>
                     <Typography variant="body1" color="textSecondary">
-                        Please upload the (.json) file
+                        Please upload PDF formats, up to 10MB
                     </Typography>
                     <Button
                         variant="outlined"
@@ -103,7 +108,7 @@ const UploadEic: React.FC<UploadDialogProps> = ({ open, onClose, onConfirm }) =>
             </DialogContent>
             <DialogActions>
                 <Button
-                    onClick={onClose}
+                    onClick={handleCloseAndSetFileNull}
                     variant="outlined"
                     sx={{ width: '50%', height: '40px', color: '#344054', borderColor: '#D0D5DD' }}
                 >
@@ -123,4 +128,4 @@ const UploadEic: React.FC<UploadDialogProps> = ({ open, onClose, onConfirm }) =>
     );
 };
 
-export default UploadEic;
+export default UploadBasePdf;

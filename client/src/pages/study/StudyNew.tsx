@@ -32,12 +32,13 @@ import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
 import { InviteMemberTempType, StudyDetail } from '@/types/study';
 import MemberInvitement from './components/study-new/MemberInvitement';
 import MemberManagement from './components/study-new/MemberManagement';
-import UploadEic from './components/eic/UploadEic';
+import UploadBasePdf from './components/eic/UploadBasePdf';
 import CreateEic from './components/eic/CreateEic';
 import StudyDeleteConfirmDialog from './components/study-new/StudyDeleteConfirmDialog';
 import { MyProfile } from '@/types/user';
 import { useFormik } from 'formik';
 import StudyPreview from './StudyPreview';
+import EicParent from './components/eic/EicParent';
 
 const FormTooltip = ({ text }) => {
     return (
@@ -72,8 +73,9 @@ const StudyNew = () => {
 
     const [drug, setDrug] = useState<Drug>();
     const [country, setCountry] = useState('KO_KR');
-    const [isUploadEicOpen, setIsUploadEicOpen] = useState(false); //EIC 연결
-    const [isCreateEicOpen, setIsCreateEicOpen] = useState(false); //EIC 생성
+    const [basePdfFile, setBasePdfFile] = useState<File | null>(null); //BasePDF File
+    const [isUploadBasePdfOpen, setIsUploadBasePdfOpen] = useState(false); //BasePDF 업로드 팝업
+    const [isCreateEicOpen, setIsCreateEicOpen] = useState(false); //EIC 생성 팝업
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -198,17 +200,17 @@ const StudyNew = () => {
         setIsOpenSurvey(!isOpenSurvey);
     };
 
-    const handleOpenUploadEic = () => {
-        setIsUploadEicOpen(true);
+    const handleOpenUploadBasePdf = () => {
+        setIsUploadBasePdfOpen(true);
     };
 
-    const handleCloseUploadEic = () => {
-        setIsUploadEicOpen(false);
+    const handleCloseUploadBasePdf = () => {
+        setIsUploadBasePdfOpen(false);
     };
 
-    const handleConfirm = (file: File) => {
+    const handleEicFile = (file: File) => {
+        console.log(file);
         setEicFile(file);
-        handleCloseUploadEic();
     };
 
     const handleOpenCreateEic = () => {
@@ -217,6 +219,12 @@ const StudyNew = () => {
 
     const handleCloseCreateEic = () => {
         setIsCreateEicOpen(false);
+    };
+
+    const handleConfirm = (file: File) => {
+        setBasePdfFile(file);
+        handleCloseUploadBasePdf();
+        handleOpenCreateEic();
     };
 
     useEffect(() => {
@@ -643,17 +651,12 @@ const StudyNew = () => {
                                     </Box>
                                 </Grid>
                                 <Grid item xs={3.5}>
-                                    <Button variant="contained" onClick={handleOpenUploadEic}>
+                                    <Button variant="contained" onClick={handleOpenUploadBasePdf}>
                                         EIC 연결
                                     </Button>
                                     <span style={{ color: 'red' }}>
                                         {'  '}* Study 배포전에 반드시 연결해주세요.
                                     </span>
-                                </Grid>
-                                <Grid item xs={1}>
-                                    <Button variant="contained" onClick={handleOpenCreateEic}>
-                                        EIC 생성
-                                    </Button>
                                 </Grid>
                             </Grid>
 
@@ -910,12 +913,15 @@ const StudyNew = () => {
                 onDeleteSuccess={handleDeleteSuccess}
                 action={actionType}
             />
-            <UploadEic
-                open={isUploadEicOpen}
-                onClose={handleCloseUploadEic}
-                onConfirm={handleConfirm}
+            <EicParent
+                isUploadBasePdfOpen={isUploadBasePdfOpen}
+                handleCloseUploadBasePdf={handleCloseUploadBasePdf}
+                handleConfirm={handleConfirm}
+                isCreateEicOpen={isCreateEicOpen}
+                handleCloseCreateEic={handleCloseCreateEic}
+                handleEicFile={handleEicFile}
+                basePdfFile={basePdfFile}
             />
-            <CreateEic open={isCreateEicOpen} onClose={handleCloseCreateEic} />
         </Container>
     );
 };
