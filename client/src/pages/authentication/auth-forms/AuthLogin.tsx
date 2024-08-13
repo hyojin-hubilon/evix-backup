@@ -20,7 +20,6 @@ import {
 import GoogleSocial from './GoogleSocial';
 import * as AuthApiType from '@/types/auth';
 import authApi from '@/apis/auth';
-import AnimateButton from '@/components/@extended/AnimateButton';
 
 const AuthLogin = () => {
     const navigate = useNavigate();
@@ -152,7 +151,7 @@ const AuthLogin = () => {
                                 </Grid>
                             )}
                             <Grid item xs={12}>
-                                <AnimateButton>
+                                
                                     <Button
                                         disableElevation
                                         disabled={isSubmitting}
@@ -164,7 +163,7 @@ const AuthLogin = () => {
                                     >
                                         Login
                                     </Button>
-                                </AnimateButton>
+                                
                             </Grid>
                             <Grid item xs={12} sx={{ mt: -1 }}>
                                 <Stack
