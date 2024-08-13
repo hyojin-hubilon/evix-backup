@@ -658,14 +658,6 @@ const StudyNew = () => {
                                         {'  '}* Study 배포전에 반드시 연결해주세요.
                                     </span>
                                 </Grid>
-<<<<<<< HEAD
-=======
-                                <Grid item xs={1}>
-                                    <Button variant="contained" onClick={handleOpenCreateEic}>
-                                        EIC 생성
-                                    </Button>
-                                </Grid>
->>>>>>> v1/develop
                             </Grid>
 
                             {/* 멤버 관리 */}
