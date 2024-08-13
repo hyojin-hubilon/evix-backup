@@ -448,8 +448,7 @@ const DashboardDefault = () => {
                 </Grid>
             </Grid>
 
-            {/* 아래는 등록한 스터디가 없을 때 */}
-            <Box
+            { participantNumber.length === 0  && <Box
                 sx={{
                     position: 'absolute',
                     left: '-24px',
@@ -489,7 +488,8 @@ const DashboardDefault = () => {
                         </Button>
                     </Box>
                 </Box>
-            </Box>
+            </Box>}
+            
         </div>
     );
 };
