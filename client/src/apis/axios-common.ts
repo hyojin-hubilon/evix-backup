@@ -52,6 +52,23 @@ export const axios_instance = Axios.create({
     },
 });
 
+const ignoreUrl = ['/auth/login'];
+
+axios_instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (ignoreUrl.indexOf(error?.response?.config?.url) === -1) {
+            if ([401, 403, 404].includes(error?.response?.status)) {
+                if (typeof window !== 'undefined') {
+                    location.href = '/login';
+                }
+                throw error;
+            }
+        }
+        throw error;
+    }
+);
+
 export const axios_file_instance = Axios.create({
     withCredentials: true,
     baseURL: `/${apiVersion}`,
@@ -61,6 +78,21 @@ export const axios_file_instance = Axios.create({
         'Content-Type': 'multipart/form-data',
     },
 });
+
+axios_file_instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (ignoreUrl.indexOf(error?.response?.config?.url) === -1) {
+            if ([401, 403, 404].includes(error?.response?.status)) {
+                if (typeof window !== 'undefined') {
+                    location.href = '/login';
+                }
+                throw error;
+            }
+        }
+        throw error;
+    }
+);
 
 function generateError(
     code: number,
@@ -104,6 +136,7 @@ export async function api<T>(
         // }
         return res.data as ResCommonSuccess<T>;
     } catch (error) {
+		console.log(error)
         // if (loadingEle) {
         //     loadingEle.style.display = 'none';
         // }

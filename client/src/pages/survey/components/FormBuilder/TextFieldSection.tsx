@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { CardProps, setText, StateProps } from "@store/reducers/survey";
 import { Input, useTheme } from "@mui/material";
 import { QuestionTypes } from '@/types/survey';
@@ -13,22 +13,10 @@ const TextFieldSection = ({ id, cardIndex }:TextFieldSectionType) => {
 	const theme = useTheme();
 	const dispatch = useDispatch();
 
-	const inputType = useSelector((state: StateProps) => {
+	const [inputType, contents, isFocused] = useSelector((state: StateProps) => {
 		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
-		return currentCard.inputType;
-	}) as string;
-
-	const contents = useSelector((state: StateProps) => {
-		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
-		return currentCard.contents
-	})
-
-	
-
-	const isFocused = useSelector((state: StateProps) => {
-		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
-		return currentCard.isFocused;
-	}) as boolean;
+		return [currentCard.inputType, currentCard.contents, currentCard.isFocused];
+	}, shallowEqual);
 
 	const isTitle = inputType === QuestionTypes.TITLE;
 
@@ -71,4 +59,4 @@ const TextFieldSection = ({ id, cardIndex }:TextFieldSectionType) => {
 	);
 };
 
-export default TextFieldSection;
+export default React.memo(TextFieldSection);

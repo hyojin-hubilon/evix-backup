@@ -8,7 +8,8 @@ export const Container = styled('div')`
 `;
 
 export const TextField = styled(MuiTextField)(({theme}) => ({
-	width: '90%',
+	display: 'flex',
+	flexGrow: 1,
 	marginLeft: '0.5rem',
   	'div' : {
     fontSize: '14px',
@@ -25,7 +26,9 @@ export const TextField = styled(MuiTextField)(({theme}) => ({
 
 export const Label = styled('label')`
 	width: 100%;
+	display:flex;
   	cursor: pointer;
+	align-items: center;
 `;
 
 
@@ -82,8 +85,8 @@ export const Checkbox = styled('input')(({theme}) => ({
 
 
 export const EtcContainer = styled('div')`
-	width: 80%;
-	display: inline-block;
+	width: 90%;
+	display: flex;
 	padding-left:12px;
 	align-items: center
 `

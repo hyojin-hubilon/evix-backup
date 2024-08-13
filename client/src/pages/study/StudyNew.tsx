@@ -413,7 +413,17 @@ const StudyNew = () => {
                                 <Typography variant="h5">
                                     <span style={{ color: 'red' }}>*</span> Study Type
                                 </Typography>
-                                <FormTooltip text="Select the Study Type" />
+                                <FormTooltip text={
+									<Box sx={{
+										'span' : {display: 'block'}
+									}}>
+									<span>- ePRO: ePRO(electronic Patient-Reported Outcome) is a service where patients electronically report their health status and treatment outcomes.</span>
+									<span>- eCOA: eCOA (electronic Clinical Outcome Assessment) refers to patient-reported outcomes and clinical assessment data collected electronically in clinical research.</span>
+									<span>- eCRF: eCRF (electronic Case Report Form) is a system used to collect and manage clinical data of patients electronically in clinical research.</span>
+									</Box>
+									}
+								/>
+
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
@@ -424,6 +434,8 @@ const StudyNew = () => {
                                     sx={{ width: '10rem' }}
                                 >
                                     <MenuItem value="ePRO">ePRO</MenuItem>
+									<MenuItem value="eCOA">eCOA</MenuItem>
+									<MenuItem value="eCRF">eCRF</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -436,7 +448,7 @@ const StudyNew = () => {
                                 <Typography variant="h5">
                                     <span style={{ color: 'red' }}>*</span> 제목
                                 </Typography>
-                                <FormTooltip text="Enter the title of the Study" />
+                                {/* <FormTooltip text="Enter the title of the Study" /> */}
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
@@ -446,7 +458,7 @@ const StudyNew = () => {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
-                                <FormHelperText error>{errors.title}</FormHelperText>
+                                {/* <FormHelperText error>{errors.title}</FormHelperText> */}
                             </FormControl>
                         </Grid>
                     </Grid>
@@ -458,7 +470,7 @@ const StudyNew = () => {
                                 <Typography variant="h5">
                                     <span style={{ color: 'red' }}>*</span> 기간
                                 </Typography>
-                                <FormTooltip text="Enter the duration of the Study" />
+                                {/* <FormTooltip text="Enter the duration of the Study" /> */}
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
@@ -477,9 +489,9 @@ const StudyNew = () => {
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
                                 <Typography variant="h5">
-                                    <span style={{ color: 'red' }}>*</span>대상인원
+                                    <span style={{ color: 'red' }}>* </span>대상인원
                                 </Typography>
-                                <FormTooltip text="Enter the number of participants" />
+                                {/* <FormTooltip text="Enter the number of participants" /> */}
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
@@ -504,7 +516,7 @@ const StudyNew = () => {
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
                                 <Typography variant="h5">개요</Typography>
-                                <FormTooltip text="Enter a brief summary of the Study" />
+                                {/* <FormTooltip text="Enter a brief summary of the Study" /> */}
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
@@ -524,9 +536,9 @@ const StudyNew = () => {
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
                                 <Typography variant="h5">
-                                    <span style={{ color: 'red' }}>*</span>질환
+                                    <span style={{ color: 'red' }}>* </span>질환
                                 </Typography>
-                                <FormTooltip text="Enter the disease for the Study" />
+                                {/* <FormTooltip text="Enter the disease for the Study" /> */}
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
@@ -546,9 +558,9 @@ const StudyNew = () => {
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
                                 <Typography variant="h5">
-                                    <span style={{ color: 'red' }}>*</span>의약품 정보
+                                    의약품 정보
                                 </Typography>
-                                <FormTooltip text="Enter the drug information if applicable" />
+                                <FormTooltip text="You can search drug information using KFDA open API, FDA open API." />
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
@@ -559,7 +571,7 @@ const StudyNew = () => {
                                     value={medicineYOrN}
                                     onChange={(e) => handleChangeMedicine(e.target.value)}
                                     sx={{
-                                        display: 'flex',
+                                        display: 'flex', 
                                         flexDirection: 'row',
                                     }}
                                 >

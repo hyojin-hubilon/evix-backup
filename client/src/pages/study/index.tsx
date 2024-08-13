@@ -16,7 +16,7 @@ import {
 	Pagination,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import StudyListItem from './components/StudyListItem';
+import StudyListItem, { STUDY_STATUS, STUDY_STATUS_KEY } from './components/StudyListItem';
 import studyApi from '@/apis/study';
 import { MyStudyList, StudyApiResponse } from '@/types/study';
 import { getDecodedToken } from '@/utils/Cookie';
@@ -135,7 +135,7 @@ const StudyList = () => {
 	useEffect(() => {
 		let newSearchedList = studies.filter(study => {
 			if(dateSet.startDt && dateSet.endDt) {
-				if(dayjs(dateSet.startDt).isSameOrBefore(dayjs(study.std_start_date)) && dayjs(study.std_end_date).isSameOrBefore(dayjs(dateSet.endDt))) return true;
+				if(dayjs(dateSet.startDt).isSameOrBefore(dayjs(study.std_start_date),'day') && dayjs(study.std_end_date).isSameOrBefore(dayjs(dateSet.endDt), 'day')) return true;
 				else return false;
 			} else {
 				return true;
@@ -147,6 +147,7 @@ const StudyList = () => {
 			newSearchedList = newSearchedList.filter(study => {
 				if(study.title.toLowerCase().includes(searchTerm.toLowerCase())) return true;
 				else if(study.disease.toLowerCase().includes(searchTerm.toLowerCase())) return true;
+				else if(STUDY_STATUS[study.std_status as STUDY_STATUS_KEY].toLowerCase().includes(searchTerm.toLowerCase())) return true;
 				else return false;
 			});
 		}

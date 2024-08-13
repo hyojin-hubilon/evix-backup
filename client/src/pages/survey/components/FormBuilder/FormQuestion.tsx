@@ -12,6 +12,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import CardHeader from "./CardHeader";
 import TextFieldSection from "./TextFieldSection";
 import ItemTypeSection from "./ItemTypeSection";
+import React from "react";
 
 export interface extendedCardProps extends CardProps {
 	isTitle: boolean;
@@ -22,26 +23,16 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 	const dispatch = useDispatch();
 	
 	const theme = useTheme();
-	const { grey, primary } = theme.palette;
+	const { primary } = theme.palette;
 	
-	const isFocused = useSelector((state: StateProps) => {
+	const [isFocused, inputType, isRequired] = useSelector((state: StateProps) => {
 		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
-		return currentCard.isFocused;
+		return [currentCard.isFocused, currentCard.inputType, currentCard.isRequired];
 	}, shallowEqual);
-
-	const { inputType } = useSelector(
-		(state: StateProps) => state.cards.find((card) => card.id === id) as CardProps,
-		shallowEqual,
-	);
 
 	const setIsFocused = () => {
 		if (!isFocused) dispatch(focus({ id }));
 	};
-
-	const isRequired = useSelector((state: StateProps) => {
-		const currentCard = state.cards.find((card) => card.id === id) as CardProps;
-		return currentCard.isRequired;
-	});
 
 	const handleChangeRequired = () => {
 		dispatch(toggleIsRequired({ id }));
@@ -149,7 +140,7 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 								<FormControlLabel
 									value="end"
 									sx={{ml: "0.5rem"}}
-									control={<Switch name="required" checked={isRequired} onChange={handleChangeRequired} />}
+									control={<Switch name="required" checked={isRequired as boolean} onChange={handleChangeRequired} />}
 									label="필수"
 									labelPlacement="start"
 									onClick={(e) => {
@@ -166,4 +157,4 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 		</Draggable>
 	)
 }
-export default FormQuestion;
+export default React.memo(FormQuestion);

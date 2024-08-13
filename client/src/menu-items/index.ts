@@ -1,12 +1,13 @@
 // project import
 import { MenuItems } from '@/types/menu';
-import { OrderedListOutlined, AppstoreAddOutlined, DashboardOutlined, BarChartOutlined, SettingOutlined } from '@ant-design/icons';
+import { OrderedListOutlined, AppstoreAddOutlined, DashboardOutlined, BarChartOutlined, SettingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 const icons = {
     OrderedListOutlined,
     AppstoreAddOutlined,
 	DashboardOutlined,
 	BarChartOutlined,
-	SettingOutlined
+	SettingOutlined,
+	QuestionCircleOutlined
 };
 
 
@@ -46,13 +47,28 @@ const menuItems: MenuItems = {
 			]	
 		},
 		{
-            id: 'settings',
-            title: 'Settings',
-            type: 'item',
-            url: '/settings',
-            icon: icons.SettingOutlined,
-            breadcrumbs: false,
-        },
+			id: 'evix-info',
+			title: 'evix-info',
+			type: 'group',
+			children: [
+				{
+					id: 'help',
+					title: 'Help',
+					type: 'item',
+					url: '/help',
+					icon: icons.QuestionCircleOutlined,
+					breadcrumbs: false,
+				},
+				{
+					id: 'settings',
+					title: 'Settings',
+					type: 'item',
+					url: '/settings',
+					icon: icons.SettingOutlined,
+					breadcrumbs: false,
+				},
+			]
+		}
 	],
 };
 
