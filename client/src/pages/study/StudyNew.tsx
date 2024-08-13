@@ -650,7 +650,7 @@ const StudyNew = () => {
                                         <FormTooltip text="Connect the EIC before Study deployment." />
                                     </Box>
                                 </Grid>
-                                <Grid item xs={3.5}>
+                                <Grid item xs={9}>
                                     <Button variant="contained" onClick={handleOpenUploadBasePdf}>
                                         EIC 연결
                                     </Button>
