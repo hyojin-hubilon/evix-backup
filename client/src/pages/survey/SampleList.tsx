@@ -63,7 +63,7 @@ const SampleList = () => {
 	}, [selectedDisease])
 
 	const handleClickNew = () => {
-		navigate('/survey/new');
+		navigate('/survey/new', {state: 'new'});
 	}
 
 	const handleShowPreview = (survey_no : number) => {
