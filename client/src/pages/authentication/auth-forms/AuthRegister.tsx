@@ -39,6 +39,8 @@ const SignUp = () => {
     const token: string = location.state?.token ?? '';
     const decodedToken: InviteToken = getTokenInfo(token);
 
+	console.log(getTokenInfo)
+
     const [privacyPolicyIsOpen, setPrivacyPolicyIsOpen] = useState<boolean>(false);
     const [termsIsOpen, setTermsIsOpen] = useState<boolean>(false);
     const [isComplete, setIsComplete] = useState<boolean>(false);

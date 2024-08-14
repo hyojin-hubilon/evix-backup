@@ -3,17 +3,21 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useState } from "react";
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useNavigate } from 'react-router';
+
 
 const Help = () => {
 	const [ searchTerm, setSearchTerm] = useState('');
 	const [ activeTab, setActiveTab] = useState('0');
+
+	const navigate = useNavigate();
 
 	const handleSearch = (e) => {
 		setSearchTerm(e.target.value);
 	}
 
 	const handleMoveToSupport = () => {
-
+		navigate('/user-support')
 	}
 
 	const handleChangeTab = (_event: React.SyntheticEvent, newValue: string) => {
