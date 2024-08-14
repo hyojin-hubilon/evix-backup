@@ -78,6 +78,7 @@ interface StudyInfoProps {
 
 const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
     const theme = useTheme();
+    console.log(studyDetail);
 
     const formatDate = (dateString: string): string => {
         return moment(dateString).format('YYYY-MM-DD');
@@ -100,9 +101,38 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
         setIsOpenSurvey(!isOpenSurvey);
     };
 
-    // console.log('studySurveySetList: ', studySurveySetList);
-
     const statusLabel = STUDY_STATUS[studyDetail.std_status as STUDY_STATUS_KEY];
+
+    const handleDownloadEicFile = async () => {
+        try {
+            if (studyDetail.eic_name) {
+                const response = await studyApi.downloadEicFile(
+                    studyDetail.std_no,
+                    studyDetail.eic_name
+                );
+                console.log(response);
+            } else {
+                console.log('Eic does not exist');
+                return;
+            }
+        } catch (error) {
+            console.error('Failed to Download EIC File', error);
+        }
+    };
+
+    const handleDeleteEicFile = async () => {
+        try {
+            if (studyDetail.eic_name) {
+                const response = await studyApi.deleteEicFile(studyDetail.std_no);
+                console.log(response);
+            } else {
+                console.log('Eic does not exist');
+                return;
+            }
+        } catch (error) {
+            console.error('Failed to Download EIC File', error);
+        }
+    };
 
     return (
         <Grid container item rowSpacing={2} className="study-info">
@@ -298,7 +328,9 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                             Delete
                                         </Button>
                                     )}
-                                    <Button variant="outlined">Edit</Button>
+                                    <Button variant="outlined" onClick={handleDownloadEicFile}>
+                                        Edit
+                                    </Button>
                                 </Box>
                             </Box>
                             {studyDetail.eic_origin_name && (

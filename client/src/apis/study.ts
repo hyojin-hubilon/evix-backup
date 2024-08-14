@@ -369,6 +369,38 @@ const studyApi = {
             throw e;
         }
     },
+
+    /**
+     * Study에 연결된 임상시험 원본 EIC 다운로드
+     */
+    downloadEicFile: async (stdNo: Number, fileName:string) => {
+        try {
+            const responseData = await api<{}>(
+                `${BASE_API_URL}/original-eic-download/${stdNo}/${fileName}`,
+                'get'
+            );
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+
+    /**
+     * Study에 연결된 임상시험 원본 EIC 삭제
+     */
+    deleteEicFile: async (stdNo: Number) => {
+        try {
+            const responseData = await api<{}>(
+                `${BASE_API_URL}/original-eic-download/${stdNo}`,
+                'delete'
+            );
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
 };
 
 export default studyApi;
