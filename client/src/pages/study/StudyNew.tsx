@@ -177,7 +177,7 @@ const StudyNew = () => {
                 new Blob([JSON.stringify(data)], { type: 'application/json' })
             );
 
-            전자동의서 파일이 있는 경우 FormData에 추가
+            // 전자동의서 파일이 있는 경우 FormData에 추가
             if (eicFile) {
                 reviewForm.append('eic_file', eicFile);
             }
