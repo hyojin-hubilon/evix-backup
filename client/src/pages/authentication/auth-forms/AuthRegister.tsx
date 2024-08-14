@@ -39,8 +39,6 @@ const SignUp = () => {
     const token: string = location.state?.token ?? '';
     const decodedToken: InviteToken = getTokenInfo(token);
 
-	console.log(getTokenInfo)
-
     const [privacyPolicyIsOpen, setPrivacyPolicyIsOpen] = useState<boolean>(false);
     const [termsIsOpen, setTermsIsOpen] = useState<boolean>(false);
     const [isComplete, setIsComplete] = useState<boolean>(false);
@@ -123,7 +121,8 @@ const SignUp = () => {
     return (
         <Container maxWidth="sm">
             <Box>
-                <Typography variant="h4" gutterBottom>
+				{/* 메일을 폼에 넣고 disabled해주는 편이 좋을 듯 하다... */}
+                <Typography variant="h4" gutterBottom> 
                     {decodedToken.email}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
