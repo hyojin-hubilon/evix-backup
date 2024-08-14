@@ -15,6 +15,7 @@ import AuthPassword from '@/pages/authentication/AuthPassword';
 // render - login
 const AuthLogin = Loadable(lazy(() => import('@/pages/authentication/Login')));
 const AuthRegister = Loadable(lazy(() => import('@/pages/authentication/Register')));
+const SurveySubmit = Loadable(lazy(() => import('@/pages/survey/SurveySubmit')));
 // const ApplyFreeTrial = Loadable(
 //     lazy(() => import("pages/authentication/ApplyFreeTrial"))
 // );
@@ -42,6 +43,7 @@ const LoginRoutes = {
         { path: 'forgot-password', element: <ForgotPassword /> },
         { path: 'change-password', element: <ChangePassword /> },
         { path: 'authentication-password', element: <AuthPassword /> },
+		{ path : 'survey/submit/:survey_no', element: <SurveySubmit />}
     ],
 };
 

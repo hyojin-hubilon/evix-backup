@@ -10,7 +10,7 @@ type CreateEicProps = {
 };
 const CreateEic: React.FC<CreateEicProps> = ({ open, onClose, basePdfFile, handleEicFile }) => {
     return (
-        <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
+        <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg" sx={{padding:'0 !important'}} scroll='body'>
             <DesignerView
                 basePdfFile={basePdfFile}
                 handleEicFile={handleEicFile}
