@@ -20,11 +20,13 @@ const GoogleSocial = () => {
         try {
             const googleInfo: Decoded = jwtDecode(response.credential);
             const { email, sub } = googleInfo;
-            console.log({ email, sub });
-            const googleResponse = await authApi.googleLogin({email, sub})
-            console.log({ googleResponse });
-            // 로그인이 성공하면 메인 화면으로 이동
-            navigate('/');
+
+            const googleResponse = await authApi.googleLogin({ email, sub });
+            console.log('googleResponse: ', { googleResponse });
+
+            if (googleResponse.code === 200) {
+                navigate('/dashboard');
+            }
         } catch (error) {
             console.log(error);
         }
