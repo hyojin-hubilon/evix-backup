@@ -179,7 +179,7 @@ const StudyNew = () => {
 
             // 전자동의서 파일이 있는 경우 FormData에 추가
             if (eicFile) {
-                reviewForm.append('eic_file', eicFile);
+                reviewForm.append('eic_file', eicFile, `${data.title}.json`);
             }
 
             try {
@@ -298,7 +298,7 @@ const StudyNew = () => {
 
     const handleUpdate = async () => {
         if (validate()) {
-            const studyData = {
+            const data = {
                 std_no: stdNo,
                 title: title,
                 std_type: 'E-PRO',
@@ -311,25 +311,23 @@ const StudyNew = () => {
                 drug_code: medicineYOrN === 'true' ? drug?.itemCode ?? null : null,
                 drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
                 drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
-                // 수정 화면에서 Survey, 초대 제외
-                // studySurveySetList: [],
-                // inviteList: [],
             };
 
             // FormData 객체 생성 및 데이터 추가
-            const formData = new FormData();
+            const reviewForm = new FormData();
 
-            const json = JSON.stringify(studyData);
-            const blob = new Blob([json], { type: 'application/json' });
+            reviewForm.append(
+                'requestDto',
+                new Blob([JSON.stringify(data)], { type: 'application/json' })
+            );
 
-            formData.append('requestDto', blob);
             // 전자동의서 파일이 있는 경우 FormData에 추가
             if (eicFile) {
-                formData.append('eic_file', eicFile);
+                reviewForm.append('eic_file', eicFile, `${data.title}.json`);
             }
 
             try {
-                const response = await studyApi.updateStudy(formData);
+                const response = await studyApi.updateStudy(reviewForm);
                 if (response.code === 200) {
                     navigate('/study');
                 }

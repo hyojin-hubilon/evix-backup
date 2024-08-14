@@ -207,12 +207,12 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                     consent and signature.
                 </Typography>
             </DialogTitle>
-
             <Box
                 ref={designerRef}
                 sx={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }}
             />
-            <Box>
+
+             <Box>
                 <Box>
                     <input
                         id="base-pdf-upload"
@@ -270,6 +270,7 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                     </Button>
                 </DialogActions>
             </Box>
+
         </Box>
     );
 }
