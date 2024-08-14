@@ -11,7 +11,6 @@ import {
     CardContent,
     ClickAwayListener,
     Grid,
-    IconButton,
     Paper,
     Popper,
     Stack,
@@ -26,9 +25,11 @@ import Transitions from '@components/@extended/Transitions';
 import ProfileTab from './ProfileTab';
 
 // assets
-import avatar1 from '@assets/images/users/avatar-1.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { getDecodedToken } from '@utils/Cookie';
+import { MyProfile } from '@/types/user';
+import userApi from '@/apis/user';
+import { useTranslation } from 'react-i18next';
+import authApi from '@/apis/auth';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -51,50 +52,42 @@ TabPanel.propTypes = {
     value: PropTypes.any.isRequired,
 };
 
-function a11yProps(index) {
-    return {
-        id: `profile-tab-${index}`,
-        'aria-controls': `profile-tabpanel-${index}`,
-    };
-}
-
 // ==============================|| HEADER CONTENT - PROFILE ||============================== //
 
 const Profile = () => {
-    const [userData, setUserData] = useState(null);
-    const [dct, setDct] = useState(null);
+    const { t, i18n } = useTranslation();
+
+    const [userData, setUserData] = useState<MyProfile | null>(null);
 
     useEffect(() => {
-        const fetchData = async () => {
-            const decodedToken = getDecodedToken('userInfoToken');
-            const aa = getDecodedToken('dctAccessToken');
-            setUserData(decodedToken); // 토큰 복호화해서 userData에 넣어줌
-            setDct(aa);
-        };
-        fetchData();
+        getMyProfile();
     }, []);
 
-    console.log(userData);
-    console.log(dct);
+    const getMyProfile = async () => {
+        try {
+            const response = await userApi.getMyProfile();
+            if (response.code === 200) {
+                setUserData(response.content);
+            }
+        } catch (error) {
+            console.error('Failed to fetch profile:', error);
+        }
+    };
 
     const theme = useTheme();
     const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('/api/v1/auth/logout', {
-                method: 'GET',
-                credentials: 'include',
-            });
-            if (response.ok) {
-                // removeCookie();
+            const response = await authApi.logout();
+            if (response.code === 200) {
                 setUserData(null);
-                navigate('/'); // 로그아웃 성공 시 홈 페이지로 이동
+                navigate('/login'); // 로그아웃 성공 시 홈 페이지로 이동
             } else {
-                console.error('로그아웃 요청 실패:', response.statusText);
+                console.error('Failed to log out: ', response.code);
             }
         } catch (error) {
-            console.error('로그아웃 요청 중 에러 발생:', error);
+            console.error('Failed to log out: ', error);
         }
     };
 
@@ -111,10 +104,9 @@ const Profile = () => {
         setOpen(false);
     };
 
-    const [value, setValue] = useState(0);
-
-    const handleChange = (_event, newValue) => {
-        setValue(newValue);
+    const handleSettings = () => {
+        navigate('/settings');
+        setOpen(false);
     };
 
     const iconBackColorOpen = 'grey.300';
@@ -124,38 +116,43 @@ const Profile = () => {
             <ButtonBase
                 sx={{
                     p: 0.25,
-					color: theme.palette.grey[800],
+                    color: theme.palette.grey[800],
                     bgcolor: open ? iconBackColorOpen : 'transparent',
                     borderRadius: 1,
                     '&:hover': { bgcolor: 'secondary.lighter' },
                 }}
                 aria-label="open profile"
-                ref={anchorRef} 
+                ref={anchorRef}
                 aria-controls={open ? 'profile-grow' : undefined}
                 aria-haspopup="true"
                 onClick={handleToggle}
             >
-                <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
-                    <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
-                    <Typography variant="subtitle1">
-                        {userData ? (
-                            `welcome ${userData['user-firstname']}`
-                        ) : (
-                            <RouterLink
-                                to="/login"
-                                style={{
-                                    textDecoration: 'none'
-                                }}
-                            >
-                                로그인해주십시오
-                            </RouterLink>
-                        )}
+                <Stack>
+                    <Typography>
+                        <Typography
+                            component="span"
+                            variant="h6"
+                            color="primary"
+                            sx={{
+                                fontWeight: 'bold',
+                            }}
+                        >
+                            {userData?.first_name} {userData?.last_name}
+                        </Typography>{' '}
+                        님 안녕하세요
                     </Typography>
+                </Stack>
+                <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
+                    <Avatar
+                        alt="profile user"
+                        src={userData?.profile_image_url}
+                        sx={{ width: 32, height: 32 }}
+                    />
                 </Stack>
             </ButtonBase>
             <Popper
                 placement="bottom-end"
-				className='popper-root'
+                className="popper-root"
                 open={open}
                 anchorEl={anchorRef.current}
                 role={undefined}
@@ -171,16 +168,14 @@ const Profile = () => {
                         },
                     ],
                 }}
-				
             >
                 {({ TransitionProps }) => (
                     <Transitions type="fade" in={open} {...TransitionProps}>
                         {open && userData && (
                             <Paper
                                 sx={{
-                                    // boxShadow: theme.customShadows.z1,
                                     width: 290,
-									minWidth: 240,
+                                    minWidth: 240,
                                     maxWidth: 290,
                                     [theme.breakpoints.down('md')]: {
                                         maxWidth: 250,
@@ -201,36 +196,27 @@ const Profile = () => {
                                                         spacing={1.25}
                                                         alignItems="center"
                                                     >
-                                                        <Avatar
-                                                            alt="profile user"
-                                                            src={avatar1}
-                                                            sx={{
-                                                                width: 32,
-                                                                height: 32,
-                                                            }}
-                                                        />
                                                         <Stack>
-                                                            <Typography variant="h6">
-                                                                {userData['user-firstname']}
-                                                            </Typography>
                                                             <Typography
-                                                                variant="body2"
-                                                                color="textSecondary"
+                                                                variant="h6"
+                                                                color="primary"
+                                                                sx={{
+                                                                    fontWeight: 'bold',
+                                                                }}
                                                             >
-                                                                {userData['user-privilege']}
+                                                                {userData?.first_name}{' '}
+                                                                {userData?.last_name}
                                                             </Typography>
                                                         </Stack>
                                                     </Stack>
                                                 </Grid>
-                                                <Grid item>
-                                                    <IconButton
-                                                        size="large"
-                                                        color="secondary"
-                                                        onClick={handleLogout}
-                                                    >
-                                                        <LogoutOutlined />
-                                                    </IconButton>
-                                                </Grid>
+                                            </Grid>
+                                            <Grid>
+                                                <Stack>
+                                                    <Typography color="textSecondary">
+                                                        {userData.email}{' '}
+                                                    </Typography>
+                                                </Stack>
                                             </Grid>
                                         </CardContent>
                                         {open && (

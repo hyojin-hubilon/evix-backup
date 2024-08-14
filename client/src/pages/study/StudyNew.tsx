@@ -288,12 +288,13 @@ const StudyNew = () => {
                 });
                 setMedicineYOrN('true');
             }
-
             setStdStatus(response.content['std_status']);
         } catch (error) {
             console.error('Failed to fetch study detail:', error);
         }
     };
+
+    console.log('studyDetail:', studyDetail);
 
     const handleUpdate = async () => {
         if (validate()) {
@@ -330,6 +331,15 @@ const StudyNew = () => {
             try {
                 const response = await studyApi.updateStudy(formData);
                 if (response.code === 200) {
+                    // Survey OR EIC 미연결
+                    if (!studyDetail?.studySurveySetList || !studyDetail?.eic_name) {
+                        alert(
+                            'Study가 수정되었습니다.\nStudy 배포전에 Survey와 EIC를 연결해주세요.'
+                        );
+                    } else {
+                        alert('Study가 수정되었습니다.');
+                    }
+
                     navigate('/study');
                 }
             } catch (error) {
@@ -385,14 +395,8 @@ const StudyNew = () => {
 
     const handlePreview = () => {
         // 미리보기 화면 출력
-        // setShowPreview(true);
-
         navigate('/study/preview', { state: { mode: 'preview', studyDetail: studyDetail } });
     };
-
-    // if (showPreview) {
-    //     return <StudyPreview studyDetail={studyDetail}></StudyPreview>;
-    // }
 
     return (
         <Container maxWidth="lg">

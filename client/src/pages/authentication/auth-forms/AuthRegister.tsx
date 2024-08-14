@@ -96,8 +96,8 @@ const SignUp = () => {
             first_name: '',
             last_name: '',
             terms: false,
-            email: decodedToken.email,
-            privilege: decodedToken['other-information'],
+            email: decodedToken.email, //가입시 토큰 decoded 안하는 방향으로 수정, email은 url에 추가 예정이며 폼에 메일주소 수정불가로 변경하기
+            privilege: "RESEARCHER",
             active_yn: 'Y',
             token: token,
         },
