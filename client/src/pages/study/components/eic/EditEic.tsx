@@ -1,13 +1,13 @@
-import Previewer from '@/components/eic/PreViewer';
+import EditViewer from '@/components/eic/EditViewer';
 import { Dialog } from '@mui/material';
 
-interface PreviewEicProps {
+interface EditEicProps {
     open: boolean;
     onClose: () => void;
     eicFile: any;
 }
 
-const PreviewEic = ({ open, onClose, eicFile }: PreviewEicProps) => {
+const EditEic = ({ open, onClose, eicFile }: EditEicProps) => {
     return (
         <>
             <Dialog
@@ -18,10 +18,10 @@ const PreviewEic = ({ open, onClose, eicFile }: PreviewEicProps) => {
                 sx={{ padding: '0 !important' }}
                 scroll="body"
             >
-                <Previewer eicFile={eicFile} onClose={onClose}/>
+                <EditViewer eicFile={eicFile} onClose={onClose}/>
             </Dialog>
         </>
     );
 };
 
-export default PreviewEic;
+export default EditEic;

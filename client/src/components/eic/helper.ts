@@ -93,7 +93,6 @@ export const handlePreviewTemplate = (
         getTemplateFromJsonFile(eicFile)
             .then((template) => {
                 if (!currentRef) return;
-                console.log(template);
                 currentRef.updateTemplate(template);
             })
             .catch((error) => {

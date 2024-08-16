@@ -8,6 +8,7 @@ import {
     getPlugins,
     handlePreviewTemplate,
 } from './helper';
+import { ConsoleView } from 'react-device-detect';
 
 const headerHeight = 71;
 
@@ -29,12 +30,11 @@ const initTemplate = () => {
     return template;
 };
 
-const Previewer = ({ eicFile }) => {
+const Previewer = ({ eicFile, onClose }) => {
     const uiRef = useRef<HTMLDivElement | null>(null);
     const ui = useRef<Form | Viewer | null>(null);
-    const [prevUiRef, setPrevUiRef] = useState<MutableRefObject<
-        HTMLDivElement | Form | Viewer | null
-    > | null>(null);
+    const [prevUiRef, setPrevUiRef] = 
+    useState<MutableRefObject<HTMLDivElement | Form | Viewer | null> | null>(null);
 
     const mode: Mode = 'form';
 
@@ -72,37 +72,22 @@ const Previewer = ({ eicFile }) => {
         });
     };
 
-    const onGetInputs = () => {
-        if (ui.current) {
-            const inputs = ui.current.getInputs();
-            console.log('aaa', inputs);
-
-            for (const obj of inputs) {
-                for (const key in obj) {
-                    if (obj[key] === 'N' || obj[key] === '') {
-                        alert('필수 입력값을 작성해주세요.');
-                        return;
-                    }
-                }
-            }
-
-            alert(JSON.stringify(inputs, null, 2));
-        }
-    };
-
     useEffect(() => {
-        if (uiRef != prevUiRef) {
+        if (uiRef !== prevUiRef) {
             if (prevUiRef && ui.current) {
                 ui.current.destroy();
             }
             buildUi(mode);
             setPrevUiRef(uiRef);
         }
-        
+
         const jsonFile = new Blob([JSON.stringify(eicFile)], {
             type: 'application/json',
         });
-        handlePreviewTemplate(jsonFile, ui.current);
+
+        getFontsData().then(() => {
+            handlePreviewTemplate(jsonFile, ui.current);
+        });
     }, []);
 
     return (
@@ -118,15 +103,7 @@ const Previewer = ({ eicFile }) => {
                 }}
             >
                 <strong>Preview</strong>
-                {/* <label style={{ width: 180 }}>
-                    Load Template
-                    <input
-                        type="file"
-                        accept="application/json"
-                        onChange={(e) => handleLoadTemplate(e, ui.current)}
-                    />
-                </label>
-                <button onClick={onGetInputs}>Get Inputs</button> */}
+                <button onClick={onClose}>Close</button>
                 <button onClick={() => generatePDF(ui.current)}>Preview PDF</button>
             </header>
             <div ref={uiRef} style={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }} />

@@ -73,7 +73,6 @@ function FormAndViewer() {
     const onGetInputs = () => {
         if (ui.current) {
             const inputs = ui.current.getInputs();
-            console.log('aaa', inputs);
 
             for (const obj of inputs) {
                 for (const key in obj) {

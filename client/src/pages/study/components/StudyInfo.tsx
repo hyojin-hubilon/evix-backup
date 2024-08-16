@@ -21,11 +21,10 @@ import MemberManagement from './study-new/MemberManagement';
 import { surveyCycle } from '@/types/study';
 import SurveyConnectDialog from './study-new/SurveyConnetDialog';
 import studyApi from '@/apis/study';
-import DesignerView from '@/components/eic/DesignerView';
 import DeleteModal from './eic/DeleteModal';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import EicParent from './eic/EicParent';
 import PreviewEic from './eic/PreviewEic';
+import EditEic from './eic/EditEic';
 
 interface StudyInfoProps {
     studyDetail: {
@@ -118,14 +117,25 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
 
     const [eicFile, setEicFile] = useState<any>(null);
     const [isPreviewEicOpen, setIsPreviewEicOpen] = useState<boolean>(false);
+    const [isEditEicOpen, setIsEditEicOpen] = useState<boolean>(false);
+    const [basePdf, setBasePdf] = useState<File | null>(null);
 
     const handlePreviewOpen = () => {
         setIsPreviewEicOpen(true);
     };
-
     const handlePreviewClose = () => {
         setIsPreviewEicOpen(false);
     };
+    const handleEditViewOpen = () => {
+        setIsEditEicOpen(true);
+    };
+    const handleEditViewClose = () => {
+        setIsEditEicOpen(false);
+    };
+
+    const handleOpenUploadBasePdf = () => {
+
+    }
 
     const handleDownloadEicFile = async () => {
         try {
@@ -361,6 +371,7 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                             </Button>
                                             <Button
                                                 variant="outlined"
+                                                onClick={handleEditViewOpen}
                                             >
                                                 Edit
                                             </Button>
@@ -460,10 +471,8 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                 studyNo={studyDetail.std_no}
             />
             <DeleteModal open={isDelete} onClose={handleDeleteClose} onDelete={() => {}} />
-            {eicFile !== null && (
-                <DesignerView basePdfFile={null} handleEicFile={() => {}} onClose={() => {}} />
-            )}
             <PreviewEic open={isPreviewEicOpen} onClose={handlePreviewClose} eicFile={eicFile}/>
+            <EditEic open={isEditEicOpen} onClose={handleEditViewClose} eicFile={eicFile}/>
         </Grid>
     );
 };
