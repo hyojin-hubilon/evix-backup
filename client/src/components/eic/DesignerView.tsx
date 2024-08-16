@@ -169,11 +169,6 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
         });
     };
 
-    // useEffect(() => {
-    // 	console.log(basePdfFile, designer)
-    //     setUpBasePdf(basePdfFile);
-    // }, [designer.current]);
-
     useEffect(() => {
         // if (designerRef != prevDesignerRef) {
 

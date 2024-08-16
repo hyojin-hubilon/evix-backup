@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MainCard from '@/components/MainCard';
 import moment from 'moment';
 import {
@@ -25,6 +25,7 @@ import DesignerView from '@/components/eic/DesignerView';
 import DeleteModal from './eic/DeleteModal';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import EicParent from './eic/EicParent';
+import PreviewEic from './eic/PreviewEic';
 
 interface StudyInfoProps {
     studyDetail: {
@@ -115,34 +116,15 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
         setIsDelete(false);
     };
 
-    const [basePdfFile, setBasePdfFile] = useState<File | null>(null); //BasePDF File
-    const [isUploadBasePdfOpen, setIsUploadBasePdfOpen] = useState(false); //BasePDF 업로드 팝업
-    const [isCreateEicOpen, setIsCreateEicOpen] = useState(false); //EIC 생성 팝업
     const [eicFile, setEicFile] = useState<any>(null);
+    const [isPreviewEicOpen, setIsPreviewEicOpen] = useState<boolean>(false);
 
-    const handleOpenUploadBasePdf = () => {
-        setIsUploadBasePdfOpen(true);
-    };
-    const handleCloseUploadBasePdf = () => {
-        setIsUploadBasePdfOpen(false);
+    const handlePreviewOpen = () => {
+        setIsPreviewEicOpen(true);
     };
 
-    const handleEicFile = (file: File) => {
-        setEicFile(file);
-    };
-
-    const handleOpenCreateEic = () => {
-        setIsCreateEicOpen(true);
-    };
-
-    const handleCloseCreateEic = () => {
-        setIsCreateEicOpen(false);
-    };
-
-    const handleConfirm = (file: File) => {
-        setBasePdfFile(file);
-        handleCloseUploadBasePdf();
-        handleOpenCreateEic();
+    const handlePreviewClose = () => {
+        setIsPreviewEicOpen(false);
     };
 
     const handleDownloadEicFile = async () => {
@@ -152,7 +134,7 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                     studyDetail.std_no,
                     studyDetail.eic_name
                 );
-                setEicFile(response);
+                setEicFile(() => response);
             } else {
                 console.log('Eic does not exist');
                 return;
@@ -175,6 +157,10 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
             console.error('Failed to Download EIC File', error);
         }
     };
+
+    useEffect(() => {
+        handleDownloadEicFile();
+    }, []);
 
     return (
         <Grid container item rowSpacing={2} className="study-info">
@@ -375,7 +361,6 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                             </Button>
                                             <Button
                                                 variant="outlined"
-                                                onClick={handleDownloadEicFile}
                                             >
                                                 Edit
                                             </Button>
@@ -397,7 +382,12 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                 >
                                     <ListItem>
                                         {/* <Link>개인정보 제공 및 참여 동의서</Link> */}
-                                        <Link>{studyDetail.eic_origin_name ?? ''}</Link>
+                                        <Link
+                                            style={{ cursor: 'pointer' }}
+                                            onClick={handlePreviewOpen}
+                                        >
+                                            {studyDetail.eic_origin_name ?? ''}
+                                        </Link>
                                     </ListItem>
                                 </List>
                             )}
@@ -412,8 +402,11 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                         height: '130px',
                                     }}
                                 >
-                                    <IconButton color="inherit" >
-                                        <AddCircleOutlineIcon sx={{ fontSize: 40 }} onClick={handleOpenUploadBasePdf}/>
+                                    <IconButton color="inherit">
+                                        <AddCircleOutlineIcon
+                                            sx={{ fontSize: 40 }}
+                                            onClick={handleOpenUploadBasePdf}
+                                        />
                                     </IconButton>
                                     <Typography variant="body1" color="textSecondary">
                                         Register your electronic consent form.
@@ -466,19 +459,11 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                 mode="edit"
                 studyNo={studyDetail.std_no}
             />
-            <EicParent
-                isUploadBasePdfOpen={isUploadBasePdfOpen}
-                handleCloseUploadBasePdf={handleCloseUploadBasePdf}
-                handleConfirm={handleConfirm}
-                isCreateEicOpen={isCreateEicOpen}
-                handleCloseCreateEic={handleCloseCreateEic}
-                handleEicFile={handleEicFile}
-                basePdfFile={basePdfFile}
-            />
             <DeleteModal open={isDelete} onClose={handleDeleteClose} onDelete={() => {}} />
             {eicFile !== null && (
                 <DesignerView basePdfFile={null} handleEicFile={() => {}} onClose={() => {}} />
             )}
+            <PreviewEic open={isPreviewEicOpen} onClose={handlePreviewClose} eicFile={eicFile}/>
         </Grid>
     );
 };
