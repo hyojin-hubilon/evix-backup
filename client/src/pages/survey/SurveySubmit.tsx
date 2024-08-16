@@ -94,6 +94,7 @@ const SurveySubmit = () => {
 					validateOnBlur={true}
 					onSubmit={(values, actions) => {
 						actions.setSubmitting(false);
+						handleSumbit(values);
 						console.log(actions, values); //아직 답변 POST 없음
 					}}
 				>
@@ -102,7 +103,7 @@ const SurveySubmit = () => {
 						{
 							previewCards && previewCards.map((card, index) => <ViewCard key={index} id={card.cardId} />)
 						}
-						<Button variant="contained" color="primary" type="submit"  fullWidth>제출하기</Button>
+						<Button variant="contained" color="primary" type="submit" fullWidth>제출하기</Button>
 					</Box>
 				</Form>
 			</Formik>
