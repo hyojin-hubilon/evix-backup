@@ -77,7 +77,7 @@ const UserSupport = () => {
 							validateOnChange={true}
 							enableReinitialize={true}
 							onSubmit={(values, actions) => {
-								console.log(values)
+								console.log(values)//mail로 문의
 								actions.setSubmitting(false);
 							}}
 		
@@ -87,7 +87,6 @@ const UserSupport = () => {
 								handleBlur,
 								handleChange,
 								handleSubmit,
-								isSubmitting,
 								touched,
 								values,
 							}) => (
