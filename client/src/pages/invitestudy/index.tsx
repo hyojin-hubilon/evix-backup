@@ -1,5 +1,6 @@
 import authApi from '@/apis/auth';
 import { ResCommonError } from '@/apis/axios-common';
+import { useConfirmation } from '@/components/ui/ConfirmDialog/ConfirmDialogContext';
 import { Button, Container, Grid, Box, Typography, styled } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +10,7 @@ const InviteStudy = () => {
     const navigate = useNavigate();
     const { token } = useParams<{ token: string }>();
     const { t } = useTranslation();
+	const confirm = useConfirmation();
 
     const toApplyPage = () => {
         navigate('/apply');
@@ -65,29 +67,50 @@ const InviteStudy = () => {
                 const response = await authApi.verifyInviteToken(token);
                 if (response.code === 200) {
                     // 토큰 유효 > 회원가입이 되어있는 유저, 스터디 초대 완료
-                    alert(response.message);
-                    navigate('/');
+					confirm({
+						description: response.message,
+						variant: 'info'
+					})
+					.then(() => { 
+						navigate('/');
+					});
+                    
                     return;
                 }
                 if (response.code === 404) {
                     // 토큰 유효 > 회원가입이 안되어있는 유저, 회원가입으로 이동
-                    alert(response.message);
-                    navigate('/register', { state: { token } });
+					confirm({
+						description: response.message,
+						variant: 'info'
+					})
+					.then(() => { 
+						navigate('/register', { state: { token } });
+					});
                     return;
                 }
                 if (response.code === 208 || response.code === 401) {
                     // 208 : 토큰 유효 > 토큰이 이미 사용된 경우
                     // 401 : 토큰 유효시간 만료
-                    alert(response.message);
-                    navigate('/');
+					confirm({
+						description: response.message,
+						variant: 'info'
+					})
+					.then(() => { 
+						navigate('/');
+					});
                     return;
                 }
             } catch (error) {
                 // 토큰 조작, 에러
                 const e = error as ResCommonError;
                 if (e) {
-                    alert(e.message);
-                    navigate('/');
+					confirm({
+						description: e.message,
+						variant: 'info'
+					})
+					.then(() => { 
+						navigate('/');
+					});   
                 }
             }
         };

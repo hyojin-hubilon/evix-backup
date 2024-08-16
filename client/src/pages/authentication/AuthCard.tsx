@@ -13,7 +13,7 @@ const AuthCard = (
     <MainCard // MainCard 컴포넌트를 렌더링합니다.
         sx={{
             // 스타일을 설정합니다.
-            maxWidth: { xs: 400, lg: 600 }, // 최대 너비를 설정합니다.
+            // maxWidth: { xs: 400, lg: 600 }, // 최대 너비를 설정합니다.
             // margin: { xs: 2.5, md: 3 }, // 마진을 설정합니다.
             '& > *': {
                 // 자식 요소에 스타일을 적용합니다.

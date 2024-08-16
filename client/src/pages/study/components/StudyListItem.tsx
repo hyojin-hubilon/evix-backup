@@ -23,7 +23,7 @@ import {
 import { ManagerList, StudyListItemProps } from '@/types/study';
 import { getDecodedToken } from '@/utils/Cookie';
 import StudyNew from '../StudyNew';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SurveyConnectDialog from './study-new/SurveyConnetDialog';
 import MemberManagement from './study-new/MemberManagement';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -74,23 +74,13 @@ export const TitleStatusIcon = ({ status }: { status: string }) => {
 const StudyListItem = ({ study }: StudyListItemProps) => {
     const theme = useTheme();
     const statusLabel = STUDY_STATUS[study.std_status as STUDY_STATUS_KEY];
+	const [ isOwner, setIsOwner ] = useState(false);
+	const [ isEditable, setIsEditable ] = useState(false);
     const { stdStatus } = theme.palette;
 
     const managerList: ManagerList[] = study.managerList;
 
     const decodedToken = getDecodedToken('userInfoToken');
-
-    const userNo = decodedToken['user-no'];
-
-    const isOwner = managerList.some(
-        (manager) => manager.user_no === userNo && manager.std_privilege === 'OWNER'
-    );
-
-    const isEditable = managerList.some(
-        (manager) =>
-            (manager.user_no === userNo && manager.std_privilege === 'OWNER') ||
-            (manager.user_no === userNo && manager.std_privilege === 'MAINTAINER')
-    );
 
     const navigate = useNavigate();
 
@@ -125,6 +115,25 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
     const handleShowStudy = () => {
         navigate(`/study/detail/${study.std_no}`);
     };
+
+	useEffect(() => {
+		const userNo = decodedToken && decodedToken['user-no'];
+		if(userNo) {
+			const isOwner = managerList.some(
+				(manager) => manager.user_no === userNo && manager.std_privilege === 'OWNER'
+			);
+
+			setIsOwner(isOwner);
+		
+			const isEditable = managerList.some(
+				(manager) =>
+					(manager.user_no === userNo && manager.std_privilege === 'OWNER') ||
+					(manager.user_no === userNo && manager.std_privilege === 'MAINTAINER')
+			);
+
+			setIsEditable(isEditable);
+		}
+	}, [])
 
     return (
         <>

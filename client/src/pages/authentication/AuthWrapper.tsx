@@ -22,17 +22,16 @@ const AuthWrapper = ({ children }) => (
             container
             justifyContent="center" // 자식 요소들을 가운데로 정렬합니다.
             alignItems="center" // 자식 요소들을 수직 방향으로 가운데로 정렬합니다.
-            // sx={{
+			// sx={{
             //     minHeight: "100vh", // 컨테이너의 최소 높이를 화면 전체 높이로 설정합니다.
             // }}
         >
-            <Grid>
-                <Grid container alignItems="center" justifyContent="center">
-                    <Box sx={{ pb: '1rem' }}>
-                        <Logo width={250} />
-                    </Box>
-                </Grid>
-                <AuthCard>{children}</AuthCard> {/* 인증 카드를 표시하고, children을 전달합니다. */}
+            <Grid item xs={12} sm={10} md={8} lg={5}>
+				<Box sx={{ pb: '1rem' }} display="flex" justifyContent="center">
+					<Logo width={250} />
+				</Box>
+		
+				<AuthCard>{children}</AuthCard> {/* 인증 카드를 표시하고, children을 전달합니다. */}
             </Grid>
         </Grid>
     </Box>
