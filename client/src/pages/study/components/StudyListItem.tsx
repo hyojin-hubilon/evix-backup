@@ -80,7 +80,6 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
 
     const managerList: ManagerList[] = study.managerList;
 
-    const decodedToken = getDecodedToken('userInfoToken');
 
     const navigate = useNavigate();
 
@@ -117,18 +116,16 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
     };
 
 	useEffect(() => {
-		const userNo = decodedToken && decodedToken['user-no'];
-		if(userNo) {
-			const isOwner = managerList.some(
-				(manager) => manager.user_no === userNo && manager.std_privilege === 'OWNER'
-			);
+		const decodedToken = getDecodedToken('dctAccessToken');
+		console.log(decodedToken);
 
-			setIsOwner(isOwner);
-		
+		const userId = decodedToken && decodedToken['sub'];
+
+		if(userId) {
 			const isEditable = managerList.some(
 				(manager) =>
-					(manager.user_no === userNo && manager.std_privilege === 'OWNER') ||
-					(manager.user_no === userNo && manager.std_privilege === 'MAINTAINER')
+					(manager.email === userId && manager.std_privilege === 'OWNER') ||
+					(manager.user_no === userId && manager.std_privilege === 'MAINTAINER')
 			);
 
 			setIsEditable(isEditable);
@@ -233,7 +230,7 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                                     <Paper>
                                         <ClickAwayListener onClickAway={handleClose}>
                                             <MenuList id="study-button-menu" autoFocusItem>
-                                                {isOwner && study.std_status !== 'STD-DONE' && (
+                                                {study.std_privilege === "OWNER" && study.std_status !== 'STD-DONE' && (
                                                     <MenuItem
                                                         onClick={() =>
                                                             handleInviteMember(study.std_no)
