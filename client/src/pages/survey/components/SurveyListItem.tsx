@@ -11,11 +11,10 @@ import { useConfirmation } from '@/components/ui/ConfirmDialog/ConfirmDialogCont
 
 type SurveyListItemProps = {
 	survey: MySurveyList,
-	userNo: number,
 	refresh: () => void
 }
 
-const SurveyListItem = ({ survey, userNo, refresh }: SurveyListItemProps) => {
+const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
     const theme = useTheme();
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	

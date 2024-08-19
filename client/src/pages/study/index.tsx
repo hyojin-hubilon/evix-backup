@@ -63,20 +63,20 @@ const StudyList = () => {
     };
 
     // 초대 받은 Study 데이터 불러오기
-    const fetchInvitedStudies = async () => {
-        try {
-            const response: any = await studyApi.unauthorizedInvitation();
-            setInvitedStudies(response.content);
+    // const fetchInvitedStudies = async () => {
+    //     try {
+    //         const response: any = await studyApi.unauthorizedInvitation();
+    //         setInvitedStudies(response.content);
 
-            const userInfo: string = getDecodedToken('userInfoToken');
-            if (userInfo) {
-                const fullName = `${userInfo['user-firstname']} ${userInfo['user-lastname']}`;
-                setFullName(fullName);
-            }
-        } catch (error) {
-            console.error('Failed to fetch Invited Study List:', error);
-        }
-    };
+    //         const userInfo: string = getDecodedToken('userInfoToken');
+    //         if (userInfo) {
+    //             const fullName = `${userInfo['user-firstname']} ${userInfo['user-lastname']}`;
+    //             setFullName(fullName);
+    //         }
+    //     } catch (error) {
+    //         console.error('Failed to fetch Invited Study List:', error);
+    //     }
+    // };
 
     useEffect(() => {
         fetchStudies();
@@ -93,14 +93,14 @@ const StudyList = () => {
     };
 
     // 초대 승인 성공 시,
-    const handleAcceptInvite = async () => {
-        try {
-            fetchStudies();
-            fetchInvitedStudies();
-        } catch (error) {
-            console.error('Failed to accept invitation:', error);
-        }
-    };
+    // const handleAcceptInvite = async () => {
+    //     try {
+    //         fetchStudies();
+    //         fetchInvitedStudies();
+    //     } catch (error) {
+    //         console.error('Failed to accept invitation:', error);
+    //     }
+    // };
 
 	const handleSearchStudy = (text) => {
 		setSearchTerm(text);
