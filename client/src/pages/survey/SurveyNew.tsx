@@ -10,6 +10,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
 import SurveyPreview from "./SurveyPreview";
+import { useConfirmation } from "@/components/ui/ConfirmDialog/ConfirmDialogContext";
 
 const SurveyNew = () => {
 	const { ref, isSticky } = useSticky();
@@ -51,14 +52,14 @@ const SurveyNew = () => {
 	const [initialValues, setInitialValues] = useState({cards : [] as CardProps[]});
 	
 	const dispatch = useDispatch();
-	const navigation = useNavigate();
+	const navigate = useNavigate();
 	const locations = useLocation();
 	const parmas = useParams();
 	
 	const [ surveyNo, setSurveyNo ] = useState<string | number | null>(null);
 	const [ locationState, setLocationState ] = useState<'edit' | 'copy' | 'new' | null>(null); //edit, copy check
 	const [ isPreview, setIsPreview ] = useState(false);
-
+	const confirm = useConfirmation();
 
 	useEffect(() => {
 		console.log(locations, parmas)
@@ -106,7 +107,15 @@ const SurveyNew = () => {
 				dispatch(resetCards())
 			}
 		} catch (error) {
-			console.error('Failed to fetch study list:', error);	
+			console.error('Failed to fetch survey:', error);	
+			dispatch(resetAll());
+			confirm({
+				description: 'Failed to fetch survey',
+				variant: 'info'
+			})
+			.then(() => { 
+				navigate('/survey');
+			});
 		}
 	}
 
@@ -159,7 +168,7 @@ const SurveyNew = () => {
 				
 				if(!temp) {//임시저장이 아닐경우
 					dispatch(resetCards()); //localStorage에 저장된 설문내용 삭제
-					navigation('/survey');//서베이 리스트로 이동
+					navigate('/survey');//서베이 리스트로 이동
 				}
 			}
 		} catch (error) {
@@ -178,7 +187,7 @@ const SurveyNew = () => {
 				
 				if(!temp) {//임시저장이 아닐경우
 					dispatch(resetCards()); //localStorage에 저장된 설문내용 삭제
-					navigation('/survey');//서베이 리스트로 이동
+					navigate('/survey');//서베이 리스트로 이동
 				}
 			}
 		} catch (error) {
