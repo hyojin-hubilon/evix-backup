@@ -18,12 +18,11 @@ const HeaderContent = () => {
         <>
             {/* {!matchesXs && <Search />} */}
             {matchesXs && <Box sx={{ width: '100%', ml: 1 }} />}
-
-            <Box sx={{width: '100%'}}display="flex" justifyContent="flex-end">
-				<Notification />
-				{!matchesXs && <Profile />}
-				{matchesXs && <MobileSection />}
-			</Box>
+            <Box sx={{ width: '100%' }} display="flex" justifyContent="flex-end">
+                {!matchesXs && <Profile />}
+                {matchesXs && <MobileSection />}
+                <Notification />
+            </Box>
         </>
     );
 };

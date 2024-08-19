@@ -7,6 +7,7 @@ import MainLayout from '@layout/MainLayout';
 // render - dashboard
 const Settings = Loadable(lazy(() => import('@pages/setting')));
 const UnauthorizedInvitation = Loadable(lazy(() => import('@pages/setting/components/UnauthorizedInvitation')));
+const Notifications = Loadable(lazy(() => import('@pages/setting/Notifications')));
 
 // ==============================|| STUDY ROUTING ||============================== //
 
@@ -21,7 +22,11 @@ const SettingsRoutes = {
         {
             path: 'unauthorizedstudy',
             element: <UnauthorizedInvitation />
-        }
+        },
+		{
+			path: 'notifications',
+			element: <Notifications />
+		}
     ],
 };
 

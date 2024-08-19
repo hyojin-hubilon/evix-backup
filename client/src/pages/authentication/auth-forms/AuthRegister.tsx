@@ -8,17 +8,21 @@ import {
     FormHelperText,
     FormControl,
     Grid,
+	Select,
+	InputLabel,
+	MenuItem,
 } from '@mui/material';
-import { useFormik } from 'formik';
+import { ErrorMessage, Field, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate, useLocation } from 'react-router';
 import { getTokenInfo } from '@/utils/Cookie';
-import { InviteToken } from '@/types/auth';
+import { IndustryType, InviteToken, SignUpReq } from '@/types/auth';
 import authApi from '@/apis/auth';
 import { useState } from 'react';
 import PrivacyPolicy from '@/components/modal/PrivacyPolicy';
 import Terms from '@/layout/LandingLayout/Footer/components/Terms';
 import SimpleModal from '@/components/ui/SimpleModal';
+import { useConfirmation } from '@/components/ui/ConfirmDialog/ConfirmDialogContext';
 
 const modalText = 'Thank you for signing up. Start the evix-DCT service';
 const modalButtonText = 'Log in';
@@ -38,10 +42,33 @@ const SignUp = () => {
     const location = useLocation();
     const token: string = location.state?.token ?? '';
     const decodedToken: InviteToken = getTokenInfo(token);
+	const confirm = useConfirmation();
 
     const [privacyPolicyIsOpen, setPrivacyPolicyIsOpen] = useState<boolean>(false);
     const [termsIsOpen, setTermsIsOpen] = useState<boolean>(false);
     const [isComplete, setIsComplete] = useState<boolean>(false);
+	const initialValues: SignUpReq = {
+		password: '',
+		confirm_password: '',
+		mobile: '',
+		country: '',
+		language: '',
+		company_name: '',
+		job_title: '',
+		industry: '',
+		first_name: '',
+		last_name: '',
+		terms: false,
+		email: decodedToken.email,
+		privilege: "RESEARCHER",
+		active_yn: 'Y',
+		token: token
+	};
+
+	// “industry”: “CONSUMER-HEALTH”,
+	// “country”: “KO_KR”,
+	// “language”: “KO_KR”,
+
 
     const handlePrivacyPolicy = (): void => {
         setPrivacyPolicyIsOpen((prev) => !prev);
@@ -73,6 +100,7 @@ const SignUp = () => {
             .matches(/^\d+$/, 'Please enter numbers only.')
             .required('mobile number is required'),
         country: Yup.string().required('Country is required'),
+		language: Yup.string().required('Language is required'),
         company_name: Yup.string().required('Company is required'),
         job_title: Yup.string().required('Job Position is required'),
         industry: Yup.string().required('Industry is required'),
@@ -83,32 +111,28 @@ const SignUp = () => {
     });
 
     const formik = useFormik({
-        initialValues: {
-            password: '',
-            confirm_password: '',
-            mobile: '',
-            country: '',
-            company_name: '',
-            job_title: '',
-            industry: '',
-            first_name: '',
-            last_name: '',
-            terms: false,
-            email: decodedToken.email,
-            privilege: decodedToken['other-information'],
-            active_yn: 'Y',
-            token: token,
-        },
+        initialValues: initialValues,
         validationSchema: validationSchema,
         onSubmit: async (values, { setSubmitting }) => {
+			delete values.confirm_password;
             try {
                 const response = await authApi.signUp(values);
                 if (response.code === 200) {
-                    alert('Thank you for signing up.Start the evix-DCT service');
+					confirm({
+						description: 'Thank you for signing up.Start the evix-DCT service',
+						variant: 'info'
+					})
+					.then(() => { 
+						navigate('/login');
+					});
+
                     handleComplete();
                 }
                 if (response.code === 400) {
-                    alert(response.message);
+                    confirm({
+						description : response.message,
+						variant: 'info'
+					})
                 }
             } catch (error) {
                 console.error('Error submitting the form', error);
@@ -119,15 +143,30 @@ const SignUp = () => {
     });
 
     return (
-        <Container maxWidth="sm">
+        <Container maxWidth="md">
             <Box>
-                <Typography variant="h4" gutterBottom>
+                {/* <Typography variant="h4" gutterBottom> 
                     {decodedToken.email}
-                </Typography>
+                </Typography> */}
                 <Typography variant="h6" gutterBottom>
                     Welcome to evix-DCT! We're so great to you're here, let's start by signing up.
                 </Typography>
                 <form onSubmit={formik.handleSubmit}>
+					<TextField
+						label="Email"
+						name="email"
+						value={formik.values.email}
+						onChange={formik.handleChange}
+						onBlur={formik.handleBlur}
+						fullWidth
+						margin="normal"
+						required
+						error={formik.touched.email && Boolean(formik.errors.email)}
+						helperText={formik.touched.email && formik.errors.email}
+						disabled
+					/>
+
+					
                     <TextField
                         label="First Name"
                         name="first_name"
@@ -184,7 +223,7 @@ const SignUp = () => {
                         }
                     />
                     <TextField
-                        label="mobile"
+                        label="Mobile"
                         name="mobile"
                         value={formik.values.mobile}
                         onChange={formik.handleChange}
@@ -207,6 +246,29 @@ const SignUp = () => {
                         error={formik.touched.country && Boolean(formik.errors.country)}
                         helperText={formik.touched.country && formik.errors.country}
                     />
+					
+					<FormControl
+						fullWidth
+						margin="normal"
+						error={formik.touched.language && Boolean(formik.errors.language)}
+						>
+						<InputLabel id="language">Language</InputLabel>
+						<Select
+							label="Language"
+							value={formik.values.language}
+							name="language"
+							onBlur={formik.handleBlur}
+							onChange={formik.handleChange}
+							required
+						>
+							<MenuItem value="EN_US">English</MenuItem>
+							<MenuItem value="KO_KR">Korean</MenuItem>
+						</Select>
+						{formik.errors.language &&  (
+							<FormHelperText sx={{ color: 'error.main' }}>{formik.errors.language}</FormHelperText>
+						)}
+					</FormControl>
+					
                     <TextField
                         label="Company"
                         name="company_name"
@@ -231,7 +293,37 @@ const SignUp = () => {
                         error={formik.touched.job_title && Boolean(formik.errors.job_title)}
                         helperText={formik.touched.job_title && formik.errors.job_title}
                     />
-                    <TextField
+
+					<FormControl
+						fullWidth
+						margin="normal"
+						error={formik.touched.industry && Boolean(formik.errors.industry)}
+						>
+						<InputLabel id="industry">Industry</InputLabel>
+						<Select
+							label="Industry"
+							value={formik.values.industry}
+							name="industry"
+							onBlur={formik.handleBlur}
+							onChange={formik.handleChange}
+							required
+						>
+							<MenuItem value={IndustryType.Academic}>Academic</MenuItem>
+							<MenuItem value={IndustryType.CROPartners}>CRO/Partners</MenuItem>
+							<MenuItem value={IndustryType.Pharmaceutical}>Pharmaceutical</MenuItem>
+							<MenuItem value={IndustryType.Biotechnology}>Biotechnology</MenuItem>
+							<MenuItem value={IndustryType.ConsumerHealth}>Consumer Health</MenuItem>
+							<MenuItem value={IndustryType.MedicalDevices}>Medical Devices</MenuItem>
+							<MenuItem value={IndustryType.DigitalTherapeutics}>Digital Therapeutics</MenuItem>
+							<MenuItem value={IndustryType.etc}>ETC</MenuItem>
+						</Select>
+						{formik.errors.industry &&  (
+							<FormHelperText sx={{ color: 'error.main' }}>{formik.errors.industry}</FormHelperText>
+						)}
+					</FormControl>
+
+
+                    {/* <TextField
                         label="Industry"
                         name="industry"
                         value={formik.values.industry}
@@ -242,7 +334,7 @@ const SignUp = () => {
                         required
                         error={formik.touched.industry && Boolean(formik.errors.industry)}
                         helperText={formik.touched.industry && formik.errors.industry}
-                    />
+                    /> */}
                     <FormControl>
                         <Grid container alignItems="center">
                             <Checkbox

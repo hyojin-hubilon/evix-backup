@@ -237,7 +237,7 @@ const SupportForm = () => {
                                 required
                                 error={formik.touched.industry && Boolean(formik.errors.industry)}
                             >
-                                <MenuItem value="Industry Segment">Industry Segment</MenuItem>
+                                <MenuItem value="">Industry Segment</MenuItem>
                                 <MenuItem value="Sponsor">Sponsor</MenuItem>
                                 <MenuItem value="CRO">CRO</MenuItem>
                                 <MenuItem value="Pre-Clinical">Pre-Clinical</MenuItem>

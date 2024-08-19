@@ -32,6 +32,7 @@ import {
     MessageOutlined,
     SettingOutlined,
 } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 // sx styles
 const avatarSX = {
@@ -55,6 +56,7 @@ const actionSX = {
 const Notification = () => {
     const theme = useTheme();
     const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
+	const navigate = useNavigate();
 
     const anchorRef = useRef<HTMLButtonElement>(null);
     const [open, setOpen] = useState(false);
@@ -71,6 +73,10 @@ const Notification = () => {
 
     const iconBackColorOpen = 'grey.300';
     const iconBackColor = 'grey.100';
+
+	const handleViewAll = () => {
+		navigate('/settings/notifications')
+	}
 
     return (
         <Box sx={{ flexShrink: 0, ml: 0.75 }}>
@@ -282,6 +288,7 @@ const Notification = () => {
                                         <Divider />
                                         <ListItemButton
                                             sx={{ textAlign: 'center', py: `${12}px !important` }}
+											onClick={handleViewAll}
                                         >
                                             <ListItemText
                                                 primary={

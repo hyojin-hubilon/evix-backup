@@ -25,7 +25,7 @@ export interface ResetPasswordDataReq {
 export interface SignUpReq {
     email: string;
     password: string;
-    confirm_password: string;
+    confirm_password?: string;
     first_name: string;
     last_name: string;
     mobile: string;
@@ -33,9 +33,34 @@ export interface SignUpReq {
     job_title: string;
     industry: string;
     country: string;
+	language: string;
     privilege: string;
     active_yn: string;
     token: string;
+	terms: boolean;
+}
+
+export enum IndustryType {
+	Academic = "ACADEMIC", //Academic
+	CROPartners = "CRO/PARTNERS", //CRO/Partners
+	Pharmaceutical = "PHARMACEUTICAL", //Pharmaceutical
+	Biotechnology = "BIOTECH", //Biotech
+	ConsumerHealth = "CONSUMER-HEALTH",//Consumer Health
+	MedicalDevices = "MEDICAL-DEVICES",//Medical Devices	
+	DigitalTherapeutics = "DIGITAL-THERAPEUTICS",//Digital Therapeutics
+	etc = 'ETC'//etc
+}
+
+export enum IndustryType2 {
+	Sponsor = "Sponsor",
+	CRO = "CRO",
+	PreClinical = "Pre-Clinical",
+	Biotechnology = "Biotechnology/R&D",
+	MedicalSchool = "Medical School",
+	IndependentResearchSite = "Independent Research Site",
+	Hospital =  "Hospital or Healthcare System",
+	Government = "Government",
+	Other = "Other"
 }
 
 export interface ApplyFreeTrialReq {

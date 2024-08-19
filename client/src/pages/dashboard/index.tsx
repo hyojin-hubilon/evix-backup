@@ -45,11 +45,14 @@ const DashboardDefault = () => {
             setParticipantNumber(studies);
 
             const firstStudy = studies[0];
-            setStudyGoal(firstStudy);
-            setStudyGoalNo(String(firstStudy.std_no));
+			if(firstStudy) {
+				setStudyGoal(firstStudy);
+				setStudyGoalNo(String(firstStudy.std_no));
 
-            const percentage = (firstStudy.number_participant / firstStudy.target_number) * 100;
-            setGoalPercentage(percentage);
+				const percentage = (firstStudy.number_participant / firstStudy.target_number) * 100;
+				setGoalPercentage(percentage);
+			}
+            
         }
 
         setLoadedTime(new Date());

@@ -9,6 +9,7 @@ import StudyRoutes from './StudyRoutes';
 import SettingsRoutes from './SettingsRoutes';
 import SurveyRoutes from './SurveyRoutes';
 import InviteStudyRoutes from './InviteStudy';
+import HelpRoutes from './HelpRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
@@ -21,6 +22,7 @@ export default function ThemeRoutes() {
         SettingsRoutes,
 		SurveyRoutes,
         InviteStudyRoutes,
+		HelpRoutes,
         { path: '*', element: <NotFound /> },
     ]);
 }
