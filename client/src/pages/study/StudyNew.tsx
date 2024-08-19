@@ -150,7 +150,7 @@ const StudyNew = () => {
 
     const handleSubmit = async () => {
         if (validate()) {
-            const data = {
+            const studyData = {
                 std_payment_status: 'WAIT',
                 deploy_method: 'IMMEDIATE',
                 std_status: 'STD-CREATED',
@@ -170,21 +170,20 @@ const StudyNew = () => {
             };
 
             // FormData 객체 생성 및 데이터 추가
-            const reviewForm = new FormData();
+            const formData = new FormData();
 
-            reviewForm.append(
+            formData.append(
                 'requestDto',
-                new Blob([JSON.stringify(data)], { type: 'application/json' })
+                new Blob([JSON.stringify(studyData)], { type: 'application/json' })
             );
 
             // 전자동의서 파일이 있는 경우 FormData에 추가
             if (eicFile) {
-                reviewForm.append('eic_file', eicFile, `${data.title}.json`);
+                formData.append('eic_file', eicFile, `${studyData.title}.json`);
             }
 
             try {
-                const response = await studyApi.createStudy(reviewForm);
-                console.log(response);
+                const response = await studyApi.createStudy(formData);
                 if (response.code === 200) {
                     navigate(-1);
                 }
@@ -298,7 +297,7 @@ const StudyNew = () => {
 
     const handleUpdate = async () => {
         if (validate()) {
-            const data = {
+            const studyData = {
                 std_no: stdNo,
                 title: title,
                 std_type: 'E-PRO',
@@ -307,27 +306,26 @@ const StudyNew = () => {
                 target_number: parseInt(participants),
                 description: description,
                 disease: disease,
-                // location: country,   requestDto에 없음
                 drug_code: medicineYOrN === 'true' ? drug?.itemCode ?? null : null,
                 drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
                 drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
             };
 
             // FormData 객체 생성 및 데이터 추가
-            const reviewForm = new FormData();
+            const formData = new FormData();
 
-            reviewForm.append(
+            formData.append(
                 'requestDto',
-                new Blob([JSON.stringify(data)], { type: 'application/json' })
+                new Blob([JSON.stringify(studyData)], { type: 'application/json' })
             );
 
             // 전자동의서 파일이 있는 경우 FormData에 추가
             if (eicFile) {
-                reviewForm.append('eic_file', eicFile, `${data.title}.json`);
+                formData.append('eic_file', eicFile, `${studyData.title}.json`);
             }
 
             try {
-                const response = await studyApi.updateStudy(reviewForm);
+                const response = await studyApi.updateStudy(formData);
                 if (response.code === 200) {
                     navigate('/study');
                 }
@@ -356,13 +354,14 @@ const StudyNew = () => {
         // FormData 객체 생성 및 데이터 추가
         const formData = new FormData();
 
-        const json = JSON.stringify(studyData);
-        const blob = new Blob([json], { type: 'application/json' });
+        formData.append(
+            'requestDto',
+            new Blob([JSON.stringify(studyData)], { type: 'application/json' })
+        );
 
-        formData.append('requestDto', blob);
         // 전자동의서 파일이 있는 경우 FormData에 추가
         if (eicFile) {
-            formData.append('eic_file', eicFile);
+            formData.append('eic_file', eicFile, `${studyData.title}.json`);
         }
 
         try {

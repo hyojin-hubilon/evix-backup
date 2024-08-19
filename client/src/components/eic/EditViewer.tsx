@@ -11,6 +11,8 @@ import {
     handlePreviewTemplate,
 } from './helper';
 import { Button, DialogActions, InputLabel } from '@mui/material';
+import studyApi from '@/apis/study';
+import { useNavigate } from 'react-router-dom';
 
 const headerHeight = 80;
 
@@ -19,11 +21,29 @@ const customTemplatePresetKey = 'custom';
 
 const templatePresets = getTemplatePresets();
 
+interface StudyDetail {
+    std_no: number;
+    std_type: string;
+    title: string;
+    std_start_date: string;
+    std_end_date: string;
+    description: string;
+    disease: string;
+    target_number: number;
+    drug_code: string;
+    drug_brand_name: string;
+    drug_manufacturer_name: string;
+}
+
 interface EditViewerProps {
     eicFile: any;
     onClose: () => void;
+    studyDetail : StudyDetail
 }
-const EditViewer = ({ eicFile, onClose }: EditViewerProps) => {
+
+const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
+    const navigate = useNavigate();
+
     const designerRef = useRef<HTMLDivElement | null>(null);
     const designer = useRef<Designer | null>(null);
     const [lang, setLang] = useState<Lang>('en');
@@ -113,8 +133,36 @@ const EditViewer = ({ eicFile, onClose }: EditViewerProps) => {
             const jsonTemplate = new Blob([JSON.stringify(template)], {
                 type: 'application/json',
             });
-            // jsonTemplate 서버로 바로 보내기??
+            handleEdit(jsonTemplate);
             onClose();
+        }
+    };
+
+    const handleEdit = async (jsonTemplate: Blob) => {
+        const studyData : StudyDetail = studyDetail;
+        console.log(studyData);
+
+        // FormData 객체 생성 및 데이터 추가
+        const formData = new FormData();
+
+        formData.append(
+            'requestDto',
+            new Blob([JSON.stringify(studyData)], { type: 'application/json' })
+        );
+
+        // 전자동의서 파일이 있는 경우 FormData에 추가
+        if (jsonTemplate) {
+            formData.append('eic_file', jsonTemplate, `${studyData.title}.json`);
+        }
+
+        try {
+            const response = await studyApi.editEicFile(formData);
+            console.log(response);
+            if (response.code === 200 && response.content.std_no) {
+                navigate('/study');
+            }
+        } catch (error) {
+            console.error('Failed to deploy study: ', error);
         }
     };
 
@@ -152,7 +200,9 @@ const EditViewer = ({ eicFile, onClose }: EditViewerProps) => {
                         variant="contained"
                         color="primary"
                     >
-                        Change Base PDF
+                        <InputLabel htmlFor="upload-pdf" style={{ width: 180 }}>
+                            Change BasePDF
+                        </InputLabel>
                         <input
                             id="upload-pdf"
                             type="file"

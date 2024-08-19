@@ -472,7 +472,7 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
             />
             <DeleteModal open={isDelete} onClose={handleDeleteClose} onDelete={() => {}} />
             <PreviewEic open={isPreviewEicOpen} onClose={handlePreviewClose} eicFile={eicFile}/>
-            <EditEic open={isEditEicOpen} onClose={handleEditViewClose} eicFile={eicFile}/>
+            <EditEic open={isEditEicOpen} onClose={handleEditViewClose} eicFile={eicFile} studyDetail={studyDetail}/>
         </Grid>
     );
 };
