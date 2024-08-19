@@ -121,10 +121,11 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
 		const userId = decodedToken && decodedToken['sub'];
 
 		if(userId) {
+			
 			const isEditable = managerList.some(
 				(manager) =>
 					(manager.email === userId && manager.std_privilege === 'OWNER') ||
-					(manager.user_no === userId && manager.std_privilege === 'MAINTAINER')
+					(manager.email === userId && manager.std_privilege === 'MAINTAINER')
 			);
 
 			setIsEditable(isEditable);
