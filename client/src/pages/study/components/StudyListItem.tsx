@@ -117,7 +117,6 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
 
 	useEffect(() => {
 		const decodedToken = getDecodedToken('dctAccessToken');
-		console.log(decodedToken);
 
 		const userId = decodedToken && decodedToken['sub'];
 
