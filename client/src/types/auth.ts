@@ -3,12 +3,20 @@ export interface LoginReq {
     password: string;
 }
 
+export enum PrivilegeTypes { // 사용자 권한
+	Master = "Master",//시스템 마스터(최상위 개념)
+	Manager = "Manager",//서비스 관리자
+	Researcher = "Researcher",//연구원(일반)
+	Caregiver = "Caregiver",//간병인(요양사)
+	Participant = "Participant"//일반 참여자
+}
+
 export interface LoginRes {
     user_no: number;
     email: string;
     first_name: string;
     last_name: string;
-    privilege: string;
+    privilege: PrivilegeTypes;
     last_login: string | Date;
 }
 
@@ -75,11 +83,19 @@ export interface ApplyFreeTrialReq {
     message: string;
 }
 
+export enum StudyPrivilege {//스터디 권한 / 기능권한 / 설명 / 비고
+	Owner = "Owner", //설문 배포/초대/결제 / PM / 최상위 개념
+	Maintainer = "Maintainer", // 설문 생성/수정/등록 / 스터디 관리자
+	Developer = "Developer", //없음 / 임상의, 임상간호사 / Role Name 변경 필요
+	Reporter = "Reporter", //없음/ 간병인, 보호자 / Role Name 변경 필요
+	Participant = "Participant", //없음 / 임상 참여자
+	Payer = "Payer" //없음 / 결제관리 / 미정
+}
 ///api/v1/researcher/study/study-user-invite 에서 사용하는 부분
 export interface InviteStudyUser {
     std_no: number;
     user_email: string;
-    std_privilege: string;
+    std_privilege: StudyPrivilege;
 }
 
 export interface InviteStudyUsers extends Array<InviteStudyUser> {}

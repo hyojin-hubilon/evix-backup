@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 // import axios from "axios";
 import { Formik } from 'formik';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -20,9 +20,11 @@ import {
 import GoogleSocial from './GoogleSocial';
 import * as AuthApiType from '@/types/auth';
 import authApi from '@/apis/auth';
+import { UserContext } from '@/context/UserContext';
 
 const AuthLogin = () => {
     const navigate = useNavigate();
+	const { setUser } = useContext(UserContext);
     const [showPassword, setShowPassword] = useState(false);
     const [formError, setFormError] = useState('');
 
@@ -54,7 +56,7 @@ const AuthLogin = () => {
                 })}
                 onSubmit={async (values, { setStatus, setSubmitting }) => {
                     try {
-                        const { code } = await authApi.login(values);
+                        const { code, content } = await authApi.login(values);
                         if (code === 400) {
                             alert('아이디 또는 패스워드를 확인해주세요.');
                             return;

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 // material-ui
@@ -25,11 +25,12 @@ import Transitions from '@components/@extended/Transitions';
 import ProfileTab from './ProfileTab';
 
 // assets
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { MyProfile } from '@/types/user';
-import userApi from '@/apis/user';
+// import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+// import { MyProfile } from '@/types/user';
+// import userApi from '@/apis/user';
 import { useTranslation } from 'react-i18next';
 import authApi from '@/apis/auth';
+import { useUserProfile } from '@/context/UserProfileContext';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -57,22 +58,24 @@ TabPanel.propTypes = {
 const Profile = () => {
     const { t, i18n } = useTranslation();
 
-    const [userData, setUserData] = useState<MyProfile | null>(null);
+    // const [userData, setUserData] = useState<MyProfile | null>(null);
+	const { userProfile, setUserProfile } = useUserProfile();
 
-    useEffect(() => {
-        getMyProfile();
-    }, []);
+    // useEffect(() => {
+    //     getMyProfile();
+    // }, []);
 
-    const getMyProfile = async () => {
-        try {
-            const response = await userApi.getMyProfile();
-            if (response.code === 200) {
-                setUserData(response.content);
-            }
-        } catch (error) {
-            console.error('Failed to fetch profile:', error);
-        }
-    };
+    // const getMyProfile = async () => {
+    //     try {
+    //         const response = await userApi.getMyProfile();
+    //         if (response.code === 200) {
+    //             setUserData(response.content);
+	// 			setUser(response.content);
+    //         }
+    //     } catch (error) {
+    //         console.error('Failed to fetch profile:', error);
+    //     }
+    // };
 
     const theme = useTheme();
     const navigate = useNavigate();
@@ -81,7 +84,7 @@ const Profile = () => {
         try {
             const response = await authApi.logout();
             if (response.code === 200) {
-                setUserData(null);
+                setUserProfile(null);
                 navigate('/login'); // 로그아웃 성공 시 홈 페이지로 이동
             } else {
                 console.error('Failed to log out: ', response.code);
@@ -137,7 +140,7 @@ const Profile = () => {
                                 fontWeight: 'bold',
                             }}
                         >
-                            {userData?.first_name} {userData?.last_name}
+                            {userProfile?.first_name} {userProfile?.last_name}
                         </Typography>{' '}
                         님 안녕하세요
                     </Typography>
@@ -145,7 +148,7 @@ const Profile = () => {
                 <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
                     <Avatar
                         alt="profile user"
-                        src={userData?.profile_image_url}
+                        src={userProfile?.profile_image_url}
                         sx={{ width: 32, height: 32 }}
                     />
                 </Stack>
@@ -171,7 +174,7 @@ const Profile = () => {
             >
                 {({ TransitionProps }) => (
                     <Transitions type="fade" in={open} {...TransitionProps}>
-                        {open && userData && (
+                        {open && userProfile && (
                             <Paper
                                 sx={{
                                     width: 290,
@@ -204,8 +207,8 @@ const Profile = () => {
                                                                     fontWeight: 'bold',
                                                                 }}
                                                             >
-                                                                {userData?.first_name}{' '}
-                                                                {userData?.last_name}
+                                                                {userProfile?.first_name}{' '}
+                                                                {userProfile?.last_name}
                                                             </Typography>
                                                         </Stack>
                                                     </Stack>
@@ -214,7 +217,7 @@ const Profile = () => {
                                             <Grid>
                                                 <Stack>
                                                     <Typography color="textSecondary">
-                                                        {userData.email}{' '}
+                                                        {userProfile?.email}{' '}
                                                     </Typography>
                                                 </Stack>
                                             </Grid>

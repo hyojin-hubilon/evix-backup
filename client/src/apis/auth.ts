@@ -38,7 +38,7 @@ const authApi = {
      */
     googleLogin: async (loginData: AuthApiType.GoogleLoginReq) => {
         try {
-            const responseData = await api<{}>('/auth/social_login', 'post', loginData);
+            const responseData = await api<AuthApiType.LoginRes>('/auth/social_login', 'post', loginData);
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
