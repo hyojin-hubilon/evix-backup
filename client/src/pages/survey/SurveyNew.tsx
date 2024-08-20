@@ -10,7 +10,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
 import SurveyPreview from "./SurveyPreview";
-import { useConfirmation } from "@/components/ui/ConfirmDialog/ConfirmDialogContext";
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 const SurveyNew = () => {
 	const { ref, isSticky } = useSticky();

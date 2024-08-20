@@ -27,12 +27,9 @@ export const UserProfileContextProvider = ({ children }) => {
     };
 
 	useEffect(() => {
-		
 		if(!userProfile) {
 			getMyProfile();
 		}
-
-		console.log(userProfile);
 	}, [userProfile]);
 	
 	return <UserProfileContext.Provider value={value}>{ children }</UserProfileContext.Provider>;

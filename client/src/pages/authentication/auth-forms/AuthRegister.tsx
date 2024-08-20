@@ -22,7 +22,8 @@ import { useState } from 'react';
 import PrivacyPolicy from '@/components/modal/PrivacyPolicy';
 import Terms from '@/layout/LandingLayout/Footer/components/Terms';
 import SimpleModal from '@/components/ui/SimpleModal';
-import { useConfirmation } from '@/components/ui/ConfirmDialog/ConfirmDialogContext';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
+
 
 const modalText = 'Thank you for signing up. Start the evix-DCT service';
 const modalButtonText = 'Log in';

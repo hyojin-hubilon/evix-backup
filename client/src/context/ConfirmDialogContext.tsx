@@ -1,19 +1,22 @@
-import * as React from "react";
-import { ConfirmationDialog, ConfirmationOptions } from "./ConfirmDialog";
+import { ConfirmationDialog, ConfirmationOptions } from "@/components/ui/ConfirmDialog";
+import { createContext, useContext, useRef, useState } from "react";
 
-const ConfirmationServiceContext = React.createContext<
+
+const ConfirmationServiceContext = createContext<
 	(options: ConfirmationOptions) => Promise<void>
 	>(Promise.reject);
 
-export const useConfirmation = () => React.useContext(ConfirmationServiceContext);
+export const useConfirmation = () => useContext(ConfirmationServiceContext);
 
 export const ConfirmationServiceProvider = ({ children }) => {
 	const [
 		confirmationState,
 		setConfirmationState
-	] = React.useState<ConfirmationOptions | null>(null);
+	] = useState<ConfirmationOptions | null>(null);
 
-	const awaitingPromiseRef = React.useRef<{
+	const [ openConfirm, setOpenConfirm ] = useState(false);
+
+	const awaitingPromiseRef = useRef<{
 		resolve: () => void;
 		reject: () => void;
 	}>();

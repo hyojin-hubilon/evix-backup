@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 export interface ConfirmationOptions {
+	open?: boolean;
 	catchOnCancel?: boolean;
 	variant?: "danger" | "info" | undefined;
 	title?: string | undefined;
@@ -17,7 +18,6 @@ export interface ConfirmationOptions {
 }
 
 interface ConfirmationDialogProps extends ConfirmationOptions {
-	open: boolean;
 	onSubmit: () => void;
 	onClose: () => void;
 }
@@ -31,7 +31,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 	onClose
 }) => {
   	return (
-		<Dialog open={open}>
+		<Dialog open={open ? open : false}>
 			{
 				title && 
 				<DialogTitle id="alert-dialog-title" variant="h5">

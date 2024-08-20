@@ -8,9 +8,9 @@ import ThemeCustomization from '@/themes';
 import { CookiesProvider } from 'react-cookie';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { ConfirmationServiceProvider } from './components/ui/ConfirmDialog/ConfirmDialogContext';
 
 import 'react-multi-carousel/lib/styles.css';
+import { ConfirmationServiceProvider } from './context/ConfirmDialogContext';
 
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //

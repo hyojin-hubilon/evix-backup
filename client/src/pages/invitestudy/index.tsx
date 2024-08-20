@@ -1,6 +1,6 @@
 import authApi from '@/apis/auth';
 import { ResCommonError } from '@/apis/axios-common';
-import { useConfirmation } from '@/components/ui/ConfirmDialog/ConfirmDialogContext';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { Button, Container, Grid, Box, Typography, styled } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';

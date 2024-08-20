@@ -8,7 +8,7 @@ import * as S from './components/FromView/ViewCard/styles';
 import { useDispatch, useSelector } from "react-redux";
 import { resetAll, PreviewStateProps, addPreview } from "@/store/reducers/preview";
 import { Formik, Form } from "formik";
-import { useConfirmation } from "@/components/ui/ConfirmDialog/ConfirmDialogContext";
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 
 type SurveyViewProps = {

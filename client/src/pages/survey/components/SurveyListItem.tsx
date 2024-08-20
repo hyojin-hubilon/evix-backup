@@ -7,7 +7,7 @@ import { MySurveyList } from '@/types/survey';
 import dayjs from 'dayjs';
 import { useRef, useState } from 'react';
 import surveyApi from '@/apis/survey';
-import { useConfirmation } from '@/components/ui/ConfirmDialog/ConfirmDialogContext';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 type SurveyListItemProps = {
 	survey: MySurveyList,
