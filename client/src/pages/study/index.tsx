@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react';
 import StudyListItem, { STUDY_STATUS, STUDY_STATUS_KEY } from './components/StudyListItem';
 import studyApi from '@/apis/study';
 import { MyStudyList, StudyApiResponse } from '@/types/study';
-import { getDecodedToken } from '@/utils/Cookie';
+
 import StudyInvitedItem from './components/StudyInvitedItem';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';

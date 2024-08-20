@@ -20,11 +20,10 @@ import {
 import GoogleSocial from './GoogleSocial';
 import * as AuthApiType from '@/types/auth';
 import authApi from '@/apis/auth';
-import { UserContext } from '@/context/UserContext';
 
 const AuthLogin = () => {
     const navigate = useNavigate();
-	const { setUser } = useContext(UserContext);
+	
     const [showPassword, setShowPassword] = useState(false);
     const [formError, setFormError] = useState('');
 

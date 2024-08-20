@@ -18,7 +18,6 @@ import SurveyListItem from './components/SurveyListItem';
 import surveyApi from '@/apis/survey';
 import { MySurveyList, SurveyApiResponse } from '@/types/survey';
 import { useNavigate } from 'react-router-dom';
-import { getDecodedToken } from '@/utils/Cookie';
 import SearchIcon from '@mui/icons-material/Search';
 import { paginator } from '@/utils/helper';
 import DatePicker from "antd/lib/date-picker";
