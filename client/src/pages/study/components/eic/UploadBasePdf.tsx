@@ -35,7 +35,7 @@ const UploadBasePdf: React.FC<UploadDialogProps> = ({ open, onClose, onConfirm }
     } = useDropzone({
         onDrop,
         accept: accept,
-        maxSize: 10 * 1024 * 1024, // 5MB
+        maxSize: 5 * 1024 * 1024, // 5MB
         noClick: true,
     });
 
@@ -87,7 +87,7 @@ const UploadBasePdf: React.FC<UploadDialogProps> = ({ open, onClose, onConfirm }
                         {selectedFile ? selectedFile.name : 'Choose a file or drag & drop it here'}
                     </Typography>
                     <Typography variant="body1" color="textSecondary">
-                        Please upload PDF formats, up to 10MB
+                        Please upload PDF formats up to 5 MB
                     </Typography>
                     <Button
                         variant="outlined"

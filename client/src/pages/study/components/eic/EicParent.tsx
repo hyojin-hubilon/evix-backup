@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import CreateEic from './CreateEic';
 import UploadBasePdf from './UploadBasePdf';
 

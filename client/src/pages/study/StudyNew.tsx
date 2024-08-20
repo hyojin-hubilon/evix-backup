@@ -32,12 +32,9 @@ import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
 import { InviteMemberTempType, StudyDetail } from '@/types/study';
 import MemberInvitement from './components/study-new/MemberInvitement';
 import MemberManagement from './components/study-new/MemberManagement';
-import UploadBasePdf from './components/eic/UploadBasePdf';
-import CreateEic from './components/eic/CreateEic';
 import StudyDeleteConfirmDialog from './components/study-new/StudyDeleteConfirmDialog';
 import { MyProfile } from '@/types/user';
 import { useFormik } from 'formik';
-import StudyPreview from './StudyPreview';
 import EicParent from './components/eic/EicParent';
 
 const FormTooltip = ({ text }) => {
@@ -172,13 +169,14 @@ const StudyNew = () => {
             // FormData 객체 생성 및 데이터 추가
             const formData = new FormData();
 
-            const json = JSON.stringify(studyData);
-            const blob = new Blob([json], { type: 'application/json' });
+            formData.append(
+                'requestDto',
+                new Blob([JSON.stringify(studyData)], { type: 'application/json' })
+            );
 
-            formData.append('requestDto', blob);
             // 전자동의서 파일이 있는 경우 FormData에 추가
             if (eicFile) {
-                formData.append('eic_file', eicFile);
+                formData.append('eic_file', eicFile, `${studyData.title}.json`);
             }
 
             try {
@@ -209,7 +207,6 @@ const StudyNew = () => {
     };
 
     const handleEicFile = (file: File) => {
-        console.log(file);
         setEicFile(file);
     };
 
@@ -307,25 +304,22 @@ const StudyNew = () => {
                 target_number: parseInt(participants),
                 description: description,
                 disease: disease,
-                // location: country,   requestDto에 없음
                 drug_code: medicineYOrN === 'true' ? drug?.itemCode ?? null : null,
                 drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
                 drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
-                // 수정 화면에서 Survey, 초대 제외
-                // studySurveySetList: [],
-                // inviteList: [],
             };
 
             // FormData 객체 생성 및 데이터 추가
             const formData = new FormData();
 
-            const json = JSON.stringify(studyData);
-            const blob = new Blob([json], { type: 'application/json' });
+            formData.append(
+                'requestDto',
+                new Blob([JSON.stringify(studyData)], { type: 'application/json' })
+            );
 
-            formData.append('requestDto', blob);
             // 전자동의서 파일이 있는 경우 FormData에 추가
             if (eicFile) {
-                formData.append('eic_file', eicFile);
+                formData.append('eic_file', eicFile, `${studyData.title}.json`);
             }
 
             try {
@@ -367,13 +361,14 @@ const StudyNew = () => {
         // FormData 객체 생성 및 데이터 추가
         const formData = new FormData();
 
-        const json = JSON.stringify(studyData);
-        const blob = new Blob([json], { type: 'application/json' });
+        formData.append(
+            'requestDto',
+            new Blob([JSON.stringify(studyData)], { type: 'application/json' })
+        );
 
-        formData.append('requestDto', blob);
         // 전자동의서 파일이 있는 경우 FormData에 추가
         if (eicFile) {
-            formData.append('eic_file', eicFile);
+            formData.append('eic_file', eicFile, `${studyData.title}.json`);
         }
 
         try {
@@ -425,17 +420,32 @@ const StudyNew = () => {
                                 <Typography variant="h5">
                                     <span style={{ color: 'red' }}>*</span> Study Type
                                 </Typography>
-                                <FormTooltip text={
-									<Box sx={{
-										'span' : {display: 'block'}
-									}}>
-									<span>- ePRO: ePRO(electronic Patient-Reported Outcome) is a service where patients electronically report their health status and treatment outcomes.</span>
-									<span>- eCOA: eCOA (electronic Clinical Outcome Assessment) refers to patient-reported outcomes and clinical assessment data collected electronically in clinical research.</span>
-									<span>- eCRF: eCRF (electronic Case Report Form) is a system used to collect and manage clinical data of patients electronically in clinical research.</span>
-									</Box>
-									}
-								/>
-
+                                <FormTooltip
+                                    text={
+                                        <Box
+                                            sx={{
+                                                'span': { display: 'block' },
+                                            }}
+                                        >
+                                            <span>
+                                                - ePRO: ePRO(electronic Patient-Reported Outcome) is
+                                                a service where patients electronically report their
+                                                health status and treatment outcomes.
+                                            </span>
+                                            <span>
+                                                - eCOA: eCOA (electronic Clinical Outcome
+                                                Assessment) refers to patient-reported outcomes and
+                                                clinical assessment data collected electronically in
+                                                clinical research.
+                                            </span>
+                                            <span>
+                                                - eCRF: eCRF (electronic Case Report Form) is a
+                                                system used to collect and manage clinical data of
+                                                patients electronically in clinical research.
+                                            </span>
+                                        </Box>
+                                    }
+                                />
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
@@ -446,8 +456,8 @@ const StudyNew = () => {
                                     sx={{ width: '10rem' }}
                                 >
                                     <MenuItem value="ePRO">ePRO</MenuItem>
-									<MenuItem value="eCOA">eCOA</MenuItem>
-									<MenuItem value="eCRF">eCRF</MenuItem>
+                                    <MenuItem value="eCOA">eCOA</MenuItem>
+                                    <MenuItem value="eCRF">eCRF</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -569,9 +579,7 @@ const StudyNew = () => {
                     <Grid container alignItems="flex-start">
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">
-                                    의약품 정보
-                                </Typography>
+                                <Typography variant="h5">의약품 정보</Typography>
                                 <FormTooltip text="You can search drug information using KFDA open API, FDA open API." />
                             </Box>
                         </Grid>
@@ -583,7 +591,7 @@ const StudyNew = () => {
                                     value={medicineYOrN}
                                     onChange={(e) => handleChangeMedicine(e.target.value)}
                                     sx={{
-                                        display: 'flex', 
+                                        display: 'flex',
                                         flexDirection: 'row',
                                     }}
                                 >

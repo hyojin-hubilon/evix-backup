@@ -73,14 +73,30 @@ export const handleLoadTemplate = (
 ) => {
     if (e.target && e.target.files) {
         getTemplateFromJsonFile(e.target.files[0])
-            .then((t) => {
+            .then((template) => {
                 if (!currentRef) return;
-                currentRef.updateTemplate(t);
+                currentRef.updateTemplate(template);
             })
             .catch((e) => {
                 alert(`Invalid template file.
 --------------------------
 ${e}`);
+            });
+    }
+};
+
+export const handlePreviewTemplate = (
+    eicFile: any,
+    currentRef: Designer | Form | Viewer | null
+) => {
+    if (eicFile) {
+        getTemplateFromJsonFile(eicFile)
+            .then((template) => {
+                if (!currentRef) return;
+                currentRef.updateTemplate(template);
+            })
+            .catch((error) => {
+                console.error(error);
             });
     }
 };

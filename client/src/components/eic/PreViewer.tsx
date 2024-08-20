@@ -1,13 +1,14 @@
-import { MutableRefObject, useRef, useState } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Template, checkTemplate, getInputFromTemplate } from '@pdfme/common';
 import { Form, Viewer } from '@pdfme/ui';
 import {
     getFontsData,
     getTemplateByPreset,
-    handleLoadTemplate,
     generatePDF,
     getPlugins,
+    handlePreviewTemplate,
 } from './helper';
+import { ConsoleView } from 'react-device-detect';
 
 const headerHeight = 71;
 
@@ -29,10 +30,11 @@ const initTemplate = () => {
     return template;
 };
 
-function FormAndViewer() {
+const Previewer = ({ eicFile, onClose }) => {
     const uiRef = useRef<HTMLDivElement | null>(null);
     const ui = useRef<Form | Viewer | null>(null);
-    const [prevUiRef, setPrevUiRef] = useState<MutableRefObject<HTMLDivElement | Form | Viewer |null> | null>(null);
+    const [prevUiRef, setPrevUiRef] = 
+    useState<MutableRefObject<HTMLDivElement | Form | Viewer | null> | null>(null);
 
     const mode: Mode = 'form';
 
@@ -70,30 +72,23 @@ function FormAndViewer() {
         });
     };
 
-    const onGetInputs = () => {
-        if (ui.current) {
-            const inputs = ui.current.getInputs();
-
-            for (const obj of inputs) {
-                for (const key in obj) {
-                    if (obj[key] === 'N' || obj[key] === '') {
-                        alert('필수 입력값을 작성해주세요.');
-                        return;
-                    }
-                }
+    useEffect(() => {
+        if (uiRef !== prevUiRef) {
+            if (prevUiRef && ui.current) {
+                ui.current.destroy();
             }
-
-            alert(JSON.stringify(inputs, null, 2));
+            buildUi(mode);
+            setPrevUiRef(uiRef);
         }
-    };
 
-    if (uiRef != prevUiRef) {
-        if (prevUiRef && ui.current) {
-            ui.current.destroy();
-        }
-        buildUi(mode);
-        setPrevUiRef(uiRef);
-    }
+        const jsonFile = new Blob([JSON.stringify(eicFile)], {
+            type: 'application/json',
+        });
+
+        getFontsData().then(() => {
+            handlePreviewTemplate(jsonFile, ui.current);
+        });
+    }, []);
 
     return (
         <div>
@@ -104,23 +99,16 @@ function FormAndViewer() {
                     justifyContent: 'space-between',
                     margin: '0 1rem',
                     fontSize: 'small',
+                    height: '3.0rem',
                 }}
             >
-                <strong>Form</strong>
-                <label style={{ width: 180 }}>
-                    Load Template
-                    <input
-                        type="file"
-                        accept="application/json"
-                        onChange={(e) => handleLoadTemplate(e, ui.current)}
-                    />
-                </label>
-                <button onClick={onGetInputs}>Get Inputs</button>
-                <button onClick={() => generatePDF(ui.current)}>Generate PDF</button>
+                <strong>Preview</strong>
+                <button onClick={onClose}>Close</button>
+                <button onClick={() => generatePDF(ui.current)}>Preview PDF</button>
             </header>
             <div ref={uiRef} style={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }} />
         </div>
     );
-}
+};
 
-export default FormAndViewer;
+export default Previewer;

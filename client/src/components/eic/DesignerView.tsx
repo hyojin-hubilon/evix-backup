@@ -86,7 +86,7 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                     setTemplatePreset(customTemplatePresetKey);
                 });
 
-				setUpBasePdf(basePdfFile);
+                setUpBasePdf(basePdfFile);
             }
         });
     };
@@ -144,12 +144,13 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                     seenKeys.add(key);
                 }
             }
-            handleEicFile(template);
+            const jsonTemplate = new Blob([JSON.stringify(template)], {
+                type: 'application/json',
+            });
+            handleEicFile(jsonTemplate);
             onClose();
         }
     };
-
-
 
     const setUpBasePdf = (basePdf: File) => {
         if (!basePdf) {
@@ -168,25 +169,17 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
         });
     };
 
-    // useEffect(() => {
-	// 	console.log(basePdfFile, designer)
-    //     setUpBasePdf(basePdfFile);
-    // }, [designer.current]);
+    useEffect(() => {
+        // if (designerRef != prevDesignerRef) {
 
+        if (designer.current) {
+            designer.current.destroy();
+        }
+        buildDesigner();
+        // setPrevDesignerRef(designerRef);
 
-	useEffect(() => {
-		// if (designerRef != prevDesignerRef) {
-			
-			if (designer.current) {
-				designer.current.destroy();
-			}
-			buildDesigner();
-			// setPrevDesignerRef(designerRef);
-			
-		// }
-
-		
-	}, [])
+        // }
+    }, []);
 
     return (
         <Box
@@ -202,37 +195,18 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                 justifyContent: 'flex-start',
             }}
         >
-           <DialogTitle>
+            <DialogTitle>
                 <Typography variant="h5">Register electronic consent form</Typography>
-                {/* <Box>
-                    <InputLabel id="lang-select-label">Lang</InputLabel>
-                    <Select
-                        labelId="lang-select-label"
-                        value={lang}
-                        onChange={(e: SelectChangeEvent) => {
-                            setLang(e.target.value as Lang);
-                            if (designer.current) {
-                                designer.current.updateOptions({ lang: e.target.value as Lang });
-                            }
-                        }}
-                    >
-                        {translations.map((t) => (
-                            <MenuItem key={t.value} value={t.value}>
-                                {t.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </Box> */}
-				<Typography variant="h6">
-					Upload the electronic consent form in PDF file format to apply functions such as
-					consent and signature.
-				</Typography>
-			</DialogTitle>
-
+                <Typography variant="h6">
+                    Upload the electronic consent form in PDF file format to apply functions such as
+                    consent and signature.
+                </Typography>
+            </DialogTitle>
             <Box
                 ref={designerRef}
                 sx={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }}
             />
+
             <Box>
                 {/**
                 <Box>
@@ -268,24 +242,30 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                 </Box>
                 <Button variant="contained" onClick={onDownloadTemplate}>
                     Download Template
-                </Button>*/}
-				<DialogActions>
-					<Button
-						variant="outlined"
-						sx={{ width: '50%', height: '40px', color: '#344054', borderColor: '#D0D5DD' }}
-						onClick={onClose}
-					>
-						Cancel
-					</Button>
-					<Button
-						sx={{ width: '50%', height: '40px' }}
-						variant="contained"
-						color="primary"
-						onClick={onSaveTemplate}
-					>
-						Save
-					</Button>
-				</DialogActions>
+                </Button>
+                 */}
+                <DialogActions>
+                    <Button
+                        variant="outlined"
+                        sx={{
+                            width: '50%',
+                            height: '40px',
+                            color: '#344054',
+                            borderColor: '#D0D5DD',
+                        }}
+                        onClick={onClose}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        sx={{ width: '50%', height: '40px' }}
+                        variant="contained"
+                        color="primary"
+                        onClick={onSaveTemplate}
+                    >
+                        Save
+                    </Button>
+                </DialogActions>
             </Box>
         </Box>
     );
