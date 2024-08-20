@@ -32,12 +32,9 @@ import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
 import { InviteMemberTempType, StudyDetail } from '@/types/study';
 import MemberInvitement from './components/study-new/MemberInvitement';
 import MemberManagement from './components/study-new/MemberManagement';
-import UploadBasePdf from './components/eic/UploadBasePdf';
-import CreateEic from './components/eic/CreateEic';
 import StudyDeleteConfirmDialog from './components/study-new/StudyDeleteConfirmDialog';
 import { MyProfile } from '@/types/user';
 import { useFormik } from 'formik';
-import StudyPreview from './StudyPreview';
 import EicParent from './components/eic/EicParent';
 
 const FormTooltip = ({ text }) => {

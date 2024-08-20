@@ -42,8 +42,10 @@ const Settings = () => {
     useEffect(() => {
         const getMyProfile = async () => {
             try {
-                const responseData = await userApi.getMyProfile();
-                setMyProfile(responseData.content);
+                const { content } = await userApi.getMyProfile();
+                if (content) {
+                    setMyProfile(content);
+                }
             } catch (error) {
                 if (error instanceof ResCommonError) {
                     alert(error.message);

@@ -25,6 +25,8 @@ import DeleteModal from './eic/DeleteModal';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import PreviewEic from './eic/PreviewEic';
 import EditEic from './eic/EditEic';
+import EicParent from './eic/EicParent';
+import { useNavigate } from 'react-router-dom';
 
 interface StudyInfoProps {
     studyDetail: {
@@ -82,7 +84,7 @@ interface StudyInfoProps {
 
 const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
     const theme = useTheme();
-    console.log(studyDetail);
+    const navigate = useNavigate();
 
     const formatDate = (dateString: string): string => {
         return moment(dateString).format('YYYY-MM-DD');
@@ -118,7 +120,9 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
     const [eicFile, setEicFile] = useState<any>(null);
     const [isPreviewEicOpen, setIsPreviewEicOpen] = useState<boolean>(false);
     const [isEditEicOpen, setIsEditEicOpen] = useState<boolean>(false);
-    const [basePdf, setBasePdf] = useState<File | null>(null);
+    const [basePdfFile, setBasePdfFile] = useState<File | null>(null);
+    const [isUploadBasePdfOpen, setIsUploadBasePdfOpen] = useState<boolean>(false);
+    const [isCreateEicOpen, setIsCreateEicOpen] = useState<boolean>(false);
 
     const handlePreviewOpen = () => {
         setIsPreviewEicOpen(true);
@@ -132,10 +136,64 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
     const handleEditViewClose = () => {
         setIsEditEicOpen(false);
     };
-
     const handleOpenUploadBasePdf = () => {
+        setIsUploadBasePdfOpen(true);
+    };
+    const handleCloseUploadBasePdf = () => {
+        setIsUploadBasePdfOpen(false);
+    };
+    const handleOpenCreateEic = () => {
+        setIsCreateEicOpen(true);
+    };
+    const handleCloseCreateEic = () => {
+        setIsCreateEicOpen(false);
+    };
+    const handleConfirm = (file: File) => {
+        setBasePdfFile(file);
+        handleCloseUploadBasePdf();
+        handleOpenCreateEic();
+    };
+    const handleEicFile = async (eicFile: File) => {
+        const studyData = {
+            std_no: studyDetail.std_no,
+            std_type: studyDetail.std_type,
+            title: studyDetail.title,
+            std_start_date: studyDetail.std_start_date,
+            std_end_date: studyDetail.std_end_date,
+            description: studyDetail.description,
+            disease: studyDetail.disease,
+            target_number: studyDetail.target_number,
+            eic_name: studyDetail.eic_name,
+            eic_origin_name: studyDetail.eic_origin_name,
+            std_status: studyDetail.std_status,
+            updated_at: studyDetail.updated_at,
+            drug_brand_name: studyDetail.drug_brand_name,
+            drug_code: studyDetail.drug_code,
+            drug_manufacturer_name: studyDetail.drug_manufacturer_name,
+        };
 
-    }
+        // FormData 객체 생성 및 데이터 추가
+        const formData = new FormData();
+
+        formData.append(
+            'requestDto',
+            new Blob([JSON.stringify(studyData)], { type: 'application/json' })
+        );
+
+        // 전자동의서 파일이 있는 경우 FormData에 추가
+        if (eicFile) {
+            formData.append('eic_file', eicFile, `${studyData.title}.json`);
+        }
+
+        try {
+            const response = await studyApi.editEicFile(formData);
+            if (response.code === 200 && response.content.std_no) {
+                navigate('/study');
+            }
+        } catch (error) {
+            console.error('Failed to deploy study: ', error);
+        }
+    };
 
     const handleDownloadEicFile = async () => {
         try {
@@ -369,10 +427,7 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                             >
                                                 Delete
                                             </Button>
-                                            <Button
-                                                variant="outlined"
-                                                onClick={handleEditViewOpen}
-                                            >
+                                            <Button variant="outlined" onClick={handleEditViewOpen}>
                                                 Edit
                                             </Button>
                                         </>
@@ -471,8 +526,22 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                 studyNo={studyDetail.std_no}
             />
             <DeleteModal open={isDelete} onClose={handleDeleteClose} onDelete={() => {}} />
-            <PreviewEic open={isPreviewEicOpen} onClose={handlePreviewClose} eicFile={eicFile}/>
-            <EditEic open={isEditEicOpen} onClose={handleEditViewClose} eicFile={eicFile} studyDetail={studyDetail}/>
+            <PreviewEic open={isPreviewEicOpen} onClose={handlePreviewClose} eicFile={eicFile} />
+            <EditEic
+                open={isEditEicOpen}
+                onClose={handleEditViewClose}
+                eicFile={eicFile}
+                studyDetail={studyDetail}
+            />
+            <EicParent
+                isUploadBasePdfOpen={isUploadBasePdfOpen}
+                handleCloseUploadBasePdf={handleCloseUploadBasePdf}
+                handleConfirm={handleConfirm}
+                isCreateEicOpen={isCreateEicOpen}
+                handleCloseCreateEic={handleCloseCreateEic}
+                handleEicFile={handleEicFile}
+                basePdfFile={basePdfFile}
+            />
         </Grid>
     );
 };

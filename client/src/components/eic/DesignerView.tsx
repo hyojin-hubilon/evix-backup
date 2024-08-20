@@ -207,7 +207,8 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                 sx={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }}
             />
 
-             <Box>
+            <Box>
+                {/**
                 <Box>
                     <input
                         id="base-pdf-upload"
@@ -242,6 +243,7 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                 <Button variant="contained" onClick={onDownloadTemplate}>
                     Download Template
                 </Button>
+                 */}
                 <DialogActions>
                     <Button
                         variant="outlined"
@@ -265,7 +267,6 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                     </Button>
                 </DialogActions>
             </Box>
-
         </Box>
     );
 }
