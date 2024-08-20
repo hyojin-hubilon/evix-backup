@@ -384,14 +384,14 @@ const SignUp = () => {
             </Box>
             <Terms isOpen={termsIsOpen} handleClose={handleTerms} />
             <PrivacyPolicy isOpen={privacyPolicyIsOpen} handleClose={handlePrivacyPolicy} />
-            <SimpleModal
+            {/* <SimpleModal
                 text={modalText}
                 isOpen={isComplete}
                 handleOpen={handleComplete}
                 style={modalStyle}
                 handleClick={toLoginPage}
                 buttonText={modalButtonText}
-            />
+            /> */}
         </Container>
     );
 };

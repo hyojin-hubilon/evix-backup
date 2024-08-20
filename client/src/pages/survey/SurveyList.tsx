@@ -40,10 +40,6 @@ const SurveyList = () => {
 	const [activeDateSetting, setActiveDateSetting] = useState('full');
 	const [ dateSet, setDateSet ] = useState<{startDt: string, endDt: string}>({startDt : '', endDt: ''});
     
-
-	const decodedToken = getDecodedToken('userInfoToken');
-	const userNo = decodedToken && decodedToken['user-no'] ? decodedToken['user-no'] : null;
-
     // Surrvey 데이터 불러오기
     const fetchSurvey = async () => {
         try {
@@ -200,7 +196,7 @@ const SurveyList = () => {
 						{paginator(searched, page, itemPerPage).data.map((survery, index) => {
 							return (
 								<Grid item xs={12} key={index}>
-									<SurveyListItem survey={survery} userNo={userNo} refresh={fetchSurvey} />
+									<SurveyListItem survey={survery} refresh={fetchSurvey} />
 								</Grid>
 							)
 						})}

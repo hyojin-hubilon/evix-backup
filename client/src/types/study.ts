@@ -59,6 +59,9 @@ export interface ManagerList {
     profile_image_name: string;
     first_name: string;
     last_name: string;
+	email:string;
+	company_name:string;	
+	invited_at: string | Date;
 }
 
 export interface MyStudyList {

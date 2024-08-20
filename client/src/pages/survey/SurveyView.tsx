@@ -1,6 +1,6 @@
 import surveyApi from "@/apis/survey";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { QuestionList, SurveyDetail } from '@/types/survey';
 import { Box, Button, Card, Typography, useTheme } from "@mui/material";
 import ViewCard from "./components/FromView/ViewCard/ViewCard";
@@ -8,6 +8,7 @@ import * as S from './components/FromView/ViewCard/styles';
 import { useDispatch, useSelector } from "react-redux";
 import { resetAll, PreviewStateProps, addPreview } from "@/store/reducers/preview";
 import { Formik, Form } from "formik";
+import { useConfirmation } from "@/components/ui/ConfirmDialog/ConfirmDialogContext";
 
 
 type SurveyViewProps = {
@@ -18,6 +19,8 @@ type SurveyViewProps = {
 const SurveyView = ({preview, surveyNo} : SurveyViewProps) => {
 	const previewCards = useSelector((state: PreviewStateProps) => state.previewCards);
   	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const confirm = useConfirmation();
 
 	const { survey_no } = useParams<{ survey_no: any }>();
 	const [ survey, setSurvey ]  = useState<SurveyDetail>({} as SurveyDetail);
@@ -43,7 +46,16 @@ const SurveyView = ({preview, surveyNo} : SurveyViewProps) => {
 				console.log(survey)
             }
         } catch (error) {
-            console.error('Failed to fetch study list:', error);
+            console.error('Failed to fetch survey:', error);
+			dispatch(resetAll());
+			confirm({
+				description: 'Failed to fetch survey',
+				variant: 'info'
+			})
+			.then(() => { 
+				navigate('/survey');
+			});
+			
         }
 	
 	}
