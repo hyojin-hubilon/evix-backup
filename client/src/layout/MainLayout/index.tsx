@@ -15,6 +15,7 @@ import Breadcrumbs from '@components/@extended/Breadcrumbs';
 // types
 import { openDrawer } from '@store/reducers/menu';
 import { IRootState } from '@store/reducers';
+import { UserProfileContextProvider } from '@/context/UserProfileContext';
 
 // ==============================|| MAIN LAYOUT ||============================== //
 
@@ -46,15 +47,17 @@ const MainLayout = () => {
     }, [drawerOpen]);
 
     return (
-        <Box sx={{ display: 'flex', width: '100%' }}>
-            <Header open={open} handleDrawerToggle={handleDrawerToggle} />
-            <Drawer open={open} handleDrawerToggle={handleDrawerToggle} />
-            <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 }, pl: open ? { xs: 2, sm: 3, md: 2} : {xs : 2, sm: 3, md: 3, lg: 11} }}>
-                <Toolbar />
-                <Breadcrumbs navigation={navigation} title />
-                <Outlet />
-            </Box>
-        </Box>
+		<UserProfileContextProvider>
+			<Box sx={{ display: 'flex', width: '100%' }}>
+				<Header open={open} handleDrawerToggle={handleDrawerToggle} />
+				<Drawer open={open} handleDrawerToggle={handleDrawerToggle} />
+				<Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 }, pl: open ? { xs: 2, sm: 3, md: 2} : {xs : 2, sm: 3, md: 3, lg: 11} }}>
+					<Toolbar />
+					<Breadcrumbs navigation={navigation} title />
+					<Outlet />
+				</Box>
+			</Box>
+		</UserProfileContextProvider>
     );
 };
 

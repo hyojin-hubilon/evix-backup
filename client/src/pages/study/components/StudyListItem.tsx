@@ -21,7 +21,6 @@ import {
 } from '@mui/material';
 
 import { ManagerList, StudyListItemProps } from '@/types/study';
-import { getDecodedToken } from '@/utils/Cookie';
 import StudyNew from '../StudyNew';
 import { useEffect, useState } from 'react';
 import SurveyConnectDialog from './study-new/SurveyConnetDialog';
@@ -35,6 +34,7 @@ import {
     PauseIcon,
     StopIcon,
 } from '@/components/StatusIcons';
+import { useUserProfile } from '@/context/UserProfileContext';
 
 // * 진행중인 상태일 경우, 한눈에 알아볼 수 있도록 bg를 다르게 처리함.
 // * 배포전/일시정지/중단: 빨간색 txt 처리
@@ -74,9 +74,10 @@ export const TitleStatusIcon = ({ status }: { status: string }) => {
 const StudyListItem = ({ study }: StudyListItemProps) => {
     const theme = useTheme();
     const statusLabel = STUDY_STATUS[study.std_status as STUDY_STATUS_KEY];
-	const [ isOwner, setIsOwner ] = useState(false);
 	const [ isEditable, setIsEditable ] = useState(false);
     const { stdStatus } = theme.palette;
+
+	const { userProfile } = useUserProfile();
 
     const managerList: ManagerList[] = study.managerList;
 
@@ -116,18 +117,14 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
     };
 
 	useEffect(() => {
-		const decodedToken = getDecodedToken('dctAccessToken');
+		const user_no = userProfile?.user_no;
 
-		const userId = decodedToken && decodedToken['sub'];
-
-		if(userId) {
-			
+		if(user_no) {			
 			const isEditable = managerList.some(
 				(manager) =>
-					(manager.email === userId && manager.std_privilege === 'OWNER') ||
-					(manager.email === userId && manager.std_privilege === 'MAINTAINER')
+					(manager.user_no === user_no && manager.std_privilege === 'OWNER') ||
+					(manager.user_no === user_no && manager.std_privilege === 'MAINTAINER')
 			);
-
 			setIsEditable(isEditable);
 		}
 	}, [])
