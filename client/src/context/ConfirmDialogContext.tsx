@@ -23,6 +23,11 @@ export const ConfirmationServiceProvider = ({ children }) => {
 
 	const openConfirmation = (options: ConfirmationOptions) => {
 		setConfirmationState(options);
+		
+		setTimeout(() => {
+			setOpenConfirm(true);	
+		}, 100);
+		
 		return new Promise<void>((resolve, reject) => {
 			awaitingPromiseRef.current = { resolve, reject };
 		});
@@ -33,7 +38,11 @@ export const ConfirmationServiceProvider = ({ children }) => {
 			awaitingPromiseRef.current.reject();
 		}
 
-		setConfirmationState(null);
+		setOpenConfirm(false);
+		
+		setTimeout(() => {
+			setConfirmationState(null);
+		}, 100);
 	};
 
 	const handleSubmit = () => {
@@ -41,7 +50,11 @@ export const ConfirmationServiceProvider = ({ children }) => {
 			awaitingPromiseRef.current.resolve();
 		}
 
-		setConfirmationState(null);
+		setOpenConfirm(false);
+
+		setTimeout(() => {
+			setConfirmationState(null);
+		}, 100);
 	};
 
 	return (
@@ -52,7 +65,7 @@ export const ConfirmationServiceProvider = ({ children }) => {
 			/>
 
 			<ConfirmationDialog
-				open={Boolean(confirmationState)}
+				open={openConfirm}
 				onSubmit={handleSubmit}
 				onClose={handleClose}
 				{...confirmationState}

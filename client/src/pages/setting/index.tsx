@@ -4,6 +4,7 @@ import userApi from '@/apis/user';
 import { ResCommonError } from '@/apis/axios-common';
 import { MyProfile } from '@/types/user';
 import SettingLoginForm from './components/SettingLoginForm';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 // TODO : 초대받은 study 목록, 업데이트 시 (privilege, language) 추가하기
 const Settings = () => {
@@ -35,12 +36,15 @@ const Settings = () => {
         survey_number: 0,
     });
 
+	const confirm = useConfirmation();
+
     const handleSuccessLogin = (status: boolean) => {
         setLoginIsSucess(status);
     };
 
     useEffect(() => {
-        const getMyProfile = async () => {
+
+		const getMyProfile = async () => {
             try {
                 const { content } = await userApi.getMyProfile();
                 if (content) {
@@ -52,7 +56,18 @@ const Settings = () => {
                 }
             }
         };
-        getMyProfile();
+		
+
+		confirm({
+			description: "테스트",
+			variant: 'info'
+		}).then(() => {
+			getMyProfile();
+		});
+
+		
+       
+        
     }, []);
 
     return (
