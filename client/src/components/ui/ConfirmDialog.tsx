@@ -6,7 +6,8 @@ import {
 	DialogContentText,
 	DialogActions,
 	Button,
-	Typography
+	Typography,
+	Box
 } from "@mui/material";
 
 export interface ConfirmationOptions {
@@ -31,29 +32,29 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 	onClose
 }) => {
   	return (
-		<Dialog open={open ? open : false}>
+		<Dialog open={open ? open : false} maxWidth="sm">
 			{
 				title && 
-				<DialogTitle id="alert-dialog-title" variant="h5">
-					{title}
+				<DialogTitle id="alert-dialog-title" variant="h6" fontWeight="bold">
+					{ title }
 				</DialogTitle>
 			}
 			
 			<DialogContent sx={{minWidth: '360px'}}>
 				{
-					description && 	<DialogContentText variant="body1">{description}</DialogContentText>
+					description && <DialogContentText variant="body1">{description}</DialogContentText>
 				}
 			</DialogContent>
-			<DialogActions>
+			<DialogActions sx={{ p: '0 1.5rem 1.5rem'}}>
 				{variant === "danger" && (
-				<>
+				<Box display="flex" justifyContent="space-between" width={1}>
 					<Button color="error" onClick={onClose} autoFocus>
 						Cancel
 					</Button>
 					<Button color="primary" variant="contained" onClick={onSubmit}>
-						Yes, I agree
+						Yes
 					</Button>
-				</>
+				</Box>
 				)}
 
 				{variant === "info" && (
@@ -63,14 +64,14 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 				)}
 
 				{variant === undefined && (
-					<>
+					<Box display="flex" justifyContent="space-between" width={1}>
 						<Button color="error" onClick={onClose} autoFocus>
 							Cancel
 						</Button>
 						<Button color="primary" variant="contained" onClick={onSubmit}>
 							Yes
 						</Button>
-					</>
+					</Box>
 					)
 				}
 			</DialogActions>

@@ -1,7 +1,7 @@
 import { ResCommonError } from '@/apis/axios-common';
 import studyApi from '@/apis/study';
 import { useEffect, useState } from 'react';
-import { Box, Button, Typography, Paper, Stack, Badge } from '@mui/material';
+import { Box, Button, Typography, Paper, Stack, Badge, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { NavLink } from 'react-router-dom';
 import authApi from '@/apis/auth';
@@ -55,8 +55,9 @@ const UnauthorizedInvitation = () => {
     }, []);
 
     return (
+		<Container maxWidth="lg">
         <Box sx={{ p: 2 }}>
-            <Typography variant="h6">
+            <Typography variant="h5">
                 Settings {'>'}
                 <NavLink
                     to="/settings/unauthorizedstudy"
@@ -100,6 +101,7 @@ const UnauthorizedInvitation = () => {
                 ))}
             </Stack>
         </Box>
+		</Container>
     );
 };
 
