@@ -10,7 +10,7 @@ import {
     getPlugins,
     handlePreviewTemplate,
 } from './helper';
-import { Button, DialogActions, InputLabel } from '@mui/material';
+import { Box, Button, DialogActions, InputLabel, Typography } from '@mui/material';
 import studyApi from '@/apis/study';
 import { useNavigate } from 'react-router-dom';
 
@@ -182,35 +182,30 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
     }, []);
 
     return (
-        <div>
-            <header
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    margin: '0 1rem',
-                    fontSize: 'small',
-                    height: '3rem',
-                }}
-            >
-                <strong>Designer</strong>
-            </header>
+        <Box>
+            <Box p={'16px 24px'}>
+                <Typography variant="h5">Register electronic consent form</Typography>
+                <Typography variant="h6">
+                    Upload the electronic consent form in PDF file format to apply functions such as
+                    consent and signature.
+                </Typography>
+            
+            </Box>
             <div
                 ref={designerRef}
-                style={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }}
+                style={{ width: '100%', height: `calc(100vh - 200px)`}}
             />
             <DialogActions>
                 <Button
                     sx={{ width: '50%', height: '40px' }}
-                    variant="contained"
-                    color="primary"
+                    variant="outlined"
                     onClick={onClose}
                 >
                     Cancel
                 </Button>
                 <Button sx={{ width: '50%', height: '40px' }} variant="contained" color="primary">
                     <InputLabel htmlFor="upload-pdf" style={{ width: 180, color: 'white' }}>
-                        Base PDF
+                        Change Base PDF
                     </InputLabel>
                     <input
                         id="upload-pdf"
@@ -229,7 +224,7 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
                     Save
                 </Button>
             </DialogActions>
-        </div>
+        </Box>
     );
 };
 
