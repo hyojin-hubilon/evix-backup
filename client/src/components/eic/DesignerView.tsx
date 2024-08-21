@@ -137,7 +137,7 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
                 for (const key in schema) {
                     if (seenKeys.has(key)) {
                         alert(
-                            `중복된 필드가 있습니다 (${key}) 서로 다른 필드 명을 가지고 있어야합니다.`
+                            `중복된 필드가 있습니다 Duplicating field name is = (${key}) 서로 다른 필드 명을 가지고 있어야합니다.`
                         );
                         return;
                     }
