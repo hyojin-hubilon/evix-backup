@@ -68,11 +68,11 @@ const InviteStudy = () => {
                 if (response.code === 200) {
                     // 토큰 유효 > 회원가입이 되어있는 유저, 스터디 초대 완료
 					confirm({
-						description: response.message,
+						description: response.message ? response.message : "스터디 초대가 완료되었습니다.",
 						variant: 'info'
 					})
 					.then(() => { 
-						navigate('/');
+						navigate('/study');
 					});
                     
                     return;
@@ -80,7 +80,7 @@ const InviteStudy = () => {
                 if (response.code === 404) {
                     // 토큰 유효 > 회원가입이 안되어있는 유저, 회원가입으로 이동
 					confirm({
-						description: response.message,
+						description: response.message ? response.message : "회원가입을 먼저 진행해주십시오.",
 						variant: 'info'
 					})
 					.then(() => { 
@@ -92,7 +92,7 @@ const InviteStudy = () => {
                     // 208 : 토큰 유효 > 토큰이 이미 사용된 경우
                     // 401 : 토큰 유효시간 만료
 					confirm({
-						description: response.message,
+						description: response.message ? response.message : "토큰이 만료되었습니다.",
 						variant: 'info'
 					})
 					.then(() => { 
@@ -105,7 +105,7 @@ const InviteStudy = () => {
                 const e = error as ResCommonError;
                 if (e) {
 					confirm({
-						description: e.message,
+						description: e.message ? e.message : "에러가 발생했습니다.",
 						variant: 'info'
 					})
 					.then(() => { 
