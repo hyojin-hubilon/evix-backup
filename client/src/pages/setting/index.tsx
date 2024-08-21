@@ -43,8 +43,7 @@ const Settings = () => {
     };
 
     useEffect(() => {
-
-		const getMyProfile = async () => {
+        const getMyProfile = async () => {
             try {
                 const { content } = await userApi.getMyProfile();
                 if (content) {
@@ -56,18 +55,7 @@ const Settings = () => {
                 }
             }
         };
-		
-
-		confirm({
-			description: "테스트",
-			variant: 'info'
-		}).then(() => {
-			getMyProfile();
-		});
-
-		
-       
-        
+        getMyProfile();
     }, []);
 
     return (
