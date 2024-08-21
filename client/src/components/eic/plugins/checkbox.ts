@@ -35,6 +35,7 @@ export const checkbox: Plugin<Checkbox> = {
             position: { x: 0, y: 0 },
             width: 11.5,
             height: 10,
+            content : ''
         },
     },
 };

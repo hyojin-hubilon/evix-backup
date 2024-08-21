@@ -102,6 +102,8 @@ export const handlePreviewTemplate = (
 };
 
 export const getPlugins = () => {
+    // text schema 생성 시 빈값 세팅
+    text.propPanel.defaultSchema.content = '';
     return {
         Text: text,
         Signature: plugins.signature,

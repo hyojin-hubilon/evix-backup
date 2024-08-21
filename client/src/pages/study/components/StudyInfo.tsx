@@ -468,10 +468,9 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                         height: '130px',
                                     }}
                                 >
-                                    <IconButton color="inherit">
+                                    <IconButton color="inherit" onClick={handleOpenUploadBasePdf}>
                                         <AddCircleOutlineIcon
                                             sx={{ fontSize: 40 }}
-                                            onClick={handleOpenUploadBasePdf}
                                         />
                                     </IconButton>
                                     <Typography variant="body1" color="textSecondary">
