@@ -38,7 +38,7 @@ interface StudyDetail {
 interface EditViewerProps {
     eicFile: any;
     onClose: () => void;
-    studyDetail : StudyDetail
+    studyDetail: StudyDetail;
 }
 
 const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
@@ -123,7 +123,7 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
                 for (const key in schema) {
                     if (seenKeys.has(key)) {
                         alert(
-                            `중복된 필드가 있습니다 (${key}) 서로 다른 필드 명을 가지고 있어야합니다.`
+                            `중복된 필드가 있습니다 Duplicating field name is = (${key}) 서로 다른 필드 명을 가지고 있어야합니다.`
                         );
                         return;
                     }
@@ -139,7 +139,7 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
     };
 
     const handleEdit = async (jsonTemplate: Blob) => {
-        const studyData : StudyDetail = studyDetail;
+        const studyData: StudyDetail = studyDetail;
         console.log(studyData);
 
         // FormData 객체 생성 및 데이터 추가
@@ -190,41 +190,45 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
                     justifyContent: 'space-between',
                     margin: '0 1rem',
                     fontSize: 'small',
+                    height: '3rem',
                 }}
             >
                 <strong>Designer</strong>
-
-                <DialogActions>
-                    <Button
-                        sx={{ width: '50%', height: '40px' }}
-                        variant="contained"
-                        color="primary"
-                    >
-                        <InputLabel htmlFor="upload-pdf" style={{ width: 180 }}>
-                            Change BasePDF
-                        </InputLabel>
-                        <input
-                            id="upload-pdf"
-                            type="file"
-                            accept="application/pdf"
-                            onChange={onChangeBasePDF}
-                            hidden
-                        />
-                    </Button>
-                    <Button
-                        sx={{ width: '50%', height: '40px' }}
-                        variant="contained"
-                        color="primary"
-                        onClick={onSaveTemplate}
-                    >
-                        Save
-                    </Button>
-                </DialogActions>
             </header>
             <div
                 ref={designerRef}
                 style={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }}
             />
+            <DialogActions>
+                <Button
+                    sx={{ width: '50%', height: '40px' }}
+                    variant="contained"
+                    color="primary"
+                    onClick={onClose}
+                >
+                    Cancel
+                </Button>
+                <Button sx={{ width: '50%', height: '40px' }} variant="contained" color="primary">
+                    <InputLabel htmlFor="upload-pdf" style={{ width: 180, color: 'white' }}>
+                        Base PDF
+                    </InputLabel>
+                    <input
+                        id="upload-pdf"
+                        type="file"
+                        accept="application/pdf"
+                        onChange={onChangeBasePDF}
+                        hidden
+                    />
+                </Button>
+                <Button
+                    sx={{ width: '50%', height: '40px' }}
+                    variant="contained"
+                    color="primary"
+                    onClick={onSaveTemplate}
+                >
+                    Save
+                </Button>
+            </DialogActions>
         </div>
     );
 };
