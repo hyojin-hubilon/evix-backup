@@ -186,22 +186,22 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
             sx={{
                 position: 'relative',
                 width: '100%',
-                height: '100%',
                 bgcolor: 'background.paper',
                 boxShadow: 24,
                 p: 0,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
+				height: 'calc(100vh - 64px)'
             }}
         >
-            <DialogTitle>
+            <Box p={'16px 24px'}>
                 <Typography variant="h5">Register electronic consent form</Typography>
                 <Typography variant="h6">
                     Upload the electronic consent form in PDF file format to apply functions such as
                     consent and signature.
                 </Typography>
-            </DialogTitle>
+            </Box>
             <Box
                 ref={designerRef}
                 sx={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }}
