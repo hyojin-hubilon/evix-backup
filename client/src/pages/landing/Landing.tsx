@@ -31,14 +31,6 @@ import './Landing.scss';
 export default function LandingPage() {
     const navigate = useNavigate();
     const { t } = useTranslation();
-    // const theme = useTheme();
-
-    // const toLoginPage = () => {
-    //     navigate("/login");
-    // };
-    // const toDashBoardPage = () => {
-    //     navigate("/dashboard");
-    // };
 
     const toApplyPage = () => {
         navigate('/apply');
@@ -917,11 +909,6 @@ export default function LandingPage() {
                     </Grid>
                 </Container>
             </Box>
-
-            {/* <Container>
-				<Button onClick={toLoginPage} children="Login" />
-				<Button onClick={toDashBoardPage} children="DashBoard" />
-			</Container> */}
         </Box>
     );
 }

@@ -4,8 +4,8 @@ import { useTheme } from '@mui/material/styles';
 import { Container, Box, Grid, Link } from '@mui/material';
 import { styled } from '@mui/system';
 import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import XIcon from '@mui/icons-material/X';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import YouTubeIcon from '@mui/icons-material/YouTube';
 
 import footerLogo from '@assets/images/EVIDNET_LOGO.svg';
 import LanguageSelector from './LangaugeSelector';
@@ -52,6 +52,10 @@ const LandingFooter = () => {
             borderColor: 'rgba(228, 219, 233, 0.5)',
         },
     }));
+
+    const handleOpenPage = (url: string) => {
+        window.open(url);
+    };
 
     return (
         <>
@@ -134,18 +138,45 @@ const LandingFooter = () => {
                                 }}
                             >
                                 <Grid item sx={{ pt: 0 }}>
-                                    <SocialButton>
-                                        <FacebookIcon></FacebookIcon>
+                                    <SocialButton
+                                        onClick={() =>
+                                            handleOpenPage(
+                                                'https://www.linkedin.com/company/evidnet'
+                                            )
+                                        }
+                                    >
+                                        <LinkedInIcon />
                                     </SocialButton>
                                 </Grid>
                                 <Grid item sx={{ pt: 0 }}>
-                                    <SocialButton>
-                                        <InstagramIcon></InstagramIcon>
+                                    <SocialButton
+                                        onClick={() =>
+                                            handleOpenPage('https://www.facebook.com/evidnet')
+                                        }
+                                    >
+                                        <FacebookIcon />
                                     </SocialButton>
                                 </Grid>
                                 <Grid item sx={{ pt: 0 }}>
-                                    <SocialButton>
-                                        <XIcon></XIcon>
+                                    <SocialButton
+                                        onClick={() =>
+                                            handleOpenPage('https://www.youtube.com/c/EvidnetVideo')
+                                        }
+                                    >
+                                        <YouTubeIcon />
+                                    </SocialButton>
+                                </Grid>
+                                <Grid item sx={{ pt: 0 }}>
+                                    <SocialButton
+                                        onClick={() =>
+                                            handleOpenPage('https://blog.naver.com/evidnet')
+                                        }
+                                    >
+                                        <img
+                                            decoding="async"
+                                            src="http://evidnet.com/wp-content/uploads/2022/05/blog2.png"
+                                            style={{ width: 25, height: 25 }}
+                                        />
                                     </SocialButton>
                                 </Grid>
                             </Grid>
