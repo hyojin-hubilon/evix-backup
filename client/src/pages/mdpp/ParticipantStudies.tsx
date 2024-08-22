@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Card, Typography } from "@mui/material";
 import MdppHeader from "./components/MdppHeader";
 
 const tempStudies = [
@@ -24,13 +24,13 @@ const tempStudies = [
 	},
 	{
 		status:'DONE', //참여완료
-		title: '펜터민 효과성 임상연구',
-		start_date: null,
-		end_date: '2024.12.31',
-		organization: '서울대학교병원',
-		survey_cycle: 'WEEK',
+		title: '마이녹실액3% 효과 임상연구',
+		start_date: '2023.01.20',
+		end_date: '2023.05.15',
+		organization: '서울아산병원',
+		survey_cycle: 'MONTH',
 		number_in_cycle: 1,
-		number_of_participation: 3
+		number_of_participation: 5
 	}
 	
 ]
@@ -43,6 +43,15 @@ const ParticipantStudies = () => {
 			</Typography>
 			<Box pt="21px">
 
+			</Box>
+			<Box p="50px 23px">
+				<Card sx={{p:'16px'}}>
+					<Typography variant="h5">임상연구 참여 안내</Typography>
+					<Typography>
+						메디팡팡은 임상연구자와 참여자 연결 역할을 담당하고 있습니다.
+						임상연구와 관련한 문의는 참여하신 병원 또는 연구기관으로 문의해 주세요.
+					</Typography>
+				</Card>
 			</Box>
 	 	</Box>
 	)
