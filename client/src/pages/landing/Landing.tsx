@@ -81,6 +81,10 @@ export default function LandingPage() {
         },
     }));
 
+    const toSupportPage = () => {
+        navigate("/support");
+    }
+
     return (
         <Box className="landing" sx={{bgcolor: 'white'}}>
             {/* Section 01*/}
@@ -690,6 +694,7 @@ export default function LandingPage() {
                         variant="contained"
                         size="large"
                         sx={{ bgcolor: '#222', fontSize: '1.1rem', p: '10px 27px' }}
+                        onClick={toSupportPage}
                     >
                         Contact Service
                     </Button>
