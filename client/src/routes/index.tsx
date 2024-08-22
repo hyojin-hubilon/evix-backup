@@ -10,6 +10,7 @@ import SettingsRoutes from './SettingsRoutes';
 import SurveyRoutes from './SurveyRoutes';
 import InviteStudyRoutes from './InviteStudy';
 import HelpRoutes from './HelpRoutes';
+import MdppRoutes from './MdppRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
@@ -23,6 +24,7 @@ export default function ThemeRoutes() {
 		SurveyRoutes,
         InviteStudyRoutes,
 		HelpRoutes,
+		MdppRoutes,
         { path: '*', element: <NotFound /> },
     ]);
 }
