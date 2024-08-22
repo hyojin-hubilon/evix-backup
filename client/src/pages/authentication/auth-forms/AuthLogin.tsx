@@ -20,9 +20,11 @@ import {
 import GoogleSocial from './GoogleSocial';
 import * as AuthApiType from '@/types/auth';
 import authApi from '@/apis/auth';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 const AuthLogin = () => {
     const navigate = useNavigate();
+	const confirm = useConfirmation();
 	
     const [showPassword, setShowPassword] = useState(false);
     const [formError, setFormError] = useState('');
@@ -57,7 +59,7 @@ const AuthLogin = () => {
                     try {
                         const { code, content } = await authApi.login(values);
                         if (code === 400) {
-                            alert('아이디 또는 패스워드를 확인해주세요.');
+                            confirm({description : '아이디 또는 패스워드를 확인해주세요.', variant : 'info'});
                             return;
                         }
                         if (code === 200) {
@@ -65,7 +67,7 @@ const AuthLogin = () => {
                             navigate('/dashboard');
                         }
                     } catch (e) {
-                        alert('This surfactant is already in use.');
+						confirm({description : 'This surfactant is already in use.', variant : 'info'});
                         setStatus({ success: false });
                         setFormError('login failed');
                         setSubmitting(false);

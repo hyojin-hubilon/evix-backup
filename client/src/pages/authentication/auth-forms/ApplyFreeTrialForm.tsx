@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { TextField, Button, Grid, Stack, Typography } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 const ApplyFreeTrialForm = () => {
     const [formState, setFormState] = useState({
@@ -17,6 +18,7 @@ const ApplyFreeTrialForm = () => {
     });
 
     const navigate = useNavigate();
+	const confirm = useConfirmation();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -35,8 +37,11 @@ const ApplyFreeTrialForm = () => {
                 },
             });
             console.log('Response:', response.data);
-            alert('Evix-DCT 무료 버전을 신청하였습니다.');
-            navigate(-1);
+            confirm({
+				description : 'Evix-DCT 무료 버전을 신청하였습니다.',
+				variant : 'info'
+			}).then(() => navigate(-1));
+            
         } catch (error) {
             console.error('Error:', error);
         }

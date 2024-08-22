@@ -4,6 +4,7 @@ import { Container, Typography, Stack, OutlinedInput, Button } from '@mui/materi
 import { useFormik } from 'formik';
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 const validationSchema = yup.object({
     password: yup
@@ -23,6 +24,7 @@ const validationSchema = yup.object({
 const ChangePasswordForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
+	const confirm = useConfirmation();
     const user_no = location.state?.user_no || '';
 
     const formik = useFormik({
@@ -38,8 +40,13 @@ const ChangePasswordForm = () => {
                     user_no,
                     new_password: values.password,
                 });
-                alert('비밀번호 변경 성공');
-                navigate('/login');
+				if(response.code == 200) {
+					confirm({description : '비밀번호 변경 성공', variant: 'info'});
+                	navigate('/login');
+				} else {
+					confirm({description : 'Failed to reset password. Please try again.', variant: 'info'});
+				}
+                
             } catch (error) {
                 console.error('Password reset failed:', error);
                 setStatus({ errorMessage: 'Failed to reset password. Please try again.' });

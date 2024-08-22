@@ -1,4 +1,5 @@
 import authApi from '@/apis/auth';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 import {
     Container,
     Typography,
@@ -21,6 +22,7 @@ const AuthenticationPasswordForm = () => {
     const location = useLocation();
     const resetToken = location.state?.resetToken || '';
     const navigate = useNavigate();
+	const confirm = useConfirmation();
 
     const [timer, setTimer] = useState(300);
     // const [timer, setTimer] = useState(10);
@@ -49,11 +51,16 @@ const AuthenticationPasswordForm = () => {
                     resetToken
                 );
                 if (response.code === 200) {
-                    alert(response.content);
+                    // alert(response.content);
                     navigate('/change-password', {
                         state: { user_no: response.content },
                     });
-                }
+                } else {
+					confirm({
+						description: response.message,
+						variant: 'info'
+					})
+				}
             } catch (error) {
                 console.error('Error verifying password reset link:', error);
             }

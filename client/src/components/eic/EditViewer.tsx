@@ -13,6 +13,7 @@ import {
 import { Box, Button, DialogActions, InputLabel, Typography } from '@mui/material';
 import studyApi from '@/apis/study';
 import { useNavigate } from 'react-router-dom';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 const headerHeight = 80;
 
@@ -43,6 +44,7 @@ interface EditViewerProps {
 
 const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
     const navigate = useNavigate();
+	const confirm = useConfirmation();
 
     const designerRef = useRef<HTMLDivElement | null>(null);
     const designer = useRef<Designer | null>(null);
@@ -122,9 +124,10 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
             for (const schema of schemas) {
                 for (const key in schema) {
                     if (seenKeys.has(key)) {
-                        alert(
-                            `중복된 필드가 있습니다 Duplicating field name is = (${key}) 서로 다른 필드 명을 가지고 있어야합니다.`
-                        );
+                        confirm({
+                            description: `중복된 필드가 있습니다 Duplicating field name is = (${key}) 서로 다른 필드 명을 가지고 있어야합니다.`,
+							variant: 'info'
+						});
                         return;
                     }
                     seenKeys.add(key);

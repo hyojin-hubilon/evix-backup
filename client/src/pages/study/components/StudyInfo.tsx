@@ -27,6 +27,7 @@ import PreviewEic from './eic/PreviewEic';
 import EditEic from './eic/EditEic';
 import EicParent from './eic/EicParent';
 import { useNavigate } from 'react-router-dom';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 interface StudyInfoProps {
     studyDetail: {
@@ -85,6 +86,8 @@ interface StudyInfoProps {
 const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
     const theme = useTheme();
     const navigate = useNavigate();
+
+	const confirm = useConfirmation();
 
     const formatDate = (dateString: string): string => {
         return moment(dateString).format('YYYY-MM-DD');
@@ -188,7 +191,10 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
         try {
             const response = await studyApi.editEicFile(formData);
             if (response.code === 200 && response.content.std_no) {
-                navigate('/study');
+				confirm({
+					description:"전자동의서가 변경되었습니다.",
+					variant: 'info'
+				});
             }
         } catch (error) {
             console.error('Failed to deploy study: ', error);

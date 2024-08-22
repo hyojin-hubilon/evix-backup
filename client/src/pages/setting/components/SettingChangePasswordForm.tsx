@@ -1,5 +1,6 @@
 import { ResCommonError } from '@/apis/axios-common';
 import userApi from '@/apis/user';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { ModifyPassword } from '@/types/user';
 import { Container, Typography, Stack, OutlinedInput, Button, Modal, Box } from '@mui/material';
 import { useFormik } from 'formik';
@@ -23,6 +24,7 @@ const modalStyle = {
 };
 
 const SettingChangePasswordForm: React.FC<Props> = ({ user_no, isOpen, handleClose }) => {
+	const confirm = useConfirmation();
     const validationSchema = yup.object({
         origin_password: yup.string().required('Origin Password is required'),
         new_password: yup
@@ -55,7 +57,7 @@ const SettingChangePasswordForm: React.FC<Props> = ({ user_no, isOpen, handleClo
         try {
             const { content } = await userApi.modifyPassword(body);
             if (content) {
-                alert('비밀번호 변경이 완료되었습니다.');
+                confirm({description : '비밀번호 변경이 완료되었습니다.', variant: 'info'});
                 handleClose();
             }
         } catch (error) {

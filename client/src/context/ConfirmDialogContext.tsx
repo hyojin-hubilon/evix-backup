@@ -42,7 +42,7 @@ export const ConfirmationServiceProvider = ({ children }) => {
 		
 		setTimeout(() => {
 			setConfirmationState(null);
-		}, 100);
+		}, 300);
 	};
 
 	const handleSubmit = () => {
@@ -54,7 +54,7 @@ export const ConfirmationServiceProvider = ({ children }) => {
 
 		setTimeout(() => {
 			setConfirmationState(null);
-		}, 100);
+		}, 300);
 	};
 
 	return (

@@ -6,6 +6,7 @@ import { Grid, Stack, TextField, Button, Typography, Paper } from '@mui/material
 import authApi from '@/apis/auth';
 import { MyProfile } from '@/types/user';
 import { LoginReq } from '@/types/auth';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 type Props = {
     myProfile: MyProfile;
@@ -14,6 +15,7 @@ type Props = {
 
 const SettingLoginForm: React.FC<Props> = ({ myProfile, handleLogin }) => {
     const initialValues: LoginReq = { email: myProfile.email, password: '' };
+	const confirm = useConfirmation();
 
     const validationSchema = Yup.object({
         email: Yup.string().email().required('이메일을 입력해주세요.'),
@@ -28,7 +30,7 @@ const SettingLoginForm: React.FC<Props> = ({ myProfile, handleLogin }) => {
             try {
                 const responseData = await authApi.login({ email, password });
                 if (responseData.code === 400) {
-                    alert('비밀번호를 다시 확인해주세요.');
+                    confirm({description : '비밀번호를 다시 확인해주세요.', variant: 'info'});
                     return;
                 }
                 if (responseData.code === 200) {

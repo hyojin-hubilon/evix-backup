@@ -1,5 +1,6 @@
 import { ResCommonError } from '@/apis/axios-common';
 import userApi from '@/apis/user';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { Box, Button } from '@mui/material';
 import { useEffect } from 'react';
 
@@ -8,6 +9,7 @@ type Props = {
     handleImageUrl: (url: string) => void;
 };
 const ProfileImage: React.FC<Props> = ({ imageUrl, handleImageUrl }) => {
+	const confirm = useConfirmation();
     const handleUploadProfileImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile: File | undefined = event.target.files?.[0];
         if (!selectedFile) {
@@ -19,7 +21,7 @@ const ProfileImage: React.FC<Props> = ({ imageUrl, handleImageUrl }) => {
         try {
             const { content } = await userApi.uploadProfileImage(formData);
             if (content) {
-                alert('프로필 사진이 변경되었습니다.');
+				confirm({description : '프로필 사진이 변경되었습니다.', variant : 'info'});   
                 handleImageUrl(content);
             }
         } catch (error) {

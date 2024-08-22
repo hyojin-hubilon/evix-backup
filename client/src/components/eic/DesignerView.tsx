@@ -21,6 +21,7 @@ import {
     SelectChangeEvent,
     Typography,
 } from '@mui/material';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 const headerHeight = 80;
 
@@ -35,6 +36,8 @@ const translations: { label: string; value: string }[] = [
 function DesignerView({ basePdfFile, handleEicFile, onClose }) {
     const designerRef = useRef<HTMLDivElement | null>(null);
     const designer = useRef<Designer | null>(null);
+	const confirm = useConfirmation();
+	
     const [lang, setLang] = useState<Lang>('en');
     const [templatePreset, setTemplatePreset] = useState<string>(
         localStorage.getItem('templatePreset') || initialTemplatePresetKey
@@ -114,9 +117,10 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
             for (const schema of schemas) {
                 for (const key in schema) {
                     if (seenKeys.has(key)) {
-                        alert(
-                            `중복된 필드가 있습니다(${key}) 서로 다른 필드 명을 가지고 있어야합니다.`
-                        );
+                        confirm({
+							description:`중복된 필드가 있습니다(${key}) 서로 다른 필드 명을 가지고 있어야합니다.`,
+							variant: 'info'
+						});
                         return;
                     }
                     seenKeys.add(key);
@@ -136,9 +140,10 @@ function DesignerView({ basePdfFile, handleEicFile, onClose }) {
             for (const schema of schemas) {
                 for (const key in schema) {
                     if (seenKeys.has(key)) {
-                        alert(
-                            `중복된 필드가 있습니다 Duplicating field name is = (${key}) 서로 다른 필드 명을 가지고 있어야합니다.`
-                        );
+						confirm({
+							description:`중복된 필드가 있습니다 Duplicating field name is = (${key}) 서로 다른 필드 명을 가지고 있어야합니다.`,
+							variant: 'info'
+						});
                         return;
                     }
                     seenKeys.add(key);

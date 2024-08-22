@@ -15,7 +15,7 @@ export interface ConfirmationOptions {
 	catchOnCancel?: boolean;
 	variant?: "danger" | "info" | undefined;
 	title?: string | undefined;
-	description?: string | undefined;
+	description?: any;
 }
 
 interface ConfirmationDialogProps extends ConfirmationOptions {
@@ -32,10 +32,10 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 	onClose
 }) => {
   	return (
-		<Dialog open={open ? open : false} maxWidth="sm">
+		<Dialog open={open ? open : false} maxWidth="sm" aria-hidden="false" aria-modal="true">
 			{
 				title && 
-				<DialogTitle id="alert-dialog-title" variant="h6" fontWeight="bold">
+				<DialogTitle id="confirm-dialog-title" variant="h6" fontWeight="bold">
 					{ title }
 				</DialogTitle>
 			}

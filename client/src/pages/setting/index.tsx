@@ -43,14 +43,7 @@ const Settings = () => {
     };
 
     useEffect(() => {
-		// confirm({
-		// 	title: '제목을 길게 적어보자 12345',
-		// 	description: '설명을 길게 적어보자 블라블라 본인확인을 위해 비밀번호를 입력해주세요. 더 길게 적으면 어디까지 늘어가는가?',
-		// 	variant: 'danger'
-		// }).then(() => {
-
-		// });
-        const getMyProfile = async () => {
+		const getMyProfile = async () => {
             try {
                 const { content } = await userApi.getMyProfile();
                 if (content) {

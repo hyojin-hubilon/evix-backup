@@ -21,6 +21,7 @@ import userApi from '@/apis/user';
 import { useNavigate } from 'react-router-dom';
 import ProfileImage from './ProfileImage';
 import SettingChangePasswordForm from './SettingChangePasswordForm';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
     const initialValues = {
@@ -37,6 +38,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
         privilege: myProfile.privilege,
     };
     const navigate = useNavigate();
+	const confirm =  useConfirmation();
 
     const [profileImageUrl, setProfileImageUrl] = useState<string>(myProfile.profile_image_url);
     const [emailAlerts, setEmailAlerts] = useState<boolean>(
@@ -83,7 +85,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
         try {
             const { content } = await userApi.updateUser(props);
             if (content) {
-                alert('수정이 완료되었습니다.');
+                confirm({description : '수정이 완료되었습니다.', variant : 'info'});
             }
             return content;
         } catch (error) {
