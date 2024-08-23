@@ -1,5 +1,5 @@
 import { StudyParticipantStatus } from '@/types/participant';
-import { Box, Typography, TextField as MuiTextField, styled } from '@mui/material';
+import { Box, Typography, TextField as MuiTextField, styled, Button } from '@mui/material';
 
 export const Title = styled('h5')`
 	font-size: 18px;
@@ -78,5 +78,24 @@ export const StudyTags = styled('span')`
 	border-radius: 4px;
 	display: block;
 	background: #EFF3F6;
-
 `
+
+export const BigButton = styled(Button)(() => ({
+	fontSize: '16px',
+	fontWeight: '600',
+	letterSpacing: '-0.3px'
+}))
+
+export const H1 = styled('h1')`
+	font-size: 27px;
+	font-weight: 700;
+	line-height: 35px;
+	letter-spacing: -0.5px;
+`
+
+
+export const RequireMark = styled('span')(({theme}) => ({
+	paddingLeft: '4px',
+  	fontSize: '16px',
+  	color: theme.palette.error.main
+}))

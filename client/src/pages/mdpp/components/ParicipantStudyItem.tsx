@@ -48,9 +48,11 @@ const ParticipantStudyItem = ({study}: ParticipantStudyItemType) => {
 				marginTop: '-10px'
 			}}>
 				<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<path d="M8.85712 6L13.1428 10.2857L8.85712 14.5714" stroke="#000001" stroke-linecap="round" stroke-linejoin="round"/>
-					<path d="M10.2857 19.5714C15.4141 19.5714 19.5714 15.4141 19.5714 10.2857C19.5714 5.15736 15.4141 1 10.2857 1C5.15736 1 1 5.15736 1 10.2857C1 15.4141 5.15736 19.5714 10.2857 19.5714Z" stroke="#000001" stroke-linecap="round" stroke-linejoin="round"/>
+					<path d="M8.85712 6L13.1428 10.2857L8.85712 14.5714" stroke="#000001" strokeLinecap="round" strokeLinejoin="round"/>
+					<path d="M10.2857 19.5714C15.4141 19.5714 19.5714 15.4141 19.5714 10.2857C19.5714 5.15736 15.4141 1 10.2857 1C5.15736 1 1 5.15736 1 10.2857C1 15.4141 5.15736 19.5714 10.2857 19.5714Z" stroke="#000001" strokeLinecap="round" strokeLinejoin="round"/>
 				</svg>
+
+				{/* 참여 완료시 링크이동 X. 아이콘도 색 변경(비활성화) #AFB3BA */}
 			</Box>
 		</Box>
 	)
