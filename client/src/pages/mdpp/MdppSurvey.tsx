@@ -84,7 +84,7 @@ const MdppSurvey = () => {
 			<Box p="23px" height="calc(100vh - 55px)" overflow="scroll">
 				<Box display="flex" flexDirection="column" gap={2}>
 					<Card sx={{width: '100%', p: '1.5rem', borderRadius:'8px', borderTop: `5px solid ${primary.main}`}}>
-						<Typography variant="h1">{survey.title}</Typography>
+						<Typography variant="h1" fontSize="24px">{survey.title}</Typography>
 						<Typography mt="1rem">{survey.description}</Typography>
 						{
 							hasRequired && <S.RequireMark>* 필수항목</S.RequireMark>
