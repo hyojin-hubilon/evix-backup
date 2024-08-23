@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
+import * as S from '../styles';
 
 type MdppHeaderType = {
 	title:string;
@@ -36,9 +37,9 @@ const MdppHeader = ({title, backBtn}:MdppHeaderType) => {
 				</Link>
 			}
 			
-			<Typography variant="h5">
+			<S.Title>
 				{ title }
-			</Typography>
+			</S.Title>
 		</Box>
 	)
 	
