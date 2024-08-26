@@ -116,8 +116,16 @@ export async function api<T>(
     config?: AxiosRequestConfig
 ): Promise<ResCommonSuccess<T>> {
     // loadingEle 은 향후 화면이 개발되면 추가한다
-    // let loadingEle;
+    let loadingEle;
     let res;
+
+	if (typeof window != 'undefined') {
+        loadingEle = document.getElementById('loadingContainer');
+        if (loadingEle) {
+            loadingEle.style.display = 'block';
+        }
+    }
+	
     try {
         if (method == 'post')
             res = await axios_instance.post<ResCommonSuccess<T>>(url, data, config);
@@ -131,15 +139,15 @@ export async function api<T>(
         // delete 수정
         // else res = await axios_instance.get(url);
         else res = await axios_instance.get<ResCommonSuccess<T>>(url, data);
-        // if (loadingEle) {
-        //     loadingEle.style.display = 'none';
-        // }
+        if (loadingEle) {
+            loadingEle.style.display = 'none';
+        }
         return res.data as ResCommonSuccess<T>;
     } catch (error) {
 		console.log(error)
-        // if (loadingEle) {
-        //     loadingEle.style.display = 'none';
-        // }
+        if (loadingEle) {
+            loadingEle.style.display = 'none';
+        }
         if (Axios.isCancel(error)) {
             throw generateError(ResCustomErrorCode.TIMEOUT, null, null, error.message);
         }
