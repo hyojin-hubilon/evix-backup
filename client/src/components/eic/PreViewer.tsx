@@ -14,7 +14,7 @@ const headerHeight = 71;
 
 type Mode = 'form' | 'viewer';
 
-const initTemplate = () => {
+export const initTemplate = () => {
     let template: Template = getTemplateByPreset(localStorage.getItem('templatePreset') || '');
     try {
         const templateString = localStorage.getItem('template');
