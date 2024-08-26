@@ -11,6 +11,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 import 'react-multi-carousel/lib/styles.css';
 import { ConfirmationServiceProvider } from './context/ConfirmDialogContext';
+import AlertSnackBar from './components/ui/AlertSnackBar';
 
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
@@ -22,6 +23,7 @@ const App = () => (
 				<LocalizationProvider dateAdapter={AdapterDayjs}>
 					<ScrollTop>
 						<Routes />
+						<AlertSnackBar />
 					</ScrollTop>
 				</LocalizationProvider>
 			</ThemeCustomization>

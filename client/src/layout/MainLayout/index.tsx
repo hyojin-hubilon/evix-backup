@@ -52,8 +52,8 @@ const MainLayout = () => {
 				<Header open={open} handleDrawerToggle={handleDrawerToggle} />
 				<Drawer open={open} handleDrawerToggle={handleDrawerToggle} />
 				
-				{/* 로딩 */}
-				<div id="loadingContainer" style={{ display: 'block', position: 'fixed', zIndex: 2000, top: 0, bottom: 0, left: open ? '270px' : 0, right: 0, background: 'rgba(255, 255, 255, 0.5)' }}>
+				{/* axios 로딩 */}
+				<div id="loadingContainer" style={{ display: 'block', position: 'fixed', zIndex: 2000, top: 0, bottom: 0, left: open ? '270px' : 0, right: 0, background: 'transparent' }}>
 					<CircularProgress sx={{top:'50%', left: '50%', position:'absolute', marginLeft: '-20px', marginTop: '-20px'}}/>
 				</div>
 

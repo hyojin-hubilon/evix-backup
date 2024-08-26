@@ -4,7 +4,7 @@ import {
     GridToolbarQuickFilter,
     gridClasses,
 } from '@mui/x-data-grid';
-import { Box, Container, useTheme } from '@mui/material';
+import { Box, Container, Grid, useTheme } from '@mui/material';
 
 function CustomToolbar() {
     return (
@@ -99,28 +99,29 @@ const StudyParticipants = () => {
     ];
 
     return (
-        <Box sx={{ minHeight: 400 }} width={1}>
-            <DataGrid
-                columns={columns}
-                rows={data}
-                disableColumnFilter
-                disableColumnSelector
-                disableDensitySelector
-                slots={{ toolbar: CustomToolbar }}
-                sx={{
-                    border: '1px solid #ddd',
-                    [`& .${gridClasses.virtualScrollerContent}`]: {
-                        borderTop: `1px solid ${theme.palette.grey[500]}`,
-                    },
-                    [`& .${gridClasses.row}`]: {
-                        borderBottom: `1px solid ${theme.palette.grey[400]}`,
-                    },
-					bgcolor: 'white',
-					p:'1rem'
-                }}
-            />
-        </Box>
-		
+		<Grid xs={12}>
+			<Box sx={{ minHeight: 400 }} width={1}>
+				<DataGrid
+					columns={columns}
+					rows={data}
+					disableColumnFilter
+					disableColumnSelector
+					disableDensitySelector
+					slots={{ toolbar: CustomToolbar }}
+					sx={{
+						border: '1px solid #ddd',
+						[`& .${gridClasses.virtualScrollerContent}`]: {
+							borderTop: `1px solid ${theme.palette.grey[500]}`,
+						},
+						[`& .${gridClasses.row}`]: {
+							borderBottom: `1px solid ${theme.palette.grey[400]}`,
+						},
+						bgcolor: 'white',
+						p:'1rem'
+					}}
+				/>
+			</Box>
+		</Grid>
     );
 };
 
