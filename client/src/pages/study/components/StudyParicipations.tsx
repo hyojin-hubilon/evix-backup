@@ -4,7 +4,7 @@ import {
     GridToolbarQuickFilter,
     gridClasses,
 } from '@mui/x-data-grid';
-import { Box, useTheme } from '@mui/material';
+import { Box, Container, useTheme } from '@mui/material';
 
 function CustomToolbar() {
     return (
@@ -99,7 +99,7 @@ const StudyParticipants = () => {
     ];
 
     return (
-        <Box sx={{ minHeight: 400, width: 'calc(100vw - 300px)', pt: '1rem' }}>
+        <Box sx={{ minHeight: 400 }} width={1}>
             <DataGrid
                 columns={columns}
                 rows={data}
@@ -115,9 +115,12 @@ const StudyParticipants = () => {
                     [`& .${gridClasses.row}`]: {
                         borderBottom: `1px solid ${theme.palette.grey[400]}`,
                     },
+					bgcolor: 'white',
+					p:'1rem'
                 }}
             />
         </Box>
+		
     );
 };
 
