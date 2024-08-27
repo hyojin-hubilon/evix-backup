@@ -10,7 +10,7 @@ export enum AlertType {
 const initialState = {
     alertText: '', // Alert snackbar text
     alertOpen: false, //Alert snackbar open 여부
-	alertType: 'error'
+	alertType: AlertType.error
 };
 
 // ==============================|| SLICE - SNACK ||============================== //

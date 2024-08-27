@@ -1,32 +1,26 @@
 import { dispatch } from "@/store";
 import { IRootState } from "@/store/reducers";
 import { setAlert } from "@/store/reducers/snack";
-import { Alert, AlertColor, Snackbar } from "@mui/material";
+import { Alert, AlertColor, AlertPropsColorOverrides, Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-const AlertSnakBar = () => {
+const AlertSnackBar = () => {
 
 	const { alertOpen, alertText, alertType } = useSelector((state: IRootState) => state.snack);
 	const handleCloseAlert = () => {
-		dispatch(setAlert({ alertOpen: false, alertText: '', alertType: '' }));
+		dispatch(setAlert({ alertOpen: false }));
 	}
 
 	useEffect(() => {
 		if(alertOpen) {
 			setSanckText(alertText)
 			setSnackType(alertType)
-		} else {
-			setTimeout(() => {
-				setSanckText(alertText)
-				setSnackType(alertType)
-			}, 3000)
 		}
-	},  [alertOpen])
-
+	},  [alertOpen]);
 	
 	const [ sanckText, setSanckText ] = useState('');
-	const [ snackType, setSnackType] = useState('success');
+	const [ snackType, setSnackType] = useState<AlertColor | undefined>(undefined);
 	
 	return (
 		<Snackbar
@@ -37,7 +31,7 @@ const AlertSnakBar = () => {
 		>
 			<Alert
 				onClose={() => handleCloseAlert()}
-				severity={snackType as AlertColor}
+				severity={snackType}
 				variant='filled'
 				sx={{ width: '100%' }}
 			>
@@ -48,4 +42,4 @@ const AlertSnakBar = () => {
 }
 
 
-export default AlertSnakBar
+export default AlertSnackBar;

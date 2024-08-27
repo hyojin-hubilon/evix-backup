@@ -145,11 +145,9 @@ export async function api<T>(
             loadingEle.style.display = 'none';
         }
 
-		console.log(res.data.code);
-
-		// if(res.data && res.data.code !== 200) { //수정중...
-		// 	dispatch(setAlert({ alertOpen: true, alertText: res.data.message, alerType: 'error' }));
-		// }
+		if(res.data && res.data.code !== 200) {
+			dispatch(setAlert({ alertOpen: true, alertText: res.data.message, alertType: 'error' }));
+		}
 
 
         return res.data as ResCommonSuccess<T>;
@@ -161,7 +159,7 @@ export async function api<T>(
             loadingEle.style.display = 'none';
         }
         if (Axios.isCancel(error)) {
-			dispatch(setAlert({ alertOpen: true, alertText: error.message, alerType: AlertType.error }));
+			dispatch(setAlert({ alertOpen: true, alertText: error.message, alertType: AlertType.error }));
             throw generateError(ResCustomErrorCode.TIMEOUT, null, null, error.message);
         }
         if (Axios.isAxiosError<ResCommonError>(error)) {
@@ -170,11 +168,11 @@ export async function api<T>(
                 errorResult.code == error.response.status;
                 throw errorResult;
             } else {
-				dispatch(setAlert({ alertOpen: true, alertText: error.message, alerType: AlertType.error }));
+				dispatch(setAlert({ alertOpen: true, alertText: error.message, alertType: AlertType.error }));
                 throw generateError(ResCustomErrorCode.NONE_RESPONSE, null, null, error.message);
             }
         } else {
-			dispatch(setAlert({ alertOpen: true, alertText: (error as Error).message, alerType: AlertType.error }));
+			dispatch(setAlert({ alertOpen: true, alertText: (error as Error).message, alertType: AlertType.error }));
             throw generateError(ResCustomErrorCode.OTHERS, null, null, (error as Error).message);
         }
     }
