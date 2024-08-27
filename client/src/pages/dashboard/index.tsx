@@ -20,7 +20,11 @@ import MainCard from '@/components/MainCard';
 import dashboardApi from '@/apis/dashboard';
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { NumOfParticipantByStudy } from '@/types/dashboard';
+import {
+    NumOfParticipantByStudy,
+    StudyGoalByMonthlyChart,
+    WeeklyByStudyChart,
+} from '@/types/dashboard';
 import ParticipantNums from './ParticipantNums';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
@@ -33,7 +37,9 @@ const DashboardDefault = () => {
     const [participantNumber, setParticipantNumber] = useState<NumOfParticipantByStudy[]>([]);
     const [loadedTime, setLoadedTime] = useState(new Date());
 
+    // Study Goal 예시데이터
     const [studyGoal, setStudyGoal] = useState<NumOfParticipantByStudy | null>(null);
+    const [monthlyStudyGoalChart, setMonthlyStudyGoalChart] = useState<StudyGoalByMonthlyChart[]>([]);
     const [studyGoalNo, setStudyGoalNo] = useState('');
 
     const navigate = useNavigate();
@@ -45,14 +51,13 @@ const DashboardDefault = () => {
             setParticipantNumber(studies);
 
             const firstStudy = studies[0];
-			if(firstStudy) {
-				setStudyGoal(firstStudy);
-				setStudyGoalNo(String(firstStudy.std_no));
+            if (firstStudy) {
+                setStudyGoal(firstStudy);
+                setStudyGoalNo(String(firstStudy.std_no));
 
-				const percentage = (firstStudy.number_participant / firstStudy.target_number) * 100;
-				setGoalPercentage(percentage);
-			}
-            
+                const percentage = (firstStudy.number_participant / firstStudy.target_number) * 100;
+                setGoalPercentage(percentage);
+            }
         }
 
         setLoadedTime(new Date());
@@ -62,24 +67,7 @@ const DashboardDefault = () => {
         getNumberParticipant();
     };
 
-    // Study Goal 예시데이터
-    const [series, setSeries] = useState([
-        {
-            name: '참여자',
-            data: [
-                [dayjs('2024-03').valueOf(), 0], //날짜, 참여자 수
-                [dayjs('2024-04').valueOf(), 5],
-                [dayjs('2024-05').valueOf(), 10],
-                [dayjs('2024-06').valueOf(), 20],
-                [dayjs('2024-07').valueOf(), 30],
-                [dayjs('2024-08').valueOf(), 31],
-            ],
-        },
-    ]);
-
     const getStudyGoalByMonthly = async (stdNo: string) => {
-        // 근데 왜 이거 List임??? 1개 가져오는거 아닌가...
-        // 스터디 번호를 주고 goal가져오는거 아닌가??
         const response = await dashboardApi.getStudyGoalByMonthly(stdNo);
         if (response.code === 200) {
             const firstItem = response.content.at(0);
@@ -97,29 +85,12 @@ const DashboardDefault = () => {
                     ],
                 },
             ];
-            setSeries(content);
+            setMonthlyStudyGoalChart(content);
         }
     };
 
     //Weekly by Study 예시 데이터
-    const [series2, setSeries2] = useState([
-        {
-            name: 'Study A',
-            data: [44, 55, 41, 67, 22, 43, 20],
-        },
-        {
-            name: 'Study B',
-            data: [13, 23, 20, 8, 13, 27, 40],
-        },
-        {
-            name: 'Study C',
-            data: [11, 17, 15, 15, 21, 14, 15],
-        },
-        {
-            name: 'Study D',
-            data: [21, 7, 25, 13, 22, 8, 4],
-        },
-    ]);
+    const [weeklyByStudy, setWeeklyByStudy] = useState<WeeklyByStudyChart[]>([]);
 
     const getStudyGoalByWeekly = async () => {
         const response = await dashboardApi.getWeeklyByStudy();
@@ -136,9 +107,7 @@ const DashboardDefault = () => {
                     ],
                 };
             });
-            setSeries2(items);
-        } else {
-            setSeries2([]);
+            setWeeklyByStudy(items);
         }
     };
 
@@ -156,7 +125,6 @@ const DashboardDefault = () => {
     }, [studyGoalNo]);
 
     const handleChangeStudyGoal = (e) => {
-        console.log(e.targer.value);
         const stdNo = String(e.target.value);
         setStudyGoalNo(stdNo);
         const findStudy = participantNumber.find((study) => String(study.std_no) == stdNo);
@@ -257,8 +225,8 @@ const DashboardDefault = () => {
         colors: [primary[900], primary[700], primary[400], primary[200], primary[100]],
     };
 
-    const [options, setOptions] = useState<ApexOptions>(areaChartOptions); // Study Goal 차트 옵션 상태를 관리합니다.
-    const [options2, setOptions2] = useState<ApexOptions>(stackedBarOptions); //Weekly by Study 차트 옵션 상태를 관리합니다.
+    const studyGoalChartOption: ApexOptions = areaChartOptions; // Study Goal 차트 옵션 상태를 관리합니다.
+    const weeklyByStudyChartOption: ApexOptions = stackedBarOptions; //Weekly by Study 차트 옵션 상태를 관리합니다.
 
     const [goalPercentage, setGoalPercentage] = useState(0);
 
@@ -366,8 +334,8 @@ const DashboardDefault = () => {
                                 {goalPercentage} %
                             </Typography>
                             <ReactApexChart
-                                options={options}
-                                series={series}
+                                options={studyGoalChartOption}
+                                series={monthlyStudyGoalChart}
                                 type="area"
                                 height={200}
                             />
@@ -381,8 +349,8 @@ const DashboardDefault = () => {
                         <Box sx={{ marginTop: '26px' }}>
                             <ReactApexChart
                                 type="bar"
-                                options={options2}
-                                series={series2}
+                                options={weeklyByStudyChartOption}
+                                series={weeklyByStudy}
                                 height={250}
                             />
                         </Box>
@@ -451,48 +419,53 @@ const DashboardDefault = () => {
                 </Grid>
             </Grid>
 
-            { participantNumber.length === 0  && <Box
-                sx={{
-                    position: 'absolute',
-                    left: '-24px',
-                    top: '-24px',
-                    right: '-24px',
-                    bottom: '-24px',
-                    background: 'rgba(255,255,255,0.8)',
-                }}
-            >
+            {participantNumber.length === 0 && (
                 <Box
                     sx={{
                         position: 'absolute',
-                        left: '50%',
-                        top: '30%',
-                        transform: 'translate(-50%, -50%)',
-                        width: '100%',
+                        left: '-24px',
+                        top: '-24px',
+                        right: '-24px',
+                        bottom: '-24px',
+                        background: 'rgba(255,255,255,0.8)',
                     }}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    flexDirection="column"
                 >
-                    <Typography variant="h1">There are no studies created.</Typography>
-                    <Typography variant="h1">
-                        Start your project by creating a new Study.
-                    </Typography>
-                    <Box mt="2rem" display="flex" gap={1}>
-                        <Button
-                            size="large"
-                            variant="contained"
-                            onClick={() => navigate('/study/new')}
-                        >
-                            Go to Create Study
-                        </Button>
-                        <Button size="large" variant="contained" onClick={() => navigate('/apply')}>
-                            Request a demo
-                        </Button>
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            left: '50%',
+                            top: '30%',
+                            transform: 'translate(-50%, -50%)',
+                            width: '100%',
+                        }}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        flexDirection="column"
+                    >
+                        <Typography variant="h1">There are no studies created.</Typography>
+                        <Typography variant="h1">
+                            Start your project by creating a new Study.
+                        </Typography>
+                        <Box mt="2rem" display="flex" gap={1}>
+                            <Button
+                                size="large"
+                                variant="contained"
+                                onClick={() => navigate('/study/new')}
+                            >
+                                Go to Create Study
+                            </Button>
+                            <Button
+                                size="large"
+                                variant="contained"
+                                onClick={() => navigate('/apply')}
+                            >
+                                Request a demo
+                            </Button>
+                        </Box>
                     </Box>
                 </Box>
-            </Box>}
-            
+            )}
         </div>
     );
 };
