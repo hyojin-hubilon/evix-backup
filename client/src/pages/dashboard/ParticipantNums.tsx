@@ -16,7 +16,7 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 		const targetNumber = studyNum.target_number;
 		
 		return {
-			labels: ['참여완료율', '미완료율'],
+			labels: ['참여자', '미참여자'],
 			series: [studyNum.number_participant, (targetNumber - studyNum.number_participant)],
 		};
 	}

@@ -28,6 +28,7 @@ import EditEic from './eic/EditEic';
 import EicParent from './eic/EicParent';
 import { useNavigate } from 'react-router-dom';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
+import { useUserProfile } from '@/context/UserProfileContext';
 
 interface StudyInfoProps {
     studyDetail: {
@@ -81,13 +82,16 @@ interface StudyInfoProps {
             accepted_at: string | null;
         }[];
     };
+    ownerId: number;
 }
 
-const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
+const StudyInfo = ({ studyDetail, ownerId }: StudyInfoProps) => {
     const theme = useTheme();
     const navigate = useNavigate();
 
-	const confirm = useConfirmation();
+    const confirm = useConfirmation();
+    const { userProfile } = useUserProfile();
+    const userId = userProfile?.user_no;
 
     const formatDate = (dateString: string): string => {
         return moment(dateString).format('YYYY-MM-DD');
@@ -191,10 +195,10 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
         try {
             const response = await studyApi.editEicFile(formData);
             if (response.code === 200 && response.content.std_no) {
-				confirm({
-					description:"전자동의서가 변경되었습니다.",
-					variant: 'info'
-				});
+                confirm({
+                    description: '전자동의서가 저장되었습니다.',
+                    variant: 'info',
+                }).then(() => window.location.reload());
             }
         } catch (error) {
             console.error('Failed to deploy study: ', error);
@@ -209,9 +213,6 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                     studyDetail.eic_name
                 );
                 setEicFile(() => response);
-            } else {
-                console.log('Eic does not exist');
-                return;
             }
         } catch (error) {
             console.error('Failed to Download EIC File', error);
@@ -222,13 +223,15 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
         try {
             if (studyDetail.eic_name) {
                 const response = await studyApi.deleteEicFile(studyDetail.std_no);
-                console.log(response);
-            } else {
-                console.log('Eic does not exist');
-                return;
+                if (response.code === 200 && response.content) {
+                    confirm({
+                        description: '전자동의서가 삭제되었습니다.',
+                        variant: 'info',
+                    }).then(() => window.location.reload());
+                }
             }
         } catch (error) {
-            console.error('Failed to Download EIC File', error);
+            console.error('Failed to delete EIC File', error);
         }
     };
 
@@ -424,7 +427,7 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                             <Box display="flex" alignItems="center" justifyContent="space-between">
                                 <Typography variant="h5">전자동의서</Typography>
                                 <Box display="flex" gap={0.5}>
-                                    {studyDetail.eic_origin_name && (
+                                    {userId === ownerId && studyDetail.eic_origin_name && (
                                         <>
                                             <Button
                                                 variant="outlined"
@@ -453,7 +456,6 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                     }}
                                 >
                                     <ListItem>
-                                        {/* <Link>개인정보 제공 및 참여 동의서</Link> */}
                                         <Link
                                             style={{ cursor: 'pointer' }}
                                             onClick={handlePreviewOpen}
@@ -463,27 +465,30 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                                     </ListItem>
                                 </List>
                             )}
-                            {!studyDetail.eic_origin_name && (
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        height: '130px',
-                                    }}
-                                >
-                                    <IconButton color="inherit" onClick={handleOpenUploadBasePdf}>
-                                        <AddCircleOutlineIcon
-                                            sx={{ fontSize: 40 }}
-                                        />
-                                    </IconButton>
-                                    <Typography variant="body1" color="textSecondary">
-                                        Register your electronic consent form.
-                                    </Typography>
-                                </Box>
-                            )}
+                            {userId === ownerId &&
+                                !studyDetail.eic_origin_name &&
+                                studyDetail.std_status === 'STD-CREATED' && (
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                            height: '130px',
+                                        }}
+                                    >
+                                        <IconButton
+                                            color="inherit"
+                                            onClick={handleOpenUploadBasePdf}
+                                        >
+                                            <AddCircleOutlineIcon sx={{ fontSize: 40 }} />
+                                        </IconButton>
+                                        <Typography variant="body1" color="textSecondary">
+                                            Register your electronic consent form.
+                                        </Typography>
+                                    </Box>
+                                )}
                         </Box>
                     </MainCard>
                 </Grid>
@@ -530,7 +535,11 @@ const StudyInfo = ({ studyDetail }: StudyInfoProps) => {
                 mode="edit"
                 studyNo={studyDetail.std_no}
             />
-            <DeleteModal open={isDelete} onClose={handleDeleteClose} onDelete={() => {}} />
+            <DeleteModal
+                open={isDelete}
+                onClose={handleDeleteClose}
+                onDelete={handleDeleteEicFile}
+            />
             <PreviewEic open={isPreviewEicOpen} onClose={handlePreviewClose} eicFile={eicFile} />
             <EditEic
                 open={isEditEicOpen}
