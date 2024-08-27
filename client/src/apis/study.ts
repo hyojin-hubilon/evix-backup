@@ -391,10 +391,9 @@ const studyApi = {
      */
     deleteEicFile: async (stdNo: Number) => {
         try {
-            const responseData = await api<{}>(
-                `${BASE_API_URL}/original-eic-download/${stdNo}`,
-                'delete'
-            );
+            const responseData = await api<number>(`${BASE_API_URL}/delete-eic`, 'delete', {
+                std_no: stdNo,
+            });
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
