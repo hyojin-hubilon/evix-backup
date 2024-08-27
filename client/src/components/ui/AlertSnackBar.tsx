@@ -1,7 +1,7 @@
 import { dispatch } from "@/store";
 import { IRootState } from "@/store/reducers";
 import { setAlert } from "@/store/reducers/snack";
-import { Alert, AlertColor, AlertPropsColorOverrides, Snackbar } from "@mui/material";
+import { Alert, AlertColor, Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 

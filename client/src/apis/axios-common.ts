@@ -145,7 +145,7 @@ export async function api<T>(
             loadingEle.style.display = 'none';
         }
 
-		if(res.data && res.data.code !== 200) {
+		if(res.data && res.data.code !== 200) { //alert snack bar
 			dispatch(setAlert({ alertOpen: true, alertText: res.data.message, alertType: 'error' }));
 		}
 
