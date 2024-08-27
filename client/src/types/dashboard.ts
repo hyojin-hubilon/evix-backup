@@ -48,6 +48,17 @@ export interface WeeklyByStudy {
 }
 
 // 최근 참여자 로그 (배포 상태인 스터디)
-export interface RecentParticipantLogs {
+export interface RecentParticipantLogs {}
 
+// 주간 스터디 참여자 수, 차트 타입
+export interface WeeklyByStudyChart {
+    name: string;
+    data: number[];
+}
+
+// 월별 스터디 참여자 수, 차트 타입
+type ParticipantData = [number, number];
+export interface StudyGoalByMonthlyChart {
+    name: string;
+    data: number[][];
 }

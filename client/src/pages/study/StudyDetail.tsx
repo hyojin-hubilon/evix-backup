@@ -6,7 +6,7 @@ import { ApexDonutChartSeriesType } from './components/overview/CircleChart';
 import StudyOverView from './components/StudyOverview';
 import StudyInfo from './components/StudyInfo';
 import StudyParticipants from './components/StudyParicipations';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import studyApi from '@/apis/study';
 import { STUDY_STATUS, STUDY_STATUS_KEY } from './components/StudyListItem';
 import { ParticipationRateByAge, totalParticipants } from '@/types/study';
@@ -21,6 +21,8 @@ const StudyDetail = () => {
     const [totalParticipants, setTotalParticipants] = useState<totalParticipants | null>(null);
     const [participationRateByAge, setParticipationRateByAge] =
         useState<ParticipationRateByAge | null>(null);
+
+	const navigate = useNavigate();
 
     useEffect(() => {
         if (stdNo) {
@@ -82,6 +84,11 @@ const StudyDetail = () => {
         (manager: any) => manager.std_privilege === 'OWNER'
     );
 
+	const handleEditClick = (std_no: number) => {
+        navigate('/study/new', { state: { mode: 'edit', stdNo: std_no } });
+    };
+
+
     return (
         <>
             <Breadcrumbs2 />
@@ -90,7 +97,7 @@ const StudyDetail = () => {
                     <Box display="flex" alignItems="center" gap={1}>
                         <Chip label={statusLabel} color="primary" />
                         <Typography variant="h3">{studyDetail?.title || ''}</Typography>
-                        <Button variant="outlined" sx={{ width: '3rem', minWidth: '48px' }}>
+                        <Button variant="outlined" sx={{ width: '3rem', minWidth: '48px' }} onClick={() => {handleEditClick(studyDetail.std_no)}}>
                             <EditOutlined style={{ fontSize: '1.2rem' }} />
                         </Button>
                     </Box>
@@ -154,7 +161,7 @@ const StudyDetail = () => {
                             participationRateByAge={participationRateByAge}
                         />
                     )}
-                {studyDetail && activeTab === '1' && <StudyInfo studyDetail={studyDetail} />}
+                {studyDetail && activeTab === '1' && <StudyInfo studyDetail={studyDetail} ownerId={owner.user_no}/>}
                 {studyDetail && activeTab === '2' && <StudyParticipants />}
             </Grid>
         </>

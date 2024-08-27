@@ -35,7 +35,8 @@
             "@utils/*": ["./src/utils/*"],
             "@apis/*": ["./src/apis/*"],
 			"@api/*": ["./src/api/*"],
-            "@i18n/*": ["./src/i18n/*"]
+            "@i18n/*": ["./src/i18n/*"],
+			"@context/*": ["./src/context/*"],
         },
         "noImplicitAny": false,
         "noImplicitThis": true,
