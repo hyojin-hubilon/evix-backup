@@ -42,7 +42,7 @@ interface StudySurveySet {
     survey_cycle: string;
     number_in_cycle: number;
     sort: number;
-    surveyList: { survey_no: number; sort: number }[];
+    surveyList: { survey_no: number; sort: number; title: string }[];
 }
 
 const SurveyConnectDialog = ({
@@ -191,13 +191,16 @@ const SurveyConnectDialog = ({
                             existingSet.surveyList.push({
                                 survey_no: survey.survey_no,
                                 sort: existingSet.surveyList.length + 1,
+                                title: survey.title,
                             });
                         } else {
                             acc.push({
                                 survey_cycle: cycleKey,
                                 number_in_cycle: timesKey,
                                 sort: 1,
-                                surveyList: [{ survey_no: survey.survey_no, sort: 1 }],
+                                surveyList: [
+                                    { survey_no: survey.survey_no, sort: 1, title: survey.title },
+                                ],
                             });
                         }
 
@@ -220,13 +223,16 @@ const SurveyConnectDialog = ({
                             existingSet.surveyList.push({
                                 survey_no: survey.survey_no,
                                 sort: existingSet.surveyList.length + 1,
+                                title: survey.title,
                             });
                         } else {
                             acc.push({
                                 survey_cycle: cycleKey,
                                 number_in_cycle: timesKey,
                                 sort: 1,
-                                surveyList: [{ survey_no: survey.survey_no, sort: 1 }],
+                                surveyList: [
+                                    { survey_no: survey.survey_no, sort: 1, title: survey.title },
+                                ],
                             });
                         }
 
@@ -265,6 +271,7 @@ const SurveyConnectDialog = ({
                 (acc: StudySurveySet[], survey: RegistrableSurvey) => {
                     const cycleKey = survey.frequency.toUpperCase();
                     const timesKey = survey.times ?? 1;
+
                     const existingSet = acc.find(
                         (set) => set.survey_cycle === cycleKey && set.number_in_cycle === timesKey
                     );
@@ -274,13 +281,16 @@ const SurveyConnectDialog = ({
                             survey_no: survey.survey_no,
                             // sort: 1,
                             sort: existingSet.surveyList.length + 1,
+                            title: survey.title,
                         });
                     } else {
                         acc.push({
                             survey_cycle: cycleKey,
                             number_in_cycle: timesKey,
                             sort: 1,
-                            surveyList: [{ survey_no: survey.survey_no, sort: 1 }],
+                            surveyList: [
+                                { survey_no: survey.survey_no, sort: 1, title: survey.title },
+                            ],
                         });
                     }
 
@@ -413,7 +423,9 @@ const SurveyConnectDialog = ({
                                     surveyList={searchedResult}
                                     selectedSurvey={selectedSurvey}
                                     handleSelected={(e) => handleSelectedSurvey(e)}
-                                    handleSelectPreview={(surveyNo) => handleSelectPreview(surveyNo)}
+                                    handleSelectPreview={(surveyNo) =>
+                                        handleSelectPreview(surveyNo)
+                                    }
                                 />
                             </Box>
                         </DialogContent>

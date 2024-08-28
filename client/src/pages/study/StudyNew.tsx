@@ -143,6 +143,10 @@ const StudyNew = () => {
         }
     };
 
+    const titles = studySurveySetList.map((cycle: any) => {
+        return cycle.surveyList.map((survey: any) => survey.title).join(', ');
+    });
+
     const handleSubmit = async () => {
         if (validate()) {
             const studyData = {
@@ -640,9 +644,13 @@ const StudyNew = () => {
                                     >
                                         Survey 연결
                                     </Button>
-                                    <span style={{ color: 'red' }}>
-                                        {'  '}* Study 배포전에 반드시 연결해주세요.
-                                    </span>
+                                    {titles ? (
+                                        titles
+                                    ) : (
+                                        <span style={{ color: 'red' }}>
+                                            {'  '}* Study 배포전에 반드시 연결해주세요.
+                                        </span>
+                                    )}
                                 </Grid>
                             </Grid>
 
