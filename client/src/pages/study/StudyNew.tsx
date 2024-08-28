@@ -823,9 +823,9 @@ const StudyNew = () => {
                                         )}
                                         {stdStatus === 'STD-PROGRESSION' && (
                                             <>
-                                                <Button variant="outlined" onClick={handleUpdate}>
+                                                {/* <Button variant="outlined" onClick={handleUpdate}>
                                                     수정
-                                                </Button>
+                                                </Button> */}
                                                 <Button
                                                     variant="outlined"
                                                     color="info"
