@@ -100,7 +100,7 @@ const SampleList = () => {
 						</Select>
 					</Box>
 				</Grid>
-				<Grid item container xs={12} justifyContent="space-between" rowGap={3}>
+				<Grid item container xs={12} justifyContent="flex-start" gap={3}>
 					<Grid item xs={3.8} alignSelf="stretch">
 						<Box onClick={() => handleClickNew()}
 							sx={{minHeight: '200px',
