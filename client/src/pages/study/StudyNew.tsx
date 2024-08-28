@@ -87,7 +87,6 @@ const StudyNew = () => {
     const [errors, setErrors] = useState({
         title: '',
         participants: '',
-        description: '',
         disease: '',
     });
 
@@ -96,7 +95,6 @@ const StudyNew = () => {
 
         tempErrors.title = title ? '' : '제목을 입력해 주세요';
         tempErrors.participants = participants ? '' : '대상인원을 입력해 주세요';
-        tempErrors.description = description ? '' : '개요를 입력해 주세요';
         tempErrors.disease = disease ? '' : '질환을 입력해 주세요';
 
         setErrors(tempErrors);
@@ -548,7 +546,6 @@ const StudyNew = () => {
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
-                                <FormHelperText error>{errors.description}</FormHelperText>
                             </FormControl>
                         </Grid>
                     </Grid>
