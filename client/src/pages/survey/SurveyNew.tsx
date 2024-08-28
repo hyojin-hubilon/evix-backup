@@ -332,7 +332,7 @@ const SurveyNew = () => {
 									>
 										<Box display="flex" alignItems="center">
 											{
-												!isSticky && <Typography variant="h3" color="secondary.dark">Survey 생성</Typography>
+												!isSticky && <Typography variant="h3" color="secondary.dark">Survey {locationState == 'edit' ? '수정' : '생성'}</Typography>
 											}
 											
 											<Box display="flex" justifyContent="flex-end" gap={1} sx={{ml: 'auto'}}>
