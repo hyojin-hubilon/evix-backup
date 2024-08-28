@@ -7,7 +7,9 @@
         "support": "Support",
         "privacy" : "Privacy",
         "terms" : "Terms",
-        "cookie_policy" : "Cookie Policy"
+        "cookie_policy" : "Cookie Policy",
+		"demo" : "Demo",
+		"login" : "Login"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -129,5 +131,8 @@
     "study": {},
     "survey": {},
     "user": {},
-    "my_page": {}
+    "my_page": {},
+	"nav": {
+		"welcome" : "님 안녕하세요"
+	}
 }

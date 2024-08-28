@@ -142,7 +142,7 @@ const Profile = () => {
                         >
                             {userProfile?.first_name} {userProfile?.last_name}
                         </Typography>{' '}
-                        님 안녕하세요
+                        {t('nav.welcome')}
                     </Typography>
                 </Stack>
                 <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
