@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { useTheme } from '@mui/material/styles';
 import { Container, Box, Grid, Link } from '@mui/material';
-import { styled } from '@mui/system';
+import { styled, useMediaQuery } from '@mui/system';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -34,6 +34,7 @@ const LandingFooter = () => {
     };
 
     const theme = useTheme();
+	const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
 
     const FooterLink = styled(Link)(({ theme }) => ({
         color: theme.palette.common.white,
@@ -62,6 +63,7 @@ const LandingFooter = () => {
             <Box
                 sx={{
                     pt: '3rem',
+					pb: '1rem',
                     width: 1,
                     minHeight: 180,
                     alignItems: 'top',
@@ -105,28 +107,24 @@ const LandingFooter = () => {
                             item
                             xs={12}
                             md={12}
-							lg={12}
+							lg={6}
 							xl={6}
                             alignItems="center"
-                            spacing={3}
                             sx={{
                                 justifyContent: {
                                     lg: 'flex-start',
 									xl: 'flex-end'
                                 },
                                 mt: {
-                                    xs: '0.5rem',
-                                    md: '0.5rem',
-									lg: '0.5rem'
-                                },
-                                mb: {
-                                    xs: '1.5rem',
-                                    md: '0',
+                                    xs: '1rem',
+                                    md: '1rem',
+									lg: '1rem',
+									xl: '0'
                                 },
 								pt: 0
                             }}
                         >
-							<Box display="flex" gap={4} justifyContent="flex-end">
+							<Box display="flex" gap={4} justifyContent={matchDownLG ? "flex-start" : "flex-end"}>
 								<Box display="flex" gap={1}>
 									<SocialButton
 										onClick={() =>
@@ -163,7 +161,7 @@ const LandingFooter = () => {
 										/>
 									</SocialButton>
 								</Box>
-								<Box>
+								<Box minWidth="150px">
 									<LanguageSelector />
 								</Box>
 							</Box>
