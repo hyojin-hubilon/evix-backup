@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 
 type ParticipantStudyItemType = {
     study: ParticipantStudyList;
+	selectStudy: (study) => void
 };
 
 const getStudyStatus = (
@@ -28,7 +29,7 @@ const getStudyStatus = (
     return StudyParticipantStatus.NEED_EIC;
 };
 
-const ParticipantStudyItem = ({ study }: ParticipantStudyItemType) => {
+const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) => {
     const now = dayjs();
     const startDate = dayjs(study.std_start_date || new Date());
     const endDate = dayjs(study.std_end_date || new Date());
@@ -42,8 +43,14 @@ const ParticipantStudyItem = ({ study }: ParticipantStudyItemType) => {
     const status = getStudyStatus(now, startDate, endDate, study.eic_name);
     const statusLabel = studyStatusKr[status];
 
+	const handleSelectStudy = (study) => {
+		if(study.status !== StudyParticipantStatus.DONE) {
+			selectStudy(study);
+		}
+	}
+
     return (
-        <Box p="20px 25px" borderBottom="1px solid #E0E5E9" position="relative">
+        <Box p="20px 25px" borderBottom="1px solid #E0E5E9" position="relative" onClick={() => handleSelectStudy(study)}>
             <Box display="flex" height="21px" alignItems="center" gap="10px">
                 <S.StudyStatus studyStatus={status}>{statusLabel}</S.StudyStatus>
                 <S.StudyTitle>{study.title}</S.StudyTitle>
@@ -79,13 +86,13 @@ const ParticipantStudyItem = ({ study }: ParticipantStudyItemType) => {
                 >
                     <path
                         d="M8.85712 6L13.1428 10.2857L8.85712 14.5714"
-                        stroke="currentColor" // 현재 색상 사용
+                        stroke={status === StudyParticipantStatus.DONE ? '#AFB3BA' : '#000001'}
                         strokeLinecap="round"
                         strokeLinejoin="round"
                     />
                     <path
                         d="M10.2857 19.5714C15.4141 19.5714 19.5714 15.4141 19.5714 10.2857C19.5714 5.15736 15.4141 1 10.2857 1C5.15736 1 1 5.15736 1 10.2857C1 15.4141 5.15736 19.5714 10.2857 19.5714Z"
-                        stroke="currentColor" // 현재 색상 사용
+                        stroke={status === StudyParticipantStatus.DONE ? '#AFB3BA' : '#000001'}
                         strokeLinecap="round"
                         strokeLinejoin="round"
                     />

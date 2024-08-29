@@ -13,7 +13,7 @@ const MdppRoutes = {
             element: <ParticipantStudies />,
         },
 		{
-            path: 'surveys',
+            path: 'study/:stdNo/surveys',
             element: <ParticipantSurveys />,
         },
 		{

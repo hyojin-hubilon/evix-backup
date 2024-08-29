@@ -2,8 +2,11 @@ import { Box, Card, Typography } from "@mui/material";
 import MdppHeader from "./components/MdppHeader";
 import * as S from './styles';
 import ParticipantStudyItem from "./components/ParicipantStudyItem";
-import {  SurveyForParticipant } from "@/types/participant";
+import {  ParticipantStudyDetail, ParticipantSurveySet, SurveyForParticipant } from "@/types/participant";
 import ParticipantSurveyItem from "./components/ParticipantSurveyItem";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import participantStudyApi from "@/apis/participantStudy";
 
 const tempSurveys : SurveyForParticipant[] = [
 	{
@@ -24,22 +27,55 @@ const tempSurveys : SurveyForParticipant[] = [
 	}
 ]
 const ParticipantSurveys = () => {
+	const { stdNo } = useParams();
+	const [ surveySets, setSurveySets ] = useState<ParticipantSurveySet[]>([]);
+	const [ studyDetail, setStudyDetail ] = useState<ParticipantStudyDetail>({} as ParticipantStudyDetail);
+
+	const fetchSurveyDetail = async () => {
+		try {
+            const response = await participantStudyApi.studyDetail(stdNo);
+            if (response.content) {
+                setStudyDetail(response.content);
+            }
+        } catch (error) {
+            console.error('Failed to get participants study list', error);
+        }
+    };
+	
+
+	const fetchSurveySet = async () => {
+        try {
+            const response = await participantStudyApi.studySurveyList(stdNo);
+            if (response.content) {
+                setSurveySets(response.content);
+            }
+        } catch (error) {
+            console.error('Failed to get participants study list', error);
+        }
+    };
+
+
+	useEffect(() => {
+		fetchSurveyDetail();
+		fetchSurveySet();
+	}, [])
+
 	return (
 		<Box sx={{bgcolor: 'white', minHeight: '100vh', pt: '22px'}}>
-			<MdppHeader title="펜터민 효과성 임상연구" backBtn></MdppHeader>			
+			<MdppHeader title={studyDetail?.title} backBtn></MdppHeader>			
 			<Box p="24px 23px">
 				<S.BlueBox>
 					<Typography variant="h5">안내 사항</Typography>
 					<S.CommonText>
-						펜터민 효과성 임상연구를 위해 처방받은 용량과 방법을 지켜서 복용해 주시고, 설문 주기에 따라참여 부탁드립니다. 
+						{studyDetail?.description}
 					</S.CommonText>
 				</S.BlueBox>
 			</Box>
 
 			<Box p="0 23px">
 				{
-					tempSurveys.map((survey, index) => 
-						<ParticipantSurveyItem survey={survey} key={index} />
+					surveySets.map((survey, index) => 
+						<ParticipantSurveyItem survey={survey} key={index} study={studyDetail}/>
 					)
 				}
 			</Box>
