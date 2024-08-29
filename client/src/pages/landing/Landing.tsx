@@ -31,14 +31,6 @@ import './Landing.scss';
 export default function LandingPage() {
     const navigate = useNavigate();
     const { t } = useTranslation();
-    // const theme = useTheme();
-
-    // const toLoginPage = () => {
-    //     navigate("/login");
-    // };
-    // const toDashBoardPage = () => {
-    //     navigate("/dashboard");
-    // };
 
     const toApplyPage = () => {
         navigate('/apply');
@@ -88,6 +80,10 @@ export default function LandingPage() {
             display: 'block',
         },
     }));
+
+    const toSupportPage = () => {
+        navigate("/support");
+    }
 
     return (
         <Box className="landing" sx={{bgcolor: 'white'}}>
@@ -698,6 +694,7 @@ export default function LandingPage() {
                         variant="contained"
                         size="large"
                         sx={{ bgcolor: '#222', fontSize: '1.1rem', p: '10px 27px' }}
+                        onClick={toSupportPage}
                     >
                         Contact Service
                     </Button>
@@ -917,11 +914,6 @@ export default function LandingPage() {
                     </Grid>
                 </Container>
             </Box>
-
-            {/* <Container>
-				<Button onClick={toLoginPage} children="Login" />
-				<Button onClick={toDashBoardPage} children="DashBoard" />
-			</Container> */}
         </Box>
     );
 }

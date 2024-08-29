@@ -154,7 +154,7 @@ const StudyDetail = () => {
                             participationRateByAge={participationRateByAge}
                         />
                     )}
-                {studyDetail && activeTab === '1' && <StudyInfo studyDetail={studyDetail} />}
+                {studyDetail && activeTab === '1' && <StudyInfo studyDetail={studyDetail} ownerId={owner.user_no}/>}
                 {studyDetail && activeTab === '2' && <StudyParticipants />}
             </Grid>
         </>

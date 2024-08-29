@@ -87,7 +87,6 @@ const StudyNew = () => {
     const [errors, setErrors] = useState({
         title: '',
         participants: '',
-        description: '',
         disease: '',
     });
 
@@ -96,7 +95,6 @@ const StudyNew = () => {
 
         tempErrors.title = title ? '' : '제목을 입력해 주세요';
         tempErrors.participants = participants ? '' : '대상인원을 입력해 주세요';
-        tempErrors.description = description ? '' : '개요를 입력해 주세요';
         tempErrors.disease = disease ? '' : '질환을 입력해 주세요';
 
         setErrors(tempErrors);
@@ -144,6 +142,10 @@ const StudyNew = () => {
             console.error('Failed to fetch owner profile:', error);
         }
     };
+
+    const titles = studySurveySetList.map((cycle: any) => {
+        return cycle.surveyList.map((survey: any) => survey.title).join(', ');
+    });
 
     const handleSubmit = async () => {
         if (validate()) {
@@ -548,7 +550,6 @@ const StudyNew = () => {
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
-                                <FormHelperText error>{errors.description}</FormHelperText>
                             </FormControl>
                         </Grid>
                     </Grid>
@@ -643,9 +644,13 @@ const StudyNew = () => {
                                     >
                                         Survey 연결
                                     </Button>
-                                    <span style={{ color: 'red' }}>
-                                        {'  '}* Study 배포전에 반드시 연결해주세요.
-                                    </span>
+                                    {titles ? (
+                                        titles
+                                    ) : (
+                                        <span style={{ color: 'red' }}>
+                                            {'  '}* Study 배포전에 반드시 연결해주세요.
+                                        </span>
+                                    )}
                                 </Grid>
                             </Grid>
 
@@ -823,9 +828,9 @@ const StudyNew = () => {
                                         )}
                                         {stdStatus === 'STD-PROGRESSION' && (
                                             <>
-                                                <Button variant="outlined" onClick={handleUpdate}>
+                                                {/* <Button variant="outlined" onClick={handleUpdate}>
                                                     수정
-                                                </Button>
+                                                </Button> */}
                                                 <Button
                                                     variant="outlined"
                                                     color="info"
