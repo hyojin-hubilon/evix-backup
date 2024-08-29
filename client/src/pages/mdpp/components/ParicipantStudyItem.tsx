@@ -36,7 +36,7 @@ const ParticipantStudyItem = ({ study }: ParticipantStudyItemType) => {
     const studyStatusKr: Record<StudyParticipantStatus, string> = {
         [StudyParticipantStatus.NEED_EIC]: '전자서명필요',
         [StudyParticipantStatus.IN_PROGRESS]: '참여중',
-        [StudyParticipantStatus.DONE]: '참여완료',
+        [StudyParticipantStatus.DONE]: '참여종료',
     };
 
     const status = getStudyStatus(now, startDate, endDate, study.eic_name);
