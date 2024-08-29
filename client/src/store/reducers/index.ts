@@ -3,6 +3,7 @@ import { combineReducers } from 'redux'; // Redux에서 제공하는 combineRedu
 
 // project import
 import menu from './menu'; // 우리가 정의한 menu 슬라이스를 import 합니다.
+import snack from './snack';
 import { cardSlice, requiredSlice } from './survey';
 import { previewSlice } from './preview';
 
@@ -14,7 +15,8 @@ const reducers = combineReducers({
 	menu,
 	cards: cardSlice.reducer,
 	required: requiredSlice.reducer,
-	previewCards : previewSlice.reducer
+	previewCards : previewSlice.reducer,
+	snack
 });
 export type IRootState = ReturnType<typeof reducers>;
 

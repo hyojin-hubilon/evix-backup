@@ -16,14 +16,10 @@ export const UserProfileContextProvider = ({ children }) => {
 	const value = { userProfile, setUserProfile };
 
 	const getMyProfile = async () => {
-        try {
-            const response = await userApi.getMyProfile();
-            if (response.code === 200) {
-				setUserProfile(response.content);
-            }
-        } catch (error) {
-            console.error('Failed to fetch profile:', error);
-        }
+		const response = await userApi.getMyProfile();
+		if (response.code === 200) {
+			setUserProfile(response.content);
+		}
     };
 
 	useEffect(() => {

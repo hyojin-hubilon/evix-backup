@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Box, Toolbar, useMediaQuery } from '@mui/material';
+import { Box, CircularProgress, Toolbar, useMediaQuery } from '@mui/material';
 
 // project import
 import Drawer from './Drawer';
@@ -51,6 +51,12 @@ const MainLayout = () => {
 			<Box sx={{ display: 'flex', width: '100%' }}>
 				<Header open={open} handleDrawerToggle={handleDrawerToggle} />
 				<Drawer open={open} handleDrawerToggle={handleDrawerToggle} />
+				
+				{/* axios 로딩 */}
+				<div id="loadingContainer" style={{ display: 'block', position: 'fixed', zIndex: 2000, top: 0, bottom: 0, left: open ? '270px' : 0, right: 0, background: 'transparent' }}>
+					<CircularProgress sx={{top:'50%', left: '50%', position:'absolute', marginLeft: '-20px', marginTop: '-20px'}}/>
+				</div>
+
 				<Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 }, pl: open ? { xs: 2, sm: 3, md: 2} : {xs : 2, sm: 3, md: 3, lg: 11} }}>
 					<Toolbar />
 					<Breadcrumbs navigation={navigation} title />
