@@ -23,3 +23,12 @@ export interface StudyForParticipant {//임시
 	number_in_cycle: number,
 	number_of_participation: number//0일때 = 참여 대기중
 }
+
+export interface SurveyForParticipant {//임시
+	total_count: number,
+	title:string,
+	survey_cycle: 'WEEK' | 'MONTH',
+	number_in_cycle: number,
+	number_of_participation: number,
+	tags?: string[]
+}
