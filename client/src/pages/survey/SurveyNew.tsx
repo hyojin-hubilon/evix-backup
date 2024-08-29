@@ -142,29 +142,32 @@ const SurveyNew = () => {
 			isFocused: 'Y'
 		}));
 
-		survey.questionList.forEach(question => {
+		if(survey.questionList) {
+			survey.questionList.forEach(question => {
 			
-			const exampleList: ItemTypeProps[] = [];
-
-			const cardId = question.question_no + String(Date.now());
-			
-			question.exampleList.forEach(example => {
-			exampleList.push({
-					id: cardId + example.example_no,
-					text: example.example_title,
-					example_title: example.example_title,
-					isEtc: example.example_type === 'OTHER' ? true : false,
-				})
-			});
-
-			dispatch(addExistCard({
-				cardId: question.question_no + String(Date.now()),
-				cardTitle: question.question,
-				inputType: question.question_type in QuestionTypes ? question.question_type : "WRITE",
-				contents: exampleList.length === 1 ? '' : exampleList,
-				isRequired: question.required_answer_yn == 'Y' ? true : false
-			}));
-		})
+				const exampleList: ItemTypeProps[] = [];
+	
+				const cardId = question.question_no + String(Date.now());
+				
+				question.exampleList.forEach(example => {
+				exampleList.push({
+						id: cardId + example.example_no,
+						text: example.example_title,
+						example_title: example.example_title,
+						isEtc: example.example_type === 'OTHER' ? true : false,
+					})
+				});
+	
+				dispatch(addExistCard({
+					cardId: question.question_no + String(Date.now()),
+					cardTitle: question.question,
+					inputType: question.question_type in QuestionTypes ? question.question_type : "WRITE",
+					contents: exampleList.length === 1 ? '' : exampleList,
+					isRequired: question.required_answer_yn == 'Y' ? true : false
+				}));
+			})
+		}
+		
 	}
 
 

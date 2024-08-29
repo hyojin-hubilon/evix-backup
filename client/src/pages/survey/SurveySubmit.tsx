@@ -29,12 +29,13 @@ const SurveySubmit = () => {
             if (response.result && response.code === 200) {
                 const survey = response.content;
 				setSurvey(survey);
+				if(survey.questionList) {
+					const hasRequiredCheck = survey.questionList.some((card) => card.required_answer_yn === 'Y');
+					setHasRequired(hasRequiredCheck);
+
+					setCards(survey.questionList)
+				}
 				
-				const hasRequiredCheck = survey.questionList.some((card) => card.required_answer_yn === 'Y');
-				setHasRequired(hasRequiredCheck);
-
-				setCards(survey.questionList)
-
 				console.log(survey)
             }
         } catch (error) {
