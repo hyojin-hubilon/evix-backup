@@ -156,7 +156,7 @@ export default function LandingPage() {
                                 },
                             }}
                         >
-                            It increases the reliability
+							{t('landing.it_increase')}
                         </Typography>
                         <Typography
                             variant="h2"
@@ -167,7 +167,7 @@ export default function LandingPage() {
                                 },
                             }}
                         >
-                            of the clinical trial results.
+                        	{t('landing.of_the_clinical')}
                         </Typography>
                         <Typography
                             sx={{
@@ -185,17 +185,15 @@ export default function LandingPage() {
                                 },
                             }}
                         >
-                            <SpanStyled>evix-DCT platform is </SpanStyled>
+                            <SpanStyled>{t('landing.evix_dct_platform_is')}</SpanStyled>
                             <SpanStyled>
-                                It provides optimized collaborative tools for researchers to
-                                conveniently analyze{' '}
+                                {t('landing.it_provides_optimized')}
                             </SpanStyled>
                             <SpanStyled>
-                                and report collected clinical data, It provides noise removal in
-                                conjunction with medical mydata,{' '}
+                                {t('landing.and_report_collected')}
                             </SpanStyled>
                             <SpanStyled>
-                                linkage analysis and learning using medical big data.
+                                {t('landing.linkage_analysis_and')}
                             </SpanStyled>
                         </Typography>
                     </Box>
@@ -224,23 +222,23 @@ export default function LandingPage() {
                                 <img src={landingImg031} alt="ePRO" style={{ maxWidth: '100%' }} />
                             </Grid>
                             <Grid item xs={12} sm={6} lg={4}>
-                                <Section03H2>ePRO</Section03H2>
-                                <Section03H4>Electronic Patient-Reported Outcomes</Section03H4>
+                                <Section03H2>{t('landing.e_pro')}</Section03H2>
+                                <Section03H4>{t('landing.electronic_patient')}</Section03H4>
                                 <Section03P>
                                     <SpanStyled>
-                                        It provides important data points in clinical trials,{' '}
+                                        {t('landing.it_provides_important')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        Provides key information for treatment effectiveness{' '}
+                                        {t('landing.provides_key_information')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        and safety evaluation. Real-time data collection,{' '}
+                                        {t('landing.and_safety_evaluation')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        improved data accuracy, increased patient engagement,{' '}
+                                        {t('landing.improved_data_accuracy')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        There is a reduction in research costs, etc.
+                                        {t('landing.there_is_a_reduction')}
                                     </SpanStyled>
                                 </Section03P>
                             </Grid>
@@ -269,26 +267,26 @@ export default function LandingPage() {
                             }}
                         >
                             <Grid item xs={12} sm={6} lg={4}>
-                                <Section03H2>eCOA</Section03H2>
-                                <Section03H4>Electronic Clinical Outcome Assessments</Section03H4>
+                                <Section03H2>{t('landing.e_coa')}</Section03H2>
+                                <Section03H4>{t('landing.electronic_clinical')}</Section03H4>
                                 <Section03P>
                                     <SpanStyled>
-                                        including not only patients but also observations of{' '}
+                                        {t('landing.including_not_only')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        healthcare providers and researchers Provides{' '}
+                                        {t('landing.healthcare_providers')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        comprehensive data. Improvement in accuracy and{' '}
+                                        {t('landing.comprehensive_data')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        reliability of data collection, reduction in errors{' '}
+                                        {t('landing.reliability_of_data')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        in paper-based data collection,real-time monitoring{' '}
+                                        {t('landing.in_paper-based_data')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        and analysis, and increased patient engagement.
+                                        {t('landing.and_analysis')}
                                     </SpanStyled>
                                 </Section03P>
                             </Grid>
@@ -318,24 +316,23 @@ export default function LandingPage() {
                                 <img src={landingImg033} alt="eCRF" style={{ maxWidth: '100%' }} />
                             </Grid>
                             <Grid item xs={12} sm={6} lg={4}>
-                                <Section03H2>eCRF</Section03H2>
-                                <Section03H4>Electronic case report form</Section03H4>
+                                <Section03H2>{t('landing.e_crf')}</Section03H2>
+                                <Section03H4>{t('landing.electronic_case')}</Section03H4>
                                 <Section03P>
                                     <SpanStyled>
-                                        It provides a variety of functions, including data
-                                        collection,{' '}
+                                        {t('landing.it_provides_a_variety')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        verification, reporting, and more, increasing data accuracy{' '}
+                                        {t('landing.verification_reporting')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        and reducing errors in data input and processing.{' '}
+                                        {t('landing.and_reducing_errors')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        The system allows you to enter data directly, modify it if{' '}
+                                        {t('landing.the_system_allows')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        necessary, and improve the quality of relevant data.
+                                        {t('landing.necessary_and_improve')}
                                     </SpanStyled>
                                 </Section03P>
                             </Grid>
@@ -363,27 +360,25 @@ export default function LandingPage() {
                                 },
                             }}
                         >
-                            <Grid item xs={12} sm={6} lg={4}>
-                                <Section03H2>CDMS</Section03H2>
-                                <Section03H4>Clinical Data Management System</Section03H4>
+                            <Grid item xs={12} sm={4} lg={6}>
+                                <Section03H2>{t('landing.cdms')}</Section03H2>
+                                <Section03H4>{t('landing.clinical_data')}</Section03H4>
                                 <Section03P>
                                     <SpanStyled>
-                                        Clinical data provides statistical analysis and reporting,{' '}
+                                        {t('landing.clinical_data_provides')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        In conjunction with the Medical MyData Platform and{' '}
+                                        {t('landing.in_conjunction_with')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        the RWE Big Data Platform Removed noise data, linked
-                                        analysis{' '}
+                                        {t('landing.the_rwe_big')}
                                     </SpanStyled>
                                     <SpanStyled>
-                                        and learning outcomes It can provide trust and insight for
-                                        research.
+                                        {t('landing.and_learning_outcomes')}
                                     </SpanStyled>
                                 </Section03P>
                             </Grid>
-                            <Grid item xs={12} sm={6} lg={4}>
+                            <Grid item xs={12} sm={4} lg={6}>
                                 <img src={landingImg034} alt="eCRF" style={{ maxWidth: '100%' }} />
                             </Grid>
                         </Grid>
@@ -410,7 +405,7 @@ export default function LandingPage() {
                                     fontWeight: 'normal',
                                 }}
                             >
-                                easy, convenient, and economical Experience
+                                {t('landing.easy_convenient')}
                             </Typography>
                             <Typography
                                 variant="h2"
@@ -419,7 +414,7 @@ export default function LandingPage() {
                                     mb: { xs: '2.5rem', md: '3.625rem' },
                                 }}
                             >
-                                evix-DCT for free now!
+                                {t('landing.evix-dct_for_free')}
                             </Typography>
                             <Button
                                 variant="contained"
@@ -427,7 +422,7 @@ export default function LandingPage() {
                                 size="large"
                                 sx={{ fontSize: '1.1rem' }}
                             >
-                                Book a Demo
+                                {t('landing.book_a_demo')}
                             </Button>
                         </Grid>
                     </Grid>
@@ -453,7 +448,7 @@ export default function LandingPage() {
                                     mb: { xs: '1rem', md: '1.2rem' },
                                 }}
                             >
-                                eCRF System
+                                {t('landing.e_crf_system')}
                             </Typography>
                             <Typography
                                 variant="h3"
@@ -462,9 +457,9 @@ export default function LandingPage() {
                                     mb: { xs: '1rem', md: '1.9rem' },
                                 }}
                             >
-                                <SpanStyled>It's a treatment for severe atopic </SpanStyled>
-                                <SpanStyled>dermatitis Safety and Effectiveness </SpanStyled>
-                                <SpanStyled>Study</SpanStyled>
+                                <SpanStyled>{t('landing.it_s_a_treatment')}</SpanStyled>
+                                <SpanStyled>{t('landing.dermatitis_safety')}</SpanStyled>
+                                <SpanStyled>{t('landing.study')}</SpanStyled>
                             </Typography>
                             <Typography
                                 sx={{
@@ -476,13 +471,13 @@ export default function LandingPage() {
                                 }}
                             >
                                 <SpanStyled>
-                                    Participation of Soonchunhyang Medical Center and 10 large{' '}
+                                    {t('landing.participation_of_soonchunhyang')}
                                 </SpanStyled>
                                 <SpanStyled>
-                                    Korean hospitals to conduct eCRF on atopic dermatitis treatment
+                                    {t('landing.korean_hospitals')}
                                 </SpanStyled>
                             </Typography>
-                            <Typography>* Hospital</Typography>
+                            <Typography>{t('landing.hospital')}</Typography>
                             <Box>
                                 <img
                                     src={landingImg052}
@@ -507,7 +502,7 @@ export default function LandingPage() {
                                     mb: { xs: '1rem', md: '1.2rem' },
                                 }}
                             >
-                                eCRF System
+								{t('landing.e_crf_system')}
                             </Typography>
                             <Typography
                                 variant="h3"
@@ -516,9 +511,9 @@ export default function LandingPage() {
                                     mb: { xs: '1rem', md: '1.9rem' },
                                 }}
                             >
-                                <SpanStyled>It's a treatment for severe atopic </SpanStyled>
-                                <SpanStyled>dermatitis Safety and Effectiveness </SpanStyled>
-                                <SpanStyled>Study</SpanStyled>
+                                <SpanStyled>{t('landing.it_s_a_treatment')}</SpanStyled>
+                                <SpanStyled>{t('landing.dermatitis_safety')}</SpanStyled>
+                                <SpanStyled>{t('landing.study')}</SpanStyled>
                             </Typography>
                             <Typography
                                 sx={{
@@ -530,13 +525,13 @@ export default function LandingPage() {
                                 }}
                             >
                                 <SpanStyled>
-                                    Participation of Soonchunhyang Medical Center and 10 large{' '}
+									{t('landing.participation_of_soonchunhyang')}
                                 </SpanStyled>
                                 <SpanStyled>
-                                    Korean hospitals to conduct eCRF on atopic dermatitis treatment
+									{t('landing.korean_hospitals')}
                                 </SpanStyled>
                             </Typography>
-                            <Typography>* Hospital</Typography>
+                            <Typography>{t('landing.hospital')}</Typography>
                             <Box>
                                 <img
                                     src={landingImg052}
@@ -572,9 +567,9 @@ export default function LandingPage() {
                             mb: { xs: '2rem', md: '4.375rem' },
                         }}
                     >
-                        On a monthly subscription basis
+                        {t('landing.on_a_monthly')}
                         <br />
-                        It will be paid monthly per study.
+                        {t('landing.it_will_be_paid')}
                         <br />
                     </Typography>
                     <Box
@@ -589,7 +584,7 @@ export default function LandingPage() {
                             size="large"
                             sx={{ fontSize: '1.1rem', p: '10px 27px' }}
                         >
-                            Month Get Started
+                            {t('landing.month_get_started')}
                         </Button>
                         <Button
                             variant="contained"
@@ -601,7 +596,7 @@ export default function LandingPage() {
                                 position: 'relative',
                             }}
                         >
-                            Year Get Started
+                            {t('landing.year_get_started')}
                             <Box
                                 sx={{
                                     position: 'absolute',
@@ -632,7 +627,7 @@ export default function LandingPage() {
                                     mt: { xs: '1.2rem', md: '1rem' },
                                 }}
                             >
-                                ePRO
+                                {t('landing.e_pro')}
                             </Typography>
                         </Grid>
                         <Grid item xs={2} md={2}>
@@ -646,7 +641,7 @@ export default function LandingPage() {
                                     mt: { xs: '1.2rem', md: '1rem' },
                                 }}
                             >
-                                eCOA
+                                {t('landing.e_coa')}
                             </Typography>
                         </Grid>
                         <Grid item xs={2} md={2}>
@@ -660,7 +655,7 @@ export default function LandingPage() {
                                     mt: { xs: '1.2rem', md: '1rem' },
                                 }}
                             >
-                                eCRF
+                                {t('landing.e_crf')}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -684,11 +679,11 @@ export default function LandingPage() {
                             mb: { xs: '1.5rem', md: '2rem' },
                         }}
                     >
-                        If you have any questions about the use of
+                        {t('landing.if_you_have')}
                         <br />
-                        the institution or multiple uses, please contact us separately and
+                        {t('landing.the_institution')}
                         <br />
-                        we will inform you through consultation.
+                        {t('landing.we_will_inform')}
                     </Typography>
                     <Button
                         variant="contained"
@@ -696,7 +691,7 @@ export default function LandingPage() {
                         sx={{ bgcolor: '#222', fontSize: '1.1rem', p: '10px 27px' }}
                         onClick={toSupportPage}
                     >
-                        Contact Service
+                        {t('landing.contact_service')}
                     </Button>
                 </Container>
             </Box>
@@ -718,13 +713,13 @@ export default function LandingPage() {
                             mb: { xs: '4rem', md: '8rem' },
                         }}
                     >
-                        With evix-DCT
+						{t('landing.with_evix-dct')}
                     </Typography>
                     <Grid container alignItems="center" justifyContent="center">
                         <Grid item xs={8}>
                             <img
                                 src={landingImg091}
-                                alt="With evix-DCT"
+                                alt={t('landing.with_evix-dct')}
                                 style={{ maxWidth: '100%' }}
                             />
                         </Grid>
@@ -758,11 +753,11 @@ export default function LandingPage() {
                                     mt: { xs: '2.5rem', md: '5.25rem' },
                                 }}
                             >
-                                Healthcare MyData and
+								{t('landing.healthcare_mydata')}
                                 <br />
-                                RWE Big Data Platform
+								{t('landing.rwe_big_data')}
                                 <br />
-                                work together
+                                {t('landing.work_together')}
                             </Typography>
                             <Typography
                                 variant="h5"
@@ -772,18 +767,16 @@ export default function LandingPage() {
                                     fontSize: { xs: '0.9rem', md: '1.5rem' },
                                 }}
                             >
-                                <SpanStyled>evix-DCT platform is </SpanStyled>
+                                <SpanStyled>{t('landing.evix-dct_platform_is')}</SpanStyled>
                                 <SpanStyled>
-                                    It provides optimized collaborative tools for researchers to
-                                    conveniently{' '}
+									{t('landing.it_provides_optimized_02')}
                                 </SpanStyled>
                                 <SpanStyled>
-                                    analyze and report collected clinical data, It provides noise
-                                    removal in{' '}
+                                    {t('landing.analyze_and_report')}
                                 </SpanStyled>
-                                <SpanStyled>conjunction with medical mydata, </SpanStyled>
+                                <SpanStyled>{t('landing.conjunction_with_medical')}</SpanStyled>
                                 <SpanStyled>
-                                    linkage analysis and learning using medical big data.
+                                    {t('landing.linkage_analysis')}
                                 </SpanStyled>
                             </Typography>
                         </Grid>
@@ -814,7 +807,7 @@ export default function LandingPage() {
                                         mb: { xs: '0.8rem', md: '1.68rem' },
                                     }}
                                 >
-                                    30b +
+                                    {t('landing.30b')}
                                 </Typography>
                                 <Typography
                                     variant="h6"
@@ -823,7 +816,7 @@ export default function LandingPage() {
                                         mb: { xs: '2rem', md: '4.3rem' },
                                     }}
                                 >
-                                    Real World Data
+                                    {t('landing.real_world_data')}
                                 </Typography>
                             </Grid>
                             <Grid item xs={6}>
@@ -842,7 +835,7 @@ export default function LandingPage() {
                                         mb: { xs: '0.8rem', md: '1.68rem' },
                                     }}
                                 >
-                                    69m +
+                                    {t('landing.69m')}
                                 </Typography>
                                 <Typography
                                     variant="h6"
@@ -851,7 +844,7 @@ export default function LandingPage() {
                                         mb: { xs: '2rem', md: '4.3rem' },
                                     }}
                                 >
-                                    Number of patients
+                                    {t('landing.number_of_patients')}
                                 </Typography>
                             </Grid>
                             <Grid item xs={6}>
@@ -879,7 +872,7 @@ export default function LandingPage() {
                                         mb: { xs: '0', md: '4.3rem' },
                                     }}
                                 >
-                                    General hospital
+                                    {t('landing.general_hospital')}
                                 </Typography>
                             </Grid>
                             <Grid item xs={6}>
@@ -898,7 +891,7 @@ export default function LandingPage() {
                                         mb: { xs: '0.8rem', md: '1.68rem' },
                                     }}
                                 >
-                                    10yr +
+                                    {t('landing.10yr')}
                                 </Typography>
                                 <Typography
                                     variant="h6"
@@ -907,7 +900,7 @@ export default function LandingPage() {
                                         mb: { xs: '0', md: '4.3rem' },
                                     }}
                                 >
-                                    Time series data
+                                    {t('landing.time_series_data')}
                                 </Typography>
                             </Grid>
                         </Grid>

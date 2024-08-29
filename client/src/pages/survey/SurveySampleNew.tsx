@@ -1,20 +1,22 @@
-import { AppBar, Box, Button, Card, Container, Dialog, Grid, OutlinedInput, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Card, Container, Dialog, FormControl, Grid, OutlinedInput, Typography } from "@mui/material";
 import FormBuilder from "./components/FormBuilder";
 import useSticky from "@/utils/useSticky";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addCard, addExistCard, CardProps, ItemTypeProps, resetAll, resetCards, StateProps } from "@/store/reducers/survey";
-import { ExampleTypes, QuestionDivision, QuestionList, QuestionTypes, SurveyDetail, SurveyPostReqBody, SurveyPutReqBody, SurveyQuestion } from "@/types/survey";
+import { addExistCard, CardProps, ItemTypeProps, resetAll, resetCards, StateProps } from "@/store/reducers/survey";
+import { ExampleTypes, QuestionDivision, QuestionTypes, SurveyDetail, SurveyPostReqBody, SurveyPutReqBody, SurveyQuestion } from "@/types/survey";
 import surveyApi from "@/apis/survey";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
 import SurveyPreview from "./SurveyPreview";
 import { useConfirmation } from '@/context/ConfirmDialogContext';
+import { Label } from "./components/FromView/InputRadio/styles";
 
-const SurveyNew = () => {
+const SurveySampleNew = () => {
 	const { ref, isSticky } = useSticky();
 	const cards = useSelector((state: StateProps) => state.cards);
+	const [ disease, setDisease ] = useState('');
 
 	const schema = Yup.object().shape({
 		cards: Yup.array()
@@ -53,120 +55,9 @@ const SurveyNew = () => {
 	
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const locations = useLocation();
-	const parmas = useParams();
 	
 	const [ surveyNo, setSurveyNo ] = useState<string | number | null>(null);
-	const [ locationState, setLocationState ] = useState<'edit' | 'copy' | 'new' | null>(null); //edit, copy check
 	const [ isPreview, setIsPreview ] = useState(false);
-	const confirm = useConfirmation();
-	const [ surveyDetail, setSurveyDetail ] = useState<SurveyDetail | null>(null);
-	const [ disease, setDisease ] = useState('');
-
-	useEffect(() => {
-		console.log(locations, parmas)
-
-		if(locations.state) setLocationState(locations.state);
-		else setLocationState(null);
-
-		
-	}, [locations])
-
-	useEffect(() => {
-		console.log(locations.pathname.startsWith('/survey/edit') && parmas.survey_no)
-		if((locations.pathname.startsWith('/survey/edit') && parmas.survey_no) || (locations.state == 'edit' && parmas.survey_no)) {
-			setLocationState('edit');
-			setSurveyNo(Number(parmas.survey_no));
-			getCopyingSurveyDeatil(parmas.survey_no);
-			return;
-		}
-
-		if(locations.state == 'copy' && parmas.survey_no) {
-			getCopyingSurveyDeatil(parmas.survey_no);
-			setSurveyNo(null);
-			return;
-		}
-
-		if(locations.state == 'new') {
-			if(parmas.survey_no) {
-				getCopyingSurveyDeatil(parmas.survey_no);
-				setSurveyNo(null);
-				return;
-			} else {
-				dispatch(resetCards());
-			}
-			
-		}
-	}, [])
-
-	const getCopyingSurveyDeatil = async (surveyNo) => {
-		console.log(locations.state, 'stateCheck')
-		try {
-			const response = await surveyApi.getCopyingSurvey(surveyNo);
-			if (response.result && response.code === 200) {				
-				const survey = response.content;
-				setSurveyDetail(survey);
-
-				if(survey.sample_yn === 'Y') {
-					
-					setDisease(survey.disease);
-				}
-
-				setCards(survey);
-			} else {
-				dispatch(resetCards())
-			}
-		} catch (error) {
-			console.error('Failed to fetch survey:', error);	
-			dispatch(resetAll());
-			confirm({
-				description: 'Failed to fetch survey',
-				variant: 'info'
-			})
-			.then(() => { 
-				navigate('/survey');
-			});
-		}
-	}
-
-
-	const setCards = (survey:SurveyDetail) => {
-		dispatch(resetAll())
-		
-		
-		dispatch(addExistCard({
-			cardId: "TitleCard",
-			cardTitle: locations.state == 'copy' ? '[Copy] ' + survey.title : (survey.title ? survey.title : ''),
-			inputType: QuestionTypes.TITLE,
-			contents: survey.description,
-			isFocused: 'Y'
-		}));
-
-		survey.questionList.forEach(question => {
-			
-			const exampleList: ItemTypeProps[] = [];
-
-			const cardId = question.question_no + String(Date.now());
-			
-			question.exampleList.forEach(example => {
-			exampleList.push({
-					id: cardId + example.example_no,
-					text: example.example_title,
-					example_title: example.example_title,
-					isEtc: example.example_type === 'OTHER' ? true : false,
-				})
-			});
-
-			dispatch(addExistCard({
-				cardId: question.question_no + String(Date.now()),
-				cardTitle: question.question,
-				inputType: question.question_type in QuestionTypes ? question.question_type : "WRITE",
-				contents: exampleList.length === 1 ? '' : exampleList,
-				isRequired: question.required_answer_yn == 'Y' ? true : false
-			}));
-		})
-	}
-
 
 	const postNewSurvey = async (survey:SurveyPostReqBody, temp:boolean) => {
 		try {
@@ -215,9 +106,9 @@ const SurveyNew = () => {
 		const newSurvey : SurveyPostReqBody = {
 			title: '',
 			description: '',
-			sample_yn: 'N',
+			sample_yn: 'Y',
 			questionList: [],
-			disease: disease ? disease : ''
+			disease: disease
 		}
 		
 		cards.forEach((card : CardProps, index:number) => {
@@ -332,7 +223,7 @@ const SurveyNew = () => {
 									>
 										<Box display="flex" alignItems="center">
 											{
-												!isSticky && <Typography variant="h3" color="secondary.dark">Survey {locationState == 'edit' ? '수정' : '생성'}</Typography>
+												!isSticky && <Typography variant="h3" color="secondary.dark">Sample Survey 생성</Typography>
 											}
 											
 											<Box display="flex" justifyContent="flex-end" gap={1} sx={{ml: 'auto'}}>
@@ -345,13 +236,11 @@ const SurveyNew = () => {
 											</Box>
 										</Box>
 									
-								</AppBar>
-								{
-									locationState === 'edit' && surveyDetail?.sample_yn == 'Y' &&
-									<Card sx={{ width: '89%', mb: '10px', p: '0.5rem'}}>
-										<OutlinedInput placeholder="질병(분류용)" size="small" value={disease} onChange={(e) => setDisease(e.target.value)} fullWidth />
-									</Card>
-								}
+								</AppBar>	
+
+								<Card sx={{ width: '89%', mb: '10px', p: '0.5rem'}}>
+									<OutlinedInput placeholder="질병(분류용)" size="small" onChange={(e) => setDisease(e.target.value)} fullWidth />
+								</Card>
 								{
 									cards && <FormBuilder />
 								}
@@ -375,4 +264,4 @@ const SurveyNew = () => {
 	)
 }
 
-export default SurveyNew;
+export default SurveySampleNew;

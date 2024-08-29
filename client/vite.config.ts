@@ -25,6 +25,7 @@ export default defineConfig({
 			'@apis': fileURLToPath(new URL("./src/apis", import.meta.url)),
 			'@api': fileURLToPath(new URL("./src/api", import.meta.url)),
 			'@i18n': fileURLToPath(new URL("./src/i18n", import.meta.url)),
+			'@context': fileURLToPath(new URL("./src/context", import.meta.url)),
 		}
 	},
 	//전역사용 CSS
