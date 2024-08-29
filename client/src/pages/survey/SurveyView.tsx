@@ -38,11 +38,15 @@ const SurveyView = ({preview, surveyNo} : SurveyViewProps) => {
                 const survey = response.content;
 				setSurvey(survey);
 				
-				const hasRequiredCheck = survey.questionList.some((card) => card.required_answer_yn === 'Y');
-				setHasRequired(hasRequiredCheck);
+				if(survey.questionList) {
 
-				setCards(survey.questionList)
+					const hasRequiredCheck = survey.questionList.some((card) => card.required_answer_yn === 'Y');
+					setHasRequired(hasRequiredCheck);
 
+					setCards(survey.questionList)
+
+				}
+				
 				console.log(survey)
             }
         } catch (error) {

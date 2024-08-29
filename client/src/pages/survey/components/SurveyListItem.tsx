@@ -34,44 +34,30 @@ const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
 	}
 
 	const deleteThisSurvey = async () => {
-		try {
-			const response = await surveyApi.deleteSurvey(survey.survey_no);
-			if (response.result && response.code === 200) {
-                confirm({
-					description: "삭제되었습니다.",
-					variant: 'info'
-				})
-				.then(() => { 
-					refresh();
-				})
-            }
-        } catch (error) {
-            console.error('Failed to fetch study list:', error);	
-        }
+		const response = await surveyApi.deleteSurvey(survey.survey_no);
+		if (response.result && response.code === 200) {
+			refresh();
+		}
 	}
 
 	const handleCopy = () => {
 		confirm({
-			catchOnCancel: true,
 			title: "설문 복제",
 			description: "이 설문을 복제하시겠습니까?"
 		})
 		.then(() => { 
 			navigate(`/survey/copy/${survey.survey_no}`, {state: 'copy'});
 		})
-		.catch(() => {console.log('cancel')});		
 	}
 
 	const handleDelete = () => {
 		confirm({
-			catchOnCancel: true,
 			title: "설문 삭제",
 			description: "이 설문을 삭제하시겠습니까?"
 		})
 		.then(() => { 
 			deleteThisSurvey()
 		})
-		.catch(() => {console.log('cancel')});		
 		
 	}
 
