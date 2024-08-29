@@ -174,7 +174,9 @@ const SurveyConnectDialog = ({
                 const newSurveys = selectedSurvey.filter(
                     (survey) =>
                         !initialSurveySetList.some((set) =>
-                            set.surveyList.some((s) => s.survey_no === survey.survey_no)
+                            set.surveyList.some(
+                                (s: { survey_no: number }) => s.survey_no === survey.survey_no
+                            )
                         )
                 );
 
