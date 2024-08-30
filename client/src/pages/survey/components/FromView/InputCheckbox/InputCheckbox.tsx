@@ -49,7 +49,7 @@ const InputCheckbox = ({ cardId, index, changeIsRequired }: InputCheckboxProps) 
 					<S.Checkbox
 						type="checkbox"
 						id={`checkbox-${example.question_no}-${example.example_no}`}
-						value={example.example_title}
+						value={example.example_value}
 						name={field.name}
 						onChange={(e) => {
 							field.onChange(e);

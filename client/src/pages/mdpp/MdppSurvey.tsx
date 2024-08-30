@@ -74,7 +74,7 @@ const MdppSurvey = () => {
 				}))
 	
 				// const newObject = `question${question.question_no}`;
-				// Object.assign(newInitialValues, { [newObject] : ''});
+				// Object.assign(newInitialValues, { [newObject] : ''}); //fieldArray로 변경하면서 initalvalues도 array로 변경
 
 				newInitialValues.push({
 					question_no: question.question_no,
@@ -100,10 +100,6 @@ const MdppSurvey = () => {
 	}
 
 	const handleSumbit = (values) => {
-		console.log(previewCards);
-
-		
-		console.log(values);
 		let answers : SurveyAnswer[] = [];
 		values.questions.forEach((value, index) => {
 			const answer = {
@@ -116,6 +112,10 @@ const MdppSurvey = () => {
 				answer_select: (value.questionType == 'RADIO' || value.questionType == 'MULTIPLE') ? value.answer : null,
 				answer_write: value.questionType == 'WRITE' ? value.answer : null
 			}
+
+// 			answer_select: 선택 답변 값 더해서 MULTIPLE일때 [2,4]<이렇게 아님
+// other 가 있을 경우도 select 값은 더해서,
+// other 텍스트는 answer_write 에
 			
 			answers.push(answer);
 		})
@@ -160,12 +160,10 @@ const MdppSurvey = () => {
 										<ViewCard 
 											key={index}
 											index={index}
-											id={card.cardId}
+											card={card}
 										/>
 									))}
 									</>
-
-									// previewCards && previewCards.map((card, index) => <ViewCard key={index} id={card.cardId} />)
 								)
 							}
 	

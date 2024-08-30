@@ -45,7 +45,7 @@ const InputRadio = ({ cardId, index, changeIsRequired }: InputRadioProps) => {
 								type="radio"
 								name={field.name}
 								id={`radio-${example.question_no}-${example.example_no}`}
-								value={example.example_type === ExampleTypes.OTHER ? etcRef.current?.value : example.example_title}
+								value={example.example_type === ExampleTypes.OTHER ? etcRef.current?.value : example.example_value}
 								onChange={(e) => field.onChange(e)}
 							/>
 							<S.Label htmlFor={`radio-${example.question_no}-${example.example_no}`}>
