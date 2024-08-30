@@ -5,13 +5,23 @@ import { Box, Button, Card, Container, Typography, useTheme } from "@mui/materia
 
 import { useDispatch, useSelector } from "react-redux";
 import { resetAll, PreviewStateProps, addPreview } from "@/store/reducers/preview";
-import { Formik, Form } from "formik";
+import { Formik, Form, FieldArray } from "formik";
 import ViewCard from "../survey/components/FromView/ViewCard/ViewCard";
 import * as S from './styles';
 import MdppHeader from "./components/MdppHeader";
 import participantSurveyApi from "@/apis/participantSurvey";
-import { ParticipantSurveyDetail, ParticipantSurveyQuestionList } from "@/types/participant";
+import { ParticipantSurveyDetail, ParticipantSurveyQuestionList, SurveyAnswer } from "@/types/participant";
+import { CardProps } from "@/store/reducers/survey";
 
+
+type InitialValues = {
+	question_no: number,
+	questionType: QuestionTypes,
+	answer: string | number | null | [];
+}
+type InitialValuesType = {
+	questions : InitialValues[]
+};
 
 const MdppSurvey = () => {
 	const previewCards = useSelector((state: PreviewStateProps) => state.previewCards);
@@ -20,7 +30,7 @@ const MdppSurvey = () => {
 	const { setNo, surveyNo, surveyCycle, surveyTurn } = useParams();
 	const [ survey, setSurvey ]  = useState<ParticipantSurveyDetail>({} as ParticipantSurveyDetail);
 	const [ hasRequired, setHasRequired ] = useState(false);
-	const [ initialValues, setInitialValues ] = useState({});
+	const [ initialValues, setInitialValues ] = useState<InitialValuesType>({ questions : []});
 
 	
 	const theme = useTheme();
@@ -50,35 +60,69 @@ const MdppSurvey = () => {
 	const setCards = (questionList:ParticipantSurveyQuestionList[]) => {
 		dispatch(resetAll());
 		
-		const newInitialValues = {};
+		const newInitialValues: InitialValues[] = [];
 
 		questionList.map(question => {
-			dispatch(addPreview({
-				cardId: 'question' + question.question_no,
-				question: question.question,
-				exampleList: question.exampleList,
-				questionType: question.question_type,
-				isRequired: question.required_answer_yn
-			}))
+			const nameOfA = QuestionTypes[question.question_type];
+			if(nameOfA) {
+				dispatch(addPreview({
+					cardId: 'question' + question.question_no,
+					question: question.question,
+					exampleList: question.exampleList,
+					questionType: question.question_type,
+					isRequired: question.required_answer_yn
+				}))
+	
+				// const newObject = `question${question.question_no}`;
+				// Object.assign(newInitialValues, { [newObject] : ''});
 
-			const newObject = `question${question.question_no}`;
-
-			Object.assign(newInitialValues, { [newObject] : ''});
+				newInitialValues.push({
+					question_no: question.question_no,
+					questionType: question.question_type,
+					answer: null
+				});
+			}
 
 		})
 
-		setInitialValues(newInitialValues);
+		setInitialValues({questions : newInitialValues});
 	}
 
 	useEffect(() => {
 		getSurveyDeatil();
 	}, []);
 
-	const handleSumbit = (event) => {
-		
+	const postSurvey = async (surveyAnswers) => {
+		const response = await participantSurveyApi.postSurveyAnswer(surveyAnswers);
+            if (response.result && response.code === 200) {
+                const survey = response.content;	
+            }
+	}
+
+	const handleSumbit = (values) => {
+		console.log(previewCards);
 
 		
-		console.log(event);
+		console.log(values);
+		let answers : SurveyAnswer[] = [];
+		values.questions.forEach((value, index) => {
+			const answer = {
+				set_no: Number(setNo),
+				survey_no: Number(surveyNo),
+				answer_cycle: surveyCycle,
+				answer_turn: Number(surveyTurn),
+				
+				question_no: value.question_no,
+				answer_select: (value.questionType == 'RADIO' || value.questionType == 'MULTIPLE') ? value.answer : null,
+				answer_write: value.questionType == 'WRITE' ? value.answer : null
+			}
+			
+			answers.push(answer);
+		})
+
+		console.log(answers);
+
+		// postSurvey(answers);
 	}
 
 	return(
@@ -108,14 +152,26 @@ const MdppSurvey = () => {
 						>
 						<Form>
 							<Box display="flex" flexDirection="column" gap={2}>
-								{
-									previewCards && previewCards.map((card, index) => {
-										const nameOfA = QuestionTypes[card.questionType];
-										return (
-											nameOfA && <ViewCard key={index} id={card.cardId} />
-										)
-									})
-								}
+							<FieldArray name="cards" render={() => {
+
+								return (
+									<>
+									{previewCards && previewCards.map((card, index: number) => (
+										<ViewCard 
+											key={index}
+											index={index}
+											id={card.cardId}
+										/>
+									))}
+									</>
+
+									// previewCards && previewCards.map((card, index) => <ViewCard key={index} id={card.cardId} />)
+								)
+							}
+	
+							}/>
+
+
 								<S.BigButton variant="contained" color="primary" type="submit" fullWidth>제출하기</S.BigButton>
 							</Box>
 						</Form>

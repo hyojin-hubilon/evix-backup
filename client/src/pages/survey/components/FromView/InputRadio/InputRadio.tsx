@@ -9,10 +9,11 @@ import { Typography } from "@mui/material";
 
 type InputRadioProps = {
 	cardId: string,
+	index: number,
 	changeIsRequired: (e:boolean) => void
 }
 
-const InputRadio = ({ cardId, changeIsRequired }: InputRadioProps) => {
+const InputRadio = ({ cardId, index, changeIsRequired }: InputRadioProps) => {
 	const etcRef = useRef<HTMLInputElement>(null);
   	const etcRefRadio = useRef<HTMLInputElement>(null);
 
@@ -29,7 +30,8 @@ const InputRadio = ({ cardId, changeIsRequired }: InputRadioProps) => {
 	
 
 	return (
-		<Field name={cardId} type="radio" validate={(value) => requiredCheck(value, ieReqired, changeIsRequired)}>
+		<Field name={`questions.${index}.answer`}  type="radio">
+			{/* validate={(value) => requiredCheck(value, ieReqired, changeIsRequired)} 밸리데이트 YUP으로 변경하기 */}
 			{({
 				field,
 				form: { touched, errors },

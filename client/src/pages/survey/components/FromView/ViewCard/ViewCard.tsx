@@ -10,10 +10,12 @@ import { useFormikContext } from "formik";
 import { useEffect, useState } from "react";
 
 type ViewCardProps = {
-	id: string
+	id: string;
+	index: number;
 }
 
-const ViewCard = ({id, ...props}: ViewCardProps) => {
+const ViewCard = ({id, index, ...props}: ViewCardProps) => {
+	console.log(id)
 	const inputType = useSelector((state: PreviewStateProps) => {
 		const currentCard = state.previewCards.find((card) => card.cardId === id) as PreviewProps;
 		return currentCard.questionType;
@@ -52,9 +54,9 @@ const ViewCard = ({id, ...props}: ViewCardProps) => {
 				</Typography>
 			</Box>
 			
-			{ inputType === QuestionTypes.WRITE ? <InputTextField cardId={id} changeIsRequired={changeIsRequired} /> : null } 
-			{ (inputType === QuestionTypes.SINGLE || inputType === QuestionTypes.RADIO) ? <InputRadio cardId={id} changeIsRequired={changeIsRequired} /> : null }
-			{ inputType === QuestionTypes.MULTIPLE ? <InputCheckbox cardId={id} changeIsRequired={changeIsRequired} /> : null }
+			{ inputType === QuestionTypes.WRITE ? <InputTextField cardId={id} index={index} changeIsRequired={changeIsRequired} /> : null } 
+			{ (inputType === QuestionTypes.SINGLE || inputType === QuestionTypes.RADIO) ? <InputRadio cardId={id} index={index} changeIsRequired={changeIsRequired} /> : null }
+			{ inputType === QuestionTypes.MULTIPLE ? <InputCheckbox cardId={id} index={index} changeIsRequired={changeIsRequired} /> : null }
 		</S.SCard>
 	)
 }
