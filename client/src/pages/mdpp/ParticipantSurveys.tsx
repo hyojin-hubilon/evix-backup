@@ -2,9 +2,9 @@ import { Box, Card, Typography } from "@mui/material";
 import MdppHeader from "./components/MdppHeader";
 import * as S from './styles';
 import ParticipantStudyItem from "./components/ParicipantStudyItem";
-import {  ParticipantStudyDetail, ParticipantSurveySet, SurveyForParticipant } from "@/types/participant";
+import {  ParticipantStudyDetail, ParticipantSurveySet, SurveyForParticipant, SurveySetList } from "@/types/participant";
 import ParticipantSurveyItem from "./components/ParticipantSurveyItem";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import participantStudyApi from "@/apis/participantStudy";
 
@@ -30,6 +30,7 @@ const ParticipantSurveys = () => {
 	const { stdNo } = useParams();
 	const [ surveySets, setSurveySets ] = useState<ParticipantSurveySet[]>([]);
 	const [ studyDetail, setStudyDetail ] = useState<ParticipantStudyDetail>({} as ParticipantStudyDetail);
+	const navigate = useNavigate();
 
 	const fetchSurveyDetail = async () => {
 		try {
@@ -58,7 +59,17 @@ const ParticipantSurveys = () => {
 	useEffect(() => {
 		fetchSurveyDetail();
 		fetchSurveySet();
-	}, [])
+	}, []);
+
+	const handleSelectSurvey = (surveySet:SurveySetList) => {
+		console.log(studyDetail)
+		if(studyDetail.signature_eic_name) {
+			navigate(`/mdpp/survey/${surveySet.set_no}/${surveySet.survey_no}/${surveySet.answer_cycle}/${surveySet.answer_turn}`)
+		} else {
+			navigate('/mdpp/eic')
+		}
+		
+	}
 
 	return (
 		<Box sx={{bgcolor: 'white', minHeight: '100vh', pt: '22px'}}>
@@ -75,7 +86,7 @@ const ParticipantSurveys = () => {
 			<Box p="0 23px">
 				{
 					surveySets.map((survey, index) => 
-						<ParticipantSurveyItem survey={survey} key={index} study={studyDetail}/>
+						<ParticipantSurveyItem survey={survey} key={index} study={studyDetail} selectSurvey={handleSelectSurvey}/>
 					)
 				}
 			</Box>

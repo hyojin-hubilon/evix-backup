@@ -1,9 +1,9 @@
 import { ResCommonError, api, file_api } from '@/apis/axios-common';
-import { SurveyAnswerReqBody } from '@/types/participant';
+import { ParticipantSurveyDetail, SurveyAnswerReqBody } from '@/types/participant';
 
 const BASE_API_URL = '/participant/survey';
 
-const participantApi = {
+const participantSurveyApi = {
     postParticipantSurveyAnswer: async (answerData: SurveyAnswerReqBody[]) => {
         try {
             const responseData = await api<{}>(`${BASE_API_URL}`, 'post', answerData);
@@ -22,7 +22,16 @@ const participantApi = {
             throw e;
         }
     },
+	getSurveyDetail: async (setNo, surveyNo, surveyCycle, surveyTurn) => {
+		try {
+            const responseData = await api<ParticipantSurveyDetail>(`${BASE_API_URL}/${setNo}/${surveyNo}/${surveyCycle}/${surveyTurn}`, 'get');
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+	}
   
 };
 
-export default participantApi;
+export default participantSurveyApi;

@@ -21,7 +21,7 @@ const MdppRoutes = {
             element: <EICAgreement />,
         },
 		{
-			path: 'survey/:survey_no',
+			path: 'survey/:setNo/:surveyNo/:surveyCycle/:surveyTurn',
 			element: <MdppSurvey />
 		}
 	]

@@ -44,7 +44,7 @@ const participantStudyApi = {
             const e = error as ResCommonError;
             throw e;
         }
-    },
+    }
 };
 
 export default participantStudyApi;

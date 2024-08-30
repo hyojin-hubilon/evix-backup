@@ -1,3 +1,5 @@
+import { QuestionDivision, QuestionTypes, SurveyDetail } from "./survey";
+
 export interface SurveyAnswerReqBody {
     set_no: number;
     survey_no: number;
@@ -66,7 +68,16 @@ export interface ParticipantStudyList {
     title: string;
 }
 
-
+export interface SurveySetList {
+	set_no: number,
+	survey_no: number,
+	title: string,
+	sort: number,
+	survey_cnt: number,
+	answer_cycle: string | Date,
+	answer_turn: number,
+	number_answer: number
+}
 
 // /api/v1/participant/study/:stdNo/survey-set
 // 내 참여 임상시험 설문 설정 목록
@@ -79,17 +90,7 @@ export interface ParticipantSurveySet {
 	number_in_cycle: number,
 	sort: number,
 	number_answer_set: number,
-	surveyList: 
-		{
-			set_no: number,
-			survey_no: number,
-			title: string,
-			sort: number,
-			survey_cnt: number,
-			answer_cycle: string | Date,
-			answer_turn: number,
-			number_answer: number
-		}[]	
+	surveyList: SurveySetList[]
 }
 
 // /api/v1/participant/study/:stdNo
@@ -121,4 +122,49 @@ export interface ParticipantStudyDetail {
     deployed_at: string | Date,
     signature_eic_name: string,
     signature_eic_extension: string//"pdf"
+}
+
+
+export interface ParticipantSurveyExampleList {
+	level:number;
+	parent: string;
+	question:string;
+	question_division: string;
+	question_no: number;
+	question_type: QuestionTypes;
+	required_answer_yn: 'Y' | 'N';
+	sort:number;
+	surveyQuestionAnswer: string | number | null;
+	survey_no: number;
+}
+export interface ParticipantSurveyQuestionList  {
+	exampleList : ParticipantSurveyExampleList[];
+	level: number;
+	parent: string;
+	question: string;
+	question_division: QuestionDivision;
+	question_no: number;
+	question_type: QuestionTypes;
+	required_answer_yn: 'Y' | 'N';
+	sort: number;
+	surveyQuestionAnswer: string | number | null;
+	survey_no: number;
+}
+
+export interface ParticipantSurveyDetail  {
+	created_at : string | Date;
+	created_user_no: number;
+	description: string;
+	disease : string;
+	questionList : ParticipantSurveyQuestionList[]
+	sample_yn : 'Y' | 'N';
+	std_no:number;
+	study_title: string;
+	survey_no: number;
+	title: string;
+	translation: string;
+	updated_at: string | Date;
+	updated_user_no : number;
+	yn_availability_survey_answer: 'Y' | 'N';
+	yn_survey_answer_completed: 'Y' |'N';
 }

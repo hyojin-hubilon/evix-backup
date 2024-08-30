@@ -1,7 +1,6 @@
-import surveyApi from "@/apis/survey";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { QuestionList, SurveyDetail } from '@/types/survey';
+import { QuestionList } from '@/types/survey';
 import { Box, Button, Card, Container, Typography, useTheme } from "@mui/material";
 
 
@@ -11,14 +10,16 @@ import { Formik, Form } from "formik";
 import ViewCard from "../survey/components/FromView/ViewCard/ViewCard";
 import * as S from './styles';
 import MdppHeader from "./components/MdppHeader";
+import participantSurveyApi from "@/apis/participantSurvey";
+import { ParticipantSurveyDetail, ParticipantSurveyQuestionList } from "@/types/participant";
 
 
 const MdppSurvey = () => {
 	const previewCards = useSelector((state: PreviewStateProps) => state.previewCards);
   	const dispatch = useDispatch();
-
-	const { survey_no } = useParams<{ survey_no: any }>();
-	const [ survey, setSurvey ]  = useState<SurveyDetail>({} as SurveyDetail);
+	//setNo/:surveyNo/:surveyCycle/:surveyTurn
+	const { setNo, surveyNo, surveyCycle, surveyTurn } = useParams();
+	const [ survey, setSurvey ]  = useState<ParticipantSurveyDetail>({} as ParticipantSurveyDetail);
 	const [ hasRequired, setHasRequired ] = useState(false);
 	const [ initialValues, setInitialValues ] = useState({});
 	
@@ -26,19 +27,19 @@ const MdppSurvey = () => {
 
 	const { primary } = theme.palette;
 	
-	const getSurveyDeatil = async (surveyNumber) => {
+	const getSurveyDeatil = async () => {
 		try {
-			const response = await surveyApi.getSurvey(surveyNumber);
+			const response = await participantSurveyApi.getSurveyDetail(setNo, surveyNo, surveyCycle, surveyTurn);
             if (response.result && response.code === 200) {
                 const survey = response.content;
 				setSurvey(survey);
 				
-				const hasRequiredCheck = survey.questionList.some((card) => card.required_answer_yn === 'Y');
-				setHasRequired(hasRequiredCheck);
+				if(survey.questionList) {
+					const hasRequiredCheck = survey.questionList.some((card) => card.required_answer_yn === 'Y');
+					setHasRequired(hasRequiredCheck);
 
-				setCards(survey.questionList)
-
-				console.log(survey)
+					setCards(survey.questionList)
+				}
             }
         } catch (error) {
             console.error('Failed to fetch study list:', error);
@@ -46,7 +47,7 @@ const MdppSurvey = () => {
 	
 	}
 
-	const setCards = (questionList:QuestionList[]) => {
+	const setCards = (questionList:ParticipantSurveyQuestionList[]) => {
 		dispatch(resetAll());
 		
 		const newInitialValues = {};
@@ -70,8 +71,8 @@ const MdppSurvey = () => {
 	}
 
 	useEffect(() => {
-		const surveyNumber = survey_no;
-		if(surveyNumber) getSurveyDeatil(surveyNumber);
+		
+		getSurveyDeatil();
 	}, []);
 
 	const handleSumbit = (event) => {
