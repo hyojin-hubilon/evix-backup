@@ -644,8 +644,17 @@ const StudyNew = () => {
                                     >
                                         Survey 연결
                                     </Button>
+                                    {'  '}
+
                                     {titles ? (
-                                        titles
+                                        <span
+                                            style={{
+                                                fontWeight: 'bold',
+                                                color: primary.main,
+                                            }}
+                                        >
+                                            {titles}
+                                        </span>
                                     ) : (
                                         <span style={{ color: 'red' }}>
                                             {'  '}* Study 배포전에 반드시 연결해주세요.
@@ -668,7 +677,11 @@ const StudyNew = () => {
                                     </Box>
                                 </Grid>
                                 <Grid item xs={9}>
-                                    <Button variant="contained" onClick={handleOpenUploadBasePdf}>
+                                    <Button
+                                        variant="contained"
+                                        onClick={handleOpenUploadBasePdf}
+                                        sx={{ width: '103.14px' }}
+                                    >
                                         EIC 연결
                                     </Button>
                                     <span style={{ color: 'red' }}>
@@ -695,6 +708,7 @@ const StudyNew = () => {
                                         onClick={() => {
                                             setIsOpenMember(true);
                                         }}
+                                        sx={{ width: '103.14px' }}
                                     >
                                         초대하기
                                     </Button>
