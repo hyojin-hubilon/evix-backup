@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { QuestionList } from '@/types/survey';
+import { QuestionList, QuestionTypes } from '@/types/survey';
 import { Box, Button, Card, Container, Typography, useTheme } from "@mui/material";
-
 
 import { useDispatch, useSelector } from "react-redux";
 import { resetAll, PreviewStateProps, addPreview } from "@/store/reducers/preview";
@@ -22,6 +21,7 @@ const MdppSurvey = () => {
 	const [ survey, setSurvey ]  = useState<ParticipantSurveyDetail>({} as ParticipantSurveyDetail);
 	const [ hasRequired, setHasRequired ] = useState(false);
 	const [ initialValues, setInitialValues ] = useState({});
+
 	
 	const theme = useTheme();
 
@@ -71,18 +71,20 @@ const MdppSurvey = () => {
 	}
 
 	useEffect(() => {
-		
 		getSurveyDeatil();
 	}, []);
 
 	const handleSumbit = (event) => {
+		
+
+		
 		console.log(event);
 	}
 
 	return(
 		<Box sx={{bgcolor: 'white', minHeight: '100vh', pt: '22px'}}>
 			<MdppHeader title="설문 참여하기" backBtn></MdppHeader>			
-			<Box p="23px" height="calc(100vh - 55px)" overflow="scroll">
+			<Box p="23px" height="calc(100vh - 60px)" sx={{'overflowY':"scroll"}}>
 				<Box display="flex" flexDirection="column" gap={2}>
 					<Card sx={{width: '100%', p: '1.5rem', borderRadius:'8px', borderTop: `5px solid ${primary.main}`}}>
 						<Typography variant="h1" fontSize="24px">{survey.title}</Typography>
@@ -107,7 +109,12 @@ const MdppSurvey = () => {
 						<Form>
 							<Box display="flex" flexDirection="column" gap={2}>
 								{
-									previewCards && previewCards.map((card, index) => <ViewCard key={index} id={card.cardId} />)
+									previewCards && previewCards.map((card, index) => {
+										const nameOfA = QuestionTypes[card.questionType];
+										return (
+											nameOfA && <ViewCard key={index} id={card.cardId} />
+										)
+									})
 								}
 								<S.BigButton variant="contained" color="primary" type="submit" fullWidth>제출하기</S.BigButton>
 							</Box>

@@ -168,3 +168,13 @@ export interface ParticipantSurveyDetail  {
 	yn_availability_survey_answer: 'Y' | 'N';
 	yn_survey_answer_completed: 'Y' |'N';
 }
+
+export interface SurveyAnswer {
+	set_no: number, //152,
+	survey_no: number, //93,
+	answer_cycle: string, //"2024-08-08(일) or 2024/34(주) or 2024-08(월)",
+	answer_turn: number, //1,
+	question_no: number, //1,
+	answer_select: number, // 1,
+	answer_write: string //"1"
+}
