@@ -22,7 +22,7 @@ const StudyDetail = () => {
     const [participationRateByAge, setParticipationRateByAge] =
         useState<ParticipationRateByAge | null>(null);
 
-	const navigate = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (stdNo) {
@@ -84,10 +84,9 @@ const StudyDetail = () => {
         (manager: any) => manager.std_privilege === 'OWNER'
     );
 
-	const handleEditClick = (std_no: number) => {
+    const handleEditClick = (std_no: number) => {
         navigate('/study/new', { state: { mode: 'edit', stdNo: std_no } });
     };
-
 
     return (
         <>
@@ -97,7 +96,13 @@ const StudyDetail = () => {
                     <Box display="flex" alignItems="center" gap={1}>
                         <Chip label={statusLabel} color="primary" />
                         <Typography variant="h3">{studyDetail?.title || ''}</Typography>
-                        <Button variant="outlined" sx={{ width: '3rem', minWidth: '48px' }} onClick={() => {handleEditClick(studyDetail.std_no)}}>
+                        <Button
+                            variant="outlined"
+                            sx={{ width: '3rem', minWidth: '48px' }}
+                            onClick={() => {
+                                handleEditClick(studyDetail.std_no);
+                            }}
+                        >
                             <EditOutlined style={{ fontSize: '1.2rem' }} />
                         </Button>
                     </Box>
@@ -161,7 +166,13 @@ const StudyDetail = () => {
                             participationRateByAge={participationRateByAge}
                         />
                     )}
-                {studyDetail && activeTab === '1' && <StudyInfo studyDetail={studyDetail} ownerId={owner.user_no}/>}
+                {studyDetail && activeTab === '1' && (
+                    <StudyInfo
+                        studyDetail={studyDetail}
+                        ownerId={owner.user_no}
+                        onSurveyClose={() => fetchStudyDetail(parseInt(stdNo!, 10))}
+                    />
+                )}
                 {studyDetail && activeTab === '2' && <StudyParticipants />}
             </Grid>
         </>
