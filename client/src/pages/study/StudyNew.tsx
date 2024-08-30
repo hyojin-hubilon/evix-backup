@@ -36,6 +36,7 @@ import StudyDeleteConfirmDialog from './components/study-new/StudyDeleteConfirmD
 import { MyProfile } from '@/types/user';
 import { useFormik } from 'formik';
 import EicParent from './components/eic/EicParent';
+import { useUserProfile } from '@/context/UserProfileContext';
 
 const FormTooltip = ({ text }) => {
     return (
@@ -50,6 +51,8 @@ const FormTooltip = ({ text }) => {
 type ActionType = 'delete' | 'pause' | 'stop' | 'restart';
 
 const StudyNew = () => {
+    const { userProfile, setUserProfile } = useUserProfile();
+
     const theme = useTheme();
     const { divider, primary } = theme.palette;
     const [dateRange, setDateRange] = useState({ startDt: dayjs(), endDt: dayjs() });
@@ -79,9 +82,7 @@ const StudyNew = () => {
 
     const state = location.state as { mode: 'write' | 'edit'; stdNo?: number };
     const stdNo = location.state?.stdNo;
-
     const [stdStatus, setStdStatus] = useState<String>('');
-    const [currentUser, setCurrentUser] = useState<MyProfile>();
 
     // 유효성 검사
     const [errors, setErrors] = useState({
@@ -131,16 +132,6 @@ const StudyNew = () => {
 
     const handleCloseDialog = () => {
         setOpenDeleteConfirm(false);
-    };
-
-    // 멤버관리 모달에서 owner 정보를 가져오기 위함
-    const getMyProfile = async () => {
-        try {
-            const response = await userApi.getMyProfile();
-            setCurrentUser(response.content);
-        } catch (error) {
-            console.error('Failed to fetch owner profile:', error);
-        }
     };
 
     const titles = studySurveySetList.map((cycle: any) => {
@@ -227,7 +218,6 @@ const StudyNew = () => {
     };
 
     useEffect(() => {
-        getMyProfile();
         if (state?.mode === 'edit') {
             setMode('edit');
             fetchStudyDetail(state.stdNo); // 스터디 상세 정보 가져오기
@@ -385,7 +375,7 @@ const StudyNew = () => {
     };
 
     const userRole = managerList.find(
-        (member) => member.user_no === currentUser?.user_no
+        (member) => member.user_no === userProfile?.user_no
     )?.std_privilege;
 
     console.log('userRole: ', userRole);
@@ -748,8 +738,8 @@ const StudyNew = () => {
                                                         color: primary.main,
                                                     }}
                                                 >
-                                                    {currentUser?.first_name}
-                                                    {currentUser?.last_name}
+                                                    {userProfile?.first_name}{' '}
+                                                    {userProfile?.last_name}
                                                 </span>
                                             </Typography>
                                         </li>
@@ -805,7 +795,6 @@ const StudyNew = () => {
                     <Button variant="outlined" size="large" onClick={() => navigate(-1)}>
                         취소
                     </Button>
-                    {/* <Button variant="contained" size="large" onClick={handleSubmitWithValidation}> */}
                     <Button variant="contained" size="large" onClick={handleSubmit}>
                         생성
                     </Button>
