@@ -645,7 +645,6 @@ const StudyNew = () => {
                                         Survey 연결
                                     </Button>
                                     {'  '}
-
                                     {titles ? (
                                         <span
                                             style={{
@@ -657,7 +656,7 @@ const StudyNew = () => {
                                         </span>
                                     ) : (
                                         <span style={{ color: 'red' }}>
-                                            {'  '}* Study 배포전에 반드시 연결해주세요.
+                                            * Study 배포전에 반드시 연결해주세요.
                                         </span>
                                     )}
                                 </Grid>
@@ -683,10 +682,21 @@ const StudyNew = () => {
                                         sx={{ width: '103.14px' }}
                                     >
                                         EIC 연결
-                                    </Button>
-                                    <span style={{ color: 'red' }}>
-                                        {'  '}* Study 배포전에 반드시 연결해주세요.
-                                    </span>
+                                    </Button>{' '}
+                                    {basePdfFile?.name ? (
+                                        <span
+                                            style={{
+                                                fontWeight: 'bold',
+                                                color: primary.main,
+                                            }}
+                                        >
+                                            {basePdfFile?.name}
+                                        </span>
+                                    ) : (
+                                        <span style={{ color: 'red' }}>
+                                            * Study 배포전에 반드시 연결해주세요.
+                                        </span>
+                                    )}
                                 </Grid>
                             </Grid>
 
