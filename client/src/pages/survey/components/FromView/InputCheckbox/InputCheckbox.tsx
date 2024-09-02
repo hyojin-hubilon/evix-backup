@@ -9,10 +9,11 @@ import { Typography } from "@mui/material";
 
 type InputCheckboxProps = {
 	cardId: string,
+	index : number,
 	changeIsRequired: (e:boolean) => void
 }
 
-const InputCheckbox = ({ cardId, changeIsRequired }: InputCheckboxProps) => {
+const InputCheckbox = ({ cardId, index, changeIsRequired }: InputCheckboxProps) => {
   	const exampleList = useSelector((state: PreviewStateProps) => {
     	const currentCard = state.previewCards.find((card) => card.cardId === cardId) as PreviewProps;
     	return currentCard.exampleList;
@@ -35,7 +36,8 @@ const InputCheckbox = ({ cardId, changeIsRequired }: InputCheckboxProps) => {
   	// }, [values, submitForm]);
 
   return (
-	<Field name={cardId} type="checkbox" validate={(value) => requiredCheck(value, ieReqired, changeIsRequired)}>
+	<Field name={`questions.${index}.answer`} type="checkbox">
+		{/* validate={(value) => requiredCheck(value, ieReqired, changeIsRequired)} 밸리데이트 YUP으로 변경하기*/}
 		{({
 		field, // { name, value, onChange, onBlur }
 		form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
@@ -47,7 +49,7 @@ const InputCheckbox = ({ cardId, changeIsRequired }: InputCheckboxProps) => {
 					<S.Checkbox
 						type="checkbox"
 						id={`checkbox-${example.question_no}-${example.example_no}`}
-						value={example.example_title}
+						value={example.example_value}
 						name={field.name}
 						onChange={(e) => {
 							field.onChange(e);

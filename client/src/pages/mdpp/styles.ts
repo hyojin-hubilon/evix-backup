@@ -1,5 +1,5 @@
 import { StudyParticipantStatus } from '@/types/participant';
-import { Box, Typography, TextField as MuiTextField, styled, Button } from '@mui/material';
+import { Box, styled, Button } from '@mui/material';
 
 export const Title = styled('h5')`
 	font-size: 18px;
@@ -29,6 +29,20 @@ export const GreyBox = styled(Box)(() => ({
 	}
 }))
 
+
+export const BlueBox = styled(Box)(() => ({
+	background: '#E7F2FD',
+	boxShadow: 'none',
+	padding:'16px',
+	borderRadius: '12px',
+	'h5' : {		
+		fontWeight:'600',
+		fontSize: '15px',
+		lineHeight : '19px',
+		letterSpacing: '-0.5px',
+		marginBottom:'12px'
+	}
+}))
 
 
 export const StudyStatus = styled(Box, {
@@ -99,3 +113,35 @@ export const RequireMark = styled('span')(({theme}) => ({
   	fontSize: '16px',
   	color: theme.palette.error.main
 }))
+
+
+export const SurveyStatus = styled(Box)(() => ({
+	fontSize: '12px',
+	fontWeight: 500,
+	lineHeight:'21px',
+	letterSpacing: '-0.05em',
+	padding: '0 4px',
+	minWidth: '66px',
+	height: '21px',
+	color: '#424242',
+	textAlign:'center',	
+  	backgroundColor: '#F6E676'
+}))
+
+export const SurveyDetail = styled('p')`
+	font-size: 13px;
+	font-weight: 500;
+	color: #7C818B;
+	line-height: 1;
+	margin-top:8px;
+	margin-bottom:7px;
+`
+
+export const SurveyTags = styled('p')`
+	font-size: 13px;
+	font-weight: 500;
+	color: #AFB3BA;
+	line-height: 1;
+	margin-top:0;
+	margin-bottom:0;
+`

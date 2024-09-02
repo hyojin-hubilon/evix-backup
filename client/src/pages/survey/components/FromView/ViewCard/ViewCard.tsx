@@ -10,28 +10,13 @@ import { useFormikContext } from "formik";
 import { useEffect, useState } from "react";
 
 type ViewCardProps = {
-	id: string
+	index: number;
+	card: PreviewProps
 }
 
-const ViewCard = ({id, ...props}: ViewCardProps) => {
-	const inputType = useSelector((state: PreviewStateProps) => {
-		const currentCard = state.previewCards.find((card) => card.cardId === id) as PreviewProps;
-		return currentCard.questionType;
-	}) as string;
-
-	const cardTitle = useSelector((state: PreviewStateProps) => {
-		const currentCard = state.previewCards.find((card) => card.cardId === id) as PreviewProps;
-		return currentCard.question;
-	}) as string;
-
-	const isRequired = useSelector((state: PreviewStateProps) => {
-		const currentCard = state.previewCards.find((card) => card.cardId === id) as PreviewProps;
-		return currentCard.isRequired;
-	}) as 'Y' | 'N';
-
+const ViewCard = ({index, card}: ViewCardProps) => {
 	const [needToCompleteRequired, setNeedToCompleteRequired] = useState(false);
 	
-
 	const changeIsRequired = (e) => {
 		setNeedToCompleteRequired(e);
 	}
@@ -47,14 +32,14 @@ const ViewCard = ({id, ...props}: ViewCardProps) => {
 		<S.SCard needToCompleteRequired={needToCompleteRequired}>
 			<Box mb={1}>
 				<Typography variant="h4">
-					{cardTitle}
-					{isRequired == 'Y' ? <S.RequireMark>*</S.RequireMark> : null}
+					{card.question}
+					{card.isRequired == 'Y' ? <S.RequireMark>*</S.RequireMark> : null}
 				</Typography>
 			</Box>
 			
-			{ inputType === QuestionTypes.WRITE ? <InputTextField cardId={id} changeIsRequired={changeIsRequired} /> : null } 
-			{ inputType === QuestionTypes.SINGLE ? <InputRadio cardId={id} changeIsRequired={changeIsRequired} /> : null }
-			{ inputType === QuestionTypes.MULTIPLE ? <InputCheckbox cardId={id} changeIsRequired={changeIsRequired} /> : null }
+			{ card.questionType === QuestionTypes.WRITE ? <InputTextField cardId={card.cardId} index={index} changeIsRequired={changeIsRequired} /> : null } 
+			{ (card.questionType  === QuestionTypes.SINGLE || card.questionType  === QuestionTypes.RADIO) ? <InputRadio cardId={card.cardId} index={index} changeIsRequired={changeIsRequired} /> : null }
+			{ card.questionType  === QuestionTypes.MULTIPLE ? <InputCheckbox cardId={card.cardId} index={index} changeIsRequired={changeIsRequired} /> : null }
 		</S.SCard>
 	)
 }

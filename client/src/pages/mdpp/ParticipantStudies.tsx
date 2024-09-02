@@ -5,9 +5,11 @@ import ParticipantStudyItem from './components/ParicipantStudyItem';
 import { ParticipantStudyList } from '@/types/participant';
 import participantStudyApi from '@/apis/participantStudy';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ParticipantStudies = () => {
     const [participantStudy, setParticipantStudy] = useState<ParticipantStudyList[]>([]);
+	const navigate = useNavigate();
 
     useEffect(() => {
         login(); //TODO: 임시 로그인임,  삭제 처리할 것..
@@ -16,6 +18,7 @@ const ParticipantStudies = () => {
 
     const login = async () => {
         const response = await participantStudyApi.login();
+		console.log(response);
     };
     const fetchStudyList = async () => {
         try {
@@ -30,6 +33,10 @@ const ParticipantStudies = () => {
         }
     };
 
+	const selectStudy = (study : ParticipantStudyList) => {
+		navigate(`/mdpp/study/${study.std_no}/surveys`);
+	}
+
     return (
         <Box sx={{ bgcolor: 'white', minHeight: '100vh', pt: '22px' }}>
             <MdppHeader title="임상연구 설문 참여" backBtn></MdppHeader>
@@ -42,7 +49,7 @@ const ParticipantStudies = () => {
 
             <Box mt="21px" borderTop="1px solid #E0E5E9">
                 {participantStudy.map((study, index) => (
-                    <ParticipantStudyItem study={study} key={study.std_no} />
+                    <ParticipantStudyItem study={study} selectStudy={selectStudy} key={study.std_no} />
                 ))}
             </Box>
             <Box p="50px 23px">

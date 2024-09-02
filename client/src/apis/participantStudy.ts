@@ -1,3 +1,4 @@
+import { ParticipantStudyDetail, ParticipantSurveySet } from '@/types/participant';
 import { api, ResCommonError } from './axios-common';
 
 const BASE_API_URL = '/participant/study';
@@ -26,6 +27,24 @@ const participantStudyApi = {
             throw e;
         }
     },
+	studyDetail: async (stdNo) => {
+		try {
+            const responseData = await api<ParticipantStudyDetail>(`${BASE_API_URL}/${stdNo}`, 'get');
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+	},
+	studySurveyList: async (stdNo) => {
+        try {
+            const responseData = await api<ParticipantSurveySet[]>(`${BASE_API_URL}/${stdNo}/survey-set`, 'get');
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    }
 };
 
 export default participantStudyApi;
