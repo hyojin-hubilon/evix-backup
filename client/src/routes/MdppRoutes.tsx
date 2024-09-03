@@ -2,6 +2,7 @@ import MinimalLayout from "@/layout/MinimalLayout";
 import EICAgreement from "@/pages/mdpp/EICAgreement";
 import MdppSurvey from "@/pages/mdpp/MdppSurvey";
 import ParticipantStudies from "@/pages/mdpp/ParticipantStudies";
+import ParticipantSurveys from "@/pages/mdpp/ParticipantSurveys";
 
 const MdppRoutes = {
     path: '/mdpp',
@@ -12,11 +13,15 @@ const MdppRoutes = {
             element: <ParticipantStudies />,
         },
 		{
-            path: 'eic/:stdNo',
+            path: 'study/:stdNo/surveys',
+            element: <ParticipantSurveys />,
+        },
+		{
+            path: 'eic',
             element: <EICAgreement />,
         },
 		{
-			path: 'survey/:survey_no',
+			path: 'survey/:setNo/:surveyNo/:surveyCycle/:surveyTurn',
 			element: <MdppSurvey />
 		}
 	]

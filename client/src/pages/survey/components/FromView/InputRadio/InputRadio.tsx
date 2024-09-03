@@ -9,10 +9,11 @@ import { Typography } from "@mui/material";
 
 type InputRadioProps = {
 	cardId: string,
+	index: number,
 	changeIsRequired: (e:boolean) => void
 }
 
-const InputRadio = ({ cardId, changeIsRequired }: InputRadioProps) => {
+const InputRadio = ({ cardId, index, changeIsRequired }: InputRadioProps) => {
 	const etcRef = useRef<HTMLInputElement>(null);
   	const etcRefRadio = useRef<HTMLInputElement>(null);
 
@@ -29,7 +30,8 @@ const InputRadio = ({ cardId, changeIsRequired }: InputRadioProps) => {
 	
 
 	return (
-		<Field name={cardId} type="radio" validate={(value) => requiredCheck(value, ieReqired, changeIsRequired)}>
+		<Field name={`questions.${index}.answer`}  type="radio">
+			{/* validate={(value) => requiredCheck(value, ieReqired, changeIsRequired)} 밸리데이트 YUP으로 변경하기 */}
 			{({
 				field,
 				form: { touched, errors },
@@ -43,7 +45,7 @@ const InputRadio = ({ cardId, changeIsRequired }: InputRadioProps) => {
 								type="radio"
 								name={field.name}
 								id={`radio-${example.question_no}-${example.example_no}`}
-								value={example.example_type === ExampleTypes.OTHER ? etcRef.current?.value : example.example_title}
+								value={example.example_type === ExampleTypes.OTHER ? etcRef.current?.value : example.example_value}
 								onChange={(e) => field.onChange(e)}
 							/>
 							<S.Label htmlFor={`radio-${example.question_no}-${example.example_no}`}>

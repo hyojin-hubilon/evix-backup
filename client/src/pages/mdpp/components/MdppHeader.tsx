@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as S from '../styles';
 
 type MdppHeaderType = {
-	title:string;
+	title?:string;
 	backBtn?: boolean;
 }
 const MdppHeader = ({title, backBtn}:MdppHeaderType) => {

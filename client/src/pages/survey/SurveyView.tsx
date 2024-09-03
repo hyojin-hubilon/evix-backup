@@ -1,7 +1,7 @@
 import surveyApi from "@/apis/survey";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { QuestionList, SurveyDetail } from '@/types/survey';
+import { QuestionList, QuestionTypes, SurveyDetail } from '@/types/survey';
 import { Box, Button, Card, Typography, useTheme } from "@mui/material";
 import ViewCard from "./components/FromView/ViewCard/ViewCard";
 import * as S from './components/FromView/ViewCard/styles';
@@ -126,9 +126,14 @@ const SurveyView = ({preview, surveyNo} : SurveyViewProps) => {
 				>
 				<Form>
 					<Box display="flex" flexDirection="column" gap={2}>
-						{
-							previewCards && previewCards.map((card, index) => <ViewCard key={index} id={card.cardId} />)
-						}
+					{
+						previewCards && previewCards.map((card, index) => {
+							const nameOfA = QuestionTypes[card.questionType]; //QuestionType Parent 일단 뺌
+							return (
+								nameOfA && <ViewCard key={index} id={card.cardId} index={index} />
+							)
+						})
+					}
 						<Button variant="contained" color="primary" type="submit" disabled={preview ? true : false} fullWidth>제출하기</Button>
 					</Box>
 				</Form>

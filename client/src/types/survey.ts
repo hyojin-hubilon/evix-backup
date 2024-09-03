@@ -96,9 +96,13 @@ export interface SurveyExample {//RequestBody Survey
 export enum QuestionTypes {
 	TITLE = "TITLE",
 	SINGLE = "SINGLE",
+	RADIO = "RADIO",
 	MULTIPLE = "MULTIPLE",
 	WRITE = "WRITE"
 }
+
+export type TQuestionTypes = keyof typeof QuestionTypes;
+
 // 서베이에서 질문타입이 다중선택일 경우
 // example_value 값을 이진법으로 1,2,4,8,16,32 
 

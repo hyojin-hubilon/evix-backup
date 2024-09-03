@@ -83,9 +83,10 @@ interface StudyInfoProps {
         }[];
     };
     ownerId: number;
+    onSurveyClose: () => void;
 }
 
-const StudyInfo = ({ studyDetail, ownerId }: StudyInfoProps) => {
+const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
     const theme = useTheme();
     const navigate = useNavigate();
 
@@ -112,6 +113,7 @@ const StudyInfo = ({ studyDetail, ownerId }: StudyInfoProps) => {
 
     const handleCloseSurvey = () => {
         setIsOpenSurvey(!isOpenSurvey);
+        onSurveyClose();
     };
 
     const statusLabel = STUDY_STATUS[studyDetail.std_status as STUDY_STATUS_KEY];
@@ -349,9 +351,6 @@ const StudyInfo = ({ studyDetail, ownerId }: StudyInfoProps) => {
                                             >
                                                 <li>업체명: {studyDetail.drug_brand_name}</li>
                                                 <li>품목기준코드: {studyDetail.drug_code}</li>
-                                                {/* <li>품목구분: 의약품</li>
-                                                <li>허가번호: 8</li>
-                                                <li>허가일: 2004-06-24</li> */}
                                             </ul>
                                         </Card>
                                     </Box>

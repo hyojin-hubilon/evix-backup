@@ -2,57 +2,40 @@ import { Box, Card, Typography } from '@mui/material';
 import MdppHeader from './components/MdppHeader';
 import * as S from './styles';
 import ParticipantStudyItem from './components/ParicipantStudyItem';
-import { StudyForParticipant, StudyParticipantStatus } from '@/types/participant';
+import { ParticipantStudyList } from '@/types/participant';
 import participantStudyApi from '@/apis/participantStudy';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const tempStudies: StudyForParticipant[] = [
-    {
-        status: StudyParticipantStatus.NEED_EIC,
-        title: '에버액스 디지털 치료기기 사...',
-        start_date: null,
-        end_date: '2024.12.31',
-        organization: '고대구로병원',
-        survey_cycle: 'WEEK',
-        number_in_cycle: 1,
-        number_of_participation: 0, //0일때 = 참여 대기중
-    },
-    {
-        status: StudyParticipantStatus.IN_PROGRESS,
-        title: '펜터민 효과성 임상연구',
-        start_date: null,
-        end_date: '2024.12.31',
-        organization: '서울대학교병원',
-        survey_cycle: 'WEEK',
-        number_in_cycle: 1,
-        number_of_participation: 3,
-    },
-    {
-        status: StudyParticipantStatus.DONE, //참여완료
-        title: '마이녹실액3% 효과 임상연구',
-        start_date: '2023.01.20',
-        end_date: '2023.05.15',
-        organization: '서울아산병원',
-        survey_cycle: 'MONTH',
-        number_in_cycle: 1,
-        number_of_participation: 5,
-    },
-];
 const ParticipantStudies = () => {
-    // 임시로 로그인, 쿠키 데이터
+    const [participantStudy, setParticipantStudy] = useState<ParticipantStudyList[]>([]);
+	const navigate = useNavigate();
+
     useEffect(() => {
-        login();
+        login(); //TODO: 임시 로그인임,  삭제 처리할 것..
         fetchStudyList();
     }, []);
 
     const login = async () => {
         const response = await participantStudyApi.login();
+		console.log(response);
+    };
+    const fetchStudyList = async () => {
+        try {
+            const response = await participantStudyApi.studyList();
+            const content = response.content as { studyMyList: ParticipantStudyList[] };
+
+            if (content.studyMyList) {
+                setParticipantStudy(content.studyMyList);
+            }
+        } catch (error) {
+            console.error('Failed to get participants study list', error);
+        }
     };
 
-    const fetchStudyList = async () => {
-        const response = await participantStudyApi.studyList();
-        console.log(response.content);
-    };
+	const selectStudy = (study : ParticipantStudyList) => {
+		navigate(`/mdpp/study/${study.std_no}/surveys`);
+	}
 
     return (
         <Box sx={{ bgcolor: 'white', minHeight: '100vh', pt: '22px' }}>
@@ -63,9 +46,10 @@ const ParticipantStudies = () => {
                     진행해 주세요.
                 </S.CommonText>
             </Box>
+
             <Box mt="21px" borderTop="1px solid #E0E5E9">
-                {tempStudies.map((study, index) => (
-                    <ParticipantStudyItem study={study} key={index} />
+                {participantStudy.map((study, index) => (
+                    <ParticipantStudyItem study={study} selectStudy={selectStudy} key={study.std_no} />
                 ))}
             </Box>
             <Box p="50px 23px">

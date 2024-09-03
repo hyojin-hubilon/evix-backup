@@ -39,9 +39,6 @@ const DraggableListItem = ({
     const handleDeleteSurvey = () => {
         deleteItem(survey);
     };
-    // const handleDeleteSurvey = (surveyNo: number) => {
-    //     deleteItem(surveyNo);
-    // };
 
     return (
         <Draggable draggableId={item.title} index={index}>
@@ -69,6 +66,7 @@ const DraggableListItem = ({
                             value={survey.frequency}
                             onChange={(e) => handleChangeFrequency(e.target.value)}
                             sx={{ width: '60px', bgcolor: 'white' }}
+                            disabled={mode === 'edit'}
                         >
                             <MenuItem value="monthly">월</MenuItem>
                             <MenuItem value="weekly">주</MenuItem>
@@ -80,6 +78,7 @@ const DraggableListItem = ({
                             value={survey.times}
                             onChange={(e) => handleChangeTimes(e.target.value)}
                             sx={{ width: '60px', bgcolor: 'white' }}
+                            disabled={mode === 'edit'}
                         >
                             <MenuItem value={1}>1</MenuItem>
                             <MenuItem value={2}>2</MenuItem>
@@ -87,7 +86,6 @@ const DraggableListItem = ({
                         </Select>
                         회 반복
                         <Button color="error" onClick={() => handleDeleteSurvey()}>
-                            {/* <Button color="error" onClick={() => handleDeleteSurvey(item.survey_no)}> */}
                             삭제
                         </Button>
                     </Grid>

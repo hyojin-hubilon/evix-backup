@@ -54,12 +54,13 @@ export const axios_instance = Axios.create({
     },
 });
 
-const ignoreUrl = ['/auth/login'];
+const ignoreAPIUrl = ['/auth/login'];
+const ignoreMdppUrl = '/mdpp';
 
-axios_instance.interceptors.response.use(
+axios_instance.interceptors.response.use( //MDPP 제외
     (response) => response,
     (error) => {
-        if (ignoreUrl.indexOf(error?.response?.config?.url) === -1) {
+        if (ignoreAPIUrl.indexOf(error?.response?.config?.url) === -1 && location.href.indexOf(ignoreMdppUrl) === -1) {
             if ([401, 403, 404].includes(error?.response?.status)) {
                 if (typeof window !== 'undefined') {
                     location.href = '/login';
@@ -84,7 +85,7 @@ export const axios_file_instance = Axios.create({
 axios_file_instance.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (ignoreUrl.indexOf(error?.response?.config?.url) === -1) {
+        if (ignoreAPIUrl.indexOf(error?.response?.config?.url) === -1) {
             if ([401, 403, 404].includes(error?.response?.status)) {
                 if (typeof window !== 'undefined') {
                     location.href = '/login';

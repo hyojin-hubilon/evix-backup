@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ExampleList, QuestionTypes } from "@/types/survey";
+import { ParticipantSurveyExampleList } from "@/types/participant";
 
 export interface PreviewStateProps {
 	previewCards: PreviewProps[];
@@ -9,7 +10,7 @@ export interface PreviewProps {
 	cardId: string;
 	question: string;
 	questionType: QuestionTypes;
-	exampleList: ExampleList[];
+	exampleList: ExampleList[] |  ParticipantSurveyExampleList[];
 	isRequired: 'Y' | 'N';
 }
 
@@ -18,7 +19,7 @@ interface ActionProps {
 	payload: PreviewProps;
 }
 
-const createNewPreview = (cardId: string, question: string, questionType: QuestionTypes, exampleList: ExampleList[], isRequired: 'Y' | 'N' ) => ({
+const createNewPreview = (cardId: string, question: string, questionType: QuestionTypes, exampleList: ExampleList[] | ParticipantSurveyExampleList[], isRequired: 'Y' | 'N' ) => ({
 	cardId: cardId,
 	question:question,
 	questionType: questionType,
