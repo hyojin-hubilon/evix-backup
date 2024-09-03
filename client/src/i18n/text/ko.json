@@ -1,13 +1,15 @@
 {
     "common": {
-        "home": "홈",
-        "products": "제품",
-        "case": "사례",
-        "price": "요금안내",
-        "support": "고객지원",
-        "privacy" : "개인정보처리방침",
-        "terms" : "이용 약관",
-        "cookie_policy" : "쿠키 정책"
+        "home": "Home",
+        "products": "Products",
+        "case": "Case",
+        "price": "Price",
+        "support": "Support",
+        "privacy" : "Privacy",
+        "terms" : "Terms",
+        "cookie_policy" : "Cookie Policy",
+		"demo" : "Demo",
+		"login" : "Login"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -129,5 +131,8 @@
     "study": {},
     "survey": {},
     "user": {},
-    "my_page": {}
+    "my_page": {},
+	"nav": {
+		"welcome" : "님 안녕하세요"
+	}
 }
