@@ -143,7 +143,6 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
 
     const handleEdit = async (jsonTemplate: Blob) => {
         const studyData: StudyDetail = studyDetail;
-        console.log(studyData);
 
         // FormData 객체 생성 및 데이터 추가
         const formData = new FormData();

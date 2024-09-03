@@ -12,7 +12,7 @@ const MdppRoutes = {
             element: <ParticipantStudies />,
         },
 		{
-            path: 'eic',
+            path: 'eic/:stdNo',
             element: <EICAgreement />,
         },
 		{
