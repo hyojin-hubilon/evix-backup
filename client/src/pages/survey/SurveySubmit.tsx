@@ -102,7 +102,7 @@ const SurveySubmit = () => {
 				<Form>
 					<Box display="flex" flexDirection="column" gap={2}>
 						{
-							previewCards && previewCards.map((card, index) => <ViewCard key={index} id={card.cardId} />)
+							previewCards && previewCards.map((card, index) => <ViewCard key={index} index={index} card={card} />)
 						}
 						<Button variant="contained" color="primary" type="submit" fullWidth>제출하기</Button>
 					</Box>
