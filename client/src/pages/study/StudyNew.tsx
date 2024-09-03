@@ -472,7 +472,7 @@ const StudyNew = () => {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
-                                {/* <FormHelperText error>{errors.title}</FormHelperText> */}
+                                <FormHelperText error>{errors.title}</FormHelperText>
                             </FormControl>
                         </Grid>
                     </Grid>
