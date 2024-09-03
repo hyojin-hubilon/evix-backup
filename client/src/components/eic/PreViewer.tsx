@@ -9,6 +9,7 @@ import {
     handlePreviewTemplate,
 } from './helper';
 import { ConsoleView } from 'react-device-detect';
+import { Button, DialogActions } from '@mui/material';
 
 const headerHeight = 71;
 
@@ -33,8 +34,9 @@ export const initTemplate = () => {
 const Previewer = ({ eicFile, onClose }) => {
     const uiRef = useRef<HTMLDivElement | null>(null);
     const ui = useRef<Form | Viewer | null>(null);
-    const [prevUiRef, setPrevUiRef] = 
-    useState<MutableRefObject<HTMLDivElement | Form | Viewer | null> | null>(null);
+    const [prevUiRef, setPrevUiRef] = useState<MutableRefObject<
+        HTMLDivElement | Form | Viewer | null
+    > | null>(null);
 
     const mode: Mode = 'form';
 
@@ -103,8 +105,24 @@ const Previewer = ({ eicFile, onClose }) => {
                 }}
             >
                 <strong>Preview</strong>
-                <button onClick={onClose}>Close</button>
-                <button onClick={() => generatePDF(ui.current)}>Preview PDF</button>
+                <DialogActions>
+                    <Button
+                        sx={{ width: '40%', height: '40px' }}
+                        variant="outlined"
+                        color="primary"
+                        onClick={onClose}
+                    >
+                        Close
+                    </Button>
+                    <Button
+                        sx={{ width: '40%', height: '40px' }}
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => generatePDF(ui.current)}
+                    >
+                        Preview PDF
+                    </Button>
+                </DialogActions>
             </header>
             <div ref={uiRef} style={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }} />
         </div>
