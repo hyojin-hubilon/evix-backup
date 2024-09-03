@@ -99,9 +99,27 @@ const MdppSurvey = () => {
             }
 	}
 
-	const handleSumbit = (values) => {
+	const handleSumbit = (values: InitialValuesType) => {
+		console.log(values);
 		let answers : SurveyAnswer[] = [];
+		let answerWrite : string | number | [] | null = null;
 		values.questions.forEach((value, index) => {
+			let answerSelect: string | number | null | [] =  null;
+			if (value.questionType === QuestionTypes.RADIO || value.questionType === QuestionTypes.SINGLE) {
+				answerSelect = value.answer;
+			}
+
+			if(value.questionType == QuestionTypes.MULTIPLE && Array.isArray(value.answer)) {
+				answerSelect =  value.answer.reduce((partialSum, a) => partialSum + Number(a), 0);
+				console.log(answerSelect);
+			}
+
+			if(value.questionType == QuestionTypes.WRITE) {
+				answerWrite = value.answer;
+			}
+
+			
+
 			const answer = {
 				set_no: Number(setNo),
 				survey_no: Number(surveyNo),
@@ -110,12 +128,12 @@ const MdppSurvey = () => {
 				
 				question_no: value.question_no,
 				answer_select: (value.questionType == 'RADIO' || value.questionType == 'MULTIPLE') ? value.answer : null,
-				answer_write: value.questionType == 'WRITE' ? value.answer : null
+				answer_write: answerWrite
 			}
 
-// 			answer_select: 선택 답변 값 더해서 MULTIPLE일때 [2,4]<이렇게 아님
-// other 가 있을 경우도 select 값은 더해서,
-// other 텍스트는 answer_write 에
+			// answer_select: 선택 답변 값 더해서 MULTIPLE일때 [2,4]<이렇게 아님
+			// other 가 있을 경우도 select 값은 더해서,
+			// other 텍스트는 answer_write 에
 			
 			answers.push(answer);
 		})
