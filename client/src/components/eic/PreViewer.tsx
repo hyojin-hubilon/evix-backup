@@ -11,7 +11,7 @@ import {
 import { ConsoleView } from 'react-device-detect';
 import { Button, DialogActions } from '@mui/material';
 
-const headerHeight = 71;
+const headerHeight = 200;
 
 type Mode = 'form' | 'viewer';
 
@@ -105,9 +105,12 @@ const Previewer = ({ eicFile, onClose }) => {
                 }}
             >
                 <strong>Preview</strong>
-                <DialogActions>
+                
+            </header>
+            <div ref={uiRef} style={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }} />
+			<DialogActions>
                     <Button
-                        sx={{ width: '40%', height: '40px' }}
+                       
                         variant="outlined"
                         color="primary"
                         onClick={onClose}
@@ -115,16 +118,14 @@ const Previewer = ({ eicFile, onClose }) => {
                         Close
                     </Button>
                     <Button
-                        sx={{ width: '40%', height: '40px' }}
-                        variant="outlined"
+                       
+                        variant="contained"
                         color="primary"
                         onClick={() => generatePDF(ui.current)}
                     >
                         Preview PDF
                     </Button>
                 </DialogActions>
-            </header>
-            <div ref={uiRef} style={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }} />
         </div>
     );
 };

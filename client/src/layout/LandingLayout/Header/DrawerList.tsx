@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import { Link as ReactRouterLink } from 'react-router-dom';
 
 import { Box, List, ListItem, ListItemButton, Button, Divider, Link} from "@mui/material";
+import { t } from "i18next";
 
 type Props = {
 	handleDrawerToggle: () => void;
@@ -45,8 +46,8 @@ const DrawerList = ({handleDrawerToggle} : Props) => {
 			<List>
 			<ListItem>
 				<Box display="flex" gap={2}>
-				<Button variant='contained' onClick={toDemoPage} sx={{fontSize: "0.9rem"}}>Demo</Button>
-				<Button variant='contained' sx={{backgroundColor: '#091C3D', fontSize: "0.9rem"}} onClick={toLoginPage}>Login</Button>
+				<Button variant='contained' onClick={toDemoPage} sx={{fontSize: "0.9rem"}}>{t('common.demo')}</Button>
+				<Button variant='contained' sx={{backgroundColor: '#091C3D', fontSize: "0.9rem"}} onClick={toLoginPage}>{t('common.login')}</Button>
 				</Box>
 			</ListItem>
 			</List>

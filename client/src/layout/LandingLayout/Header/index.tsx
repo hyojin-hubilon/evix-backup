@@ -104,14 +104,14 @@ const LandingHeader = ({ open, handleDrawerToggle }: Props) => {
                     sx={{ display: 'flex', gap: 1 }}
                 >
                     <Button variant="contained" onClick={toDemoPage} sx={{ fontSize: '1rem' }}>
-                        Demo
+                        {t('common.demo')}
                     </Button>
                     <Button
                         variant="contained"
                         sx={{ backgroundColor: '#091C3D', fontSize: '1rem' }}
                         onClick={toLoginPage}
                     >
-                        Login
+						{t('common.login')}
                     </Button>
                 </Grid>
             </Grid>
