@@ -1,7 +1,5 @@
-import { QuestionTypes, SurveyExample, SurveyQuestion } from "@/types/survey";
-import { Card, Box, TextField, Select, MenuItem, Radio, IconButton, Divider, Tooltip, Switch, useTheme, FormControlLabel } from "@mui/material";
-import { ClearIcon } from "@mui/x-date-pickers";
-import { useEffect, useState } from "react";
+import { QuestionTypes } from "@/types/survey";
+import { Card, Box, IconButton, Divider, Tooltip, Switch, useTheme, FormControlLabel } from "@mui/material";
 
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';

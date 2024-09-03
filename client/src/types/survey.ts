@@ -33,7 +33,7 @@ export interface QuestionList {
 export interface SurveyDetail {
 	survey_no: number,
 	title: string,
-	diseases: string,
+	disease: string,
 	description: string,
 	translation: string,
 	sample_yn: string, // Y | N?
@@ -126,7 +126,7 @@ export interface SurveyQuestion {
 
 export interface SurveyPostReqBody {
 	title: string,
-	diseases?: string,
+	disease?: string,
 	description: string, //영문
 	translation?: string, //한글변역?
 	sample_yn?: string, //Y|N
