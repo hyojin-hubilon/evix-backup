@@ -9,11 +9,10 @@ import { Typography } from "@mui/material";
 
 type InputCheckboxProps = {
 	cardId: string,
-	index : number,
-	changeIsRequired: (e:boolean) => void
+	questionIndex : number
 }
 
-const InputCheckbox = ({ cardId, index, changeIsRequired }: InputCheckboxProps) => {
+const InputCheckbox = ({ cardId, questionIndex }: InputCheckboxProps) => {
   	const exampleList = useSelector((state: PreviewStateProps) => {
     	const currentCard = state.previewCards.find((card) => card.cardId === cardId) as PreviewProps;
     	return currentCard.exampleList;
@@ -36,8 +35,7 @@ const InputCheckbox = ({ cardId, index, changeIsRequired }: InputCheckboxProps) 
   	// }, [values, submitForm]);
 
   return (
-	<Field name={`questions.${index}.answer`} type="checkbox">
-		{/* validate={(value) => requiredCheck(value, ieReqired, changeIsRequired)} 밸리데이트 YUP으로 변경하기*/}
+	<Field name={`questions.${questionIndex}.answerMultiple`} type="checkbox">
 		{({
 		field, // { name, value, onChange, onBlur }
 		form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
@@ -61,7 +59,7 @@ const InputCheckbox = ({ cardId, index, changeIsRequired }: InputCheckboxProps) 
 							<S.EtcContainer>
 								<span>기타 : </span>
 								<S.TextField
-									name={cardId}
+									name={`questions.${questionIndex}.answerEtc`}
 									variant="standard"
 									onChange={(e) => field.onChange(e)}
 								/>
@@ -72,7 +70,11 @@ const InputCheckbox = ({ cardId, index, changeIsRequired }: InputCheckboxProps) 
 					</S.Label>	
 				</S.CheckboxContainer>
 			))}
-			{ errors[cardId] && touched[cardId] && <Typography paddingTop="0.5rem" sx={{display:'block', color: 'red'}}>{ errors[cardId] }</Typography>}
+			{ errors.questions && errors.questions[questionIndex] && errors.questions[questionIndex].answerMultiple
+ 				?
+				//  { errors.questions[questionIndex].answerMultiple }
+				<Typography paddingTop="0.5rem" sx={{display:'block', color: 'red'}}>필수 항목입니다.</Typography> : ''
+			}
 		</S.Container>
 		)}
 	</Field>
