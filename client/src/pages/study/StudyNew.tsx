@@ -635,7 +635,7 @@ const StudyNew = () => {
                                         Survey 연결
                                     </Button>
                                     {'  '}
-                                    {titles ? (
+                                    {titles.length > 0 ? (
                                         <span
                                             style={{
                                                 fontWeight: 'bold',
