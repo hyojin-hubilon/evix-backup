@@ -170,11 +170,11 @@ export interface ParticipantSurveyDetail  {
 }
 
 export interface SurveyAnswer {
-	set_no: number, //152,
-	survey_no: number, //93,
-	answer_cycle: string | Date | undefined, //"2024-08-08(일) or 2024/34(주) or 2024-08(월)",
-	answer_turn: number, //1,
-	question_no: number, //1,
-	answer_select: number, // 1,
-	answer_write: string //"1"
+	set_no: number,
+	survey_no: number,
+	answer_cycle: string | Date | undefined,
+	answer_turn: number,
+	question_no: number,
+	answer_select: string | number | [] | null,
+	answer_write: string | number | [] | null
 }
