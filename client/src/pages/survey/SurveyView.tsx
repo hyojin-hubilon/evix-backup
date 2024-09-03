@@ -130,7 +130,12 @@ const SurveyView = ({preview, surveyNo} : SurveyViewProps) => {
 						previewCards && previewCards.map((card, index) => {
 							const nameOfA = QuestionTypes[card.questionType]; //QuestionType Parent 일단 뺌
 							return (
-								nameOfA && <ViewCard key={index} id={card.cardId} index={index} />
+								nameOfA &&
+								<ViewCard 
+									key={index}
+									index={index}
+									card={card}
+							/>
 							)
 						})
 					}
