@@ -12,6 +12,7 @@ import MdppHeader from "./components/MdppHeader";
 import participantSurveyApi from "@/apis/participantSurvey";
 import { ParticipantSurveyDetail, ParticipantSurveyQuestionList, SurveyAnswer } from "@/types/participant";
 import * as Yup from 'yup';
+import { setAlert } from "@/store/reducers/snack";
 
 
 type InitialValues = {
@@ -122,7 +123,7 @@ const MdppSurvey = () => {
 	const postSurvey = async (surveyAnswers) => {
 		const response = await participantSurveyApi.postSurveyAnswer(surveyAnswers);
             if (response.result && response.code === 200) {
-                const survey = response.content;	
+				// dispatch(setAlert({ alertOpen: true, alertText: '설문에 참여해주셔서 감사합니다.', alertType: 'suceess' }));	디자인.. 안맞음. 교체예정
             }
 	}
 
