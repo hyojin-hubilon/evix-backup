@@ -1,13 +1,11 @@
-import { QuestionList, QuestionTypes } from "@/types/survey";
+import { QuestionTypes } from "@/types/survey";
 import * as S from './styles';
 import { Box, Typography } from "@mui/material";
 import InputTextField from "../InputTextField";
 import InputRadio from "../InputRadio/InputRadio";
-import { useSelector } from "react-redux";
-import { PreviewProps, PreviewStateProps } from "@/store/reducers/preview";
+import { PreviewProps } from "@/store/reducers/preview";
 import InputCheckbox from "../InputCheckbox/InputCheckbox";
-import { useFormikContext } from "formik";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type ViewCardProps = {
 	index: number;
@@ -37,9 +35,9 @@ const ViewCard = ({index, card}: ViewCardProps) => {
 				</Typography>
 			</Box>
 			
-			{ card.questionType === QuestionTypes.WRITE ? <InputTextField cardId={card.cardId} index={index} changeIsRequired={changeIsRequired} /> : null } 
-			{ (card.questionType  === QuestionTypes.SINGLE || card.questionType  === QuestionTypes.RADIO) ? <InputRadio cardId={card.cardId} index={index} changeIsRequired={changeIsRequired} /> : null }
-			{ card.questionType  === QuestionTypes.MULTIPLE ? <InputCheckbox cardId={card.cardId} index={index} changeIsRequired={changeIsRequired} /> : null }
+			{ card.questionType === QuestionTypes.WRITE ? <InputTextField cardId={card.cardId} questionIndex={index}  /> : null } 
+			{ (card.questionType  === QuestionTypes.SINGLE || card.questionType  === QuestionTypes.RADIO) ? <InputRadio cardId={card.cardId} questionIndex={index}  /> : null }
+			{ card.questionType  === QuestionTypes.MULTIPLE ? <InputCheckbox cardId={card.cardId} questionIndex={index}  /> : null }
 		</S.SCard>
 	)
 }

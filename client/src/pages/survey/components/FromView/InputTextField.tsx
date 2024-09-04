@@ -9,11 +9,10 @@ import { useSelector } from "react-redux";
 
 type InputTextFieldProps = {
 	cardId: string,
-	index:number,
-	changeIsRequired: (e:boolean) => void
+	questionIndex:number
 }
 
-const InputTextField = ({ cardId, index, changeIsRequired }: InputTextFieldProps) => {
+const InputTextField = ({ cardId, questionIndex }: InputTextFieldProps) => {
 	const ieReqired = useSelector((state: PreviewStateProps) => {
     	const currentCard = state.previewCards.find((card) => card.cardId === cardId) as PreviewProps;
     	return currentCard.isRequired;
@@ -21,17 +20,21 @@ const InputTextField = ({ cardId, index, changeIsRequired }: InputTextFieldProps
 
 	  
 	return(
-		<Field name={`questions.${index}.answer`} type="text">
-			 {/* validate={(value) => requiredCheck(value, ieReqired, changeIsRequired)} 밸리데이트 YUP으로 변경하기 */}
+		<Field name={`questions.${questionIndex}.answer`} type="text">
 			{({
 				field,
 				form: { touched, errors },
-			}) => (
+			}) => {
+				console.log(errors)
+				return (
 				<>
 					<TextField size="small" name={field.name} onChange={(e) => field.onChange(e)} />
-					{ errors[cardId] && touched[cardId] && <Typography paddingTop="0.5rem" sx={{display:'block', color: 'red'}}>{ errors[cardId] }</Typography>}
+					{ errors[field.name] && touched[field.name] && <Typography paddingTop="0.5rem" sx={{display:'block', color: 'red'}}>{ errors[field.name] }</Typography>}
+					{ errors.questions && errors.questions[questionIndex] && errors.questions[questionIndex].answer ?
+						<Typography paddingTop="0.5rem" sx={{display:'block', color: 'red'}}>{ errors.questions[questionIndex].answer }</Typography> : ''
+					}
 				</>
-			)}
+			)}}
 		</Field>
 	)
 }
