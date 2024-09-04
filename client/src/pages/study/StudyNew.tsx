@@ -18,7 +18,6 @@ import {
     Button,
     Divider,
 } from '@mui/material';
-import * as Yup from 'yup'; // 유효성 검사
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 import DateRangePicker, { DateRage } from './components/study-new/Daterangepicker';
@@ -29,12 +28,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Drug } from '@/apis/test/drug/drugsAPI_TEST';
 import userApi from '@/apis/user';
 import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
-import { InviteMemberTempType, StudyDetail } from '@/types/study';
+import { InviteMemberTempType, StudyDetail, StudySurveySetList } from '@/types/study';
 import MemberInvitement from './components/study-new/MemberInvitement';
 import MemberManagement from './components/study-new/MemberManagement';
 import StudyDeleteConfirmDialog from './components/study-new/StudyDeleteConfirmDialog';
 import { MyProfile } from '@/types/user';
-import { useFormik } from 'formik';
 import EicParent from './components/eic/EicParent';
 
 const FormTooltip = ({ text }) => {
@@ -64,9 +62,11 @@ const StudyNew = () => {
     const [isOpenSurvey, setIsOpenSurvey] = useState(false);
     const [inviteList, setInviteList] = useState<InviteMemberTempType[]>([]);
     const [managerList, setManagerList] = useState<any[]>([]);
-    const [studySurveySetList, setStudySurveySetList] = useState<any[]>([]);
+    const [studySurveySetList, setStudySurveySetList] = useState<StudySurveySetList[]>([]);
 
     const [members, setMembers] = useState<InviteMemberTempType[]>([]);
+
+	const [titles, setTitles] = useState<string[]>();
 
     const [drug, setDrug] = useState<Drug>();
     const [country, setCountry] = useState('KO_KR');
@@ -143,9 +143,20 @@ const StudyNew = () => {
         }
     };
 
-    const titles = studySurveySetList.map((cycle: any) => {
-        return cycle.surveyList.map((survey: any) => survey.title).join(', ');
-    });
+    // const titles = studySurveySetList.map((cycle: any) => {
+    //     return cycle.surveyList.map((survey: any) => survey.title).join(', ');
+    // });
+
+	useEffect(() => {
+		if(studySurveySetList) {
+			const titles = studySurveySetList.map((cycle: any) => {
+				return cycle.surveyList.map((survey: any) => survey.title).join(', ');
+			});	
+			setTitles(titles);
+		}
+		
+	
+	}, [studySurveySetList])
 
     const handleSubmit = async () => {
         if (validate()) {
