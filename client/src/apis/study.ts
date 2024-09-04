@@ -37,7 +37,7 @@ const studyApi = {
      */
     updateStudy: async (data: any) => {
         try {
-            const responseData = await file_api<{}>(`${BASE_API_URL}`, 'put', data);
+            const responseData = await api<{}>(`${BASE_API_URL}/basic-info`, 'put', data);
             console.log('responseData', responseData);
             console.log('data', data);
             return responseData;
@@ -274,7 +274,8 @@ const studyApi = {
      */
     deployStudy: async (deployData) => {
         try {
-            const response = await file_api<{}>(`${BASE_API_URL}/deploy`, 'put', deployData);
+            // const response = await file_api<{}>(`${BASE_API_URL}/deploy`, 'put', deployData);
+            const response = await api<{}>(`${BASE_API_URL}/deploy`, 'put', deployData);
             return response;
         } catch (error) {
             const e = error as ResCommonError;

@@ -134,7 +134,7 @@ const StudyNew = () => {
         setOpenDeleteConfirm(false);
     };
 
-    const titles = studySurveySetList.map((cycle: any) => {
+    const titles = studySurveySetList?.map((cycle: any) => {
         return cycle.surveyList.map((survey: any) => survey.title).join(', ');
     });
 
@@ -301,21 +301,21 @@ const StudyNew = () => {
                 drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
             };
 
-            // FormData 객체 생성 및 데이터 추가
-            const formData = new FormData();
+            // // FormData 객체 생성 및 데이터 추가
+            // const formData = new FormData();
 
-            formData.append(
-                'requestDto',
-                new Blob([JSON.stringify(studyData)], { type: 'application/json' })
-            );
+            // formData.append(
+            //     'requestDto',
+            //     new Blob([JSON.stringify(studyData)], { type: 'application/json' })
+            // );
 
-            // 전자동의서 파일이 있는 경우 FormData에 추가
-            if (eicFile) {
-                formData.append('eic_file', eicFile, `${studyData.title}.json`);
-            }
+            // // 전자동의서 파일이 있는 경우 FormData에 추가
+            // if (eicFile) {
+            //     formData.append('eic_file', eicFile, `${studyData.title}.json`);
+            // }
 
             try {
-                const response = await studyApi.updateStudy(formData);
+                const response = await studyApi.updateStudy(studyData);
                 if (response.code === 200) {
                     // Survey OR EIC 미연결
                     if (!studyDetail?.studySurveySetList || !studyDetail?.eic_name) {
@@ -350,21 +350,21 @@ const StudyNew = () => {
             std_status: 'STD-PROGRESSION',
         };
 
-        // FormData 객체 생성 및 데이터 추가
-        const formData = new FormData();
+        // // FormData 객체 생성 및 데이터 추가
+        // const formData = new FormData();
 
-        formData.append(
-            'requestDto',
-            new Blob([JSON.stringify(studyData)], { type: 'application/json' })
-        );
+        // formData.append(
+        //     'requestDto',
+        //     new Blob([JSON.stringify(studyData)], { type: 'application/json' })
+        // );
 
-        // 전자동의서 파일이 있는 경우 FormData에 추가
-        if (eicFile) {
-            formData.append('eic_file', eicFile, `${studyData.title}.json`);
-        }
+        // // 전자동의서 파일이 있는 경우 FormData에 추가
+        // if (eicFile) {
+        //     formData.append('eic_file', eicFile, `${studyData.title}.json`);
+        // }
 
         try {
-            const response = await studyApi.deployStudy(formData);
+            const response = await studyApi.deployStudy(studyData);
             if (response.code === 200) {
                 alert('Study가 배포되었습니다.');
                 navigate('/study');
