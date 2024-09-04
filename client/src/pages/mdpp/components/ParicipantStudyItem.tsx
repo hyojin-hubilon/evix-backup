@@ -60,7 +60,8 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
     };
 
     return (
-        <Box p="20px 25px" borderBottom="1px solid #E0E5E9" position="relative">
+        <Box p="20px 25px" borderBottom="1px solid #E0E5E9" position="relative"> 
+		{/* onClick={() => handleSelectStudy(study)} */}
             <Box display="flex" height="21px" alignItems="center" gap="10px">
                 <S.StudyStatus studyStatus={status}>{statusLabel}</S.StudyStatus>
                 <S.StudyTitle>{study.title}</S.StudyTitle>
