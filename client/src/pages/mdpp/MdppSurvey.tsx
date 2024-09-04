@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { QuestionTypes } from '@/types/survey';
 import { Box, Card, Typography, useTheme } from "@mui/material";
 
@@ -13,6 +13,7 @@ import participantSurveyApi from "@/apis/participantSurvey";
 import { ParticipantSurveyDetail, ParticipantSurveyQuestionList, SurveyAnswer } from "@/types/participant";
 import * as Yup from 'yup';
 import { setAlert } from "@/store/reducers/snack";
+import { useConfirmation } from "@/context/ConfirmDialogContext";
 
 
 type InitialValues = {
@@ -35,6 +36,8 @@ const MdppSurvey = () => {
 	const [ survey, setSurvey ]  = useState<ParticipantSurveyDetail>({} as ParticipantSurveyDetail);
 	const [ hasRequired, setHasRequired ] = useState(false);
 	const [ initialValues, setInitialValues ] = useState<InitialValuesType>({ questions : []});
+	const confirm = useConfirmation();
+	const navigate = useNavigate();
 
 	const schema = Yup.object().shape({
 		questions: Yup.array()
@@ -123,7 +126,13 @@ const MdppSurvey = () => {
 	const postSurvey = async (surveyAnswers) => {
 		const response = await participantSurveyApi.postSurveyAnswer(surveyAnswers);
             if (response.result && response.code === 200) {
-				// dispatch(setAlert({ alertOpen: true, alertText: '설문에 참여해주셔서 감사합니다.', alertType: 'suceess' }));	디자인.. 안맞음. 교체예정
+				confirm({
+					description:'설문에 참여해주셔서 감사합니다.',
+					variant: 'info'
+				}).then(() => {
+					navigate('/mdpp/studies');
+				});
+
             }
 	}
 
