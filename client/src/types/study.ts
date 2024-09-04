@@ -146,6 +146,25 @@ interface Invite {
     accepted_at: string | null;
 }
 
+export interface StudySurveySetList {
+		set_no: number,
+		std_no: number,
+		survey_start_date: string | Date,
+		survey_end_date: string|Date,
+		survey_cycle: 'DAILY' | 'WEEKLY' | 'MONTHLY',
+		number_in_cycle: number,
+		sort: number,
+		surveyList: 
+			{
+				set_no: number,
+				survey_no: number,
+				survey_cnt: number,
+				title: string,
+				sort: number
+			}[]
+		
+}
+
 export interface StudyDetail {
     std_no: number;
     std_type: string;
@@ -175,7 +194,7 @@ export interface StudyDetail {
     deployed_user_no: number | null;
     deployed_at: string | null;
     std_privilege: string;
-    studySurveySetList: any;
+    studySurveySetList: StudySurveySetList[];
     managerList: {
         std_no: number;
         user_no: number;

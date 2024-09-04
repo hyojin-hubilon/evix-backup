@@ -18,7 +18,6 @@ import {
     Button,
     Divider,
 } from '@mui/material';
-import * as Yup from 'yup'; // 유효성 검사
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 import DateRangePicker, { DateRage } from './components/study-new/Daterangepicker';
@@ -29,13 +28,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Drug } from '@/apis/test/drug/drugsAPI_TEST';
 import userApi from '@/apis/user';
 import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
-import { InviteMemberTempType, StudyDetail } from '@/types/study';
+import { InviteMemberTempType, StudyDetail, StudySurveySetList } from '@/types/study';
 import MemberInvitement from './components/study-new/MemberInvitement';
 import MemberManagement from './components/study-new/MemberManagement';
 import StudyDeleteConfirmDialog from './components/study-new/StudyDeleteConfirmDialog';
 import { MyProfile } from '@/types/user';
-import { useFormik } from 'formik';
 import EicParent from './components/eic/EicParent';
+import { t } from 'i18next';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { useUserProfile } from '@/context/UserProfileContext';
 
 const FormTooltip = ({ text }) => {
@@ -67,7 +67,7 @@ const StudyNew = () => {
     const [isOpenSurvey, setIsOpenSurvey] = useState(false);
     const [inviteList, setInviteList] = useState<InviteMemberTempType[]>([]);
     const [managerList, setManagerList] = useState<any[]>([]);
-    const [studySurveySetList, setStudySurveySetList] = useState<any[]>([]);
+    const [studySurveySetList, setStudySurveySetList] = useState<StudySurveySetList[]>([]);
 
     const [members, setMembers] = useState<InviteMemberTempType[]>([]);
 
@@ -79,6 +79,7 @@ const StudyNew = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const confirm = useConfirmation();
 
     const state = location.state as { mode: 'write' | 'edit'; stdNo?: number };
     const stdNo = location.state?.stdNo;
@@ -94,9 +95,9 @@ const StudyNew = () => {
     const validate = () => {
         let tempErrors = { ...errors };
 
-        tempErrors.title = title ? '' : '제목을 입력해 주세요';
-        tempErrors.participants = participants ? '' : '대상인원을 입력해 주세요';
-        tempErrors.disease = disease ? '' : '질환을 입력해 주세요';
+        tempErrors.title = title ? '' : t('study.please_enter_title'); //제목을 입력해 주세요
+        tempErrors.participants = participants ? '' : t('study.please_enter_target'); //대상인원을 입력해 주세요
+        tempErrors.disease = disease ? '' : t('study.please_enter_disease'); //질환을 입력해 주세요
 
         setErrors(tempErrors);
 
@@ -232,7 +233,7 @@ const StudyNew = () => {
                     .map((m) => m.user_email);
                 return memberEmails.length > 0
                     ? memberEmails.join(', ')
-                    : '초대하기 팝업에서 설정해주세요.';
+                    : t('study.please_set_it_invite'); //'초대하기 팝업에서 설정해주세요.';
             };
         } else if (mode === 'edit') {
             return (privilege: string): string => {
@@ -241,10 +242,10 @@ const StudyNew = () => {
                     .map((i) => i.email);
                 return inviteEmails.length > 0
                     ? inviteEmails.join(', ')
-                    : '초대하기 팝업에서 설정해주세요.';
+                    : t('study.please_set_it_invite'); //'초대하기 팝업에서 설정해주세요.';
             };
         }
-        return (privilege: string) => '초대하기 팝업에서 설정해주세요.';
+        return (privilege: string) => t('study.please_set_it_invite'); //'초대하기 팝업에서 설정해주세요.';
     }, [members, inviteList, mode]);
 
     const [studyDetail, setStudyDetail] = useState<StudyDetail>();
@@ -319,14 +320,20 @@ const StudyNew = () => {
                 if (response.code === 200) {
                     // Survey OR EIC 미연결
                     if (!studyDetail?.studySurveySetList || !studyDetail?.eic_name) {
-                        alert(
-                            'Study가 수정되었습니다.\nStudy 배포전에 Survey와 EIC를 연결해주세요.'
-                        );
+                        confirm({
+                            description: t('study.study_has_been_modified_connect_survey'), //"Study가 수정되었습니다. Study 배포전에 Survey와 EIC를 연결해주세요.",
+                            variant: 'info',
+                        }).then(() => {
+                            navigate('/study');
+                        });
                     } else {
-                        alert('Study가 수정되었습니다.');
+                        confirm({
+                            description: t('study.study_has_been_modified'), //Study가 수정되었습니다.
+                            variant: 'info',
+                        }).then(() => {
+                            navigate('/study');
+                        });
                     }
-
-                    navigate('/study');
                 }
             } catch (error) {
                 console.error('Failed to update study:', error);
@@ -366,8 +373,12 @@ const StudyNew = () => {
         try {
             const response = await studyApi.deployStudy(studyData);
             if (response.code === 200) {
-                alert('Study가 배포되었습니다.');
-                navigate('/study');
+                confirm({
+                    description: t('study.study_has_been_deployed'), //Study가 배포되었습니다.
+                    variant: 'info',
+                }).then(() => {
+                    navigate('/study');
+                });
             }
         } catch (error) {
             console.error('Failed to deploy study: ', error);
@@ -410,7 +421,7 @@ const StudyNew = () => {
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
                                 <Typography variant="h5">
-                                    <span style={{ color: 'red' }}>*</span> Study Type
+                                    <span style={{ color: 'red' }}>*</span> {t('study.study_type')}
                                 </Typography>
                                 <FormTooltip
                                     text={
@@ -420,20 +431,23 @@ const StudyNew = () => {
                                             }}
                                         >
                                             <span>
-                                                - ePRO: ePRO(electronic Patient-Reported Outcome) is
+                                                {t('study.epro_epro')}
+                                                {/* - ePRO: ePRO(electronic Patient-Reported Outcome) is
                                                 a service where patients electronically report their
-                                                health status and treatment outcomes.
+                                                health status and treatment outcomes. */}
                                             </span>
                                             <span>
-                                                - eCOA: eCOA (electronic Clinical Outcome
+                                                {t('study.ecoa_ecoa')}
+                                                {/* - eCOA: eCOA (electronic Clinical Outcome
                                                 Assessment) refers to patient-reported outcomes and
                                                 clinical assessment data collected electronically in
-                                                clinical research.
+                                                clinical research. */}
                                             </span>
                                             <span>
-                                                - eCRF: eCRF (electronic Case Report Form) is a
+                                                {t('study.ecrf_ecrf')}
+                                                {/* - eCRF: eCRF (electronic Case Report Form) is a
                                                 system used to collect and manage clinical data of
-                                                patients electronically in clinical research.
+                                                patients electronically in clinical research. */}
                                             </span>
                                         </Box>
                                     }
@@ -460,7 +474,7 @@ const StudyNew = () => {
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
                                 <Typography variant="h5">
-                                    <span style={{ color: 'red' }}>*</span> 제목
+                                    <span style={{ color: 'red' }}>*</span> {t('study.title')}
                                 </Typography>
                                 {/* <FormTooltip text="Enter the title of the Study" /> */}
                             </Box>
@@ -468,7 +482,7 @@ const StudyNew = () => {
                         <Grid item xs={9}>
                             <FormControl size="small" fullWidth>
                                 <OutlinedInput
-                                    placeholder="제목"
+                                    placeholder={t('study.title')}
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
@@ -482,7 +496,7 @@ const StudyNew = () => {
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
                                 <Typography variant="h5">
-                                    <span style={{ color: 'red' }}>*</span> 기간
+                                    <span style={{ color: 'red' }}>*</span> {t('study.period')}
                                 </Typography>
                                 {/* <FormTooltip text="Enter the duration of the Study" /> */}
                             </Box>
@@ -503,7 +517,8 @@ const StudyNew = () => {
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
                                 <Typography variant="h5">
-                                    <span style={{ color: 'red' }}>* </span>대상인원
+                                    <span style={{ color: 'red' }}>* </span>{' '}
+                                    {t('study.target_number')}
                                 </Typography>
                                 {/* <FormTooltip text="Enter the number of participants" /> */}
                             </Box>
@@ -518,7 +533,7 @@ const StudyNew = () => {
                                         onChange={(e) => setParticipants(e.target.value)}
                                         sx={{ width: '10rem' }}
                                     />
-                                    <Typography>명</Typography>
+                                    <Typography>{t('study.person')}</Typography>
                                 </Box>
                                 <FormHelperText error>{errors.participants}</FormHelperText>
                             </FormControl>
@@ -529,14 +544,15 @@ const StudyNew = () => {
                     <Grid container alignItems="flex-start">
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">개요</Typography>
+                                <Typography variant="h5">{t('study.summary')}</Typography>
                                 {/* <FormTooltip text="Enter a brief summary of the Study" /> */}
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
                             <FormControl size="small" fullWidth>
                                 <OutlinedInput
-                                    placeholder="Study에 대한 간략한 정보와 요약내용"
+                                    placeholder={t('study.brief_information')}
+                                    //"Study에 대한 간략한 정보와 요약내용"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
@@ -549,7 +565,8 @@ const StudyNew = () => {
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
                                 <Typography variant="h5">
-                                    <span style={{ color: 'red' }}>* </span>질환
+                                    <span style={{ color: 'red' }}>* </span>
+                                    {t('study.disease')}
                                 </Typography>
                                 {/* <FormTooltip text="Enter the disease for the Study" /> */}
                             </Box>
@@ -557,7 +574,8 @@ const StudyNew = () => {
                         <Grid item xs={9}>
                             <FormControl size="small" fullWidth>
                                 <OutlinedInput
-                                    placeholder="Study를 진행할 대상 질환"
+                                    placeholder={t('study.subject_disease')}
+                                    //"Study를 진행할 대상 질환"
                                     value={disease}
                                     onChange={(e) => setDisease(e.target.value)}
                                 />
@@ -570,8 +588,11 @@ const StudyNew = () => {
                     <Grid container alignItems="flex-start">
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">의약품 정보</Typography>
-                                <FormTooltip text="You can search drug information using KFDA open API, FDA open API." />
+                                <Typography variant="h5" sx={{ width: '70%' }}>
+                                    {t('study.pharmaceutical_information')}
+                                </Typography>
+                                <FormTooltip text={t('study.you_can_search_drug_information')} />
+                                {/* "You can search drug information using KFDA open API, FDA open API." */}
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
@@ -589,12 +610,12 @@ const StudyNew = () => {
                                     <FormControlLabel
                                         value="true"
                                         control={<Radio size="small" />}
-                                        label="있음"
+                                        label={t('study.yes')} //있음
                                     />
                                     <FormControlLabel
                                         value="false"
                                         control={<Radio size="small" />}
-                                        label="없음"
+                                        label={t('study.no')} //없음
                                     />
                                 </RadioGroup>
                             </FormControl>
@@ -622,7 +643,8 @@ const StudyNew = () => {
                                         gap={0.5}
                                     >
                                         <Typography variant="h5">Survey</Typography>
-                                        <FormTooltip text="Connect the Survey before Study deployment." />
+                                        <FormTooltip text={t('study.connect_the_survey')} />
+                                        {/* Connect the Survey before Study deployment. */}
                                     </Box>
                                 </Grid>
                                 <Grid item xs={9}>
@@ -632,10 +654,11 @@ const StudyNew = () => {
                                             setIsOpenSurvey(true);
                                         }}
                                     >
-                                        Survey 연결
+                                        {t('study.connect_survey')}
+                                        {/* Survey 연결 */}
                                     </Button>
                                     {'  '}
-                                    {titles.length > 0 ? (
+                                    {titles && titles.length > 0 ? (
                                         <span
                                             style={{
                                                 fontWeight: 'bold',
@@ -646,14 +669,15 @@ const StudyNew = () => {
                                         </span>
                                     ) : (
                                         <span style={{ color: 'red' }}>
-                                            * Study 배포전에 반드시 연결해주세요.
+                                            {t('study.make_sure_connect')}
+                                            {/* * Study 배포전에 반드시 연결해주세요. */}
                                         </span>
                                     )}
                                 </Grid>
                             </Grid>
 
                             {/* EIC(전자동의서) */}
-                            <Grid container alignItems="flex-start">
+                            <Grid container alignItems="center">
                                 <Grid item xs={3}>
                                     <Box
                                         display="flex"
@@ -661,8 +685,11 @@ const StudyNew = () => {
                                         sx={{ pt: '0.2rem' }}
                                         gap={0.5}
                                     >
-                                        <Typography variant="h5">EIC(전자동의서)</Typography>
-                                        <FormTooltip text="Connect the EIC before Study deployment." />
+                                        <Typography variant="h5" sx={{ maxWidth: '70%' }}>
+                                            {t('study.eic')}
+                                        </Typography>
+                                        <FormTooltip text={t('study.connect_the_eic')} />
+                                        {/* Connect the EIC before Study deployment. */}
                                     </Box>
                                 </Grid>
                                 <Grid item xs={9}>
@@ -671,7 +698,8 @@ const StudyNew = () => {
                                         onClick={handleOpenUploadBasePdf}
                                         sx={{ width: '103.14px' }}
                                     >
-                                        EIC 연결
+                                        {t('study.connect_eic')}
+                                        {/* EIC 연결 */}
                                     </Button>{' '}
                                     {basePdfFile?.name ? (
                                         <span
@@ -684,7 +712,8 @@ const StudyNew = () => {
                                         </span>
                                     ) : (
                                         <span style={{ color: 'red' }}>
-                                            * Study 배포전에 반드시 연결해주세요.
+                                            {t('study.make_sure_connect')}
+                                            {/* * Study 배포전에 반드시 연결해주세요. */}
                                         </span>
                                     )}
                                 </Grid>
@@ -699,7 +728,9 @@ const StudyNew = () => {
                                         sx={{ pt: '0.2rem' }}
                                         gap={0.5}
                                     >
-                                        <Typography variant="h5">멤버 관리</Typography>
+                                        <Typography variant="h5">
+                                            {t('study.managing_members')}
+                                        </Typography>
                                     </Box>
                                 </Grid>
                                 <Grid item xs={9}>
@@ -710,7 +741,8 @@ const StudyNew = () => {
                                         }}
                                         sx={{ width: '103.14px' }}
                                     >
-                                        초대하기
+                                        {t('study.inviting')}
+                                        {/* 초대하기 */}
                                     </Button>
                                 </Grid>
                             </Grid>
@@ -724,14 +756,17 @@ const StudyNew = () => {
                                         sx={{ pt: '0.2rem' }}
                                         gap={0.5}
                                     >
-                                        <Typography variant="h5">멤버 권한 안내</Typography>
+                                        <Typography variant="h5">
+                                            {t('study.member_permission_information')}
+                                        </Typography>
                                     </Box>
                                 </Grid>
                                 <Grid item xs={9}>
                                     <ul style={{ margin: 0, paddingLeft: '20px' }}>
                                         <li>
                                             <Typography>
-                                                Owner (Study의 생성, 수정, 배포, 멤버 초대) :{' '}
+                                                {t('study.owner_permission')}
+                                                {/* Owner (Study의 생성, 수정, 배포, 멤버 초대) :{' '} */}
                                                 <span
                                                     style={{
                                                         fontWeight: 'bold',
@@ -748,7 +783,8 @@ const StudyNew = () => {
                                             <>
                                                 <li>
                                                     <Typography>
-                                                        초대 멤버(Maintainer) :{' '}
+                                                        {t('study.invited_member_maintainer')}
+                                                        {/* 초대 멤버(Maintainer) :{' '} */}
                                                         <span style={{ color: 'red' }}>
                                                             {getEmailByPrivilege('MAINTAINER')}
                                                         </span>
@@ -756,7 +792,9 @@ const StudyNew = () => {
                                                 </li>
                                                 <li>
                                                     <Typography>
-                                                        초대 멤버(Developer) :{' '}
+                                                        {t('study.invited_member_developer')}
+
+                                                        {/* 초대 멤버(Developer) :{' '} */}
                                                         <span style={{ color: 'red' }}>
                                                             {getEmailByPrivilege('DEVELOPER')}
                                                         </span>
@@ -767,7 +805,8 @@ const StudyNew = () => {
                                             <>
                                                 <li>
                                                     <Typography>
-                                                        Maintainer (Study의 수정, 멤버 초대) :{' '}
+                                                        {t('study.maintainer')}
+                                                        {/* Maintainer (Study의 수정, 멤버 초대) :{' '} */}
                                                         <span style={{ color: 'red' }}>
                                                             {getEmailByPrivilege('MAINTAINER')}
                                                         </span>
@@ -775,7 +814,8 @@ const StudyNew = () => {
                                                 </li>
                                                 <li>
                                                     <Typography>
-                                                        Developer (Study 조회) :{' '}
+                                                        {t('study.developer')}
+                                                        {/* Developer (Study 조회) :{' '} */}
                                                         <span style={{ color: 'red' }}>
                                                             {getEmailByPrivilege('DEVELOPER')}
                                                         </span>
