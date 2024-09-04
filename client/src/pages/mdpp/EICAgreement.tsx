@@ -12,25 +12,25 @@ import {
     handlePreviewTemplate,
 } from '@/components/eic/helper';
 import EICImage from '@assets/images/eicAgreement.png';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import participantStudyApi from '@/apis/participantStudy';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
-import { StudyDetailForParticipant } from '@/types/participant';
 
 const EICAgreement = () => {
     const navigate = useNavigate();
     const params = useParams();
-    const stdNo = params?.stdNo;
+    const stdNo = Number(params?.stdNo);
+    const location = useLocation();
+    const study = location.state?.study ?? {};
 
-    const [studyTitle, setStudyTitle] = useState<String>();
-    const [description, setDiscription] = useState<String>();
+    console.log(study);
 
     const uiRef = useRef<HTMLDivElement | null>(null);
     const ui = useRef<Form | Viewer | null>(null);
     const [prevUiRef, setPrevUiRef] = useState<MutableRefObject<
         HTMLDivElement | Form | Viewer | null
     > | null>(null);
-    const [eicFile, setEicFile] = useState<any>(null);
+
     const [submitted, setSumbmitted] = useState<boolean>(false);
     const confirm = useConfirmation();
     const mode: Mode = 'form';
@@ -69,24 +69,6 @@ const EICAgreement = () => {
         });
     };
 
-    const handleGetStudyInfo = async (stdNo: number) => {
-        if (stdNo) {
-            const response = await participantStudyApi.getStudyDetail(stdNo);
-            const content: StudyDetailForParticipant = response.content;
-            return content;
-        }
-    };
-
-    const handleDownloadEicFile = async (stdNo: number, eicFileName: string) => {
-        try {
-            const eicFile = await participantStudyApi.downloadEicFile(stdNo, eicFileName);
-            console.log(eicFile);
-            return eicFile;
-        } catch (error) {
-            console.error('Failed to Download EIC File', error);
-        }
-    };
-
     const handleSubmit = async () => {
         if (stdNo) {
             const formData = new FormData();
@@ -96,8 +78,7 @@ const EICAgreement = () => {
                 formData.append('eic_file', pdf, `eic_file.pdf`);
             }
 
-            const std_no = Number(stdNo);
-            participantStudyApi.uploadEic(std_no, formData).then((res) => {
+            participantStudyApi.uploadEic(stdNo, formData).then((res) => {
                 if (res.code === 200) {
                     confirm({
                         description: `전자서명이 완료되었습니다.`,
@@ -110,13 +91,6 @@ const EICAgreement = () => {
     };
 
     useEffect(() => {
-        const fetchStudyInfo = async () => {
-            const std_no = Number(stdNo);
-            const response = await handleGetStudyInfo(std_no);
-            console.log(response);
-        };
-        fetchStudyInfo();
-
         if (uiRef !== prevUiRef) {
             if (prevUiRef && ui.current) {
                 ui.current.destroy();
@@ -124,6 +98,26 @@ const EICAgreement = () => {
             buildUi(mode);
             setPrevUiRef(uiRef);
         }
+        
+        const handleEic = async () => {
+            try {
+                const eicFile = await participantStudyApi.downloadEicFile(stdNo, study.eic_name);
+                console.log('eicFile', eicFile);
+                return eicFile;
+            } catch (error) {
+                console.error('Failed to Download EIC File', error);
+            }
+        };
+
+        const eicFile = handleEic();
+
+        const jsonFile = new Blob([JSON.stringify(eicFile)], {
+            type: 'application/json',
+        });
+
+        getFontsData().then(() => {
+            handlePreviewTemplate(jsonFile, ui.current);
+        });
     }, []);
 
     return (
@@ -133,7 +127,7 @@ const EICAgreement = () => {
                     <MdppHeader title="전자동의서" backBtn></MdppHeader>
                     <Box m="23px">
                         <S.CommonText>
-                            {description} 조사에 참여해 주셔서 감사드립니다.
+                            {/* {description} 조사에 참여해 주셔서 감사드립니다. */}
                             동의서 내용을 확인하시고, 데이터 활용에 동의해 주세요.
                         </S.CommonText>
                     </Box>
@@ -155,7 +149,7 @@ const EICAgreement = () => {
                         <S.H1>동의서 제출 완료</S.H1>
                         <Box mt="21px">
                             <S.CommonText>
-                                <strong>참여자명</strong> 님의 <strong>{studyTitle}</strong> 연구 참여
+                                {/* <strong>참여자명</strong> 님의 <strong>{studyTitle}</strong> 연구 참여 */}
                                 동의서를
                                 <br />
                                 <strong>코드발급 기관명</strong> 에 안전하게 제출하였습니다.

@@ -2,10 +2,11 @@ import { ParticipantStudyList, StudyParticipantStatus } from '@/types/participan
 import { Box } from '@mui/material';
 import * as S from '../styles';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 type ParticipantStudyItemType = {
     study: ParticipantStudyList;
-	selectStudy: (study) => void
+    selectStudy: (study) => void;
 };
 
 const getStudyStatus = (
@@ -33,6 +34,7 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
     const now = dayjs();
     const startDate = dayjs(study.std_start_date || new Date());
     const endDate = dayjs(study.std_end_date || new Date());
+    console.log(study);
 
     const studyStatusKr: Record<StudyParticipantStatus, string> = {
         [StudyParticipantStatus.NEED_EIC]: '전자서명필요',
@@ -43,14 +45,22 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
     const status = getStudyStatus(now, startDate, endDate, study.eic_name);
     const statusLabel = studyStatusKr[status];
 
-	const handleSelectStudy = (study) => {
-		if(study.status !== StudyParticipantStatus.DONE) {
-			selectStudy(study);
-		}
-	}
+    const handleSelectStudy = (study) => {
+        if (study.status !== StudyParticipantStatus.DONE) {
+            selectStudy(study);
+        }
+    };
+
+    const navigate = useNavigate();
+    const handleEicPage = () => {
+        // if(status === StudyParticipantStatus.NEED_EIC) {
+        // 	navigate(`/mdpp/eic/${study.std_no}`);
+        // }
+        navigate(`/mdpp/eic/${study.std_no}`, { state: { study } });
+    };
 
     return (
-        <Box p="20px 25px" borderBottom="1px solid #E0E5E9" position="relative" onClick={() => handleSelectStudy(study)}>
+        <Box p="20px 25px" borderBottom="1px solid #E0E5E9" position="relative">
             <Box display="flex" height="21px" alignItems="center" gap="10px">
                 <S.StudyStatus studyStatus={status}>{statusLabel}</S.StudyStatus>
                 <S.StudyTitle>{study.title}</S.StudyTitle>
@@ -75,7 +85,9 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
                     height: '21px',
                     marginTop: '-10px',
                     color: status === StudyParticipantStatus.DONE ? '#AFB3BA' : '#000001', // 색상 변경 예시
+                    cursor: 'pointer',
                 }}
+                onClick={handleEicPage}
             >
                 <svg
                     width="21"
