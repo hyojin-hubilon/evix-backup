@@ -83,9 +83,10 @@ interface StudyInfoProps {
         }[];
     };
     ownerId: number;
+    onSurveyClose: () => void;
 }
 
-const StudyInfo = ({ studyDetail, ownerId }: StudyInfoProps) => {
+const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
     const theme = useTheme();
     const navigate = useNavigate();
 
@@ -112,6 +113,7 @@ const StudyInfo = ({ studyDetail, ownerId }: StudyInfoProps) => {
 
     const handleCloseSurvey = () => {
         setIsOpenSurvey(!isOpenSurvey);
+        onSurveyClose();
     };
 
     const statusLabel = STUDY_STATUS[studyDetail.std_status as STUDY_STATUS_KEY];
