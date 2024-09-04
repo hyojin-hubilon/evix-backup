@@ -128,7 +128,15 @@
             "ko": "한국어"
         }
     },
-    "study": {},
+    "study": {
+		"search_by" : "타이틀, 질환명, 상태 검색",
+		"all_studies" : "All Studies",
+		"my_studies" : "My Studies",
+		"included_studies" : "Included Studies",
+		"full_period" : "Full Period",
+		"date_setting" : "Date Setting",
+		"new_study" : "Study 생성"
+	},
     "survey": {},
     "user": {},
     "my_page": {},

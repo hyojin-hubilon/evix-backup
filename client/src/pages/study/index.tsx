@@ -29,6 +29,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 dayjs.extend(isSameOrBefore);
 import DatePicker, { DatePickerProps } from "antd/lib/date-picker";
 import { paginator } from '@/utils/helper';
+import { t } from 'i18next';
 const { RangePicker } = DatePicker;
 
 const StudyList = () => {
@@ -171,7 +172,7 @@ const StudyList = () => {
             <Grid container flexDirection="row" rowSpacing={2}>
                 <Grid container item xs={12}>
                     <Box display="flex" alignItems="center" gap={1}>
-                        <Typography variant="h3">Study 목록</Typography>
+                        <Typography variant="h3">Study</Typography>
                         <Chip label={studyCount} color="primary" size="small" />
                     </Box>
                    
@@ -210,7 +211,7 @@ const StudyList = () => {
 									}
 									value={searchTerm}
 									onChange={(e) => handleSearchStudy(e.target.value)}
-									placeholder='타이틀, 질환명, 상태 검색'
+									placeholder={t('study.search_by')}
 								/>
                             </Grid>
 							<Grid item xs={activeDateSetting == 'full' ? 2 : 1.6}>
@@ -220,9 +221,9 @@ const StudyList = () => {
 									value={activeTab} fullWidth
 									sx={{bgcolor: 'white'}}
 									>
-									<MenuItem value="0">All Studies</MenuItem>
-									<MenuItem value="1">My Studies</MenuItem>
-									<MenuItem value="2">Included Studies</MenuItem>
+									<MenuItem value="0">{t('study.all_studies')}</MenuItem>
+									<MenuItem value="1">{t('study.my_studies')}</MenuItem>
+									<MenuItem value="2">{t('study.included_studies')}</MenuItem>
 								</Select>
 								{/* My Studies : Owner, Included Studies : MAINTAINER, DEVELOPER */}
 							</Grid>
@@ -233,8 +234,8 @@ const StudyList = () => {
 									value={activeDateSetting} fullWidth
 									sx={{bgcolor: 'white'}}
 									>
-									<MenuItem value="full">Full Period</MenuItem>
-									<MenuItem value="dates">Date Setting</MenuItem>
+									<MenuItem value="full">{t('study.full_period')}</MenuItem>
+									<MenuItem value="dates">{t('study.date_setting')}</MenuItem>
 								</Select>
 							</Grid>
 							{
@@ -255,7 +256,7 @@ const StudyList = () => {
 							<Grid item xs={activeDateSetting == 'full' ? 1.7 : 1.5}>
 								<Button variant="contained" onClick={handleCreateStudy} sx={{ ml: 'auto' }} fullWidth>
 									<PlusOutlined />
-									<Typography sx={{ ml: 1 }}>Study 생성</Typography>
+									<Typography sx={{ ml: 1 }}>{t('study.new_study')}</Typography>
 								</Button>
 							</Grid>
                         </Grid>
@@ -304,7 +305,7 @@ const StudyList = () => {
                                     variant="h5"
                                     onClick={handleCreateStudy}
                                 >
-                                    Study 생성
+									{t('study.new_study')}
                                 </Typography>
                             </Box>
                         </Grid>

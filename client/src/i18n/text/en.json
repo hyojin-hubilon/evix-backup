@@ -128,7 +128,15 @@
             "ko": "Korean"
         }
     },
-    "study": {},
+    "study": {
+		"search_by" : "Search by title, disease, status",
+		"all_studies" : "All Studies",
+		"my_studies" : "My Studies",
+		"included_studies" : "Included Studies",
+		"full_period" : "Full Period",
+		"date_setting" : "Date Setting",
+		"new_study" : "New Study"
+	},
     "survey": {},
     "user": {},
     "my_page": {},
