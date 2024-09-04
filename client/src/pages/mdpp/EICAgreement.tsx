@@ -24,7 +24,7 @@ const EICAgreement = () => {
     const study = location.state?.study ?? {};
 
     console.log(study);
-
+  
     const uiRef = useRef<HTMLDivElement | null>(null);
     const ui = useRef<Form | Viewer | null>(null);
     const [prevUiRef, setPrevUiRef] = useState<MutableRefObject<
@@ -74,10 +74,11 @@ const EICAgreement = () => {
             const formData = new FormData();
             const pdf = await createPDF(ui.current);
 
-            if (pdf) {
-                formData.append('eic_file', pdf, `eic_file.pdf`);
+            if (!pdf) {
+                return;
             }
 
+            formData.append('eic_file', pdf, `eic_file.pdf`);
             participantStudyApi.uploadEic(stdNo, formData).then((res) => {
                 if (res.code === 200) {
                     confirm({
@@ -152,7 +153,7 @@ const EICAgreement = () => {
                                 <strong>참여자명</strong> 님의 <strong>{study.title}</strong> 연구 참여 
                                 동의서를
                                 <br />
-                                <strong>코드발급 기관명</strong> 에 안전하게 제출하였습니다.
+                                <strong>{study.participation_organization}</strong> 에 안전하게 제출하였습니다.
                             </S.CommonText>
                         </Box>
                     </Box>
