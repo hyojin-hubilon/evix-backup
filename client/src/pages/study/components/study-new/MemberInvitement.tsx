@@ -32,8 +32,10 @@ import MemberListItem from './MemberListItem';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import userApi from '@/apis/user';
 import { InviteMemberTempType, MemberTempType } from '@/types/study';
+import { useUserProfile } from '@/context/UserProfileContext';
 
 const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMembers }) => {
+    const { userProfile, setUserProfile } = useUserProfile();
     const [activeTab, setActiveTab] = useState('0');
     const [newAuthority, setNewAuthority] = useState<string>('');
 
@@ -53,29 +55,14 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
     const theme = useTheme();
     const { primary, grey } = theme.palette;
 
-    const [ownerProfileImage, setOwnerProfileImage] = useState('');
-    const [ownerName, setOwnerName] = useState('');
+    // const [ownerProfileImage, setOwnerProfileImage] = useState('');
+    // const [ownerName, setOwnerName] = useState('');
 
     // const [members, setMembers] = useState<MemberTempType[]>([]);
 
     const handleChangeTab = (e, newValue) => {
         setActiveTab(newValue);
     };
-
-    // 멤버관리 모달에서 owner 정보를 가져오기 위함
-    const getMyProfile = async () => {
-        try {
-            const response = await userApi.getMyProfile();
-            setOwnerProfileImage(response.content['profile_image_url']);
-            setOwnerName(response.content['first_name'] + ' ' + response.content['last_name']);
-        } catch (error) {
-            console.error('Failed to fetch owner profile:', error);
-        }
-    };
-
-    useEffect(() => {
-        getMyProfile(); // 페이지 진입 시 owner 정보 가져오기
-    }, []);
 
     const createData = (
         std_privilege: string, // 권한
@@ -168,12 +155,14 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                         </Grid>
                         <Grid item xs={4}>
                             <Box display="flex" gap={1} justifyContent="flex-end">
-                                <Avatar alt="Owner" src={ownerProfileImage} />
+                                <Avatar alt="Owner" src={userProfile?.profile_image_url} />
                                 <Box>
                                     <Typography variant="caption" sx={{ mb: '0' }}>
                                         Owner
                                     </Typography>
-                                    <Typography color="primary">{ownerName}</Typography>
+                                    <Typography color="primary">
+                                        {userProfile?.first_name} {userProfile?.last_name}
+                                    </Typography>
                                 </Box>
                             </Box>
                         </Grid>

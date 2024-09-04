@@ -8,7 +8,6 @@ import {
     getPlugins,
     handlePreviewTemplate,
 } from './helper';
-import { ConsoleView } from 'react-device-detect';
 import { Button, DialogActions } from '@mui/material';
 
 const headerHeight = 200;
