@@ -653,6 +653,7 @@ const StudyNew = () => {
                                         onClick={() => {
                                             setIsOpenSurvey(true);
                                         }}
+										sx={{ minWidth: '105px' }}
                                     >
                                         {t('study.connect_survey')}
                                         {/* Survey 연결 */}
@@ -739,7 +740,7 @@ const StudyNew = () => {
                                         onClick={() => {
                                             setIsOpenMember(true);
                                         }}
-                                        sx={{ width: '103.14px' }}
+										sx={{ minWidth: '105px' }}
                                     >
                                         {t('study.inviting')}
                                         {/* 초대하기 */}

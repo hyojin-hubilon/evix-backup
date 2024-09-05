@@ -189,8 +189,13 @@
 		"item_standard_code" : "품목기준코드",
 		"after_searching_for" : "의약품 검색 후 제품명을 선택해주세요.",
 		"korea_pharmaceutical" : "한국 약품통합정보시스템",
-		"us_fda" : "미국 FDA Drug Search"
-
+		"us_fda" : "미국 FDA Drug Search",
+		"invite_members" : "멤버 초대",
+		"veiw_results" : "결과 보기",
+		"settings" : "세팅",
+		"survey_successfully_deleted" : "설문이 성공적으로 삭제되었습니다.",
+		"failed_delete_survey" : "설문 삭제에 실패했습니다.",
+		"new_survey_connected" : "새로운 설문이 성공적으로 연결되었습니다."
 	},
     "survey": {},
     "user": {},

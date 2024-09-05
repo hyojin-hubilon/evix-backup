@@ -28,6 +28,7 @@ import SurveyConnectPreview from './SurveyConnectPreview';
 import surveyApi from '@/apis/survey';
 import studyApi from '@/apis/study';
 import SurveyDeleteDialog from './SurveyDeleteDialog';
+import { t } from 'i18next';
 
 interface SurveyConnectDialogProps {
     isOpen: boolean;
@@ -107,11 +108,11 @@ const SurveyConnectDialog = ({
                     (s) => s.survey_no !== surveyToDelete.survey_no
                 );
                 setSelectedSurvey(newSelectedSurvey);
-                setSuccessMessage('설문이 성공적으로 삭제되었습니다.');
+                setSuccessMessage(t('study.survey_successfully_deleted')); //설문이 성공적으로 삭제되었습니다.
                 setOpenAlert(true);
             } catch (error) {
                 console.error('Failed to disconnect survey:', error);
-                setSuccessMessage('설문 삭제에 실패했습니다.');
+                setSuccessMessage(t('study.failed_delete_survey'));//설문 삭제에 실패했습니다.
                 setOpenAlert(true);
             }
         }
@@ -257,7 +258,7 @@ const SurveyConnectDialog = ({
                         studySurveySetList: newStudySurveySetList,
                     };
                     await studyApi.postSurvey(data);
-                    setSuccessMessage('새로운 설문이 성공적으로 연결되었습니다.');
+                    setSuccessMessage(t('study.new_survey_connected')); //새로운 설문이 성공적으로 연결되었습니다.
                     setOpenAlert(true);
                 } catch (error) {
                     console.error('Failed to post survey:', error);

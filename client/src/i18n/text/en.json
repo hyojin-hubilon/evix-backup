@@ -191,9 +191,13 @@
 		"after_searching_for" : "After searching for a medicine, please select the product name.",
 		"korea_drug_information":"Korea Drug Information Search",
 		"us_fda" : "US FDA Drug Search",
-		"enter_search_term" : "Enter search term"
-
-
+		"enter_search_term" : "Enter search term",
+		"invite_members" : "Invite members",
+		"veiw_results" : "Veiw Results",
+		"settings" : "Settings",
+		"survey_successfully_deleted" : "The survey has been successfully deleted.",
+		"failed_delete_survey" : "Failed to delete survey.",
+		"new_survey_connected" : "Your new survey has been successfully connected."
 	},
     "survey": {},
     "user": {},
