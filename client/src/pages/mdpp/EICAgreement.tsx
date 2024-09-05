@@ -86,7 +86,7 @@ const EICAgreement = () => {
                         description: `전자서명이 완료되었습니다.`,
                         variant: 'info',
                     });
-                    setParticipantName((prev) => res.content.participantName);
+                    setParticipantName((prev) => res.content.full_name);
                     setSumbmitted((prev) => true);
                 }
             });

@@ -405,11 +405,11 @@ const studyApi = {
     /**
      * Study에 연결된 EIC 파일 수정
      */
-    editEicFile: async (formData: FormData) => {
+    editEicFile: async (stdNo:number, formData: FormData) => {
         try {
             const responseData = await file_api<{ std_no: number }>(
-                `${BASE_API_URL}/basic-info`,
-                'put',
+                `${BASE_API_URL}/upload-eic?std_no=${stdNo}`,
+                'post',
                 formData
             );
             return responseData;

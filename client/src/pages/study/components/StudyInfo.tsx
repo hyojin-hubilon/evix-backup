@@ -162,45 +162,26 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
         handleCloseUploadBasePdf();
         handleOpenCreateEic();
     };
-    const handleEicFile = async (eicFile: File) => {
-        const studyData = {
-            std_no: studyDetail.std_no,
-            std_type: studyDetail.std_type,
-            title: studyDetail.title,
-            std_start_date: studyDetail.std_start_date,
-            std_end_date: studyDetail.std_end_date,
-            description: studyDetail.description,
-            disease: studyDetail.disease,
-            target_number: studyDetail.target_number,
-            eic_name: studyDetail.eic_name,
-            eic_origin_name: studyDetail.eic_origin_name,
-            std_status: studyDetail.std_status,
-            updated_at: studyDetail.updated_at,
-            drug_brand_name: studyDetail.drug_brand_name,
-            drug_code: studyDetail.drug_code,
-            drug_manufacturer_name: studyDetail.drug_manufacturer_name,
-        };
 
+    const handleEicFile = async (eicFile: File) => {
         // FormData 객체 생성 및 데이터 추가
         const formData = new FormData();
-
-        formData.append(
-            'requestDto',
-            new Blob([JSON.stringify(studyData)], { type: 'application/json' })
-        );
-
         // 전자동의서 파일이 있는 경우 FormData에 추가
+
         if (eicFile) {
-            formData.append('eic_file', eicFile, `${studyData.title}.json`);
+            formData.append('eic_file', eicFile, `${studyDetail.title}.json`);
         }
 
         try {
-            const response = await studyApi.editEicFile(formData);
-            if (response.code === 200 && response.content.std_no) {
+            const response = await studyApi.editEicFile(studyDetail.std_no, formData);
+            if (response.code === 200) {
                 confirm({
                     description: '전자동의서가 저장되었습니다.',
                     variant: 'info',
-                }).then(handleEditViewClose);
+                }).then(() => {
+                    handleEditViewClose();
+                    onSurveyClose();
+                });
             }
         } catch (error) {
             console.error('Failed to deploy study: ', error);
@@ -225,11 +206,14 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
         try {
             if (studyDetail.eic_name) {
                 const response = await studyApi.deleteEicFile(studyDetail.std_no);
-                if (response.code === 200 && response.content) {
+                if (response.code === 200) {
                     confirm({
                         description: '전자동의서가 삭제되었습니다.',
                         variant: 'info',
-                    }).then(handleDeleteClose);
+                    }).then(() => {
+                        handleDeleteClose();
+                        onSurveyClose();
+                    });
                 }
             }
         } catch (error) {
