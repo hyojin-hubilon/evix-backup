@@ -71,7 +71,8 @@ export const Checkbox = styled('input')(({theme}) => ({
 				display:'block',
 				position:'absolute',
 				left: '6px',
-				top: '3px',
+				top: '50%',
+				marginTop:'-7px',
 				width:'7px',
 				height: '10px',
 				border: 'solid white',
@@ -84,9 +85,10 @@ export const Checkbox = styled('input')(({theme}) => ({
 }))
 
 
-export const EtcContainer = styled('div')`
-	width: 90%;
-	display: flex;
-	padding-left:12px;
-	align-items: center
-`
+export const EtcContainer = styled('div')(({theme}) => ({
+	width: '90%',
+	display: 'flex',
+	paddingLeft:'12px',
+	alignItems: 'center',
+}))
+	

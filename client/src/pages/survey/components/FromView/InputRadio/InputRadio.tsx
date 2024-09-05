@@ -9,11 +9,10 @@ import { Typography } from "@mui/material";
 
 type InputRadioProps = {
 	cardId: string,
-	index: number,
-	changeIsRequired: (e:boolean) => void
+	questionIndex: number
 }
 
-const InputRadio = ({ cardId, index, changeIsRequired }: InputRadioProps) => {
+const InputRadio = ({ cardId, questionIndex }: InputRadioProps) => {
 	const etcRef = useRef<HTMLInputElement>(null);
   	const etcRefRadio = useRef<HTMLInputElement>(null);
 
@@ -30,8 +29,7 @@ const InputRadio = ({ cardId, index, changeIsRequired }: InputRadioProps) => {
 	
 
 	return (
-		<Field name={`questions.${index}.answer`}  type="radio">
-			{/* validate={(value) => requiredCheck(value, ieReqired, changeIsRequired)} 밸리데이트 YUP으로 변경하기 */}
+		<Field name={`questions.${questionIndex}.answer`}  type="radio">
 			{({
 				field,
 				form: { touched, errors },
@@ -53,7 +51,7 @@ const InputRadio = ({ cardId, index, changeIsRequired }: InputRadioProps) => {
 									<S.EtcContainer>
 										<span>기타 : </span>
 										<S.TextField
-											name={cardId}
+											name={`questions.${questionIndex}.answerEtc`}
 											variant="standard"
 											inputRef={etcRef}
 											onChange={(e) => field.onChange(e)}
@@ -66,7 +64,9 @@ const InputRadio = ({ cardId, index, changeIsRequired }: InputRadioProps) => {
 						</S.Container>
 					))}
 
-					{ errors[cardId] && touched[cardId] && <Typography paddingTop="0.5rem" sx={{display:'block', color: 'red'}}>{ errors[cardId] }</Typography>}
+{ errors.questions && errors.questions[questionIndex] && errors.questions[questionIndex].answer ?
+						<Typography paddingTop="0.5rem" sx={{display:'block', color: 'red'}}>{ errors.questions[questionIndex].answer }</Typography> : ''
+					}
 				</S.RadioContainer>
 			)}
 		</Field>

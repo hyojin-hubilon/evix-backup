@@ -7,7 +7,9 @@
         "support": "Support",
         "privacy" : "Privacy",
         "terms" : "Terms",
-        "cookie_policy" : "Cookie Policy"
+        "cookie_policy" : "Cookie Policy",
+		"demo" : "Demo",
+		"login" : "Login"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -126,8 +128,56 @@
             "ko": "Korean"
         }
     },
-    "study": {},
+    "study": {
+		"search_by" : "Search by title, disease, status",
+		"all_studies" : "All Studies",
+		"my_studies" : "My Studies",
+		"included_studies" : "Included Studies",
+		"full_period" : "Full Period",
+		"date_setting" : "Date Setting",
+		"new_study" : "New Study",
+		"please_enter_title" : "Please enter the title",
+		"please_enter_target" : "Please enter the target number of people",
+		"please_enter_disease" : "Please enter the disease",
+		"please_set_it_invite" : "Please set it up in the Invite dialog.",
+		"study_has_been_modified_connect_survey" : "Study has been modified. Please connect Survey and EIC before Study deployment.",
+		"study_has_been_modified." : "Study has been modified.",
+		"study_has_been_deployed." : "Study has been deployed.",
+		"study_type" : "Study Type",
+		"title": "Title",
+		"period": "Period",
+		"target_number" : "Target number",
+		"person" : "person",
+		"summary" : "Summary",
+		"brief_information" : "Brief information and summary from Study",
+		"disease" : "Disease",
+		"subject_disease" : "Subject Disease to Study",
+		"pharmaceutical_information" : "Pharmaceutical information",
+		"yes" : "Yes",
+		"no" : "No",		
+		"epro_epro" : "- ePRO: ePRO(electronic Patient-Reported Outcome) is a service where patients electronically report their health status and treatment outcomes.",
+		"ecoa_ecoa" : "- eCOA: eCOA (electronic Clinical Outcome Assessment) refers to patient-reported outcomes and clinical assessment data collected electronically in clinical research.",
+		"ecrf_ecrf" : "- eCRF: eCRF (electronic Case Report Form) is a system used to collect and manage clinical data of patients electronically in clinical research.",
+		"you_can_search_drug_information" : "You can search drug information using KFDA open API, FDA open API.",
+		"connect_the_survey" : "Connect the Survey before Study deployment.",
+		"connect_survey": "Connect Survey",
+		"make_sure_connect" : " * Please make sure to connect before distributing the study.",
+		"eic" : "EIC (Electronic Informed Consent)",
+		"connect_the_eic" : "Connect the EIC before Study deployment.",
+		"connect_eic" : "Connect EIC",
+		"managing_members" : "Managing members",
+		"inviting" : "Inviting",
+		"member_permission_information" : "Member permission information",
+		"owner_permission" : "Owner (Study creation, modification, distribution, member invitation) : ",
+		"invited_member_maintainer" : "Invited member (Maintainer) : ",
+		"invited_member_developer" : "Invited member (Developer) : ",
+		"maintainer" : "Maintainer (Study의 수정, 멤버 초대) : ",
+		"developer" : "Developer (Study inquiry) : "
+	},
     "survey": {},
     "user": {},
-    "my_page": {}
+    "my_page": {},
+	"nav": {
+		"welcome" : ", Welcome"
+	}
 }
