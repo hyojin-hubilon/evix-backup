@@ -1,8 +1,6 @@
 import { ParticipantStudyDetail, ParticipantSurveySet } from '@/types/participant';
-import { api, ResCommonError } from './axios-common';
-
+import { api, file_api, ResCommonError } from './axios-common';
 const BASE_API_URL = '/participant/study';
-
 const participantStudyApi = {
     studyList: async () => {
         try {
@@ -27,16 +25,16 @@ const participantStudyApi = {
             throw e;
         }
     },
-	studyDetail: async (stdNo) => {
-		try {
+    studyDetail: async (stdNo) => {
+        try {
             const responseData = await api<ParticipantStudyDetail>(`${BASE_API_URL}/${stdNo}`, 'get');
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
         }
-	},
-	studySurveyList: async (stdNo) => {
+    },
+    studySurveyList: async (stdNo) => {
         try {
             const responseData = await api<ParticipantSurveySet[]>(`${BASE_API_URL}/${stdNo}/survey-set`, 'get');
             return responseData;
@@ -44,7 +42,28 @@ const participantStudyApi = {
             const e = error as ResCommonError;
             throw e;
         }
-    }
-};
+    },
+    downloadEicFile: async (stdNo: number, fileName: string) => {
+        try {
+            const responseData = await api<{}>(
+                `${BASE_API_URL}/original-eic-download/${stdNo}/${fileName}`,
+                'get'
+            );
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+    uploadEic: async (std_no: number, formData: FormData) => {
+        try {
+            const responseData = await file_api<{full_name : string}>(`${BASE_API_URL}/upload-eic?std_no=${std_no}`, 'post', formData);
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
 
+};
 export default participantStudyApi;

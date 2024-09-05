@@ -47,7 +47,7 @@ export class ResCommonError implements ResCommonErrorInf {
 export const axios_instance = Axios.create({
     withCredentials: true,
     baseURL: `/${apiVersion}`, // baseURL을 확인하고 변경 필요
-    timeout: 60000,
+    timeout: 5000,
     headers: {
         'Content-Language': 'utf-8',
         'Content-Type': 'application/json',
