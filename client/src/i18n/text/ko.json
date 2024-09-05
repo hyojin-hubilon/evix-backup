@@ -17,7 +17,8 @@
 		"pause" : "일시중지",
 		"deploy" : "배포",
 		"preview" : "미리보기",
-		"create" : "생성"
+		"create" : "생성",
+		"search" : "검색"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -184,7 +185,8 @@
 		"search_for_medicines" : "의약품 검색",
 		"product_name" : "제품명",
 		"company_name" : "업체명",
-		"item_standard_code" : "품목기준코드"
+		"item_standard_code" : "품목기준코드",
+		"after_searching_for" : "의약품 검색 후 제품명을 선택해주세요."
 	},
     "survey": {},
     "user": {},

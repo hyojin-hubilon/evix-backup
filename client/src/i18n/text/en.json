@@ -17,7 +17,8 @@
 		"pause" : "Pause",
 		"deploy" : "Deploy",
 		"preview" : "Preview",
-		"create": "Create"
+		"create": "Create",
+		"search" : "Search"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -185,7 +186,8 @@
 		"search_for_medicines" : "Search for medicines",
 		"product_name" : "Product Name",
 		"company_name" : "Company name",
-		"item_standard_code" : "Item standard code"
+		"item_standard_code" : "Item standard code",
+		"after_searching_for" : "After searching for a medicine, please select the product name."
 	},
     "survey": {},
     "user": {},

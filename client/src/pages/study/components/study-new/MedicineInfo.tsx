@@ -85,7 +85,7 @@ const MedicineInfo = ({ country, setCountry, drug, setDrug }) => {
 						{/* 품목기준코드 */}
 					</Typography>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={4}>
                     <FormControl size="small" fullWidth>
                         <OutlinedInput
                             placeholder={t('study.item_standard_code')}

@@ -16,6 +16,7 @@ import {
     useTheme,
 } from '@mui/material';
 import { DataGrid, gridClasses, GridColDef } from '@mui/x-data-grid';
+import { t } from 'i18next';
 import { useState } from 'react';
 type MedicineSearchProps = {
     isOpen: boolean;
@@ -43,7 +44,7 @@ const MedicineSearch = ({
         { field: 'id', headerName: 'No', width: 50 },
         {
             field: 'productName',
-            headerName: '제품명',
+            headerName: t('study.product_name'),
             width: 400,
             renderCell: (params) => {
                 const onClickName = (e) => {
@@ -68,8 +69,8 @@ const MedicineSearch = ({
                 );
             },
         },
-        { field: 'companyName', headerName: '업체명', width: 100 },
-        { field: 'itemCode', headerName: '품목기준코드', width: 100 },
+        { field: 'companyName', headerName: t('study.company_name'), width: 100 },
+        { field: 'itemCode', headerName: t('study.item_standard_code'), width: 100 },
     ];
 
     const getKoreanDrugs = async () => {
@@ -114,11 +115,13 @@ const MedicineSearch = ({
             fullWidth
         >
             <DialogTitle id="medicine-search-title" variant="h5">
-                의약품 검색
+				{t('study.search_for_medicines')}
+                {/* 의약품 검색 */}
             </DialogTitle>
             <DialogContent>
                 <DialogContentText id="medicine-search-description" color={grey[600]} mb={1}>
-                    의약품 검색 후 제품명을 선택해주세요.
+					{t('study.after_searching_for')}
+                    {/* 의약품 검색 후 제품명을 선택해주세요. */}
                 </DialogContentText>
                 <Box width={1}>
                     <Grid container columnGap={1}>
