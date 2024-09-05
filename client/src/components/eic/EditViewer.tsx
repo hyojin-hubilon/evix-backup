@@ -142,29 +142,21 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
     };
 
     const handleEdit = async (jsonTemplate: Blob) => {
-        const studyData: StudyDetail = studyDetail;
-        console.log(studyData);
-
         // FormData 객체 생성 및 데이터 추가
         const formData = new FormData();
 
-        formData.append(
-            'requestDto',
-            new Blob([JSON.stringify(studyData)], { type: 'application/json' })
-        );
-
         // 전자동의서 파일이 있는 경우 FormData에 추가
         if (jsonTemplate) {
-            formData.append('eic_file', jsonTemplate, `${studyData.title}.json`);
+            formData.append('eic_file', jsonTemplate, `${studyDetail.title}.json`);
         }
 
         try {
-            const response = await studyApi.editEicFile(formData);
-            if (response.code === 200 && response.content.std_no) {
+            const response = await studyApi.editEicFile(studyDetail.std_no, formData);
+            if (response.code === 200) {
                 confirm({
                     description: '전자동의서가 변경되었습니다.',
                     variant: 'info',
-                }).then(() => window.location.reload());
+                });
             }
         } catch (error) {
             console.error('Failed to deploy study: ', error);

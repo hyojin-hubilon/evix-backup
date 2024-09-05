@@ -92,7 +92,9 @@ export const handlePreviewTemplate = (
     if (eicFile) {
         getTemplateFromJsonFile(eicFile)
             .then((template) => {
-                if (!currentRef) return;
+                if (!currentRef) {
+                    return;
+                }
                 currentRef.updateTemplate(template);
             })
             .catch((error) => {
@@ -140,6 +142,41 @@ export const generatePDF = async (currentRef: Designer | Form | Viewer | null) =
 
         const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
         window.open(URL.createObjectURL(blob));
+    } catch (error) {
+        alert('필수 입력을 작성해주세요.');
+        console.error(error);
+    }
+};
+
+export const createPDF = async (currentRef: Designer | Form | Viewer | null) => {
+    if (!currentRef) return;
+    const template = currentRef.getTemplate();
+    const inputs =
+        typeof (currentRef as Viewer | Form).getInputs === 'function'
+            ? (currentRef as Viewer | Form).getInputs()
+            : getInputFromTemplate(template);
+
+    for (const obj of inputs) {
+        for (const key in obj) {
+            if (obj[key] === 'N' || obj[key] === '') {
+                alert('필수 입력을 작성해주세요.');
+                return;
+            }
+        }
+    }
+
+    const font = await getFontsData();
+
+    try {
+        const pdf = await generate({
+            template,
+            inputs,
+            options: { font, title: 'ediv-net' },
+            plugins: getPlugins(),
+        });
+
+        const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
+        return blob;
     } catch (error) {
         alert('필수 입력을 작성해주세요.');
         console.error(error);
