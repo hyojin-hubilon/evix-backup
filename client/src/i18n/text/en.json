@@ -9,7 +9,15 @@
         "terms" : "Terms",
         "cookie_policy" : "Cookie Policy",
 		"demo" : "Demo",
-		"login" : "Login"
+		"login" : "Login",
+		"edit" : "Edit",
+		"cancel" : "Cancel",
+		"restart" : "Restart",
+		"complete" : "Complete",
+		"pause" : "Pause",
+		"deploy" : "Deploy",
+		"preview" : "Preview",
+		"create": "Create"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -171,8 +179,13 @@
 		"owner_permission" : "Owner (Study creation, modification, distribution, member invitation) : ",
 		"invited_member_maintainer" : "Invited member (Maintainer) : ",
 		"invited_member_developer" : "Invited member (Developer) : ",
-		"maintainer" : "Maintainer (Study의 수정, 멤버 초대) : ",
-		"developer" : "Developer (Study inquiry) : "
+		"maintainer" : "Maintainer (editing of Study, inviting members) : ",
+		"developer" : "Developer (Study inquiry) : ",
+		"delete_study" : "Delete Study",
+		"search_for_medicines" : "Search for medicines",
+		"product_name" : "Product Name",
+		"company_name" : "Company name",
+		"item_standard_code" : "Item standard code"
 	},
     "survey": {},
     "user": {},

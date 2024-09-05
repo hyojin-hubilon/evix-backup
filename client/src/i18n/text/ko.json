@@ -9,7 +9,15 @@
         "terms" : "Terms",
         "cookie_policy" : "Cookie Policy",
 		"demo" : "Demo",
-		"login" : "Login"
+		"login" : "Login",
+		"edit" : "수정",
+		"cancel" : "취소",
+		"restart" : "재시작",
+		"complete" : "종료",
+		"pause" : "일시중지",
+		"deploy" : "배포",
+		"preview" : "미리보기",
+		"create" : "생성"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -170,10 +178,14 @@
 		"owner_permission" : "Owner (Study의 생성, 수정, 배포, 멤버 초대) : ",
 		"invited_member_maintainer" : "초대 멤버(Maintainer) : ",
 		"invited_member_developer" : "초대 멤버(Developer) : ",
-		"maintainer" : "Maintainer (editing of Study, inviting members) : ",
-		"developer" : "Developer (Study 조회) : "
+		"maintainer" : "Maintainer (Study의 수정, 멤버 초대) : ",
+		"developer" : "Developer (Study 조회) : ",
+		"delete_study" : "스터디 삭제",
+		"search_for_medicines" : "의약품 검색",
+		"product_name" : "제품명",
+		"company_name" : "업체명",
+		"item_standard_code" : "품목기준코드"
 	},
-
     "survey": {},
     "user": {},
     "my_page": {},
