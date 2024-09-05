@@ -109,15 +109,13 @@ const Previewer = ({ eicFile, onClose }) => {
             <div ref={uiRef} style={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }} />
 			<DialogActions>
                     <Button
-                       
-                        variant="outlined"
+                        variant="contained"
                         color="primary"
                         onClick={onClose}
                     >
                         Close
                     </Button>
                     <Button
-                       
                         variant="contained"
                         color="primary"
                         onClick={() => generatePDF(ui.current)}

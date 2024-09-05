@@ -17,6 +17,7 @@ import participantStudyApi from '@/apis/participantStudy';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 const EICAgreement = () => {
+    const [participantName, setParticipantName] = useState<string>('');
     const navigate = useNavigate();
     const params = useParams();
     const stdNo = Number(params?.stdNo);
@@ -85,6 +86,7 @@ const EICAgreement = () => {
                         description: `전자서명이 완료되었습니다.`,
                         variant: 'info',
                     });
+                    setParticipantName((prev) => res.content.participantName);
                     setSumbmitted((prev) => true);
                 }
             });
@@ -150,10 +152,10 @@ const EICAgreement = () => {
                         <S.H1>동의서 제출 완료</S.H1>
                         <Box mt="21px">
                             <S.CommonText>
-                                <strong>참여자명</strong> 님의 <strong>{study.title}</strong> 연구 참여 
+                                <strong>{participantName}</strong> 님의 <strong>{study.title}</strong> 연구 참여 
                                 동의서를
                                 <br />
-                                <strong>{study.participation_organization}</strong> 에 안전하게 제출하였습니다.
+                                <strong>{study.allotment_agency_name}</strong> 에 안전하게 제출하였습니다.
                             </S.CommonText>
                         </Box>
                     </Box>

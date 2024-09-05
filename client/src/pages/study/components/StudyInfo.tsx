@@ -200,7 +200,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                 confirm({
                     description: '전자동의서가 저장되었습니다.',
                     variant: 'info',
-                }).then(() => window.location.reload());
+                }).then(handleEditViewClose);
             }
         } catch (error) {
             console.error('Failed to deploy study: ', error);
@@ -229,7 +229,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                     confirm({
                         description: '전자동의서가 삭제되었습니다.',
                         variant: 'info',
-                    }).then(() => window.location.reload());
+                    }).then(handleDeleteClose);
                 }
             }
         } catch (error) {
