@@ -10,6 +10,7 @@ import {
     Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type DeleteConfirmDialogProps = {
     member: MemberTempType;
@@ -27,6 +28,7 @@ const DeleteConfirmDialog = ({
     onDeleteSuccess,
 }: DeleteConfirmDialogProps) => {
     const [mode, setMode] = useState<'delete' | 'confirmed'>('delete');
+	const { t, i18n } = useTranslation();
 
     const handleConfirmDelete = async () => {
         setMode('confirmed');
@@ -53,13 +55,17 @@ const DeleteConfirmDialog = ({
             maxWidth="xs"
         >
             <DialogTitle id="member-delete-dialog-title" variant="h5">
-                멤버 삭제
+				{t('study.delete_member')}
+                {/* 멤버 삭제 */}
             </DialogTitle>
             <DialogContent>
                 <Box minWidth="300px">
                     <Typography id="member-delete-dialog-description">
                         {mode === 'delete' ? (
                             <>
+							{
+
+							}
                                 <b>
                                     {member.first_name} {member.last_name}
                                 </b>

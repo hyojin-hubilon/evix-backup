@@ -7,6 +7,7 @@ import {
     DialogTitle,
     Typography,
 } from '@mui/material';
+import { t } from 'i18next';
 
 interface SurveyDeleteDialogProps {
     isOpen: boolean;
@@ -23,21 +24,22 @@ const SurveyDeleteDialog = ({ isOpen, handleClose, handleConfirm }: SurveyDelete
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title" variant="h5">
-                {'Survey 삭제'}
+                {t('study.delete_survey')}
             </DialogTitle>
             <DialogContent>
                 <Box minWidth="300px">
                     <Typography id="study-action-dialog-description">
-                        Survey를 삭제 하시겠습니까?
+						{t('study.are_you_sure_delete')}
+                        {/* Survey를 삭제 하시겠습니까? */}
                     </Typography>
                 </Box>
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" onClick={handleClose}>
-                    취소
+                    {t('common.cancel')}
                 </Button>
                 <Button variant="contained" color="error" onClick={handleConfirm} autoFocus>
-                    확인
+					{t('common.confirm')}
                 </Button>
             </DialogActions>
         </Dialog>

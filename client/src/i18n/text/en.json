@@ -19,7 +19,8 @@
 		"preview" : "Preview",
 		"create": "Create",
 		"search" : "Search",
-		"close" : "Close"
+		"close" : "Close",
+		"confirm" : "Confirm"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -202,7 +203,20 @@
 		"no_new_surveys" : "There are no new surveys added.",
 		"survey_connection": "Survey Connection",
 		"connect_one_or_more" : "Please connect one or more Surveys.",
-		"if_there_are_multiple_surveys" : "If there are multiple surveys, they are processed according to the order of settings."
+		"if_there_are_multiple_surveys" : "If there are multiple surveys, they are processed according to the order of settings.",
+		"view_all" : "View All",
+		"connect" : "Connect",
+		"delete_survey" : "Delete Survey",
+		"are_you_sure_delete" : "Are you sure you want to delete the survey?",
+		"check_your_email" : "Please check your email.",
+		"set_the_permissions" : "Please set the permissions.",
+		"people_invited" : "People to be invited",
+		"enter_emails" : "Enter email addresses",
+		"permission" : "Permission",
+		"add" : "Add",
+		"all" : "All",
+		"waiting" : "Waiting for response",
+		"delete_member" : "Delete member"
 	},
     "survey": {},
     "user": {},

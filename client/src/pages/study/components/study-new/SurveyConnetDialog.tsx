@@ -377,14 +377,16 @@ const SurveyConnectDialog = ({
                                         type="submit"
                                         onClick={handleSearchSurvey}
                                     >
-                                        검색
+										{t('common.search')}
+                                        {/* 검색 */}
                                     </Button>
                                     <Button
                                         variant="outlined"
                                         sx={{ flexGrow: 1 }}
                                         onClick={handleSeeAll}
                                     >
-                                        전체보기
+										{t('study.view_all')}
+                                        {/* 전체보기 */}
                                     </Button>
                                 </Box>
                             </form>
@@ -419,7 +421,8 @@ const SurveyConnectDialog = ({
                                         variant="contained"
                                         sx={{ width: '10rem' }}
                                     >
-                                        연결하기
+										{t('study.connect')}
+                                        {/* 연결하기 */}
                                     </Button>
                                 </Box>
                             )}

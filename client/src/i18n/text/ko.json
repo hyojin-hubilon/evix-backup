@@ -19,7 +19,8 @@
 		"preview" : "미리보기",
 		"create" : "생성",
 		"search" : "검색",
-		"close" : "닫기"
+		"close" : "닫기",
+		"confirm" :  "확인"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -200,7 +201,20 @@
 		"no_new_surveys" : "새로 추가된 설문이 없습니다.",
 		"survey_connection": "Survey 연결",
 		"connect_one_or_more" : "1개 이상의 Survey를 연결해주세요.",
-		"if_there_are_multiple_surveys" : "Survey가 여러개일 경우, 설정 순서에 따라 진행됩니다."
+		"if_there_are_multiple_surveys" : "Survey가 여러개일 경우, 설정 순서에 따라 진행됩니다.",
+		"view_all" : "전체보기",
+		"connect" : "연결하기",
+		"delete_survey" : "Survey 삭제",
+		"are_you_sure_delete" : "Survey를 삭제 하시겠습니까?",
+		"check_your_email" : "이메일을 확인해주세요.",
+		"set_the_permissions" : "권한을 설정해주세요.",
+		"people_invited" : "초대받을 사람",
+		"enter_emails" : "메일 주소 입력",
+		"permission" : "권한",
+		"add" : "추가하기",
+		"all" : "전체",
+		"waiting" : "대기",
+		"delete_member" : "멤버 삭제"
 	},
     "survey": {},
     "user": {},
