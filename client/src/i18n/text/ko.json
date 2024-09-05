@@ -195,7 +195,12 @@
 		"settings" : "세팅",
 		"survey_successfully_deleted" : "설문이 성공적으로 삭제되었습니다.",
 		"failed_delete_survey" : "설문 삭제에 실패했습니다.",
-		"new_survey_connected" : "새로운 설문이 성공적으로 연결되었습니다."
+		"new_survey_connected" : "새로운 설문이 성공적으로 연결되었습니다.",
+		"failed_connect_survey" : "설문 연결에 실패했습니다.",
+		"no_new_surveys" : "새로 추가된 설문이 없습니다.",
+		"survey_connection": "Survey 연결",
+		"connect_one_or_more" : "1개 이상의 Survey를 연결해주세요.",
+		"if_there_are_multiple_surveys" : "Survey가 여러개일 경우, 설정 순서에 따라 진행됩니다."
 	},
     "survey": {},
     "user": {},

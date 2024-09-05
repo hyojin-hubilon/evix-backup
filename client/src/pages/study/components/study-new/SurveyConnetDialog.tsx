@@ -262,11 +262,11 @@ const SurveyConnectDialog = ({
                     setOpenAlert(true);
                 } catch (error) {
                     console.error('Failed to post survey:', error);
-                    setSuccessMessage('설문 연결에 실패했습니다.');
+                    setSuccessMessage(t('study.failed_connect_survey'));//설문 연결에 실패했습니다.
                     setOpenAlert(true);
                 }
             } else {
-                setSuccessMessage('새로 추가된 설문이 없습니다.');
+                setSuccessMessage(t('study.no_new_surveys'));//새로 추가된 설문이 없습니다.
                 setOpenAlert(true);
             }
         } else if (mode === 'create') {
@@ -338,7 +338,8 @@ const SurveyConnectDialog = ({
                 <Grid container width={previewSurveyNo ? 1100 : 730}>
                     <Grid item xs={previewSurveyNo ? 8 : 12}>
                         <DialogTitle id="survey-connect-title" variant="h4">
-                            Survey 연결
+							{t('study.survey_connection')}
+                            {/* Survey 연결 */}
                             <IconButton
                                 size="small"
                                 sx={{ position: 'absolute', top: '10px', left: '680px' }}
@@ -356,8 +357,10 @@ const SurveyConnectDialog = ({
                                     },
                                 }}
                             >
-                                <span>1개 이상의 Survey를 연결해주세요.</span>
-                                <span>Survey가 여러개일 경우, 설정 순서에 따라 진행됩니다.</span>
+								{/* 1개 이상의 Survey를 연결해주세요. */}
+                                <span>{t('study.connect_one_or_more')}</span>
+								{/* Survey가 여러개일 경우, 설정 순서에 따라 진행됩니다. */}
+                                <span>{t('study.if_there_are_multiple_surveys')}</span>
                             </Typography>
                             <form onSubmit={handleSearchSurvey}>
                                 <Box display="flex" mt="1rem" mb="1rem" gap={1}>

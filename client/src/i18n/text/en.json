@@ -197,7 +197,12 @@
 		"settings" : "Settings",
 		"survey_successfully_deleted" : "The survey has been successfully deleted.",
 		"failed_delete_survey" : "Failed to delete survey.",
-		"new_survey_connected" : "Your new survey has been successfully connected."
+		"new_survey_connected" : "Your new survey has been successfully connected.",
+		"failed_connect_survey" : "Failed to connect to the survey.",
+		"no_new_surveys" : "There are no new surveys added.",
+		"survey_connection": "Survey Connection",
+		"connect_one_or_more" : "Please connect one or more Surveys.",
+		"if_there_are_multiple_surveys" : "If there are multiple surveys, they are processed according to the order of settings."
 	},
     "survey": {},
     "user": {},
