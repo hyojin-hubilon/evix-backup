@@ -128,8 +128,14 @@ const MedicineSearch = ({
                         <Grid item xs={3.8}>
                             <FormControl size="small" fullWidth>
                                 <Select value={country} onChange={handleChangeCountry}>
-                                    <MenuItem value="KO_KR">한국 약품통합정보시스템</MenuItem>
-                                    <MenuItem value="EN_US">미국 FDA Drug Search</MenuItem>
+                                    <MenuItem value="KO_KR">
+										{t('study.korea_drug_information')}
+										{/* 한국 약품통합정보시스템 */}
+									</MenuItem>
+                                    <MenuItem value="EN_US">
+										{t('study.us_fda')}
+										{/* 미국 FDA Drug Search */}
+									</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -138,7 +144,7 @@ const MedicineSearch = ({
                                 <Box gap={1} display="flex">
                                     <FormControl size="small" fullWidth>
                                         <OutlinedInput
-                                            placeholder="검색어 입력"
+                                            placeholder={t('study.enter_search_term')} // 검색어 입력
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                         />
                                     </FormControl>
@@ -148,7 +154,8 @@ const MedicineSearch = ({
                                         color="primary"
                                         onClick={handleSearch}
                                     >
-                                        검색
+                                        {t('common.search')}
+										{/* 검색 */}
                                     </Button>
                                 </Box>
                             </form>
@@ -184,7 +191,8 @@ const MedicineSearch = ({
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>닫기</Button>
+                <Button onClick={handleClose}>{t('common.close')}</Button>
+				{/* 닫기 */}
             </DialogActions>
         </Dialog>
     );

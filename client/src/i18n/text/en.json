@@ -18,7 +18,8 @@
 		"deploy" : "Deploy",
 		"preview" : "Preview",
 		"create": "Create",
-		"search" : "Search"
+		"search" : "Search",
+		"close" : "Close"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -187,7 +188,12 @@
 		"product_name" : "Product Name",
 		"company_name" : "Company name",
 		"item_standard_code" : "Item standard code",
-		"after_searching_for" : "After searching for a medicine, please select the product name."
+		"after_searching_for" : "After searching for a medicine, please select the product name.",
+		"korea_drug_information":"Korea Drug Information Search",
+		"us_fda" : "US FDA Drug Search",
+		"enter_search_term" : "Enter search term"
+
+
 	},
     "survey": {},
     "user": {},

@@ -18,7 +18,8 @@
 		"deploy" : "배포",
 		"preview" : "미리보기",
 		"create" : "생성",
-		"search" : "검색"
+		"search" : "검색",
+		"close" : "닫기"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -186,7 +187,10 @@
 		"product_name" : "제품명",
 		"company_name" : "업체명",
 		"item_standard_code" : "품목기준코드",
-		"after_searching_for" : "의약품 검색 후 제품명을 선택해주세요."
+		"after_searching_for" : "의약품 검색 후 제품명을 선택해주세요.",
+		"korea_pharmaceutical" : "한국 약품통합정보시스템",
+		"us_fda" : "미국 FDA Drug Search"
+
 	},
     "survey": {},
     "user": {},
