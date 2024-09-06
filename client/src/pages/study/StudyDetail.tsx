@@ -90,7 +90,7 @@ const StudyDetail = () => {
 
     return (
         <>
-            <Breadcrumbs2 />
+            <Breadcrumbs2 sub={studyDetail?.title}/>
             <Grid container rowSpacing={3} columnSpacing={1}>
                 <Grid container item xs={12}>
                     <Box display="flex" alignItems="center" gap={1}>
