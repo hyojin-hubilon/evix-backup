@@ -177,6 +177,7 @@
 		"connect_eic" : "EIC 연결",
 		"managing_members" : "멤버 관리",
 		"inviting" : "초대하기",
+		"invite_as_partners" : "초대하기",
 		"member_permission_information" : "멤버 권한 안내",
 		"owner_permission" : "Owner (Study의 생성, 수정, 배포, 멤버 초대) : ",
 		"invited_member_maintainer" : "초대 멤버(Maintainer) : ",
@@ -216,7 +217,19 @@
 		"waiting" : "대기",
 		"delete_member" : "멤버 삭제",
 		"do_you_want_remove_member" : "님을 멤버에서 삭제하시겠습니까?",
-		"has_been_removed" : "님이 멤버에서 삭제되었습니다."
+		"has_been_removed" : "님이 멤버에서 삭제되었습니다.",
+		"participation_completion_rate" : "참여완료율",
+		"male" : "남성",
+		"female": "여성",
+		"gender" : "성별",
+		"s" : "대",
+		"over_70s" : "70대 이상",
+		"participant_gender_age_group" :  "참여자 성별/연령대",
+		"total_participant_trends" : "전체 참여자 추이",
+		"participants" : "참여자",
+		"status_by_institution" : "병원별 참여자",
+		"recent_participant_logs" : "최근 참여자"
+
 	},
     "survey": {},
     "user": {},

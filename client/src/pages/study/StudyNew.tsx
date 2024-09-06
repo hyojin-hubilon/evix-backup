@@ -38,6 +38,8 @@ import { t } from 'i18next';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { useUserProfile } from '@/context/UserProfileContext';
 import { useTranslation } from 'react-i18next';
+import AddLinkIcon from '@mui/icons-material/AddLink';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 const FormTooltip = ({ text }) => {
     return (
@@ -655,7 +657,8 @@ const StudyNew = () => {
                                             setIsOpenSurvey(true);
                                         }}
 										sx={{ minWidth: '105px' }}
-                                    >
+                                    >	
+										<AddLinkIcon sx={{mr:'5px', fontSize:'1.2rem'}} />
                                         {t('study.connect_survey')}
                                         {/* Survey 연결 */}
                                     </Button>
@@ -700,6 +703,7 @@ const StudyNew = () => {
                                         onClick={handleOpenUploadBasePdf}
                                         sx={{ minWidth: '105px' }}
                                     >
+										<AddLinkIcon sx={{mr:'5px', fontSize:'1.2rem'}} />
                                         {t('study.connect_eic')}
                                         {/* EIC 연결 */}
                                     </Button>{' '}
@@ -730,6 +734,7 @@ const StudyNew = () => {
                                         sx={{ pt: '0.2rem' }}
                                         gap={0.5}
                                     >
+
                                         <Typography variant="h5">
                                             {t('study.managing_members')}
                                         </Typography>
@@ -743,7 +748,8 @@ const StudyNew = () => {
                                         }}
 										sx={{ minWidth: '105px' }}
                                     >
-                                        {t('study.inviting')}
+										<PersonAddAlt1Icon sx={{mr:'5px', fontSize:'1.2rem'}}/>
+										{t('study.invite_as_partners')}
                                         {/* 초대하기 */}
                                     </Button>
                                 </Grid>

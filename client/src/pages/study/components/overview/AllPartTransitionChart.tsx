@@ -1,5 +1,6 @@
 import { Box, Button, Stack, Typography, useTheme, Grid } from '@mui/material';
 import { ApexOptions } from "apexcharts";
+import { t } from 'i18next';
 import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
@@ -48,7 +49,7 @@ const AllPartTransitionChart = ({ title } : {title:string}) => {
 
 	const [series, setSeries] = useState([ // 예시데이터
 		{
-			name: '참여자',
+			name: t('study.participants'),
 			data: [
 				[1327359600000,30], //날짜, 참여자
                 [1327446000000,31],
@@ -364,7 +365,7 @@ const AllPartTransitionChart = ({ title } : {title:string}) => {
 			tooltip: {
 				y: {
 					formatter: function (val) {
-						return val + "명"
+						return val + ' ' +t('study.person')
 					}
 				}
 			},

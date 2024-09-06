@@ -1,5 +1,6 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Box, Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useTheme } from "@mui/material";
+import { t } from "i18next";
   
 const RecentParticipant = () => {
 	const theme = useTheme();
@@ -28,7 +29,10 @@ const RecentParticipant = () => {
 		<Box>
 			<Grid container>
 				<Grid item xs={6}>
-					<Typography variant="h6" color="textSecondary">최근 참여자</Typography>
+					<Typography variant="h6" color="textSecondary">
+						{t('study.recent_participant_logs')}
+						{/* 최근 참여자 */}
+					</Typography>
 				</Grid>
 				<Grid item xs={6} display="flex" justifyContent="flex-end">
 					<Button><PlusOutlined style={{fontSize: '0.7rem', marginRight: '1rem'}} />more</Button>
