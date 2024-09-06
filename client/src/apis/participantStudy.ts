@@ -57,7 +57,7 @@ const participantStudyApi = {
     },
     uploadEic: async (std_no: number, formData: FormData) => {
         try {
-            const responseData = await file_api<{}>(`${BASE_API_URL}/upload-eic?std_no=${std_no}`, 'post', formData);
+            const responseData = await file_api<{full_name : string}>(`${BASE_API_URL}/upload-eic?std_no=${std_no}`, 'post', formData);
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;

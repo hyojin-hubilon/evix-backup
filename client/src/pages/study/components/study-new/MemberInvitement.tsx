@@ -30,9 +30,9 @@ import * as yup from 'yup';
 
 import MemberListItem from './MemberListItem';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
-import userApi from '@/apis/user';
 import { InviteMemberTempType, MemberTempType } from '@/types/study';
 import { useUserProfile } from '@/context/UserProfileContext';
+import { t } from 'i18next';
 
 const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMembers }) => {
     const { userProfile, setUserProfile } = useUserProfile();
@@ -78,7 +78,7 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
         const errorEmail = value.find((email) => !emailSchema.isValidSync(email));
         if (errorEmail) {
             setEmailInput(errorEmail);
-            setEmailError('이메일을 확인해주세요.');
+            setEmailError(t('study.check_your_email')); //이메일을 확인해주세요.
         } else {
             setEmailError('');
         }
@@ -91,11 +91,11 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
 
     const handleAddMember = () => {
         if (emails.length === 0) {
-            setEmailError('이메일을 확인해주세요.');
+            setEmailError(t('study.check_your_email')); //이메일을 확인해주세요.
             return;
         }
         if (!newAuthority) {
-            setAuthorityError('권한을 설정해주세요.');
+            setAuthorityError(t('study.set_the_permissions')); //권한을 설정해주세요.
             return;
         }
 
@@ -137,7 +137,7 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                 maxWidth="sm"
             >
                 <DialogTitle id="member-management-title" variant="h4" width={600}>
-                    초대하기 <span style={{ color: primary.main }}>({members.length})</span>
+                    {t('study.inviting')} <span style={{ color: primary.main }}>({members.length})</span>
                     <IconButton
                         size="small"
                         sx={{ position: 'absolute', top: '10px', right: '10px' }}
@@ -175,7 +175,8 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                         p="1rem"
                     >
                         <Typography variant="h6" fontWeight="600">
-                            초대받을 사람
+							{t('study.people_invited')}
+                            {/* 초대받을 사람 */}
                         </Typography>
                         <Autocomplete
                             multiple
@@ -192,7 +193,7 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                                 ))
                             }
                             renderInput={(params) => (
-                                <TextField {...params} placeholder="메일 주소 입력" />
+                                <TextField {...params} placeholder={t('study.enter_emails')} />
                             )}
                         />
                         {emailError && <FormHelperText error>{emailError}</FormHelperText>}
@@ -207,7 +208,10 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                                     sx={{ width: 1, backgroundColor: 'white' }}
                                     displayEmpty
                                 >
-                                    <MenuItem value="">권한</MenuItem>
+                                    <MenuItem value="">
+										{t('study.permission')}
+										{/* 권한 */}
+									</MenuItem>
                                     <MenuItem value="maintainer">Maintainer</MenuItem>
                                     <MenuItem value="developer">Developer</MenuItem>
                                 </Select>
@@ -218,7 +222,8 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                                 sx={{ ml: 'auto' }}
                                 onClick={handleAddMember}
                             >
-                                추가하기
+								{t('study.add')}
+                                {/* 추가하기 */}
                             </Button>
                         </Box>
                         {authorityError && <FormHelperText error>{authorityError}</FormHelperText>}
@@ -229,10 +234,10 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                             onChange={handleChangeTab}
                             aria-label="Study Status Tab"
                         >
-                            <Tab label="전체" value="0" />
+                            <Tab label={t('study.all')} value="0" />
                             <Tab label="Maintainer" value="1" />
                             <Tab label="Developer" value="2" />
-                            <Tab label="대기" value="3" />
+                            <Tab label={t('study.waiting')} value="3" />
                         </Tabs>
 
                         <List>

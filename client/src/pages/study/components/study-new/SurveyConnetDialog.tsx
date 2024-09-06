@@ -28,6 +28,7 @@ import SurveyConnectPreview from './SurveyConnectPreview';
 import surveyApi from '@/apis/survey';
 import studyApi from '@/apis/study';
 import SurveyDeleteDialog from './SurveyDeleteDialog';
+import { t } from 'i18next';
 
 interface SurveyConnectDialogProps {
     isOpen: boolean;
@@ -107,11 +108,11 @@ const SurveyConnectDialog = ({
                     (s) => s.survey_no !== surveyToDelete.survey_no
                 );
                 setSelectedSurvey(newSelectedSurvey);
-                setSuccessMessage('설문이 성공적으로 삭제되었습니다.');
+                setSuccessMessage(t('study.survey_successfully_deleted')); //설문이 성공적으로 삭제되었습니다.
                 setOpenAlert(true);
             } catch (error) {
                 console.error('Failed to disconnect survey:', error);
-                setSuccessMessage('설문 삭제에 실패했습니다.');
+                setSuccessMessage(t('study.failed_delete_survey'));//설문 삭제에 실패했습니다.
                 setOpenAlert(true);
             }
         }
@@ -257,15 +258,15 @@ const SurveyConnectDialog = ({
                         studySurveySetList: newStudySurveySetList,
                     };
                     await studyApi.postSurvey(data);
-                    setSuccessMessage('새로운 설문이 성공적으로 연결되었습니다.');
+                    setSuccessMessage(t('study.new_survey_connected')); //새로운 설문이 성공적으로 연결되었습니다.
                     setOpenAlert(true);
                 } catch (error) {
                     console.error('Failed to post survey:', error);
-                    setSuccessMessage('설문 연결에 실패했습니다.');
+                    setSuccessMessage(t('study.failed_connect_survey'));//설문 연결에 실패했습니다.
                     setOpenAlert(true);
                 }
             } else {
-                setSuccessMessage('새로 추가된 설문이 없습니다.');
+                setSuccessMessage(t('study.no_new_surveys'));//새로 추가된 설문이 없습니다.
                 setOpenAlert(true);
             }
         } else if (mode === 'create') {
@@ -337,7 +338,8 @@ const SurveyConnectDialog = ({
                 <Grid container width={previewSurveyNo ? 1100 : 730}>
                     <Grid item xs={previewSurveyNo ? 8 : 12}>
                         <DialogTitle id="survey-connect-title" variant="h4">
-                            Survey 연결
+							{t('study.survey_connection')}
+                            {/* Survey 연결 */}
                             <IconButton
                                 size="small"
                                 sx={{ position: 'absolute', top: '10px', left: '680px' }}
@@ -355,8 +357,10 @@ const SurveyConnectDialog = ({
                                     },
                                 }}
                             >
-                                <span>1개 이상의 Survey를 연결해주세요.</span>
-                                <span>Survey가 여러개일 경우, 설정 순서에 따라 진행됩니다.</span>
+								{/* 1개 이상의 Survey를 연결해주세요. */}
+                                <span>{t('study.connect_one_or_more')}</span>
+								{/* Survey가 여러개일 경우, 설정 순서에 따라 진행됩니다. */}
+                                <span>{t('study.if_there_are_multiple_surveys')}</span>
                             </Typography>
                             <form onSubmit={handleSearchSurvey}>
                                 <Box display="flex" mt="1rem" mb="1rem" gap={1}>
@@ -373,14 +377,16 @@ const SurveyConnectDialog = ({
                                         type="submit"
                                         onClick={handleSearchSurvey}
                                     >
-                                        검색
+										{t('common.search')}
+                                        {/* 검색 */}
                                     </Button>
                                     <Button
                                         variant="outlined"
                                         sx={{ flexGrow: 1 }}
                                         onClick={handleSeeAll}
                                     >
-                                        전체보기
+										{t('study.view_all')}
+                                        {/* 전체보기 */}
                                     </Button>
                                 </Box>
                             </form>
@@ -415,7 +421,8 @@ const SurveyConnectDialog = ({
                                         variant="contained"
                                         sx={{ width: '10rem' }}
                                     >
-                                        연결하기
+										{t('study.connect')}
+                                        {/* 연결하기 */}
                                     </Button>
                                 </Box>
                             )}

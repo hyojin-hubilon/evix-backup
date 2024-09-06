@@ -17,6 +17,7 @@ import participantStudyApi from '@/apis/participantStudy';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 const EICAgreement = () => {
+    const [participantName, setParticipantName] = useState<string>('');
     const navigate = useNavigate();
     const params = useParams();
     const stdNo = Number(params?.stdNo);
@@ -24,7 +25,7 @@ const EICAgreement = () => {
     const study = location.state?.study ?? {};
 
     console.log(study);
-
+  
     const uiRef = useRef<HTMLDivElement | null>(null);
     const ui = useRef<Form | Viewer | null>(null);
     const [prevUiRef, setPrevUiRef] = useState<MutableRefObject<
@@ -74,16 +75,18 @@ const EICAgreement = () => {
             const formData = new FormData();
             const pdf = await createPDF(ui.current);
 
-            if (pdf) {
-                formData.append('eic_file', pdf, `eic_file.pdf`);
+            if (!pdf) {
+                return;
             }
 
+            formData.append('eic_file', pdf, `eic_file.pdf`);
             participantStudyApi.uploadEic(stdNo, formData).then((res) => {
                 if (res.code === 200) {
                     confirm({
                         description: `전자서명이 완료되었습니다.`,
                         variant: 'info',
                     });
+                    setParticipantName((prev) => res.content.full_name);
                     setSumbmitted((prev) => true);
                 }
             });
@@ -98,26 +101,26 @@ const EICAgreement = () => {
             buildUi(mode);
             setPrevUiRef(uiRef);
         }
-        
+
         const handleEic = async () => {
             try {
                 const eicFile = await participantStudyApi.downloadEicFile(stdNo, study.eic_name);
-                console.log('eicFile', eicFile);
                 return eicFile;
             } catch (error) {
                 console.error('Failed to Download EIC File', error);
             }
         };
 
-        const eicFile = handleEic();
+        handleEic().then((eicFile) => {
+            console.log('eicFile', eicFile); 
+            const jsonFile = new Blob([JSON.stringify(eicFile)], {
+                type: 'application/json',
+            });
 
-        const jsonFile = new Blob([JSON.stringify(eicFile)], {
-            type: 'application/json',
-        });
-
-        getFontsData().then(() => {
-            handlePreviewTemplate(jsonFile, ui.current);
-        });
+            getFontsData().then(() => {
+                handlePreviewTemplate(jsonFile, ui.current);
+            });
+        })
     }, []);
 
     return (
@@ -127,7 +130,7 @@ const EICAgreement = () => {
                     <MdppHeader title="전자동의서" backBtn></MdppHeader>
                     <Box m="23px">
                         <S.CommonText>
-                            {/* {description} 조사에 참여해 주셔서 감사드립니다. */}
+                            {study.title} 조사에 참여해 주셔서 감사드립니다.
                             동의서 내용을 확인하시고, 데이터 활용에 동의해 주세요.
                         </S.CommonText>
                     </Box>
@@ -149,10 +152,10 @@ const EICAgreement = () => {
                         <S.H1>동의서 제출 완료</S.H1>
                         <Box mt="21px">
                             <S.CommonText>
-                                {/* <strong>참여자명</strong> 님의 <strong>{studyTitle}</strong> 연구 참여 */}
+                                <strong>{participantName}</strong> 님의 <strong>{study.title}</strong> 연구 참여 
                                 동의서를
                                 <br />
-                                <strong>코드발급 기관명</strong> 에 안전하게 제출하였습니다.
+                                <strong>{study.allotment_agency_name}</strong> 에 안전하게 제출하였습니다.
                             </S.CommonText>
                         </Box>
                     </Box>

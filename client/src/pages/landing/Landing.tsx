@@ -360,7 +360,7 @@ export default function LandingPage() {
                                 },
                             }}
                         >
-                            <Grid item xs={12} sm={4} lg={6}>
+                            <Grid item xs={12} sm={4} lg={4}>
                                 <Section03H2>{t('landing.cdms')}</Section03H2>
                                 <Section03H4>{t('landing.clinical_data')}</Section03H4>
                                 <Section03P>
