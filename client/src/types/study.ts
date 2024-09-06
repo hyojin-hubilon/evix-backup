@@ -59,9 +59,9 @@ export interface ManagerList {
     profile_image_name: string;
     first_name: string;
     last_name: string;
-	email:string;
-	company_name:string;	
-	invited_at: string | Date;
+    email: string;
+    company_name: string;
+    invited_at: string | Date;
 }
 
 export interface MyStudyList {
@@ -147,22 +147,20 @@ interface Invite {
 }
 
 export interface StudySurveySetList {
-		set_no: number,
-		std_no: number,
-		survey_start_date: string | Date,
-		survey_end_date: string|Date,
-		survey_cycle: 'DAILY' | 'WEEKLY' | 'MONTHLY',
-		number_in_cycle: number,
-		sort: number,
-		surveyList: 
-			{
-				set_no: number,
-				survey_no: number,
-				survey_cnt: number,
-				title: string,
-				sort: number
-			}[]
-		
+    set_no: number;
+    std_no: number;
+    survey_start_date: string | Date;
+    survey_end_date: string | Date;
+    survey_cycle: 'DAILY' | 'WEEKLY' | 'MONTHLY';
+    number_in_cycle: number;
+    sort: number;
+    surveyList: {
+        set_no: number;
+        survey_no: number;
+        survey_cnt: number;
+        title: string;
+        sort: number;
+    }[];
 }
 
 export interface StudyDetail {
@@ -259,4 +257,18 @@ export interface totalParticipants {
     target_number: number;
     number_participant: number;
     participation_late: number;
+}
+
+export interface ParticipantsList {
+    std_no: number;
+    participant_no: number;
+    std_privilege: string;
+    full_name: string;
+    gender: string;
+    birthday: string;
+    age: number;
+    number_answer: number;
+    allotment_agency_name: string;
+    total_number_survey: number;
+    participation_status: 'PROGRESS' | 'COMPLETE';
 }

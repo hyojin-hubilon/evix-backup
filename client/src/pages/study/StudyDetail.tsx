@@ -9,18 +9,18 @@ import StudyParticipants from './components/StudyParicipations';
 import { useNavigate, useParams } from 'react-router-dom';
 import studyApi from '@/apis/study';
 import { STUDY_STATUS, STUDY_STATUS_KEY } from './components/StudyListItem';
-import { ParticipationRateByAge, totalParticipants } from '@/types/study';
+import { ParticipantsList, ParticipationRateByAge, totalParticipants } from '@/types/study';
 
 const StudyDetail = () => {
     const { stdNo } = useParams<{ stdNo: string | undefined }>();
 
     const [studyDetail, setStudyDetail] = useState<any>();
 
-    console.log('studyDetail: ', studyDetail);
-
     const [totalParticipants, setTotalParticipants] = useState<totalParticipants | null>(null);
     const [participationRateByAge, setParticipationRateByAge] =
         useState<ParticipationRateByAge | null>(null);
+    const [participantList, setParticipantList] = useState<ParticipantsList[]>([]);
+    const [recentParticipantList, setRecentParticipantList] = useState<ParticipantsList[]>([]);
 
     const navigate = useNavigate();
 
@@ -31,6 +31,8 @@ const StudyDetail = () => {
             fetchStudyDetail(stdNoParsed);
             fetchTotalParticipants(stdNoParsed);
             fetchOverviewByAge(stdNoParsed);
+            fetchParticipantsList(stdNoParsed);
+            fetchRecentParticipantList(stdNoParsed);
         }
     }, [stdNo]);
 
@@ -59,6 +61,94 @@ const StudyDetail = () => {
             setParticipationRateByAge(response.content as ParticipationRateByAge);
         } catch (error) {
             console.error('Failed to fetch participation rate by age: ', error);
+        }
+    };
+
+    const fetchParticipantsList = async (stdNo: number) => {
+        try {
+            const response = await studyApi.participantList(stdNo);
+
+            setParticipantList(response.content as ParticipantsList[]);
+            // setParticipantList([
+            //     {
+            //         'std_no': 3,
+            //         'participant_no': 1,
+            //         'std_privilege': 'PARTICIPANT',
+            //         'full_name': '이*덕',
+            //         'gender': 'male',
+            //         'birthday': 'Jun 24, 2000',
+            //         'age': 1,
+            //         'number_answer': 1,
+            //         'allotment_agency_name': '대웅제약',
+            //         'total_number_survey': 400,
+            //         'participation_status': 'PROGRESS',
+            //     },
+            //     {
+            //         'std_no': 3,
+            //         'participant_no': 2,
+            //         'std_privilege': 'PARTICIPANT',
+            //         'full_name': '이*진',
+            //         'gender': 'male',
+            //         'birthday': 'Jun 24, 2000',
+            //         'age': 15,
+            //         'number_answer': 2,
+            //         'allotment_agency_name': '보령제약',
+            //         'total_number_survey': 400,
+            //         'participation_status': 'PROGRESS',
+            //     },
+            //     {
+            //         'std_no': 3,
+            //         'participant_no': 3,
+            //         'std_privilege': 'PARTICIPANT',
+            //         'full_name': '박*영',
+            //         'gender': 'male',
+            //         'birthday': 'Jun 24, 2000',
+            //         'age': 31,
+            //         'number_answer': 2,
+            //         'allotment_agency_name': '보령제약',
+            //         'total_number_survey': 400,
+            //         'participation_status': 'COMPLETE',
+            //     },
+            // ]);
+        } catch (error) {
+            console.error('Failed to fetch participants list: ', error);
+        }
+    };
+
+    const fetchRecentParticipantList = async (stdNo: number) => {
+        try {
+            const response = await studyApi.recentParticipantLogs(stdNo);
+            setRecentParticipantList(response.content as ParticipantsList[]);
+            // setRecentParticipantList([
+            //     {
+            //         'std_no': 3,
+            //         'participant_no': 1,
+            //         'std_privilege': 'PARTICIPANT',
+            //         'full_name': '이*덕',
+            //         'gender': 'male',
+            //         'birthday': 'Jun 24, 2000',
+            //         'age': 1,
+            //         'number_answer': 1,
+            //         'allotment_agency_name': '대웅제약',
+            //         'total_number_survey': 400,
+            //         'participation_status': 'PROGRESS',
+            //     },
+            //     {
+            //         'std_no': 3,
+            //         'participant_no': 3,
+            //         'std_privilege': 'PARTICIPANT',
+            //         'full_name': '박*영',
+            //         'gender': 'male',
+            //         'birthday': 'Jun 24, 2000',
+            //         'age': 31,
+            //         'number_answer': 2,
+            //         'allotment_agency_name': '보령제약',
+            //         'total_number_survey': 400,
+            //         'participation_status': 'COMPLETE',
+            //     },
+            // ]);
+        } catch (error) {
+            console.error('Failed to fetch participants list: ', error);
         }
     };
 
@@ -164,6 +254,8 @@ const StudyDetail = () => {
                             partCompleteRate={partCompleteRate}
                             totalParticipants={totalParticipants}
                             participationRateByAge={participationRateByAge}
+                            participantList={recentParticipantList}
+                            onMoreClick={() => setActiveTab('2')} // 최근 참여자 More 버튼 클릭 시 Participants 탭으로 이동
                         />
                     )}
                 {studyDetail && activeTab === '1' && (
@@ -173,7 +265,9 @@ const StudyDetail = () => {
                         onSurveyClose={() => fetchStudyDetail(parseInt(stdNo!, 10))}
                     />
                 )}
-                {studyDetail && activeTab === '2' && <StudyParticipants />}
+                {studyDetail && activeTab === '2' && (
+                    <StudyParticipants participantList={participantList} />
+                )}
             </Grid>
         </>
     );

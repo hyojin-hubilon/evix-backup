@@ -5,7 +5,7 @@ import GenderAgeChart from './overview/GenderAgeChart';
 import AllPartTransitionChart from './overview/AllPartTransitionChart';
 import PartByHospitalsChart from './overview/PartByHospitalsChart';
 import RecentParticipant from './overview/RecentParticipant';
-import { ParticipationRateByAge } from '@/types/study';
+import { ParticipantsList, ParticipationRateByAge } from '@/types/study';
 
 type StudyOverviewProps = {
     partCompleteRate: ApexDonutChartSeriesType;
@@ -14,11 +14,16 @@ type StudyOverviewProps = {
         target_number: number;
     };
     participationRateByAge: ParticipationRateByAge;
+    participantList: ParticipantsList[];
+    onMoreClick: () => void;
 };
+
 const StudyOverView = ({
     partCompleteRate,
     totalParticipants,
     participationRateByAge,
+    participantList,
+    onMoreClick,
 }: StudyOverviewProps) => {
     return (
         <>
@@ -75,7 +80,10 @@ const StudyOverView = ({
 
             <Grid item xs={12}>
                 <MainCard>
-                    <RecentParticipant />
+                    <RecentParticipant
+                        participantList={participantList}
+                        onMoreClick={onMoreClick}
+                    />
                 </MainCard>
             </Grid>
         </>
