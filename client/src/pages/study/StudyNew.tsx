@@ -37,6 +37,7 @@ import EicParent from './components/eic/EicParent';
 import { t } from 'i18next';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { useUserProfile } from '@/context/UserProfileContext';
+import { useTranslation } from 'react-i18next';
 
 const FormTooltip = ({ text }) => {
     return (
@@ -84,7 +85,7 @@ const StudyNew = () => {
     const state = location.state as { mode: 'write' | 'edit'; stdNo?: number };
     const stdNo = location.state?.stdNo;
     const [stdStatus, setStdStatus] = useState<String>('');
-
+	
     // 유효성 검사
     const [errors, setErrors] = useState({
         title: '',
@@ -653,6 +654,7 @@ const StudyNew = () => {
                                         onClick={() => {
                                             setIsOpenSurvey(true);
                                         }}
+										sx={{ minWidth: '105px' }}
                                     >
                                         {t('study.connect_survey')}
                                         {/* Survey 연결 */}
@@ -696,7 +698,7 @@ const StudyNew = () => {
                                     <Button
                                         variant="contained"
                                         onClick={handleOpenUploadBasePdf}
-                                        sx={{ width: '103.14px' }}
+                                        sx={{ minWidth: '105px' }}
                                     >
                                         {t('study.connect_eic')}
                                         {/* EIC 연결 */}
@@ -739,7 +741,7 @@ const StudyNew = () => {
                                         onClick={() => {
                                             setIsOpenMember(true);
                                         }}
-                                        sx={{ width: '103.14px' }}
+										sx={{ minWidth: '105px' }}
                                     >
                                         {t('study.inviting')}
                                         {/* 초대하기 */}
@@ -833,10 +835,12 @@ const StudyNew = () => {
             {mode === 'write' ? (
                 <Box display="flex" justifyContent="flex-end" pt="1rem" gap={2}>
                     <Button variant="outlined" size="large" onClick={() => navigate(-1)}>
-                        취소
+                        {t('common.cancel')}
+						{/* 취소 */}
                     </Button>
                     <Button variant="contained" size="large" onClick={handleSubmit}>
-                        생성
+						{t('common.create')}
+						{/* 생성 */}
                     </Button>
                 </Box>
             ) : (
@@ -851,7 +855,8 @@ const StudyNew = () => {
                                         color="error"
                                         onClick={() => handleOpenDialog('delete')}
                                     >
-                                        스터디 삭제
+                                        {t('study.delete_study')}
+										{/* 스터디 삭제 */}
                                     </Button>
                                 </Grid>
                                 <Grid item xs={10}>
@@ -859,23 +864,27 @@ const StudyNew = () => {
                                         <Button
                                             variant="outlined"
                                             onClick={() => navigate('/study')}
-                                        >
-                                            취소
+                                        >	
+											{t('common.cancel')}
+                                            {/* 취소 */}
                                         </Button>
                                         {stdStatus === 'STD-CREATED' && (
                                             <>
                                                 <Button variant="outlined" onClick={handleUpdate}>
-                                                    수정
+													{t('common.edit')}
+                                                    {/* 수정 */}
                                                 </Button>
                                                 <Button
                                                     variant="outlined"
                                                     color="info"
                                                     onClick={handlePreview}
                                                 >
-                                                    미리보기
+													{t('common.preview')}
+                                                    {/* 미리보기 */}
                                                 </Button>
                                                 <Button variant="contained" onClick={handleDeploy}>
-                                                    배포
+													{t('common.deploy')}
+                                                    {/* 배포 */}
                                                 </Button>
                                             </>
                                         )}
@@ -888,14 +897,16 @@ const StudyNew = () => {
                                                     variant="outlined"
                                                     color="info"
                                                     onClick={() => handleOpenDialog('pause')}
-                                                >
-                                                    일시중지
+                                                >	
+													{t('common.pause')}
+                                                    {/* 일시중지 */}
                                                 </Button>
                                                 <Button
                                                     variant="contained"
                                                     onClick={() => handleOpenDialog('stop')}
-                                                >
-                                                    종료
+                                                >	
+													{t('common.complete')}
+                                                    {/* 종료 */}
                                                 </Button>
                                             </>
                                         )}
@@ -903,34 +914,39 @@ const StudyNew = () => {
                                             stdStatus === 'STD-STOP') && (
                                             <>
                                                 <Button variant="outlined" onClick={handleUpdate}>
-                                                    수정
+													{t('common.edit')}
+                                                    {/* 수정 */}
                                                 </Button>
                                                 <Button
                                                     variant="contained"
                                                     onClick={() => handleOpenDialog('stop')}
                                                 >
-                                                    종료
+													{t('common.complete')}
+                                                    {/* 종료 */}
                                                 </Button>
                                                 <Button
                                                     variant="outlined"
                                                     color="info"
                                                     onClick={() => handleOpenDialog('progression')}
                                                 >
-                                                    재시작
+													{t('common.restart')}
+                                                    {/* 재시작 */}
                                                 </Button>
                                             </>
                                         )}
                                         {stdStatus === 'STD-DONE' && (
                                             <>
                                                 <Button variant="outlined" onClick={handleUpdate}>
-                                                    수정
+													{t('common.edit')}
+                                                    {/* 수정 */}
                                                 </Button>
                                                 <Button
                                                     variant="outlined"
                                                     color="info"
                                                     onClick={() => handleOpenDialog('progression')}
                                                 >
-                                                    재시작
+													{t('common.restart')}
+                                                    {/* 재시작 */}
                                                 </Button>
                                             </>
                                         )}
@@ -942,10 +958,12 @@ const StudyNew = () => {
                             <Grid item xs={12}>
                                 <Box justifyContent="flex-end" display="flex" gap={1}>
                                     <Button variant="outlined" onClick={() => navigate('/study')}>
-                                        취소
+										{t('common.cancel')}
+                                        {/* 취소 */}
                                     </Button>
                                     <Button variant="outlined" onClick={handleUpdate}>
-                                        수정
+										{t('common.edit')}
+                                        {/* 수정 */}
                                     </Button>
                                 </Box>
                             </Grid>

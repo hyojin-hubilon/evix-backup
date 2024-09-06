@@ -1,13 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { EditOutlined, FundViewOutlined, UserAddOutlined } from '@ant-design/icons';
-import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
 import {
     Avatar,
     AvatarGroup,
     Box,
-    Button,
     Card,
-    Chip,
     ClickAwayListener,
     Grid,
     Grow,
@@ -21,9 +17,7 @@ import {
 } from '@mui/material';
 
 import { ManagerList, StudyListItemProps } from '@/types/study';
-import StudyNew from '../StudyNew';
 import { useEffect, useState } from 'react';
-import SurveyConnectDialog from './study-new/SurveyConnetDialog';
 import MemberManagement from './study-new/MemberManagement';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
@@ -35,6 +29,7 @@ import {
     StopIcon,
 } from '@/components/StatusIcons';
 import { useUserProfile } from '@/context/UserProfileContext';
+import { t } from 'i18next';
 
 // * 진행중인 상태일 경우, 한눈에 알아볼 수 있도록 bg를 다르게 처리함.
 // * 배포전/일시정지/중단: 빨간색 txt 처리
@@ -168,7 +163,11 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                         >
                             <TitleStatusIcon status={study.std_status} /> {statusLabel}
                         </Typography>
-                        <Typography variant="h4" onClick={handleShowStudy}>
+                        <Typography variant="h4" onClick={handleShowStudy} sx={{
+							maxHeight: "30px",
+							textOverflow: "ellipsis",
+							whiteSpace: "nowrap",
+							overflow: "hidden"}}>
                             {study.title}
                         </Typography>
                         <Typography variant="caption" sx={{ color: theme.palette.grey[500] }}>
@@ -232,8 +231,9 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                                                         onClick={() =>
                                                             handleInviteMember(study.std_no)
                                                         }
-                                                    >
-                                                        Invite members
+                                                    >	
+														{t('study.invite_members')}
+                                                        {/* Invite members */}
                                                     </MenuItem>
                                                 )}
                                                 {study.std_status !== 'STD-CREATED' && (
@@ -241,7 +241,8 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                                                         component={Link}
                                                         to={`/study/detail/${study.std_no}`}
                                                     >
-                                                        Veiw Results
+														{t('study.veiw_results')}
+                                                        {/* Veiw Results */}
                                                     </MenuItem>
                                                 )}
                                                 {isEditable && (
