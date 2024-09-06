@@ -37,6 +37,7 @@ import EicParent from './components/eic/EicParent';
 import { t } from 'i18next';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { useUserProfile } from '@/context/UserProfileContext';
+import { useTranslation } from 'react-i18next';
 
 const FormTooltip = ({ text }) => {
     return (
@@ -84,7 +85,7 @@ const StudyNew = () => {
     const state = location.state as { mode: 'write' | 'edit'; stdNo?: number };
     const stdNo = location.state?.stdNo;
     const [stdStatus, setStdStatus] = useState<String>('');
-
+	
     // 유효성 검사
     const [errors, setErrors] = useState({
         title: '',

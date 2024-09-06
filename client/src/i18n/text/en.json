@@ -216,7 +216,10 @@
 		"add" : "Add",
 		"all" : "All",
 		"waiting" : "Waiting for response",
-		"delete_member" : "Delete member"
+		"delete_member" : "Delete member",
+		"do_you_want_remove_01" : "Do you want to remove ",
+		"do_you_want_remove_02" : " from your members?",
+		"has_been_removed" : "has been removed from members."
 	},
     "survey": {},
     "user": {},
