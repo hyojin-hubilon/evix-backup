@@ -48,7 +48,17 @@ export interface WeeklyByStudy {
 }
 
 // 최근 참여자 로그 (배포 상태인 스터디)
-export interface RecentParticipantLogs {}
+export interface RecentParticipantLogs {
+    std_no: number;
+    participant_no: number;
+    study_title: string;
+    full_name: string;
+    birthday: string;
+    created_at: string; //<< update date 항목에 노출해주시면 됩니다.
+    number_answer: number;
+    total_number_survey: number;
+    participation_status: 'PROGRESS' | 'COMPLETE';
+}
 
 // 주간 스터디 참여자 수, 차트 타입
 export interface WeeklyByStudyChart {
