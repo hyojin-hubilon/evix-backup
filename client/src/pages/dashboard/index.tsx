@@ -320,6 +320,7 @@ const DashboardDefault = () => {
                                 onChange={handleChangeStudyGoal}
                                 value={studyGoalNo}
                                 size="small"
+								sx={{maxWidth: "200px"}}
                             >
                                 {participantNumber.map((study, index) => (
                                     <MenuItem key={index} value={String(study.std_no)}>
