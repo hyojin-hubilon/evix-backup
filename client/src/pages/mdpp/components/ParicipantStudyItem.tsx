@@ -2,10 +2,11 @@ import { ParticipantStudyList, StudyParticipantStatus } from '@/types/participan
 import { Box } from '@mui/material';
 import * as S from '../styles';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 type ParticipantStudyItemType = {
     study: ParticipantStudyList;
-	selectStudy: (study) => void
+    selectStudy: (study) => void;
 };
 
 const getStudyStatus = (
@@ -33,6 +34,7 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
     const now = dayjs();
     const startDate = dayjs(study.std_start_date || new Date());
     const endDate = dayjs(study.std_end_date || new Date());
+    console.log(study);
 
     const studyStatusKr: Record<StudyParticipantStatus, string> = {
         [StudyParticipantStatus.NEED_EIC]: '전자서명필요',
@@ -43,29 +45,40 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
     const status = getStudyStatus(now, startDate, endDate, study.eic_name);
     const statusLabel = studyStatusKr[status];
 
-	const handleSelectStudy = (study) => {
-		if(study.status !== StudyParticipantStatus.DONE) {
-			selectStudy(study);
-		}
-	}
+    const handleSelectStudy = (study) => {
+        if (study.status !== StudyParticipantStatus.DONE) {
+            selectStudy(study);
+        }
+    };
+
+    const navigate = useNavigate();
+    const handleEicPage = () => {
+        if (status === StudyParticipantStatus.NEED_EIC) {
+            navigate(`/mdpp/eic/${study.std_no}`, { state: { study } });
+        }
+    };
 
     return (
-        <Box p="20px 25px" borderBottom="1px solid #E0E5E9" position="relative" onClick={() => handleSelectStudy(study)}>
-            <Box display="flex" height="21px" alignItems="center" gap="10px">
-                <S.StudyStatus studyStatus={status}>{statusLabel}</S.StudyStatus>
-                <S.StudyTitle>{study.title}</S.StudyTitle>
-            </Box>
-            <Box pt="14px">
-                <S.StudyDetail>
-                    참여기간: {startDate.format('YYYY.MM.DD')} ~ {endDate.format('YYYY.MM.DD')}
-                </S.StudyDetail>
-                <S.StudyDetail>참여기관: {study.participation_organization}</S.StudyDetail>
-            </Box>
-            <Box display="flex" alignItems="center" gap="5px" mt="15px">
-                <S.StudyTags>
-                    {study.number_answer === 0 ? '참여대기중' : `총 ${study.number_answer}회 참여`}
-                </S.StudyTags>
-            </Box>
+        <Box p="20px 25px" borderBottom="1px solid #E0E5E9" position="relative">
+            <div onClick={() => handleSelectStudy(study)}>
+                <Box display="flex" height="21px" alignItems="center" gap="10px">
+                    <S.StudyStatus studyStatus={status}>{statusLabel}</S.StudyStatus>
+                    <S.StudyTitle>{study.title}</S.StudyTitle>
+                </Box>
+                <Box pt="14px">
+                    <S.StudyDetail>
+                        참여기간: {startDate.format('YYYY.MM.DD')} ~ {endDate.format('YYYY.MM.DD')}
+                    </S.StudyDetail>
+                    <S.StudyDetail>참여기관: {study.participation_organization}</S.StudyDetail>
+                </Box>
+                <Box display="flex" alignItems="center" gap="5px" mt="15px">
+                    <S.StudyTags>
+                        {study.number_answer === 0
+                            ? '참여대기중'
+                            : `총 ${study.number_answer}회 참여`}
+                    </S.StudyTags>
+                </Box>
+            </div>
             <Box
                 sx={{
                     position: 'absolute',
@@ -74,8 +87,10 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
                     width: '21px',
                     height: '21px',
                     marginTop: '-10px',
-                    color: status === StudyParticipantStatus.DONE ? '#AFB3BA' : '#000001', // 색상 변경 예시
+                    color: status === StudyParticipantStatus.NEED_EIC ? '#AFB3BA' : '#000001', // 색상 변경 예시
+                    cursor: status === StudyParticipantStatus.NEED_EIC ? 'pointer' : undefined
                 }}
+                onClick={handleEicPage}
             >
                 <svg
                     width="21"
@@ -86,13 +101,13 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
                 >
                     <path
                         d="M8.85712 6L13.1428 10.2857L8.85712 14.5714"
-                        stroke={status === StudyParticipantStatus.DONE ? '#AFB3BA' : '#000001'}
+                        stroke={status !== StudyParticipantStatus.NEED_EIC ? '#AFB3BA' : '#000001'}
                         strokeLinecap="round"
                         strokeLinejoin="round"
                     />
                     <path
                         d="M10.2857 19.5714C15.4141 19.5714 19.5714 15.4141 19.5714 10.2857C19.5714 5.15736 15.4141 1 10.2857 1C5.15736 1 1 5.15736 1 10.2857C1 15.4141 5.15736 19.5714 10.2857 19.5714Z"
-                        stroke={status === StudyParticipantStatus.DONE ? '#AFB3BA' : '#000001'}
+                        stroke={status !== StudyParticipantStatus.NEED_EIC ? '#AFB3BA' : '#000001'}
                         strokeLinecap="round"
                         strokeLinejoin="round"
                     />

@@ -1,6 +1,7 @@
 import { Button, FormControl, Grid, OutlinedInput, Typography, useTheme } from '@mui/material';
 import MedicineSearch from './MedicineSearch';
 import { useState } from 'react';
+import { t } from 'i18next';
 
 const MedicineInfo = ({ country, setCountry, drug, setDrug }) => {
     const theme = useTheme();
@@ -34,21 +35,28 @@ const MedicineInfo = ({ country, setCountry, drug, setDrug }) => {
                 borderRadius="1rem"
             >
                 <Grid item xs={3}>
-                    <Typography>검색</Typography>
+                    <Typography>
+						{t('common.search')}
+						{/* 검색 */}
+					</Typography>
                 </Grid>
                 <Grid item xs={9}>
                     <Button variant="contained" onClick={() => setOpenSearch(true)}>
-                        의약품 검색
+						{t('study.search_for_medicines')}
+                        {/* 의약품 검색 */}
                     </Button>
                 </Grid>
 
                 <Grid item xs={3}>
-                    <Typography>제품명</Typography>
+                    <Typography>
+						{t('study.product_name')}
+						{/* 제품명 */}
+					</Typography>
                 </Grid>
                 <Grid item xs={9}>
                     <FormControl size="small" fullWidth>
                         <OutlinedInput
-                            placeholder="제품명"
+                            placeholder={t('study.product_name')}
                             sx={{ backgroundColor: 'white' }}
                             value={drug?.productName}
                         />
@@ -56,12 +64,15 @@ const MedicineInfo = ({ country, setCountry, drug, setDrug }) => {
                 </Grid>
 
                 <Grid item xs={3}>
-                    <Typography>업체명</Typography>
+                    <Typography>
+						{t('study.company_name')}
+						{/* 업체명 */}
+					</Typography>
                 </Grid>
                 <Grid item xs={9}>
                     <FormControl size="small" fullWidth>
                         <OutlinedInput
-                            placeholder="업체명"
+                            placeholder={t('study.company_name')}
                             sx={{ backgroundColor: 'white' }}
                             value={drug?.companyName}
                         />
@@ -69,12 +80,15 @@ const MedicineInfo = ({ country, setCountry, drug, setDrug }) => {
                 </Grid>
 
                 <Grid item xs={3}>
-                    <Typography>품목기준코드</Typography>
+                    <Typography>
+						{t('study.item_standard_code')}
+						{/* 품목기준코드 */}
+					</Typography>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={4}>
                     <FormControl size="small" fullWidth>
                         <OutlinedInput
-                            placeholder="품목기준코드"
+                            placeholder={t('study.item_standard_code')}
                             sx={{ backgroundColor: 'white' }}
                             value={drug?.itemCode}
                         />

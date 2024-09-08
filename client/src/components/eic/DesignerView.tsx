@@ -7,18 +7,12 @@ import {
     readFile,
     cloneDeep,
     getPlugins,
-    handleLoadTemplate,
     downloadJsonFile,
 } from './helper';
 import {
     Box,
     Button,
     DialogActions,
-    DialogTitle,
-    InputLabel,
-    MenuItem,
-    Select,
-    SelectChangeEvent,
     Typography,
 } from '@mui/material';
 import { useConfirmation } from '@/context/ConfirmDialogContext';

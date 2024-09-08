@@ -16,6 +16,7 @@ import {
     useTheme,
 } from '@mui/material';
 import { DataGrid, gridClasses, GridColDef } from '@mui/x-data-grid';
+import { t } from 'i18next';
 import { useState } from 'react';
 type MedicineSearchProps = {
     isOpen: boolean;
@@ -43,7 +44,7 @@ const MedicineSearch = ({
         { field: 'id', headerName: 'No', width: 50 },
         {
             field: 'productName',
-            headerName: '제품명',
+            headerName: t('study.product_name'),
             width: 400,
             renderCell: (params) => {
                 const onClickName = (e) => {
@@ -68,8 +69,8 @@ const MedicineSearch = ({
                 );
             },
         },
-        { field: 'companyName', headerName: '업체명', width: 100 },
-        { field: 'itemCode', headerName: '품목기준코드', width: 100 },
+        { field: 'companyName', headerName: t('study.company_name'), width: 100 },
+        { field: 'itemCode', headerName: t('study.item_standard_code'), width: 100 },
     ];
 
     const getKoreanDrugs = async () => {
@@ -114,19 +115,27 @@ const MedicineSearch = ({
             fullWidth
         >
             <DialogTitle id="medicine-search-title" variant="h5">
-                의약품 검색
+				{t('study.search_for_medicines')}
+                {/* 의약품 검색 */}
             </DialogTitle>
             <DialogContent>
                 <DialogContentText id="medicine-search-description" color={grey[600]} mb={1}>
-                    의약품 검색 후 제품명을 선택해주세요.
+					{t('study.after_searching_for')}
+                    {/* 의약품 검색 후 제품명을 선택해주세요. */}
                 </DialogContentText>
                 <Box width={1}>
                     <Grid container columnGap={1}>
                         <Grid item xs={3.8}>
                             <FormControl size="small" fullWidth>
                                 <Select value={country} onChange={handleChangeCountry}>
-                                    <MenuItem value="KO_KR">한국 약품통합정보시스템</MenuItem>
-                                    <MenuItem value="EN_US">미국 FDA Drug Search</MenuItem>
+                                    <MenuItem value="KO_KR">
+										{t('study.korea_drug_information')}
+										{/* 한국 약품통합정보시스템 */}
+									</MenuItem>
+                                    <MenuItem value="EN_US">
+										{t('study.us_fda')}
+										{/* 미국 FDA Drug Search */}
+									</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -135,7 +144,7 @@ const MedicineSearch = ({
                                 <Box gap={1} display="flex">
                                     <FormControl size="small" fullWidth>
                                         <OutlinedInput
-                                            placeholder="검색어 입력"
+                                            placeholder={t('study.enter_search_term')} // 검색어 입력
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                         />
                                     </FormControl>
@@ -145,7 +154,8 @@ const MedicineSearch = ({
                                         color="primary"
                                         onClick={handleSearch}
                                     >
-                                        검색
+                                        {t('common.search')}
+										{/* 검색 */}
                                     </Button>
                                 </Box>
                             </form>
@@ -181,7 +191,8 @@ const MedicineSearch = ({
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>닫기</Button>
+                <Button onClick={handleClose}>{t('common.close')}</Button>
+				{/* 닫기 */}
             </DialogActions>
         </Dialog>
     );

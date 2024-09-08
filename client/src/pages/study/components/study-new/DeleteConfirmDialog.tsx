@@ -10,6 +10,7 @@ import {
     Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type DeleteConfirmDialogProps = {
     member: MemberTempType;
@@ -27,6 +28,8 @@ const DeleteConfirmDialog = ({
     onDeleteSuccess,
 }: DeleteConfirmDialogProps) => {
     const [mode, setMode] = useState<'delete' | 'confirmed'>('delete');
+	const { t, i18n } = useTranslation();
+	console.log(i18n)
 
     const handleConfirmDelete = async () => {
         setMode('confirmed');
@@ -53,24 +56,39 @@ const DeleteConfirmDialog = ({
             maxWidth="xs"
         >
             <DialogTitle id="member-delete-dialog-title" variant="h5">
-                멤버 삭제
+				{t('study.delete_member')}
+                {/* 멤버 삭제 */}
             </DialogTitle>
             <DialogContent>
                 <Box minWidth="300px">
                     <Typography id="member-delete-dialog-description">
                         {mode === 'delete' ? (
                             <>
-                                <b>
-                                    {member.first_name} {member.last_name}
-                                </b>
-                                님을 멤버에서 삭제하시겠습니까?
+							{
+								i18n.language === 'en' ? 
+								<>
+									{t('study.do_you_want_remove_01')}
+									<b>
+										{member.first_name} {member.last_name}
+									</b>
+									{t('study.do_you_want_remove_02')}
+									</>
+								:
+								<>
+									<b>
+										{member.first_name} {member.last_name}
+									</b>
+									{t('study.do_you_want_remove_member')}
+								</>
+							}
+                                
                             </>
                         ) : (
                             <>
                                 <b>
                                     {member.first_name} {member.last_name}
                                 </b>
-                                님이 멤버에서 삭제되었습니다.
+                                {t('study.has_been_removed')}
                             </>
                         )}
                     </Typography>
@@ -80,16 +98,16 @@ const DeleteConfirmDialog = ({
                 {mode === 'delete' ? (
                     <>
                         <Button variant="outlined" onClick={handleClose}>
-                            취소
+                            {t('common.cancel')}
                         </Button>
                         <Button variant="contained" color="error" onClick={handleConfirmDelete}>
-                            확인
+                            {t('common.confirm')}
                         </Button>
                     </>
                 ) : (
                     <>
                         <Button variant="contained" color="primary" onClick={handleClose}>
-                            확인
+						{t('common.confirm')}
                         </Button>
                     </>
                 )}
