@@ -5,7 +5,7 @@ import GenderAgeChart from './overview/GenderAgeChart';
 import AllPartTransitionChart from './overview/AllPartTransitionChart';
 import PartByHospitalsChart from './overview/PartByHospitalsChart';
 import RecentParticipant from './overview/RecentParticipant';
-import { ParticipationRateByAge } from '@/types/study';
+import { ParticipantsList, ParticipationRateByAge } from '@/types/study';
 import { t } from 'i18next';
 
 type StudyOverviewProps = {
@@ -15,11 +15,16 @@ type StudyOverviewProps = {
         target_number: number;
     };
     participationRateByAge: ParticipationRateByAge;
+    participantList: ParticipantsList[];
+    onMoreClick: () => void;
 };
+
 const StudyOverView = ({
     partCompleteRate,
     totalParticipants,
     participationRateByAge,
+    participantList,
+    onMoreClick,
 }: StudyOverviewProps) => {
     return (
         <>
@@ -27,7 +32,7 @@ const StudyOverView = ({
                 <Grid item xs={2}>
                     <MainCard sx={{ height: '190px' }} overflow="visible">
                         <Typography variant="h6" color="textSecondary">
-							{t('study.participation_completion_rate')}
+                            {t('study.participation_completion_rate')}
                             {/* 참여완료율 */}
                         </Typography>
                         <CircleChart series={partCompleteRate} />
@@ -36,7 +41,7 @@ const StudyOverView = ({
                 <Grid item xs={2}>
                     <MainCard sx={{ height: '190px' }}>
                         <Typography variant="h6" color="textSecondary">
-							{t('study.number_of_participants')}
+                            {t('study.number_of_participants')}
                             {/* 참여자수 */}
                         </Typography>
                         <Box>
@@ -67,20 +72,23 @@ const StudyOverView = ({
                 <Grid item xs={7}>
                     <MainCard sx={{ height: '300px' }} overflow="visible">
                         <AllPartTransitionChart title={t('study.total_participant_trends')} />
-						{/* 전체 참여자 추이 */}
+                        {/* 전체 참여자 추이 */}
                     </MainCard>
                 </Grid>
                 <Grid item xs={5}>
                     <MainCard sx={{ height: '300px' }}>
                         <PartByHospitalsChart title={t('study.status_by_institution')} />
-						{/* 병원별 참여자 */}
+                        {/* 병원별 참여자 */}
                     </MainCard>
                 </Grid>
             </Grid>
 
             <Grid item xs={12}>
                 <MainCard>
-                    <RecentParticipant />
+                    <RecentParticipant
+                        participantList={participantList}
+                        onMoreClick={onMoreClick}
+                    />
                 </MainCard>
             </Grid>
         </>
