@@ -126,7 +126,7 @@ const StudyNew = () => {
     };
 
     // const [actionType, setActionType] = useState<ActionType | null>(null);
-    type ActionType = 'delete' | 'pause' | 'stop' | 'progression';
+    type ActionType = 'delete' | 'pause' | 'done' | 'progression';
     const [actionType, setActionType] = useState<ActionType>('delete');
 
     const handleOpenDialog = (action) => {
