@@ -87,7 +87,7 @@ const StudyNew = () => {
     const state = location.state as { mode: 'write' | 'edit'; stdNo?: number };
     const stdNo = location.state?.stdNo;
     const [stdStatus, setStdStatus] = useState<String>('');
-	
+
     // 유효성 검사
     const [errors, setErrors] = useState({
         title: '',
@@ -656,9 +656,9 @@ const StudyNew = () => {
                                         onClick={() => {
                                             setIsOpenSurvey(true);
                                         }}
-										sx={{ minWidth: '105px' }}
-                                    >	
-										<AddLinkIcon sx={{mr:'5px', fontSize:'1.2rem'}} />
+                                        sx={{ minWidth: '105px' }}
+                                    >
+                                        <AddLinkIcon sx={{ mr: '5px', fontSize: '1.2rem' }} />
                                         {t('study.connect_survey')}
                                         {/* Survey 연결 */}
                                     </Button>
@@ -703,7 +703,7 @@ const StudyNew = () => {
                                         onClick={handleOpenUploadBasePdf}
                                         sx={{ minWidth: '105px' }}
                                     >
-										<AddLinkIcon sx={{mr:'5px', fontSize:'1.2rem'}} />
+                                        <AddLinkIcon sx={{ mr: '5px', fontSize: '1.2rem' }} />
                                         {t('study.connect_eic')}
                                         {/* EIC 연결 */}
                                     </Button>{' '}
@@ -734,7 +734,6 @@ const StudyNew = () => {
                                         sx={{ pt: '0.2rem' }}
                                         gap={0.5}
                                     >
-
                                         <Typography variant="h5">
                                             {t('study.managing_members')}
                                         </Typography>
@@ -746,10 +745,10 @@ const StudyNew = () => {
                                         onClick={() => {
                                             setIsOpenMember(true);
                                         }}
-										sx={{ minWidth: '105px' }}
+                                        sx={{ minWidth: '105px' }}
                                     >
-										<PersonAddAlt1Icon sx={{mr:'5px', fontSize:'1.2rem'}}/>
-										{t('study.invite_as_partners')}
+                                        <PersonAddAlt1Icon sx={{ mr: '5px', fontSize: '1.2rem' }} />
+                                        {t('study.invite_as_partners')}
                                         {/* 초대하기 */}
                                     </Button>
                                 </Grid>
@@ -842,11 +841,11 @@ const StudyNew = () => {
                 <Box display="flex" justifyContent="flex-end" pt="1rem" gap={2}>
                     <Button variant="outlined" size="large" onClick={() => navigate(-1)}>
                         {t('common.cancel')}
-						{/* 취소 */}
+                        {/* 취소 */}
                     </Button>
                     <Button variant="contained" size="large" onClick={handleSubmit}>
-						{t('common.create')}
-						{/* 생성 */}
+                        {t('common.create')}
+                        {/* 생성 */}
                     </Button>
                 </Box>
             ) : (
@@ -862,7 +861,7 @@ const StudyNew = () => {
                                         onClick={() => handleOpenDialog('delete')}
                                     >
                                         {t('study.delete_study')}
-										{/* 스터디 삭제 */}
+                                        {/* 스터디 삭제 */}
                                     </Button>
                                 </Grid>
                                 <Grid item xs={10}>
@@ -870,14 +869,14 @@ const StudyNew = () => {
                                         <Button
                                             variant="outlined"
                                             onClick={() => navigate('/study')}
-                                        >	
-											{t('common.cancel')}
+                                        >
+                                            {t('common.cancel')}
                                             {/* 취소 */}
                                         </Button>
                                         {stdStatus === 'STD-CREATED' && (
                                             <>
                                                 <Button variant="outlined" onClick={handleUpdate}>
-													{t('common.edit')}
+                                                    {t('common.edit')}
                                                     {/* 수정 */}
                                                 </Button>
                                                 <Button
@@ -885,11 +884,11 @@ const StudyNew = () => {
                                                     color="info"
                                                     onClick={handlePreview}
                                                 >
-													{t('common.preview')}
+                                                    {t('common.preview')}
                                                     {/* 미리보기 */}
                                                 </Button>
                                                 <Button variant="contained" onClick={handleDeploy}>
-													{t('common.deploy')}
+                                                    {t('common.deploy')}
                                                     {/* 배포 */}
                                                 </Button>
                                             </>
@@ -903,47 +902,23 @@ const StudyNew = () => {
                                                     variant="outlined"
                                                     color="info"
                                                     onClick={() => handleOpenDialog('pause')}
-                                                >	
-													{t('common.pause')}
+                                                >
+                                                    {t('common.pause')}
                                                     {/* 일시중지 */}
                                                 </Button>
                                                 <Button
                                                     variant="contained"
-                                                    onClick={() => handleOpenDialog('stop')}
-                                                >	
-													{t('common.complete')}
+                                                    onClick={() => handleOpenDialog('done')}
+                                                >
+                                                    {t('common.complete')}
                                                     {/* 종료 */}
                                                 </Button>
                                             </>
                                         )}
-                                        {(stdStatus === 'STD-PAUSE' ||
-                                            stdStatus === 'STD-STOP') && (
+                                        {stdStatus === 'STD-PAUSE' && (
                                             <>
                                                 <Button variant="outlined" onClick={handleUpdate}>
-													{t('common.edit')}
-                                                    {/* 수정 */}
-                                                </Button>
-                                                <Button
-                                                    variant="contained"
-                                                    onClick={() => handleOpenDialog('stop')}
-                                                >
-													{t('common.complete')}
-                                                    {/* 종료 */}
-                                                </Button>
-                                                <Button
-                                                    variant="outlined"
-                                                    color="info"
-                                                    onClick={() => handleOpenDialog('progression')}
-                                                >
-													{t('common.restart')}
-                                                    {/* 재시작 */}
-                                                </Button>
-                                            </>
-                                        )}
-                                        {stdStatus === 'STD-DONE' && (
-                                            <>
-                                                <Button variant="outlined" onClick={handleUpdate}>
-													{t('common.edit')}
+                                                    {t('common.edit')}
                                                     {/* 수정 */}
                                                 </Button>
                                                 <Button
@@ -951,11 +926,12 @@ const StudyNew = () => {
                                                     color="info"
                                                     onClick={() => handleOpenDialog('progression')}
                                                 >
-													{t('common.restart')}
+                                                    {t('common.restart')}
                                                     {/* 재시작 */}
                                                 </Button>
                                             </>
                                         )}
+                                        {stdStatus === 'STD-DONE' && <></>}
                                     </Box>
                                 </Grid>
                             </>
@@ -964,11 +940,11 @@ const StudyNew = () => {
                             <Grid item xs={12}>
                                 <Box justifyContent="flex-end" display="flex" gap={1}>
                                     <Button variant="outlined" onClick={() => navigate('/study')}>
-										{t('common.cancel')}
+                                        {t('common.cancel')}
                                         {/* 취소 */}
                                     </Button>
                                     <Button variant="outlined" onClick={handleUpdate}>
-										{t('common.edit')}
+                                        {t('common.edit')}
                                         {/* 수정 */}
                                     </Button>
                                 </Box>

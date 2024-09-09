@@ -225,7 +225,7 @@ export const surveyCycle = {
 export const actionMessages = {
     delete: '삭제',
     pause: '일시정지',
-    stop: '중지',
+    done: '완료',
     progression: '재시작',
 };
 

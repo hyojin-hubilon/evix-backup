@@ -11,7 +11,7 @@ import {
 import studyApi from '@/apis/study';
 import { actionMessages } from '@/types/study';
 
-type ActionType = 'delete' | 'pause' | 'stop' | 'progression';
+type ActionType = 'delete' | 'pause' | 'done' | 'progression';
 
 type StudyDeleteConfirmDialogProps = {
     open: boolean;
