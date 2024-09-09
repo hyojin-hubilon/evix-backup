@@ -29,8 +29,7 @@ const DeleteConfirmDialog = ({
 }: DeleteConfirmDialogProps) => {
     const [mode, setMode] = useState<'delete' | 'confirmed'>('delete');
 	const { t, i18n } = useTranslation();
-	console.log(i18n)
-
+	
     const handleConfirmDelete = async () => {
         setMode('confirmed');
         try {

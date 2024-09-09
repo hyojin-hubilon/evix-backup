@@ -20,7 +20,8 @@
 		"create": "Create",
 		"search" : "Search",
 		"close" : "Close",
-		"confirm" : "Confirm"
+		"confirm" : "Confirm",
+		"delete" : "Delete"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -232,7 +233,29 @@
 		"total_participant_trends" : "Participant trend chart",
 		"participants" : "Participants",
 		"status_by_institution" : "Participation status by institution",
-		"recent_participant_logs" : "Recent participant logs"
+		"recent_participant_logs" : "Recent participant logs",
+		"study_status" : "Study status",
+		"recent_updates" : "Recent Updates",
+		"study_period" : "Study period",
+		"study_summary" : "Summary",
+		"study_type_02" : "Study type",
+		"study_title" : "Study title",
+		"repeat" : "Repeat",
+		"time_per" : "times per ",
+		"register_electronic_consent" : "Register your electronic consent form.",
+		"electronic_consent_form" : "Electronic consent form",
+		"members" : "Members",
+		"displayed_most_recent_approval" : "* They are displayed in order of most recent approval date.",
+		"member_management" : "Member Management",
+		"name": "Name",
+		"function" : "Function",
+		"affiliation" : "Affiliation",
+		"invitation_sending_date" : "Invitation sending date",
+		"approval_status" : "Approval status"
+	},
+	"eic" : {
+		"has_been_saved" : "Your electronic consent form has been saved.",
+		"has_been_deleted" : "The electronic consent form has been deleted."
 	},
     "survey": {},
     "user": {},

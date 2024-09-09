@@ -20,7 +20,8 @@
 		"create" : "생성",
 		"search" : "검색",
 		"close" : "닫기",
-		"confirm" :  "확인"
+		"confirm" :  "확인",
+		"delete" : "삭제"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -228,8 +229,28 @@
 		"total_participant_trends" : "전체 참여자 추이",
 		"participants" : "참여자",
 		"status_by_institution" : "병원별 참여자",
-		"recent_participant_logs" : "최근 참여자"
-
+		"recent_participant_logs" : "최근 참여자",
+		"study_status" : "Study 상태",
+		"recent_updates" : "최근 업데이트",
+		"study_period" : "Study 기간",
+		"study_summary" : "Study 개요",
+		"study_type_02" : "Study 타입",
+		"study_title" : "Study 제목",
+		"repeat" : "마다",
+		"time_per" : "회 반복",
+		"register_electronic_consent" : "전자동의서를 등록하세요.",
+		"electronic_consent_form" : "전자동의서",
+		"members" : "Study 멤버현황",
+		"displayed_most_recent_approval" : "*최근 승인일 순으로 보여집니다.",
+		"member_management" : "멤버관리",
+		"function" : "권한",
+		"affiliation" : "소속",
+		"invitation_sending_date" : "초대발송일자",
+		"approval_status" : "Approval status"
+	},
+	"eic" : {
+		"has_been_saved" : "전자동의서가 저장되었습니다.",
+		"has_been_deleted" : "전자동의서가 삭제되었습니다."
 	},
     "survey": {},
     "user": {},

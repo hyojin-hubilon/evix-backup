@@ -38,7 +38,7 @@ const StudyParticipants = ({ participantList }) => {
     ];
 
     return (
-        <Grid xs={12}>
+        <Grid item xs={12}>
             <Box sx={{ minHeight: 400, width: '100%' }}>
                 <DataGrid
                     columns={columns}

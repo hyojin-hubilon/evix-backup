@@ -18,7 +18,6 @@ function LinkRouter(props: LinkRouterProps) {
 
 const breadcrumbNameMap: { [key: string]: string } = {
 	'study': 'Study',
-	'/study/detail': 'Analysis & Summary',
 	'/survey': 'Survey'
 };
 
@@ -36,11 +35,11 @@ const Breadcrumbs2 = ({sub} : BreadCrumbs2Type) => {
 	return (
 		<Breadcrumbs aria-label="breadcrumb" sx={{mb: 2}}>
 			
-			<LinkRouter underline="hover" color="inherit" to={pathnames[0]}>
+			<LinkRouter underline="hover" color="inherit" to={`/${pathnames[0]}`}>
 				{breadcrumbNameMap[pathnames[0]]}
 			</LinkRouter>
 			
-			<Typography fontWeight="600" color="common.black">
+			<Typography fontWeight="600" color="common.black" textOverflow="ellipsis" maxWidth="200px" overflow="hidden" whiteSpace="nowrap">
 				{ sub }
 			</Typography>
 
