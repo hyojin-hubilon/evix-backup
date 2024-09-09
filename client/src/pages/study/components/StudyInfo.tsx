@@ -19,7 +19,6 @@ import StudyMemberStatus from './study-info/StudyMemberStatus';
 import { STUDY_STATUS, STUDY_STATUS_KEY } from './StudyListItem';
 import MemberManagement from './study-new/MemberManagement';
 import { surveyCycle } from '@/types/study';
-import SurveyConnectDialog from './study-new/SurveyConnetDialog';
 import studyApi from '@/apis/study';
 import DeleteModal from './eic/DeleteModal';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -29,6 +28,7 @@ import EicParent from './eic/EicParent';
 import { useNavigate } from 'react-router-dom';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { useUserProfile } from '@/context/UserProfileContext';
+import SurveyConnectDialog from './study-new/SurveyConnetDialog';
 
 interface StudyInfoProps {
     studyDetail: {
