@@ -257,7 +257,23 @@
 		"has_been_saved" : "Your electronic consent form has been saved.",
 		"has_been_deleted" : "The electronic consent form has been deleted."
 	},
-    "survey": {},
+    "survey": {
+		"survey_list" : "Survey",
+		"search_placeholder" : "Search by title",
+		"new_survey" : "New Survey",
+		"duplicate_the_survey" : "Duplicate the survey",
+		"would_duplicate_survey" : "Would you like to duplicate this survey?",
+		"delete_survey" : "Delete Survey",
+		"sure_delete_survey" : "Are you sure you want to delete this survey?",
+		"go_to_study" : "Go to Study",
+		"under_construction" : "Under construction",
+		"questions" : " questions",
+		"created_date" : "Created date",
+		"preview" : "Preview",
+		"view_samples_by_disease" : "View samples by disease",
+		"make_your_own" : "Make your own",
+		"write_with_this_sample" : "Write with this sample"
+	},
     "user": {},
     "my_page": {},
 	"nav": {

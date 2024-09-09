@@ -252,7 +252,23 @@
 		"has_been_saved" : "전자동의서가 저장되었습니다.",
 		"has_been_deleted" : "전자동의서가 삭제되었습니다."
 	},
-    "survey": {},
+    "survey": {
+		"survey_list" : "Survey 목록",
+		"search_placeholder" : "타이틀로 검색",
+		"new_survey" : "Survey 생성",
+		"duplicate_the_survey" : "설문 복제",
+		"would_duplicate_survey" : "이 설문을 복제하시겠습니까?",
+		"delete_survey" : "설문 삭제",
+		"sure_delete_survey" : "이 설문을 삭제하시겠습니까?",
+		"go_to_study" : "Study 바로가기",
+		"under_construction" : " 작성중",
+		"questions" : "문항",
+		"created_date" : "생성일",
+		"preview" : "미리보기",
+		"view_samples_by_disease" : "질환별 샘플보기",
+		"make_your_own" : "직접 만들기",
+		"write_with_this_sample" : "이 샘플로 작성하기"
+	},
     "user": {},
     "my_page": {},
 	"nav": {

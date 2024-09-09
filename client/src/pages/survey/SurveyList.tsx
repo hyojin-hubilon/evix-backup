@@ -23,6 +23,7 @@ import { paginator } from '@/utils/helper';
 import DatePicker from "antd/lib/date-picker";
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
+import { t } from 'i18next';
 dayjs.extend(isBetween);
 const { RangePicker } = DatePicker;
 
@@ -124,7 +125,8 @@ const SurveyList = () => {
             <Grid container flexDirection="row" rowSpacing={2}>
                 <Grid item xs={12}>
                     <Box display="flex" alignItems="center" gap={1}>
-                        <Typography variant="h3">Survey 목록</Typography>
+                        <Typography variant="h3">{t('survey.survey_list')}</Typography>
+						{/* Survey 목록 */}
                         <Chip label={surveyCount} color="primary" size="small" />
                     </Box>
                 </Grid>
@@ -152,7 +154,7 @@ const SurveyList = () => {
 										}
 										value={searchTerm}
 										onChange={(e) => handleSearch(e.target.value)}
-										placeholder='타이틀'
+										placeholder={t('survey.search_placeholder')}
 									/>
 								</Grid>
 								<Grid item xs={activeDateSetting == 'full' ? 3.9 : 2}>
@@ -186,7 +188,8 @@ const SurveyList = () => {
 								<Box display="flex" justifyContent="flex-end" width={1}>
 									<Button variant="contained" onClick={handleCreateSurvey} fullWidth>
 										<PlusOutlined />
-										<Typography sx={{ ml: 1 }}>Survey 생성</Typography>
+										{/* Survey 생성 */}
+										<Typography sx={{ ml: 1 }}>{t('survey.new_survey')}</Typography>
 									</Button>
 								</Box>
 							</Grid>
@@ -236,7 +239,7 @@ const SurveyList = () => {
                                     variant="h5"
                                     onClick={handleCreateSurvey}
                                 >
-                                    Survey 생성
+                                    {t('survey.new_survey')}
                                 </Typography>
                             </Box>
                         </Grid>
