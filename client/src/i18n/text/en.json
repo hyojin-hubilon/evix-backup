@@ -21,7 +21,8 @@
 		"search" : "Search",
 		"close" : "Close",
 		"confirm" : "Confirm",
-		"delete" : "Delete"
+		"delete" : "Delete",
+		"save" : "Save"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -272,7 +273,26 @@
 		"preview" : "Preview",
 		"view_samples_by_disease" : "View samples by disease",
 		"make_your_own" : "Make your own",
-		"write_with_this_sample" : "Write with this sample"
+		"write_with_this_sample" : "Write with this sample",
+		"edit_survey" : "Edit Survey",
+		"save_temporarily" : "Save temporarily",
+		"an_untitled_survey" : "An untitled survey",
+		"description" : "Description",
+		"survey_description" : "Survey Description",
+		"answer" : "Answer",
+		"survey_title" : "Survey Ttile",
+		"question" : "Question",
+		"subjective_answer" : "Subjective answer",
+		"single_choice_answer" : "Single choice answer",
+		"multiple_choice_answer" : "Multiple choice answer",
+		"etc" : "etc : ",
+		"option" : "Option",
+		"add_option" : "Add option",
+		"or" : "or",
+		"add_etc_item" : "Add etc item",
+		"copy_question" : "Copy Question",
+		"delete_question" : "Delete Question",
+		"required" : "Required"
 	},
     "user": {},
     "my_page": {},

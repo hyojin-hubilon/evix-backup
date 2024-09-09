@@ -11,6 +11,7 @@ import CardHeader from "./CardHeader";
 import TextFieldSection from "./TextFieldSection";
 import ItemTypeSection from "./ItemTypeSection";
 import React from "react";
+import { t } from "i18next";
 
 export interface extendedCardProps extends CardProps {
 	isTitle: boolean;
@@ -112,7 +113,7 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 								<Divider />
 								<Box display="flex" alignItems="center" justifyContent="flex-end" gap={1}>
 								{/* 복사 */}
-								<Tooltip title="질문 복사">
+								<Tooltip title={t('survey.copy_question')}>
 									<IconButton onClick={(e) => {
 										e.stopPropagation();
 										dispatch(copyCard({ cardId: id, copiedCardId: String(Date.now()) }));
@@ -123,7 +124,7 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 								
 
 								{/* 삭제 */}
-								<Tooltip title="질문 삭제">
+								<Tooltip title={t('survey.delete_question')}>
 									<IconButton  onClick={(e) => {
 										e.stopPropagation();
 										dispatch(removeCard({ cardId: id }));
@@ -139,7 +140,7 @@ const FormQuestion = ({	isTitle, id, index }:extendedCardProps) => {
 									value="end"
 									sx={{ml: "0.5rem"}}
 									control={<Switch name="required" checked={isRequired as boolean} onChange={handleChangeRequired} />}
-									label="필수"
+									label={t('survey.required')}
 									labelPlacement="start"
 									onClick={(e) => {
 										e.stopPropagation();
