@@ -656,7 +656,7 @@ const StudyNew = () => {
                                         onClick={() => {
                                             setIsOpenSurvey(true);
                                         }}
-                                        sx={{ minWidth: '105px' }}
+                                        sx={{ minWidth: '166px' }}
                                     >
                                         <AddLinkIcon sx={{ mr: '5px', fontSize: '1.2rem' }} />
                                         {t('study.connect_survey')}
@@ -701,7 +701,7 @@ const StudyNew = () => {
                                     <Button
                                         variant="contained"
                                         onClick={handleOpenUploadBasePdf}
-                                        sx={{ minWidth: '105px' }}
+                                        sx={{ minWidth: '166px' }}
                                     >
                                         <AddLinkIcon sx={{ mr: '5px', fontSize: '1.2rem' }} />
                                         {t('study.connect_eic')}
