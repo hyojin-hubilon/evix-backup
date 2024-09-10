@@ -49,7 +49,7 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
     const designerRef = useRef<HTMLDivElement | null>(null);
     const designer = useRef<Designer | null>(null);
     const [lang, setLang] = useState<Lang>('en');
-    const fileInputRef = useRef<HTMLInputElement|null>(null);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const [templatePreset, setTemplatePreset] = useState<string>(
         localStorage.getItem('templatePreset') || initialTemplatePresetKey
@@ -166,9 +166,7 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
     };
 
     const handleButtonClick = () => {
-		if(fileInputRef.current) {
-			fileInputRef.current.click();
-		}
+        fileInputRef.current?.click();
     };
 
     useEffect(() => {
