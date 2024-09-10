@@ -745,7 +745,7 @@ const StudyNew = () => {
                                         onClick={() => {
                                             setIsOpenMember(true);
                                         }}
-                                        sx={{ minWidth: '105px' }}
+                                        sx={{ minWidth: '166px' }}
                                     >
                                         <PersonAddAlt1Icon sx={{ mr: '5px', fontSize: '1.2rem' }} />
                                         {t('study.invite_as_partners')}
