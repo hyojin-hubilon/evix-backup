@@ -7,6 +7,7 @@ import authApi from '@/apis/auth';
 import { MyProfile } from '@/types/user';
 import { LoginReq } from '@/types/auth';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
+import { t } from 'i18next';
 
 type Props = {
     myProfile: MyProfile;
@@ -18,8 +19,8 @@ const SettingLoginForm: React.FC<Props> = ({ myProfile, handleLogin }) => {
 	const confirm = useConfirmation();
 
     const validationSchema = Yup.object({
-        email: Yup.string().email().required('이메일을 입력해주세요.'),
-        password: Yup.string().required('비밀번호를 입력해주세요.'),
+		email: Yup.string().email().required(t('settings.enter_your_email_address')),
+        password: Yup.string().required(t('settings.enter_your_password'))
     });
 
     const formik = useFormik({
@@ -30,7 +31,7 @@ const SettingLoginForm: React.FC<Props> = ({ myProfile, handleLogin }) => {
             try {
                 const responseData = await authApi.login({ email, password });
                 if (responseData.code === 400) {
-                    confirm({description : '비밀번호를 다시 확인해주세요.', variant: 'info'});
+                    confirm({description : t('settings.confirm_your_password'), variant: 'info'});
                     return;
                 }
                 if (responseData.code === 200) {
@@ -54,7 +55,8 @@ const SettingLoginForm: React.FC<Props> = ({ myProfile, handleLogin }) => {
             <Paper elevation={3} sx={{ p: 4, borderRadius: 2, width: '100%', maxWidth: 500 }}>
                 <Stack spacing={3}>
                     <Typography variant="h6" textAlign="center">
-                        본인 확인을 위해 비밀번호를 입력해주세요.
+						{t('settings.enter_password_to_verify')}
+                        {/* 본인 확인을 위해 비밀번호를 입력해주세요. */}
                     </Typography>
                     <form onSubmit={formik.handleSubmit}>
                         <Stack spacing={2}>
@@ -81,7 +83,8 @@ const SettingLoginForm: React.FC<Props> = ({ myProfile, handleLogin }) => {
                                 helperText={formik.touched.password && formik.errors.password}
                             />
                             <Button variant="contained" type="submit" fullWidth>
-                                확인
+								{t('common.confirm')}
+                                {/* 확인 */}
                             </Button>
                         </Stack>
                     </form>

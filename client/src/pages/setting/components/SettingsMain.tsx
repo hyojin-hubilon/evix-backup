@@ -22,6 +22,8 @@ import { useNavigate } from 'react-router-dom';
 import ProfileImage from './ProfileImage';
 import SettingChangePasswordForm from './SettingChangePasswordForm';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
+import { t } from 'i18next';
+import { useUserProfile } from '@/context/UserProfileContext';
 
 const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
     const initialValues = {
@@ -47,16 +49,18 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
 
     const [language, setLanguage] = useState<string>(myProfile.language);
     const [changePasswordModal, setChangePasswordModal] = useState<boolean>(false);
+	const { setUserProfile } = useUserProfile();
+
 
     const handleImageUrl = (url: string) => {
         setProfileImageUrl(() => url);
     };
 
     const validationSchema = Yup.object({
-        mobile: Yup.string().required('전화번호를 입력해주세요'),
-        country: Yup.string().required('국가를 입력해주세요.'),
-        company_name: Yup.string().required('회사를 입력해주세요.'),
-        job_title: Yup.string().required('직업을 입력해주세요.'),
+        mobile: Yup.string().required(t('settings.enter_your_phone_number')), //전화번호를 입력해주세요
+        country: Yup.string().required(t('settings.enter_your_country')),//'국가를 입력해주세요.'
+        company_name: Yup.string().required(t('settings.enter_your_company')),//'회사를 입력해주세요.'
+        job_title: Yup.string().required(t('settings.enter_your_occupation')), //'직업을 입력해주세요.'
     });
 
     const formik = useFormik({
@@ -85,7 +89,9 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
         try {
             const { content } = await userApi.updateUser(props);
             if (content) {
-                confirm({description : '수정이 완료되었습니다.', variant : 'info'});
+                confirm({description : t('settings.modification_completed'), variant : 'info'}).then(() => {
+					setUserProfile(null);
+				});
             }
             return content;
         } catch (error) {
@@ -119,7 +125,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={4}>
                         <Paper
-                            elevation={4}
+                            elevation={1}
                             sx={{
                                 padding: '1.5rem',
                                 textAlign: 'center',
@@ -127,7 +133,8 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                             }}
                         >
                             <Typography variant="h6" color="primary">
-                                내가 받은 Study 초대
+								{t('settings.study_invitation_received')}
+                                {/* 내가 받은 Study 초대 */}
                             </Typography>
                             <Typography
                                 variant="h2"
@@ -141,7 +148,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <Paper
-                            elevation={4}
+                            elevation={1}
                             sx={{
                                 padding: '1.5rem',
                                 textAlign: 'center',
@@ -163,7 +170,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <Paper
-                            elevation={4}
+                            elevation={1}
                             sx={{
                                 padding: '1.5rem',
                                 textAlign: 'center',
@@ -187,7 +194,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
 
                 <Grid item xs={12}>
                     <Paper
-                        elevation={4}
+                        elevation={1}
                         sx={{
                             padding: '1.5rem',
                             backgroundColor: '#ffffff',
@@ -196,7 +203,8 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                         }}
                     >
                         <Typography variant="h6" color="primary">
-                            계정정보
+							{t('settings.account_information')}
+                            {/* 계정정보 */}
                         </Typography>
                         <form onSubmit={formik.handleSubmit}>
                             <Stack spacing={2} sx={{ marginTop: '1rem' }}>
@@ -235,8 +243,10 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                         sx={{ marginLeft: '1rem' }}
                                         color="secondary"
                                         onClick={handleChangePasswordModal}
+										size="large"
                                     >
-                                        변경
+										{t('settings.change')}
+                                        {/* 변경 */}
                                     </Button>
                                 </Box>
                                 <TextField
@@ -287,42 +297,48 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                     fullWidth
                                 />
                             </Stack>
-                            <Typography variant="h6" color="primary">
-                                알림 설정
-                            </Typography>
-                            <FormControlLabel
-                                label="이메일 알림"
-                                control={
-                                    <Switch
-                                        checked={emailAlerts}
-                                        onChange={handleEmailAlert}
-                                        name="emailAlerts"
-                                        color="primary"
-                                    />
-                                }
-                            />
-                            <Typography variant="h6" color="primary">
-                                언어 설정
-                            </Typography>
-                            <FormControl component="fieldset">
-                                <RadioGroup
-                                    row
-                                    name="language"
-                                    value={language}
-                                    onChange={(e) => setLanguage(e.target.value)}
-                                >
-                                    <FormControlLabel
-                                        value="EN_US"
-                                        control={<Radio color="primary" />}
-                                        label="English"
-                                    />
-                                    <FormControlLabel
-                                        value="KO_KR"
-                                        control={<Radio color="primary" />}
-                                        label="Korean"
-                                    />
-                                </RadioGroup>
-                            </FormControl>
+							<Box mt="20px" mb="20px">
+								<Typography variant="h6" color="primary">
+									{t('settings.notification_settings')}
+									{/* 알림 설정 */}
+								</Typography>
+								<FormControlLabel
+									label={t('settings.email_notifications')} //"이메일 알림"
+									control={
+										<Switch
+											checked={emailAlerts}
+											onChange={handleEmailAlert}
+											name="emailAlerts"
+											color="primary"
+										/>
+									}
+								/>
+							</Box>
+							<Box mt="20px" mb="10px">
+								<Typography variant="h6" color="primary">
+									{t('settings.language_settings')}
+									{/* 언어 설정 */}
+								</Typography>
+								<FormControl component="fieldset">
+									<RadioGroup
+										row
+										name="language"
+										value={language}
+										onChange={(e) => setLanguage(e.target.value)}
+									>
+										<FormControlLabel
+											value="EN_US"
+											control={<Radio color="primary" />}
+											label="English"
+										/>
+										<FormControlLabel
+											value="KO_KR"
+											control={<Radio color="primary" />}
+											label="Korean"
+										/>
+									</RadioGroup>
+								</FormControl>
+							</Box>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -330,7 +346,8 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                 fullWidth
                                 sx={{ marginTop: '1rem' }}
                             >
-                                수정 완료
+								{t('settings.edit_completed')}
+                                {/* 수정 완료 */}
                             </Button>
                         </form>
                         {changePasswordModal && (

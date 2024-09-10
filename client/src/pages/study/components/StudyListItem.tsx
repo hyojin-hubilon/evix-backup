@@ -47,18 +47,18 @@ export const STUDY_STATUS = {
 // 타입으로 추출
 export type STUDY_STATUS_KEY = keyof typeof STUDY_STATUS;
 
-export const TitleStatusIcon = ({ status }: { status: string }) => {
+export const TitleStatusIcon = ({ status, color }: { status: string, color?: string }) => {
     const theme = useTheme();
     const { stdStatus } = theme.palette;
     return (
         <span>
             {
                 {
-                    'STD-CREATED': <NewIcon color={stdStatus.new} />,
-                    'STD-PROGRESSION': <OngoingIcon color={stdStatus.ongoing} />,
-                    'STD-DONE': <CompletedIcon color={stdStatus.completed} />,
-                    'STD-Expired': <ExpiredIcon color={stdStatus.expired} />,
-                    'STD-PAUSE': <PauseIcon color={stdStatus.pause} />,
+                    'STD-CREATED': <NewIcon color={color ? color : stdStatus.new} />,
+                    'STD-PROGRESSION': <OngoingIcon color={color ? color : stdStatus.ongoing} />,
+                    'STD-DONE': <CompletedIcon color={color ? color : stdStatus.completed} />,
+                    'STD-Expired': <ExpiredIcon color={color ? color : stdStatus.expired} />,
+                    'STD-PAUSE': <PauseIcon color={color ? color : stdStatus.pause} />,
                 }[status]
             }
         </span>

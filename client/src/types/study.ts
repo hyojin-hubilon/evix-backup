@@ -221,6 +221,12 @@ export const surveyCycle = {
     DAILY: '일',
 };
 
+export const surveyCycleEn = {
+    WEEKLY: 'week',
+    MONTHLY: 'month',
+    DAILY: 'day',
+};
+
 // 액션 타입에 대한 한글 메시지 매핑
 export const actionMessages = {
     delete: '삭제',

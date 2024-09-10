@@ -8,6 +8,7 @@ import CreateIcon from '@mui/icons-material/Create';
 
 import { useNavigate } from "react-router-dom";
 import SurveyPreview from "./SurveyPreview";
+import { t } from "i18next";
 
 
 const SampleList = () => {
@@ -86,14 +87,17 @@ const SampleList = () => {
 			<Grid container rowGap={2}>
 				<Grid item xs={12}>
 					<Box display="flex" alignItems="center" justifyContent="space-between">
-						<Typography variant="h3">Survey 생성</Typography>
+						<Typography variant="h3">
+							{t('survey.new_survey')}
+							{/* Survey 생성 */}
+							</Typography>
 						<Select
 							value={selectedDisease}
 							onChange={(e) => setSelectedDisease(e.target.value)}
 							sx={{ backgroundColor: 'white' }}
 							displayEmpty
 						>
-							<MenuItem value="">질환별 샘플보기</MenuItem>
+							<MenuItem value="">{t('survey.view_samples_by_disease')}</MenuItem>
 							{
 								diseases.map((disease, index) => <MenuItem value={disease} key={index}>{ disease }</MenuItem>)
 							}
@@ -121,7 +125,10 @@ const SampleList = () => {
 								}
 							 }}>
 								<PlusOutlined style={{fontSize: '2rem', color: primary.main}} />
-								<Typography variant="h5" sx={{color: primary.main}}>직접 만들기</Typography>
+								<Typography variant="h5" sx={{color: primary.main}}>
+									{t('survey.make_your_own')}
+									{/* 직접 만들기 */}
+								</Typography>
 						</Box>
 					</Grid>
 					{
@@ -182,7 +189,7 @@ const SampleList = () => {
 				<Dialog open={isPreview} maxWidth="lg" onClose={handleClosePreview} fullWidth>
 					<SurveyPreview surveyNo={surveyNo} handleClose={handleClosePreview} isDialog={true} />
 					<Fab variant="extended" sx={{position: 'sticky', bottom: '5%', left: '80%', width: '200px', padding: '0.7rem'}} color="primary" onClick={() => handleSelectSample()}>
-						<CreateIcon sx={{ mr: 1 }} />이 샘플로 작성하기
+						<CreateIcon sx={{ mr: 1 }} />{t('survey.write_with_this_sample')}
 					</Fab>
 				</Dialog>
 		}

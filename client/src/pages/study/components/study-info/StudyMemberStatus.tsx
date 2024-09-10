@@ -10,6 +10,7 @@ import {
     TableRow,
     useTheme,
 } from '@mui/material';
+import { t } from 'i18next';
 
 export interface ManagerType {
     std_no: number;
@@ -97,12 +98,17 @@ const StudyMemberStatus = ({ managerList, inviteList }: StudyMemberStatusProps) 
                             }}
                         >
                             <TableCell></TableCell>
-                            <TableCell>Name</TableCell>
-                            <TableCell align="center">권한</TableCell>
-                            <TableCell align="center">소속</TableCell>
+							{/* 이름 */}
+                            <TableCell>{t('study.name')}</TableCell>
+							{/* 권한 */}
+                            <TableCell align="center">{t('study.function')}</TableCell>
+							{/* 소속 */}
+                            <TableCell align="center">{t('study.affiliation')}</TableCell>
                             <TableCell align="center">email</TableCell>
-                            <TableCell align="center">초대발송일자</TableCell>
-                            <TableCell align="center">승인상태</TableCell>
+							{/* 초대발송일자 */}
+                            <TableCell align="center">{t('study.invitation_sending_date')}</TableCell>
+							{/* 승인상태 */}
+                            <TableCell align="center">{t('study.approval_status')}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

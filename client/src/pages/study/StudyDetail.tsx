@@ -8,7 +8,7 @@ import StudyInfo from './components/StudyInfo';
 import StudyParticipants from './components/StudyParicipations';
 import { useNavigate, useParams } from 'react-router-dom';
 import studyApi from '@/apis/study';
-import { STUDY_STATUS, STUDY_STATUS_KEY } from './components/StudyListItem';
+import { STUDY_STATUS, STUDY_STATUS_KEY, TitleStatusIcon } from './components/StudyListItem';
 import { ParticipantsList, ParticipationRateByAge, totalParticipants } from '@/types/study';
 
 const StudyDetail = () => {
@@ -180,11 +180,15 @@ const StudyDetail = () => {
 
     return (
         <>
-            <Breadcrumbs2 />
+            <Breadcrumbs2 sub={studyDetail?.title}/>
             <Grid container rowSpacing={3} columnSpacing={1}>
                 <Grid container item xs={12}>
                     <Box display="flex" alignItems="center" gap={1}>
-                        <Chip label={statusLabel} color="primary" />
+                        <Chip label={
+							<>
+								<TitleStatusIcon status={studyDetail?.std_status} color="white" /> {statusLabel}
+							</>
+							} color="primary" />
                         <Typography variant="h3">{studyDetail?.title || ''}</Typography>
                         <Button
                             variant="outlined"

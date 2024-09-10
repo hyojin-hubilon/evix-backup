@@ -4,6 +4,7 @@ import { useState } from "react";
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useNavigate } from 'react-router';
+import { t } from "i18next";
 
 
 const Help = () => {
@@ -50,13 +51,16 @@ const Help = () => {
 							}
 							value={searchTerm}
 							onChange={(e) => handleSearch(e.target.value)}
-							placeholder='도움말을 검색해보세요.'
+							placeholder={t('help.search_placeholder')} //도움말을 검색해보세요.
 						/>
 					</Grid>
 					<Grid item xs={2}>
 						<Button variant="contained" onClick={handleMoveToSupport} fullWidth>
 							<LiveHelpIcon sx={{mr:'0.5rem'}}/>
-							<Typography>문의하기</Typography>
+							<Typography>
+								{t('help.contact_us')}
+								{/* 문의하기 */}
+							</Typography>
 						</Button>
 					</Grid>							
 				</Grid>
@@ -65,12 +69,15 @@ const Help = () => {
 					<Tabs
 						value={activeTab}
 						onChange={handleChangeTab}
-						aria-label="Study Status Tab"
+						aria-label="help-select-tab"
 					>
-						<Tab label="자주찾는 도움말" value="0" />
-						<Tab label="서비스 소개" value="1" />
+						{/* 자주찾는 도움말 */}
+						<Tab label={t('help.faq')} value="0" />
+						{/* 서비스 소개 */}
+						<Tab label={t('help.service_introduction')} value="1" />
 						<Tab label="Study" value="2" />
-						<Tab label="멤버관리" value="3" />
+						{/* 멤버관리 */}
+						<Tab label={t('help.member_management')} value="3" />
 						<Tab label="Survey" value="4" />
 						<Tab label="Billing" value="5" />
 						<Tab label="Report" value="6" />

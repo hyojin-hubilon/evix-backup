@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import MainCard from '@/components/MainCard';
-import moment from 'moment';
 import {
     Box,
     Grid,
@@ -18,7 +17,7 @@ import {
 import StudyMemberStatus from './study-info/StudyMemberStatus';
 import { STUDY_STATUS, STUDY_STATUS_KEY } from './StudyListItem';
 import MemberManagement from './study-new/MemberManagement';
-import { surveyCycle } from '@/types/study';
+import { surveyCycle, surveyCycleEn } from '@/types/study';
 import studyApi from '@/apis/study';
 import DeleteModal from './eic/DeleteModal';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -29,6 +28,8 @@ import { useNavigate } from 'react-router-dom';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { useUserProfile } from '@/context/UserProfileContext';
 import SurveyConnectDialog from './study-new/SurveyConnetDialog';
+import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 interface StudyInfoProps {
     studyDetail: {
@@ -94,8 +95,10 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
     const { userProfile } = useUserProfile();
     const userId = userProfile?.user_no;
 
+	const { t, i18n } = useTranslation();
+
     const formatDate = (dateString: string): string => {
-        return moment(dateString).format('YYYY-MM-DD');
+        return dayjs(dateString).format('YYYY-MM-DD');
     };
 
     const [isOpenMember, setIsOpenMember] = useState(false);
@@ -116,7 +119,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
         onSurveyClose();
     };
 
-    const today = moment().format('YYYY-MM-DD');
+    const today = dayjs().format('YYYY-MM-DD');
     const endDate = studyDetail.std_end_date;
 
     const getStatusLabel = () => {
@@ -186,7 +189,8 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
             const response = await studyApi.editEicFile(studyDetail.std_no, formData);
             if (response.code === 200) {
                 confirm({
-                    description: '전자동의서가 저장되었습니다.',
+                    description: t('eic.has_been_saved'),
+					//'전자동의서가 저장되었습니다.',
                     variant: 'info',
                 }).then(() => {
                     handleEditViewClose();
@@ -218,7 +222,8 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                 const response = await studyApi.deleteEicFile(studyDetail.std_no);
                 if (response.code === 200) {
                     confirm({
-                        description: '전자동의서가 삭제되었습니다.',
+						description: t('eic.has_been_deleted'),
+						//'전자동의서가 삭제되었습니다.',
                         variant: 'info',
                     }).then(() => {
                         handleDeleteClose();
@@ -238,7 +243,10 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
     return (
         <Grid container item rowSpacing={2} className="study-info">
             <Grid item xs={12}>
-                <Typography variant="h4">Study 상태</Typography>
+                <Typography variant="h4">
+					{t('study.study_status')}
+					{/* Study 상태 */}
+				</Typography>
                 <MainCard>
                     <List>
                         <ListItem>
@@ -249,13 +257,17 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                 </Typography>
                                 {studyDetail.updated_at && (
                                     <Typography>
-                                        (최근 업데이트 {formatDate(studyDetail.updated_at)})
+										{/* 최근 업데이트 */}
+                                        ({t('study.recent_updates')} {formatDate(studyDetail.updated_at)})
                                     </Typography>
                                 )}
                             </Box>
                         </ListItem>
                         <ListItem>
-                            <Typography variant="h5">Study 기간</Typography>
+                            <Typography variant="h5">
+								{t('study.study_period')}
+								{/* Study 기간 */}
+							</Typography>
                             <Box display="flex" gap={1}>
                                 <Typography>
                                     {studyDetail.std_start_date} ~ {studyDetail.std_end_date}
@@ -281,7 +293,10 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
             </Grid>
             <Grid container item columnSpacing={1.5}>
                 <Grid item xs={7}>
-                    <Typography variant="h4">Study 개요</Typography>
+                    <Typography variant="h4">
+						{t('study.study_summary')}
+						{/* Study 개요 */}
+					</Typography>
                 </Grid>
                 <Grid item xs={5}>
                     <Box display="flex" gap={1} alignItems="center">
@@ -292,38 +307,56 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                     <MainCard sx={{ height: '100%' }}>
                         <List>
                             <ListItem>
-                                <Typography variant="h5">Study 타입</Typography>
+                                <Typography variant="h5">
+									{t('study.study_type_02')}
+									{/* Study 타입 */}
+									</Typography>
                                 <Box display="flex" gap={1}>
                                     <Chip color="primary" label={studyDetail.std_type} />
                                 </Box>
                             </ListItem>
                             <ListItem>
-                                <Typography variant="h5">Study 제목</Typography>
+                                <Typography variant="h5">
+									{t('study.study_title')}
+									{/* Study 제목 */}
+								</Typography>
                                 <Box display="flex" gap={1}>
                                     <Typography>{studyDetail.title}</Typography>
                                 </Box>
                             </ListItem>
                             <ListItem>
-                                <Typography variant="h5">대상인원</Typography>
+                                <Typography variant="h5">
+									{t('study.target_number')}
+									{/* 대상인원 */}
+								</Typography>
                                 <Box display="flex" gap={1}>
-                                    <Typography>{studyDetail.target_number} 명</Typography>
+                                    <Typography>{studyDetail.target_number} {t('study.person')}</Typography>
                                 </Box>
                             </ListItem>
                             <ListItem>
-                                <Typography variant="h5">개요</Typography>
+                                <Typography variant="h5">
+									{t('study.summary')}
+									{/* 개요 */}
+								</Typography>
                                 <Box display="flex" gap={1}>
                                     <Typography>{studyDetail.description}</Typography>
                                 </Box>
                             </ListItem>
                             <ListItem>
-                                <Typography variant="h5">질환</Typography>
+                                <Typography variant="h5">
+									{t('study.disease')}
+									{/* 질환 */}
+								</Typography>
                                 <Box display="flex" gap={1}>
                                     <Typography>{studyDetail.disease}</Typography>
                                 </Box>
                             </ListItem>
                             {studyDetail.drug_code && (
                                 <ListItem sx={{ alignItems: 'flex-start' }}>
-                                    <Typography variant="h5">의약품 정보</Typography>
+                                    <Typography variant="h5">
+										{t('study.pharmaceutical_information')}
+										{/* 의약품 정보 */}
+									</Typography>
                                     <Box>
                                         <Typography>
                                             {studyDetail.drug_manufacturer_name}
@@ -343,8 +376,10 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                                     listStyle: 'disc',
                                                 }}
                                             >
-                                                <li>업체명: {studyDetail.drug_brand_name}</li>
-                                                <li>품목기준코드: {studyDetail.drug_code}</li>
+												{/* 업체명 */}
+                                                <li>{t('study.company_name')} : {studyDetail.drug_brand_name}</li>
+												{/* 품목기준코드 */}
+                                                <li>{t('study.item_standard_code')} : {studyDetail.drug_code}</li>
                                             </ul>
                                         </Card>
                                     </Box>
@@ -402,8 +437,19 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                                     {survey.title}
                                                 </Link>
                                                 <Typography sx={{ display: 'inline-block' }}>
-                                                    {surveyCycle[surveySet.survey_cycle]}마다{' '}
-                                                    {surveySet.number_in_cycle}회 반복
+												{
+														i18n.language === 'en' ? 
+														<>
+															{t('study.repeat')} { surveySet.number_in_cycle === 1 ? 'once a' : surveySet.number_in_cycle + t('study.time_per') } {surveyCycleEn[surveySet.survey_cycle]}
+														</>
+														:
+														<>
+															{surveyCycle[surveySet.survey_cycle]}{t('study.repeat')}{' '}
+															{surveySet.number_in_cycle}{t('study.time_per')}
+														</>
+													}
+                                                    {/* {surveyCycle[surveySet.survey_cycle]}마다{' '}
+                                                    {surveySet.number_in_cycle}회 반복 */}
                                                 </Typography>
                                             </ListItem>
                                         ))
@@ -418,7 +464,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                             }}
                         >
                             <Box display="flex" alignItems="center" justifyContent="space-between">
-                                <Typography variant="h5">전자동의서</Typography>
+                                <Typography variant="h5">{t('study.electronic_consent_form')}</Typography>
                                 <Box display="flex" gap={0.5}>
                                     {userId === ownerId && studyDetail.eic_origin_name && (
                                         <>
@@ -427,10 +473,12 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                                 color="error"
                                                 onClick={handleDeleteOpen}
                                             >
-                                                Delete
+												{t('common.delete')}
+                                                {/* Delete */}
                                             </Button>
                                             <Button variant="outlined" onClick={handleEditViewOpen}>
-                                                Edit
+												{t('common.edit')}
+                                                {/* Edit */}
                                             </Button>
                                         </>
                                     )}
@@ -478,7 +526,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                             <AddCircleOutlineIcon sx={{ fontSize: 40 }} />
                                         </IconButton>
                                         <Typography variant="body1" color="textSecondary">
-                                            Register your electronic consent form.
+                                            {t('study.register_electronic_consent')}
                                         </Typography>
                                     </Box>
                                 )}
@@ -491,9 +539,10 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                 <Grid item container>
                     <Grid item xs={10}>
                         <Box display="flex" alignItems="center" gap={1}>
-                            <Typography variant="h4">Study 멤버현황</Typography>
+                            <Typography variant="h4">{t('study.members')}</Typography>
                             <Typography variant="caption">
-                                *최근 승인일 순으로 보여집니다.
+                                {t('study.displayed_most_recent_approval')}
+								{/* *최근 승인일 순으로 보여집니다. */}
                             </Typography>
                         </Box>
                     </Grid>
@@ -505,7 +554,8 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                 sx={{ mb: '0.3rem' }}
                                 variant="contained"
                             >
-                                멤버관리
+								{t('study.member_management')}
+                                {/* 멤버관리 */}
                             </Button>
                         </Box>
                     </Grid>

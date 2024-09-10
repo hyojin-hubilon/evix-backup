@@ -80,8 +80,8 @@ const SettingChangePasswordForm: React.FC<Props> = ({ user_no, isOpen, handleClo
                         Change password
                     </Typography>
 
-                    <Stack spacing={1} sx={{ mb: 2 }}>
-                        <Typography gutterBottom>Please enter a new password.</Typography>
+                    <Stack sx={{ mt: 2, mb: 2 }}>
+                        <Typography>Please enter a new password.</Typography>
                         <Typography>After the change, go to the login screen.</Typography>
                     </Stack>
 

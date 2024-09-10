@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { QuestionTypes } from "@/types/survey";
 import { PersistState } from "redux-persist/lib/types";
+import {t} from 'i18next';
 
 export interface StateProps {
 	cards: CardProps[];
@@ -33,9 +34,9 @@ interface ActionProps {
 
 const initialCards = {
 	id: "TitleCard",
-	cardTitle: "제목 없는 설문지",
+	cardTitle: t('survey.an_untitled_survey'), //제목없는 설문지
 	inputType: "TITLE",
-	contents: "설명",
+	contents: t('survey.description'),//설명
 	isFocused: false,
 	isRequired: false,
 };
@@ -170,7 +171,7 @@ export const cardSlice = createSlice({
 				targetCard.contents = [
 					{
 					id: String(Date.now()),
-					text: "옵션 1",
+					text: t('survey.option') + ' 1',
 					},
 				];
 			} else if (
