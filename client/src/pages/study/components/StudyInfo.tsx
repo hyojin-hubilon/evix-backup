@@ -13,6 +13,7 @@ import {
     Divider,
     Link,
     IconButton,
+	Dialog
 } from '@mui/material';
 import StudyMemberStatus from './study-info/StudyMemberStatus';
 import { STUDY_STATUS, STUDY_STATUS_KEY } from './StudyListItem';
@@ -30,6 +31,7 @@ import { useUserProfile } from '@/context/UserProfileContext';
 import SurveyConnectDialog from './study-new/SurveyConnetDialog';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
+import SurveyPreview from '@/pages/survey/SurveyPreview';
 
 interface StudyInfoProps {
     studyDetail: {
@@ -236,6 +238,21 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
         }
     };
 
+
+	const [ surveyNo, setSurveyNo ] = useState<number|null>(null);
+	const [ isPreview, setIsPreview ] = useState(false);
+
+
+	const handleShowSurvey = (surveyNo) => {
+		setSurveyNo(surveyNo);
+		setIsPreview(true);
+	}
+
+	const handleClosePreview = () => {
+		setIsPreview(false);
+		setSurveyNo(null);
+	}
+
     useEffect(() => {
         handleDownloadEicFile();
     }, []);
@@ -432,7 +449,9 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                                     sx={{
                                                         display: 'inline-block',
                                                         marginRight: '0.5rem',
+														cursor: 'pointer'
                                                     }}
+													onClick={() => handleShowSurvey(survey.survey_no)}
                                                 >
                                                     {survey.title}
                                                 </Link>
@@ -599,6 +618,12 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                 handleEicFile={handleEicFile}
                 basePdfFile={basePdfFile}
             />
+			{
+			surveyNo && isPreview &&
+				<Dialog open={isPreview} maxWidth="lg" onClose={handleClosePreview} fullWidth>
+					<SurveyPreview surveyNo={surveyNo} handleClose={handleClosePreview} isDialog={true} />
+				</Dialog>
+		}
         </Grid>
     );
 };

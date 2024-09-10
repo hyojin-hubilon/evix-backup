@@ -292,7 +292,10 @@
 		"add_etc_item" : "Add etc item",
 		"copy_question" : "Copy Question",
 		"delete_question" : "Delete Question",
-		"required" : "Required"
+		"required" : "Required",
+		"large_screen" : "Large screen",
+		"mobile_screen" : "Mobile screen",
+		"end_preview" : "End preview"
 	},
     "user": {},
     "settings": {

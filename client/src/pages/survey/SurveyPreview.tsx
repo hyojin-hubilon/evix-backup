@@ -2,6 +2,7 @@ import { useState } from "react";
 import SurveyView from "./SurveyView";
 import { Box, Button, Card, Container, Dialog, Grid, Tab, Tabs } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { t } from "i18next";
 type SurveyPreviewTypes = {
 	surveyNo?: string | number | undefined,
 	handleClose?: () => void,
@@ -38,14 +39,19 @@ const SurveyPreview = ({surveyNo, handleClose, isDialog, headerHide} : SurveyPre
 							onChange={handleChange}
 							aria-label="Survey Preview Tab"
 						>
-							<Tab label="PC 화면" value="0" />
-							<Tab label="모바일 화면" value="1" />
+							{/* PC 화면 */}
+							<Tab label={t('survey.large_screen')} value="0" /> 
+							{/* 모바일 화면 */}
+							<Tab label={t('survey.mobile_screen')} value="1" />
 						</Tabs>
 						
 					</Grid>
 					<Grid item xs={4}>
 						<Box display="flex" justifyContent="flex-end">
-							<Button variant="contained" sx={{mr: '0.5rem'}} onClick={handleEndPreview}>미리보기 종료</Button>
+							<Button variant="contained" sx={{mr: '0.5rem'}} onClick={handleEndPreview}>
+								{t('survey.end_preview')}
+								{/* 미리보기 종료 */}
+							</Button>
 							{/* 종료했을때 작성 혹은 목록으로 돌아가기 */}
 						</Box>
 					</Grid>
