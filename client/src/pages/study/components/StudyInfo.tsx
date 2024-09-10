@@ -121,7 +121,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
 
     const getStatusLabel = () => {
         if (endDate < today) {
-            return 'Expiration';
+            return 'Expired';
         }
         return STUDY_STATUS[studyDetail.std_status as STUDY_STATUS_KEY];
     };

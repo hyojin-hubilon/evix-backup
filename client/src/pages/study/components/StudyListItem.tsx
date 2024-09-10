@@ -22,7 +22,7 @@ import MemberManagement from './study-new/MemberManagement';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
     CompletedIcon,
-    ExpirationIcon,
+    ExpiredIcon,
     NewIcon,
     OngoingIcon,
     PauseIcon,
@@ -40,7 +40,7 @@ export const STUDY_STATUS = {
     'STD-CREATED': 'New', //생성완료
     'STD-PROGRESSION': 'Ongoing', //진행중
     'STD-DONE': 'Completed', //완료
-    'STD-EXPIRATION': 'Expiration', //만료
+    'STD-Expired': 'Expired', //만료
     'STD-PAUSE': 'Pause', //일시정지
 } as const;
 
@@ -57,7 +57,7 @@ export const TitleStatusIcon = ({ status }: { status: string }) => {
                     'STD-CREATED': <NewIcon color={stdStatus.new} />,
                     'STD-PROGRESSION': <OngoingIcon color={stdStatus.ongoing} />,
                     'STD-DONE': <CompletedIcon color={stdStatus.completed} />,
-                    'STD-EXPIRATION': <ExpirationIcon color={stdStatus.expired} />,
+                    'STD-Expired': <ExpiredIcon color={stdStatus.expired} />,
                     'STD-PAUSE': <PauseIcon color={stdStatus.pause} />,
                 }[status]
             }
@@ -127,7 +127,7 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
 
     const getStatusLabel = () => {
         if (endDate < today) {
-            return 'Expiration';
+            return 'Expired';
         }
         return STUDY_STATUS[study.std_status as STUDY_STATUS_KEY];
     };
@@ -146,9 +146,9 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                         bgcolor: theme.palette.success.lighter,
                     }), //Completed
                     ...(endDate < today &&
-                        'STD-EXPIRATION' && {
+                        'STD-Expired' && {
                             bgcolor: theme.palette.purple.lighter,
-                        }), //EXPIRATION
+                        }), //Expired
                     p: '1rem',
                     cursor: 'pointer',
                 }}
@@ -167,15 +167,15 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                                     color: stdStatus.completed,
                                 }), //Completed
                                 ...(endDate < today &&
-                                    'STD-EXPIRATION' && {
+                                    'STD-Expired' && {
                                         color: stdStatus.expired,
-                                    }), //EXPIRATION
+                                    }), //Expired
                             }}
                             fontWeight="600"
                         >
                             {/* <TitleStatusIcon status={study.std_status} /> {statusLabel} */}
                             <TitleStatusIcon
-                                status={endDate < today ? 'STD-EXPIRATION' : study.std_status}
+                                status={endDate < today ? 'STD-Expired' : study.std_status}
                             />{' '}
                             {statusLabel}
                         </Typography>
