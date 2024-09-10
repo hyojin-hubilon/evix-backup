@@ -49,6 +49,8 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
     const designerRef = useRef<HTMLDivElement | null>(null);
     const designer = useRef<Designer | null>(null);
     const [lang, setLang] = useState<Lang>('en');
+    const fileInputRef = useRef(null);
+
     const [templatePreset, setTemplatePreset] = useState<string>(
         localStorage.getItem('templatePreset') || initialTemplatePresetKey
     );
@@ -163,6 +165,10 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
         }
     };
 
+    const handleButtonClick = () => {
+        fileInputRef.current.click();
+    };
+
     useEffect(() => {
         if (designer.current) {
             designer.current.destroy();
@@ -192,7 +198,12 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
                 <Button sx={{ width: '50%', height: '40px' }} variant="outlined" onClick={onClose}>
                     Cancel
                 </Button>
-                <Button sx={{ width: '50%', height: '40px' }} variant="contained" color="primary">
+                <Button
+                    sx={{ width: '50%', height: '40px' }}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleButtonClick}
+                >
                     <InputLabel htmlFor="upload-pdf" style={{ width: 180, color: 'white' }}>
                         Change Base PDF
                     </InputLabel>
@@ -201,6 +212,7 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
                         type="file"
                         accept="application/pdf"
                         onChange={onChangeBasePDF}
+                        ref={fileInputRef}
                         hidden
                     />
                 </Button>

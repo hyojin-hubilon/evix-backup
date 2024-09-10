@@ -520,7 +520,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                             style={{ cursor: 'pointer' }}
                                             onClick={handlePreviewOpen}
                                         >
-                                            {studyDetail.eic_origin_name ?? ''}
+                                            Preview
                                         </Link>
                                     </ListItem>
                                 </List>
