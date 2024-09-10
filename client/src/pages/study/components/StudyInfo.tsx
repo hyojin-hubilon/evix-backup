@@ -116,7 +116,17 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
         onSurveyClose();
     };
 
-    const statusLabel = STUDY_STATUS[studyDetail.std_status as STUDY_STATUS_KEY];
+    const today = moment().format('YYYY-MM-DD');
+    const endDate = studyDetail.std_end_date;
+
+    const getStatusLabel = () => {
+        if (endDate < today) {
+            return 'Expiration';
+        }
+        return STUDY_STATUS[studyDetail.std_status as STUDY_STATUS_KEY];
+    };
+
+    const statusLabel = getStatusLabel();
 
     const [isDelete, setIsDelete] = useState<boolean>(false);
     const handleDeleteOpen = () => {
