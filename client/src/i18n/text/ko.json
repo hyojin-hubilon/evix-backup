@@ -247,7 +247,10 @@
 		"function" : "권한",
 		"affiliation" : "소속",
 		"invitation_sending_date" : "초대발송일자",
-		"approval_status" : "승인상태"
+		"approval_status" : "승인상태",
+		"send" : "보내기",
+		"no_members" : "멤버가 없습니다.",
+		"invitation_email_sent" : "초대메일 발송 완료"
 	},
 	"eic" : {
 		"has_been_saved" : "전자동의서가 저장되었습니다.",

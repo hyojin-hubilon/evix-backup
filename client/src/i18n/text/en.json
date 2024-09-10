@@ -252,7 +252,10 @@
 		"function" : "Function",
 		"affiliation" : "Affiliation",
 		"invitation_sending_date" : "Invitation sending date",
-		"approval_status" : "Approval status"
+		"approval_status" : "Approval status",
+		"send" : "Send",
+		"no_members" : "There are no members.",
+		"invitation_email_sent" : "Invitation email sent"
 	},
 	"eic" : {
 		"has_been_saved" : "Your electronic consent form has been saved.",

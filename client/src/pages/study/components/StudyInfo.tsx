@@ -147,6 +147,8 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
     const [basePdfFile, setBasePdfFile] = useState<File | null>(null);
     const [isUploadBasePdfOpen, setIsUploadBasePdfOpen] = useState<boolean>(false);
     const [isCreateEicOpen, setIsCreateEicOpen] = useState<boolean>(false);
+	const [ managerList, setManagerList] = useState<any[]>(studyDetail.managerList);
+	const [ inviteList, setInviteList] = useState<any[]>(studyDetail.inviteList);
 
     const handlePreviewOpen = () => {
         setIsPreviewEicOpen(true);
@@ -580,8 +582,8 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                     </Grid>
                 </Grid>
                 <StudyMemberStatus
-                    managerList={studyDetail.managerList}
-                    inviteList={studyDetail.inviteList}
+                    managerList={managerList}
+                    inviteList={inviteList}
                 />
             </Grid>
             <MemberManagement

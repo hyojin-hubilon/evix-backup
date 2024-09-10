@@ -186,14 +186,14 @@ export async function file_api<T>(
     config?: AxiosRequestConfig
 ): Promise<ResCommonSuccess<T>> {
     let res;
-	let loadingEle;
+	// let loadingEle;
 
-	if (typeof window != 'undefined') {
-        loadingEle = document.getElementById('loadingContainer');
-        if (loadingEle) {
-            loadingEle.style.display = 'block';
-        }
-    }
+	// if (typeof window != 'undefined') {
+    //     loadingEle = document.getElementById('loadingContainer');
+    //     if (loadingEle) {
+    //         loadingEle.style.display = 'block';
+    //     }
+    // }
 
     try {
         if (method === 'post') {
@@ -204,14 +204,14 @@ export async function file_api<T>(
         } else {
             res = await axios_file_instance.get(url);
         }
-        if (loadingEle) {
-            loadingEle.style.display = 'none';
-        }
+        // if (loadingEle) {
+        //     loadingEle.style.display = 'none';
+        // }
         return res.data as ResCommonSuccess<T>;
     } catch (error) {
-		if (loadingEle) {
-            loadingEle.style.display = 'none';
-        }
+		// if (loadingEle) {
+        //     loadingEle.style.display = 'none';
+        // }
         if (Axios.isCancel(error)) {
             throw generateError(ResCustomErrorCode.TIMEOUT, null, null, error.message);
         }
