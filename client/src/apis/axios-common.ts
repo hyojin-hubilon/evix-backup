@@ -160,7 +160,7 @@ export async function api<T>(
             loadingEle.style.display = 'none';
         }
         if (Axios.isCancel(error)) {
-			dispatch(setAlert({ alertOpen: true, alertText: error.message, alertType: AlertType.error }));
+			// dispatch(setAlert({ alertOpen: true, alertText: error.message, alertType: AlertType.error }));
             throw generateError(ResCustomErrorCode.TIMEOUT, null, null, error.message);
         }
         if (Axios.isAxiosError<ResCommonError>(error)) {
@@ -169,11 +169,11 @@ export async function api<T>(
                 errorResult.code == error.response.status;
                 throw errorResult;
             } else {
-				dispatch(setAlert({ alertOpen: true, alertText: error.message, alertType: AlertType.error }));
+				// dispatch(setAlert({ alertOpen: true, alertText: error.message, alertType: AlertType.error }));
                 throw generateError(ResCustomErrorCode.NONE_RESPONSE, null, null, error.message);
             }
         } else {
-			dispatch(setAlert({ alertOpen: true, alertText: (error as Error).message, alertType: AlertType.error }));
+			// dispatch(setAlert({ alertOpen: true, alertText: (error as Error).message, alertType: AlertType.error }));
             throw generateError(ResCustomErrorCode.OTHERS, null, null, (error as Error).message);
         }
     }
