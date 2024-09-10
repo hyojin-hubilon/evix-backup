@@ -2,7 +2,7 @@ import { ResCommonError } from '@/apis/axios-common';
 import userApi from '@/apis/user';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { Box, Button } from '@mui/material';
-import { useEffect } from 'react';
+import { t } from 'i18next';
 
 type Props = {
     imageUrl: string;
@@ -21,7 +21,7 @@ const ProfileImage: React.FC<Props> = ({ imageUrl, handleImageUrl }) => {
         try {
             const { content } = await userApi.uploadProfileImage(formData);
             if (content) {
-				confirm({description : '프로필 사진이 변경되었습니다.', variant : 'info'});   
+				confirm({description : t('settings.profile_picture_changed'), variant : 'info'});    //'프로필 사진이 변경되었습니다.'
                 handleImageUrl(content);
             }
         } catch (error) {
@@ -54,7 +54,8 @@ const ProfileImage: React.FC<Props> = ({ imageUrl, handleImageUrl }) => {
             />
             <label htmlFor="upload-button">
                 <Button variant="outlined" color="primary" component="span">
-                    사진 변경
+					{t('settings.change_photo')}
+                    {/* 사진 변경 */}
                 </Button>
             </label>
         </>

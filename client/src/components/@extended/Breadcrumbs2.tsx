@@ -18,7 +18,8 @@ function LinkRouter(props: LinkRouterProps) {
 
 const breadcrumbNameMap: { [key: string]: string } = {
 	'study': 'Study',
-	'/survey': 'Survey'
+	'/survey': 'Survey',
+	'settings' : 'Settings'
 };
 
 type BreadCrumbs2Type = {

@@ -295,8 +295,36 @@
 		"required" : "Required"
 	},
     "user": {},
-    "my_page": {},
+    "settings": {
+		"enter_password_to_verify" : "Please enter your password to verify your identity.",
+		"enter_your_email_address" : "Please enter your email address.",
+		"enter_your_password" : "Please enter your password.",
+		"confirm_your_password" : "Please confirm your password again.",
+		"enter_your_phone_number" : "Please enter your phone number.",
+		"enter_your_country" : "Please enter your country.",
+		"enter_your_company" : "Please enter your company name.",
+		"enter_your_occupation" : "Please enter your occupation.",
+		"modification_completed" : "The modification has been completed.",
+		"study_invitation_received" : "Study invitation I received",
+		"account_information" : "Account Information",
+		"change" : "Change",
+		"change_photo" : "Change photo",
+		"profile_picture_changed" : "Your profile picture has changed.",
+		"notification_settings" : "Notification Settings",
+		"email_notifications" : "Email Notifications",
+		"language_settings" : "Language settings",
+		"edit_completed" : "Edit completed",
+		"participate_in_the_study" : "After accepting the invitation, please participate in the Study.",
+		"received_invitations_displayed": "※ Only received invitations are displayed."
+	},
 	"nav": {
 		"welcome" : ", Welcome"
+	},
+	"help" : {
+		"search_placeholder" : "Try searching for help.",
+		"contact_us" : "Contact Us",
+		"faq" : "FAQ",
+		"service_introduction": "Service Introduction",
+		"member_management" : "Member Management"
 	}
 }

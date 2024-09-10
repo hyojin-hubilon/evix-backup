@@ -290,8 +290,36 @@
 		"required" : "필수"
 	},
     "user": {},
-    "my_page": {},
+    "settings": {
+		"enter_password_to_verify" : "본인 확인을 위해 비밀번호를 입력해주세요.",
+		"enter_your_email_address" : "이메일을 입력해주세요.",
+		"enter_your_password" : "비밀번호를 입력해주세요.",
+		"confirm_your_password" : "비밀번호를 다시 확인해주세요.",
+		"enter_your_phone_number" : "전화번호를 입력해주세요.",
+		"enter_your_country" : "국가를 입력해주세요.",
+		"enter_your_company" : "회사명을 입력해주세요.",
+		"enter_your_occupation" : "직업을 입력해주세요.",
+		"modification_completed" : "수정이 완료되었습니다.",
+		"study_invitation_received" : "내가 받은 Study 초대",
+		"account_information" : "계정정보",
+		"change" : "변경",
+		"change_photo" : "사진 변경",
+		"profile_picture_changed" : "프로필 사진이 변경되었습니다.",
+		"notification_settings" : "알림 설정",
+		"email_notifications" : "이메일 알림",
+		"language_settings" : "언어 설정",
+		"edit_completed" : "수정 완료",
+		"participate_in_the_study" : "초대 수락 후 Study에 참여해보세요.",
+		"received_invitations_displayed": "※ 받은 초대만 조회됩니다."
+	},
 	"nav": {
 		"welcome" : "님 안녕하세요"
+	},
+	"help" : {
+		"search_placeholder" : "도움말을 검색해보세요.",
+		"contact_us" : "문의하기",
+		"faq" : "자주찾는 도움말",
+		"service_introduction": "서비스 소개",
+		"member_management" : "멤버관리"
 	}
 }
