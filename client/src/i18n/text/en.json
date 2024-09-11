@@ -307,7 +307,8 @@
 		"required" : "Required",
 		"large_screen" : "Large screen",
 		"mobile_screen" : "Mobile screen",
-		"end_preview" : "End preview"
+		"end_preview" : "End preview",
+		"add_a_question" : "Add a question"
 	},
     "user": {},
     "settings": {
