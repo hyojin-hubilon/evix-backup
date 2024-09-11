@@ -22,7 +22,8 @@
 		"close" : "Close",
 		"confirm" : "Confirm",
 		"delete" : "Delete",
-		"save" : "Save"
+		"save" : "Save",
+		"list" : "List"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -260,7 +261,8 @@
 		"success" : "Success",
 		"select" : "Select",
 		"survey_title" :"Survey Ttile",
-		"updated_at" : "Updated at"
+		"updated_at" : "Updated at",
+		"none" : "None"
 	},
 	"eic" : {
 		"has_been_saved" : "Your electronic consent form has been saved.",
@@ -337,5 +339,11 @@
 		"faq" : "FAQ",
 		"service_introduction": "Service Introduction",
 		"member_management" : "Member Management"
+	},
+	"auth" : {
+		"study_invitation_completed" : "Your study invitation has been completed.",
+		"register_member_first" : "Please register as a member first.",
+		"token_expired" : "The token has expired.",
+		"error_occurred" : "An error occurred."
 	}
 }

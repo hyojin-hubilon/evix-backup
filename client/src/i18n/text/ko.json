@@ -22,7 +22,8 @@
 		"close" : "닫기",
 		"confirm" :  "확인",
 		"delete" : "삭제",
-		"save" : "저장"
+		"save" : "저장",
+		"list" : "목록"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -255,7 +256,8 @@
 		"success" : "성공",
 		"select" : "선택",
 		"survey_title" : "Survey 제목",
-		"updated_at" : "업데이트"
+		"updated_at" : "업데이트",
+		"none" : "없음"
 	},
 	"eic" : {
 		"has_been_saved" : "전자동의서가 저장되었습니다.",
@@ -332,5 +334,11 @@
 		"faq" : "자주찾는 도움말",
 		"service_introduction": "서비스 소개",
 		"member_management" : "멤버관리"
+	},
+	"auth" : {
+		"study_invitation_completed" : "스터디 초대가 완료되었습니다.",
+		"register_member_first" : "회원가입을 먼저 진행해주십시오.",
+		"token_expired" : "토큰이 만료되었습니다.",
+		"error_occurred" : "에러가 발생했습니다."
 	}
 }
