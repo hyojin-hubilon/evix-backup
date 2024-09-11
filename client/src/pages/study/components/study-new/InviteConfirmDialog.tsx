@@ -9,6 +9,7 @@ import {
     Typography,
     useTheme,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 type InviteConfirmDialogProps = {
     emails: string[];
@@ -18,6 +19,7 @@ type InviteConfirmDialogProps = {
 const InviteConfirmDialog = ({ emails, open, handleClose }: InviteConfirmDialogProps) => {
     const theme = useTheme();
     const { primary } = theme.palette;
+	const { t, i18n} =  useTranslation();
 
     return (
         <Dialog
@@ -28,19 +30,30 @@ const InviteConfirmDialog = ({ emails, open, handleClose }: InviteConfirmDialogP
             maxWidth="xs"
         >
             <DialogTitle id="invited-dialog-title" variant="h5">
-                초대메일 발송 완료
+				{t('study.invitation_email_sent')}
+                {/* 초대메일 발송 완료 */}
             </DialogTitle>
             <DialogContent>
                 <Box minWidth="300px">
                     <Typography id="alert-dialog-description">
-                        <span style={{ color: primary.main }}>{emails.join(', ')}</span> 로
-                        초대메일이 발송되었습니다.
+						{
+							i18n.language == 'en' ? <>
+								An invitation email has been sent to <span style={{ color: primary.main }}>{emails.join(', ')}</span>
+							</>
+							:
+							<>
+								<span style={{ color: primary.main }}>{emails.join(', ')}</span> 로
+								초대메일이 발송되었습니다.
+							</>
+
+						}
+                        
                     </Typography>
                 </Box>
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" color="primary" onClick={handleClose}>
-                    확인
+                    {t('common.confirm')}
                 </Button>
             </DialogActions>
         </Dialog>

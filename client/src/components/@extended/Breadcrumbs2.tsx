@@ -17,21 +17,38 @@ function LinkRouter(props: LinkRouterProps) {
 }
 
 const breadcrumbNameMap: { [key: string]: string } = {
-	'/study': 'Study 목록',
-	'/study/detail': 'Analysis & Summary'
+	'study': 'Study',
+	'/survey': 'Survey',
+	'settings' : 'Settings'
 };
 
-const Breadcrumbs2 = () => {
+type BreadCrumbs2Type = {
+	sub: string;
+}
+
+const Breadcrumbs2 = ({sub} : BreadCrumbs2Type) => {
   	const { pathname } = useLocation();
   	const pathnames = pathname.split('/').filter((x) => x);
 	
+
+	console.log(pathnames);
+	
 	return (
-    	<Breadcrumbs aria-label="breadcrumb" sx={{mb: 2}}>
-			{pathnames.map((_value, index) => {
+		<Breadcrumbs aria-label="breadcrumb" sx={{mb: 2}}>
+			
+			<LinkRouter underline="hover" color="inherit" to={`/${pathnames[0]}`}>
+				{breadcrumbNameMap[pathnames[0]]}
+			</LinkRouter>
+			
+			<Typography fontWeight="600" color="common.black" textOverflow="ellipsis" maxWidth="200px" overflow="hidden" whiteSpace="nowrap">
+				{ sub }
+			</Typography>
+
+			{/* {pathnames.map((_value, index) => {
 				const last = index === pathnames.length - 1;
 				const to = `/${pathnames.slice(0, index + 1).join('/')}`;
 				return last ? (
-				<Typography key={to} fontWeight="600" color="common.black">
+				<Typography key={to} >
 					{breadcrumbNameMap[to]}
 				</Typography>
 				) : (
@@ -39,7 +56,7 @@ const Breadcrumbs2 = () => {
 					{breadcrumbNameMap[to]}
 				</LinkRouter>
 				);
-			})}
+			})} */}
     	</Breadcrumbs>
   );
 }

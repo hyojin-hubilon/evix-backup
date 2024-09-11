@@ -4,6 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Fab, Tooltip, useTheme } from "@mui/material";
 
 import { addCard, StateProps } from "@store/reducers/survey";
+import { t } from "i18next";
 
 const AddCardButton = () => {
 	const theme = useTheme();
@@ -17,7 +18,7 @@ const AddCardButton = () => {
 		if (cards.length < 2)
 			dispatch(
 				addCard({
-					cardTitle: "제목없는 질문",
+					cardTitle: t('survey.an_untitled_survey'),
 					focusedCardIndex: String(focusedCardIndex),
 					cardId: String(Date.now()),
 				}),
@@ -25,7 +26,7 @@ const AddCardButton = () => {
 	}, []);
 
 	return (
-		<Tooltip title="질문 추가" placement="right">
+		<Tooltip title={t('survey.add_a_question')} placement="right">
 		<Fab
 			color="primary"
 			aria-label="add"

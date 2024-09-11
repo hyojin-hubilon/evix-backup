@@ -6,6 +6,8 @@ import { styled } from '@mui/material/styles';
 import { NavLink } from 'react-router-dom';
 import authApi from '@/apis/auth';
 import { invitedStudy } from '@/types/study';
+import Breadcrumbs2 from '@/components/@extended/Breadcrumbs2';
+import { t } from 'i18next';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -57,22 +59,14 @@ const UnauthorizedInvitation = () => {
     return (
 		<Container maxWidth="lg">
         <Box sx={{ p: 2 }}>
-            <Typography variant="h5">
-                Settings {'>'}
-                <NavLink
-                    to="/settings/unauthorizedstudy"
-                    style={({ isActive }) => ({
-                        textDecoration: isActive ? 'underline' : 'none',
-                    })}
-                >
-                    내가 받은 Study 초대 ({invitedStudyNumber})
-                </NavLink>
-            </Typography>
+			<Breadcrumbs2 sub={`${t('settings.study_invitation_received')} (${invitedStudyNumber})`}/>
 
-            <Typography variant="body2" sx={{ mt: 1, mb: 2 }}>
-                초대 수락 후 Study에 참여해보세요.
+            <Typography variant="body1" sx={{ mt: 1, mb: 2 }}>
+				{t('settings.participate_in_the_study')}
+                {/* 초대 수락 후 Study에 참여해보세요. */}
                 <br />
-                ※받은 초대만 조회됩니다.
+				{t('settings.received_invitations_displayed')}
+                {/* ※받은 초대만 조회됩니다. */}
             </Typography>
             <Stack spacing={2}>
                 {invitedStudies.map((study, index) => (

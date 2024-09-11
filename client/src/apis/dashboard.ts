@@ -50,7 +50,7 @@ const DashboardApi = {
     // 최근 참여자 로그 (배포 상태인 스터디)
     getRecentParticipantLogs: async () => {
         try {
-            const responseData = await api<DashboardApiType.NumOfParticipantByStudy[]>(
+            const responseData = await api<DashboardApiType.RecentParticipantLogs[]>(
                 `${BASE_API_URL}/recent-participant-logs`,
                 'get'
             );

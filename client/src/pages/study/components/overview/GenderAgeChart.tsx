@@ -1,6 +1,7 @@
 import { ParticipationRateByAge } from '@/types/study';
 import { Box, Grid, Stack, Typography, useTheme } from '@mui/material';
 import { ApexOptions } from 'apexcharts';
+import { t } from 'i18next';
 import ReactApexChart from 'react-apexcharts';
 
 const GenderAgeChart = ({
@@ -14,11 +15,11 @@ const GenderAgeChart = ({
 
     const genderChartSeries = [
         {
-            name: '남성',
+            name: t('study.male'),
             data: [participationRateByAge.num_male],
         },
         {
-            name: '여성',
+            name: t('study.female'),
             data: [participationRateByAge.num_female],
         },
     ];
@@ -37,7 +38,7 @@ const GenderAgeChart = ({
             },
         },
         xaxis: {
-            categories: ['성별'],
+            categories: [t('study.gender')],
             labels: {
                 show: false,
             },
@@ -77,7 +78,7 @@ const GenderAgeChart = ({
             colors: ['#fff'],
         },
         xaxis: {
-            categories: ['10대', '20대', '30대', '40대', '50대', '60대', '70대 이상'],
+            categories: [`10${t('study.s')}`, `20${t('study.s')}`, `30${t('study.s')}`, `40${t('study.s')}`, `50${t('study.s')}`, `60${t('study.s')}`, t('study.over_70s')],
             labels: {
                 show: false,
             },
@@ -85,7 +86,7 @@ const GenderAgeChart = ({
         tooltip: {
             y: {
                 formatter: function (val) {
-                    return val + '명';
+                    return val + t('study.person');
                 },
             },
         },
@@ -130,7 +131,8 @@ const GenderAgeChart = ({
                 <Grid item xs={3}>
                     <Stack>
                         <Typography variant="h6" color="textSecondary">
-                            참여자 성별/연령대
+							{t('study.participant_gender_age_group')}
+                            {/* 참여자 성별/연령대 */}
                         </Typography>
                         <ReactApexChart
                             options={genderChartOptions}

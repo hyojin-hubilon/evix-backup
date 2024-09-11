@@ -11,6 +11,7 @@ import { Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
 import SurveyPreview from "./SurveyPreview";
 import { useConfirmation } from '@/context/ConfirmDialogContext';
+import { t } from "i18next";
 
 const SurveyNew = () => {
 	const { ref, isSticky } = useSticky();
@@ -335,16 +336,27 @@ const SurveyNew = () => {
 									>
 										<Box display="flex" alignItems="center">
 											{
-												!isSticky && <Typography variant="h3" color="secondary.dark">Survey {locationState == 'edit' ? '수정' : '생성'}</Typography>
+												!isSticky && <Typography variant="h3" color="secondary.dark">{locationState == 'edit' ? t('survey.edit_survey') : t('survey.new_survey')}</Typography>
 											}
 											
 											<Box display="flex" justifyContent="flex-end" gap={1} sx={{ml: 'auto'}}>
+											
 												{
-													surveyNo && <Button variant="outlined" onClick={handlePreview}>미리보기</Button>
+													surveyNo &&
+													<Button variant="outlined" onClick={handlePreview}>
+														{t('survey.preview')}
+														{/* 미리보기 */}
+													</Button>
 												}
 												
-												<Button variant="outlined" disabled={isSubmitting} onClick={() => handleButtonClick(true, formikProps)}>임시저장</Button>
-												<Button variant="contained" disabled={isSubmitting} onClick={() => handleButtonClick(false, formikProps)}>저장</Button>
+												<Button variant="outlined" disabled={isSubmitting} onClick={() => handleButtonClick(true, formikProps)}>
+													{t('survey.save_temporarily')}
+													{/* 임시저장 */}
+												</Button>
+												<Button variant="contained" disabled={isSubmitting} onClick={() => handleButtonClick(false, formikProps)}>
+													{t('common.save')}
+													{/* 저장 */}
+												</Button>
 											</Box>
 										</Box>
 									

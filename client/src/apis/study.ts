@@ -418,6 +418,36 @@ const studyApi = {
             throw e;
         }
     },
+    /**
+     * 임상시험 참여자 목록
+     * @param stdNo
+     */
+    participantList: async (stdNo: Number) => {
+        try {
+            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/list-participant`, 'get');
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+    /**
+     * 스터디 최근 참여자 로그
+     * @param stdNo
+     * @returns
+     */
+    recentParticipantLogs: async (stdNo: Number) => {
+        try {
+            const responseData = await api<{}>(
+                `${BASE_API_URL}/${stdNo}/overview/recent-participant-logs`,
+                'get'
+            );
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
 };
 
 export default studyApi;

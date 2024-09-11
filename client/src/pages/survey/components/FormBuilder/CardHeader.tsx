@@ -5,6 +5,7 @@ import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { CardProps, setTitle, StateProps, typeChange } from "@/store/reducers/survey";
 import { QuestionTypes } from "@/types/survey";
 import { Field } from "formik";
+import { t } from "i18next";
   
 type CardHeaderType = {
 	id: string,
@@ -53,7 +54,8 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 						field.onChange(e.target.value);
 					}}
 					onBlur={(e) => handleCardTitleChange(e)}
-					placeholder={isTitle ? "설문지 제목" : "질문"}
+					placeholder={isTitle ? t('survey.survey_title') : t('survey.question')}
+					//설문지 제목 : 질문
 					variant="filled"
 					key={cardTitle as string}
 					sx={{
@@ -90,9 +92,18 @@ const CardHeader = ({ id, isTitle, cardIndex }: CardHeaderType) => {
 							name={field.name}
 							value={inputType ? inputType : "WRITE"}
 						>
-							<MenuItem value={QuestionTypes.WRITE}>주관식 답변</MenuItem>
-							<MenuItem value={QuestionTypes.SINGLE}>객관식 답변(단일응답)</MenuItem>
-							<MenuItem value={QuestionTypes.MULTIPLE}>객관식 답변(복수응답)</MenuItem>
+							<MenuItem value={QuestionTypes.WRITE}>
+								{t('survey.subjective_answer')}
+								{/* 주관식 답변 */}
+							</MenuItem>
+							<MenuItem value={QuestionTypes.SINGLE}>
+								{t('survey.single_choice_answer')}
+								{/* 객관식 답변(단일응답) */}
+							</MenuItem>
+							<MenuItem value={QuestionTypes.MULTIPLE}>
+								{t('survey.multiple_choice_answer')}
+								{/* 객관식 답변(복수응답) */}
+							</MenuItem>
 						</Select>
 					)}
 				</Field>
