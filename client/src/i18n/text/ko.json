@@ -257,7 +257,9 @@
 		"select" : "선택",
 		"survey_title" : "Survey 제목",
 		"updated_at" : "업데이트",
-		"none" : "없음"
+		"none" : "없음",
+		"and" : "외",
+		"other_person" : "명"
 	},
 	"eic" : {
 		"has_been_saved" : "전자동의서가 저장되었습니다.",
@@ -339,6 +341,7 @@
 		"study_invitation_completed" : "스터디 초대가 완료되었습니다.",
 		"register_member_first" : "회원가입을 먼저 진행해주십시오.",
 		"token_expired" : "토큰이 만료되었습니다.",
-		"error_occurred" : "에러가 발생했습니다."
+		"error_occurred" : "에러가 발생했습니다.",
+		"password_changed" : "비밀번호 변경 성공"
 	}
 }

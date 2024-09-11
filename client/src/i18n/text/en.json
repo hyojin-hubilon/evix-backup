@@ -262,7 +262,9 @@
 		"select" : "Select",
 		"survey_title" :"Survey Ttile",
 		"updated_at" : "Updated at",
-		"none" : "None"
+		"none" : "None",
+		"and" : "and",
+		"other_person" : " other person"
 	},
 	"eic" : {
 		"has_been_saved" : "Your electronic consent form has been saved.",
@@ -344,6 +346,7 @@
 		"study_invitation_completed" : "Your study invitation has been completed.",
 		"register_member_first" : "Please register as a member first.",
 		"token_expired" : "The token has expired.",
-		"error_occurred" : "An error occurred."
+		"error_occurred" : "An error occurred.",
+		"password_changed" : "Your password has been successfully changed."
 	}
 }

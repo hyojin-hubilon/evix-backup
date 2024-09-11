@@ -28,7 +28,7 @@ const StudyPreviewPage = () => {
         if (members.length === 0) return t('study.none');
 
         const names = members.map((member) => `${member.first_name} ${member.last_name}`);
-        return names.length > 1 ? `${names[0]} 외 ${names.length - 1}명` : names[0];
+        return names.length > 1 ? `${names[0]} ${t('study.and')} ${names.length - 1}${t('study.other_person')}` : names[0];
     };
 
     return (
