@@ -142,6 +142,7 @@
         }
     },
     "study": {
+		"study": "Study",
 		"search_by" : "Search by title, disease, status",
 		"all_studies" : "All Studies",
 		"my_studies" : "My Studies",
@@ -255,7 +256,11 @@
 		"approval_status" : "Approval status",
 		"send" : "Send",
 		"no_members" : "There are no members.",
-		"invitation_email_sent" : "Invitation email sent"
+		"invitation_email_sent" : "Invitation email sent",
+		"success" : "Success",
+		"select" : "Select",
+		"survey_title" :"Survey Ttile",
+		"updated_at" : "Updated at"
 	},
 	"eic" : {
 		"has_been_saved" : "Your electronic consent form has been saved.",

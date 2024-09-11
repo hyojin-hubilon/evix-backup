@@ -15,6 +15,7 @@ import {
 import dayjs from 'dayjs';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import PreviewIcon from '@mui/icons-material/Preview';
+import { t } from 'i18next';
 
 export type SurveyAdd = {
     type: 'add' | 'delete';
@@ -62,10 +63,22 @@ const SurveyListTable = ({
                     <TableRow
                         sx={{ 'td, th': { borderBottom: `1px solid ${theme.palette.grey[400]}` } }}
                     >
-                        <TableCell align="center">선택</TableCell>
-                        <TableCell align="left">Survey 제목</TableCell>
-                        <TableCell align="center">업데이트</TableCell>
-                        <TableCell align="center">미리보기</TableCell>
+                        <TableCell align="center">
+							{t('study.select')}
+							{/* 선택 */}
+						</TableCell>
+                        <TableCell align="left">
+							{t('study.survey_title')}
+							{/* Survey 제목 */}
+							</TableCell>
+                        <TableCell align="center">
+							{t('study.updated_at')}
+							{/* 업데이트 */}
+						</TableCell>
+                        <TableCell align="center">
+							{t('common.preview')}
+							{/* 미리보기 */}
+							</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

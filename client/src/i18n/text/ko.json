@@ -142,6 +142,7 @@
         }
     },
     "study": {
+		"stduy": "스터디",
 		"search_by" : "타이틀, 질환명, 상태 검색",
 		"all_studies" : "All Studies",
 		"my_studies" : "My Studies",
@@ -250,7 +251,11 @@
 		"approval_status" : "승인상태",
 		"send" : "보내기",
 		"no_members" : "멤버가 없습니다.",
-		"invitation_email_sent" : "초대메일 발송 완료"
+		"invitation_email_sent" : "초대메일 발송 완료",
+		"success" : "성공",
+		"select" : "선택",
+		"survey_title" : "Survey 제목",
+		"updated_at" : "업데이트"
 	},
 	"eic" : {
 		"has_been_saved" : "전자동의서가 저장되었습니다.",

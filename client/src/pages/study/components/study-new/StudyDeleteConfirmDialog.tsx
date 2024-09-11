@@ -9,7 +9,8 @@ import {
     Typography,
 } from '@mui/material';
 import studyApi from '@/apis/study';
-import { actionMessages } from '@/types/study';
+import { actionMessages, actionMessagesEn, actionMessagesEnPast } from '@/types/study';
+import { useTranslation } from 'react-i18next';
 
 type ActionType = 'delete' | 'pause' | 'done' | 'progression';
 
@@ -29,6 +30,7 @@ const StudyDeleteConfirmDialog = ({
     action = 'delete',
 }: StudyDeleteConfirmDialogProps) => {
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+	const { t, i18n } = useTranslation();
 
     const handleConfirmAction = async () => {
         try {
@@ -53,7 +55,12 @@ const StudyDeleteConfirmDialog = ({
     };
 
     const getSuccessMessage = () => {
-        return `${actionMessages[action]}되었습니다.`;
+		if(i18n.language === 'en') {
+			return `It has been. ${actionMessagesEnPast[action]}.`;
+		} else {
+			return `${actionMessages[action]}되었습니다.`;
+		}
+        
     };
 
     return (
@@ -66,25 +73,35 @@ const StudyDeleteConfirmDialog = ({
                 maxWidth="xs"
             >
                 <DialogTitle id="study-action-dialog-title" variant="h5">
-                    스터디 {actionMessages[action]}
+                    { i18n.language == 'en' ? `${actionMessagesEn[action]} ${t('study.study')}` : t('study.study') + actionMessages[action]}
                 </DialogTitle>
                 <DialogContent>
                     <Box minWidth="300px">
                         <Typography id="study-action-dialog-description">
-                            Study를 {actionMessages[action]}하시겠습니까?
+							{
+								i18n.language == 'en' ?  
+								<>Would you like to {actionMessagesEn[action].toLowerCase()} your study?</>
+								:
+								<>
+								Study를 {actionMessages[action]}하시겠습니까?
+								</>
+							}
+                            
                         </Typography>
                     </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button variant="outlined" onClick={handleClose}>
-                        취소
+						{t('common.cancel')}
+                        {/* 취소 */}
                     </Button>
                     <Button
                         variant="contained"
                         color={action === 'delete' ? 'error' : 'primary'}
                         onClick={handleConfirmAction}
                     >
-                        확인
+						{t('common.confirm')}
+                        {/* 확인 */}
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -97,7 +114,8 @@ const StudyDeleteConfirmDialog = ({
                 maxWidth="xs"
             >
                 <DialogTitle id="study-success-dialog-title" variant="h5">
-                    성공
+					{t('study.success')}
+                    {/* 성공 */}
                 </DialogTitle>
                 <DialogContent>
                     <Box minWidth="300px">
@@ -108,7 +126,8 @@ const StudyDeleteConfirmDialog = ({
                 </DialogContent>
                 <DialogActions>
                     <Button variant="contained" onClick={handleSuccessDialogClose}>
-                        확인
+						{t('common.confirm')}
+                        {/* 확인 */}
                     </Button>
                 </DialogActions>
             </Dialog>
