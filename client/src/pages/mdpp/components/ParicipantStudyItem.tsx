@@ -42,7 +42,7 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
         [StudyParticipantStatus.DONE]: '참여종료',
     };
 
-    const status = getStudyStatus(now, startDate, endDate, study.eic_name);
+    const status = getStudyStatus(now, startDate, endDate, study.signature_eic_name);
     const statusLabel = studyStatusKr[status];
 
     const handleSelectStudy = (study) => {
