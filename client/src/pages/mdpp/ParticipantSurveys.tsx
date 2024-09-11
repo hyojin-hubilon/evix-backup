@@ -63,14 +63,13 @@ const ParticipantSurveys = () => {
 
 	const handleSelectSurvey = (surveySet:SurveySetList) => {
 		console.log(studyDetail)
-		if(studyDetail.signature_eic_name) {
-			navigate(`/mdpp/survey/${surveySet.set_no}/${surveySet.survey_no}/${surveySet.answer_cycle}/${surveySet.answer_turn}`);
+		navigate(`/mdpp/survey/${surveySet.set_no}/${surveySet.survey_no}/${surveySet.answer_cycle}/${surveySet.answer_turn}`);
 
 			// /api/v1/participant/survey/{setNo}/{surveyNo}/{surveyCycle}/{surveyTurn}  설문 조회(답변 포함) api  호출
           	// answer_cycle  >> {surveyCycle}, answer_turn >> {surveyTurn} 입니다.
-		} else {
-			navigate('/mdpp/eic')
-		}
+		// } else {
+		// 	navigate('/mdpp/eic')
+		// }
 		
 	}
 

@@ -46,21 +46,22 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
     const statusLabel = studyStatusKr[status];
 
     const handleSelectStudy = (study) => {
-        if (study.status !== StudyParticipantStatus.DONE) {
+		if (status === StudyParticipantStatus.NEED_EIC) {
+            navigate(`/mdpp/eic/${study.std_no}`, { state: { study } });
+        }
+        else if (study.status !== StudyParticipantStatus.DONE) {
             selectStudy(study);
         }
     };
 
     const navigate = useNavigate();
-    const handleEicPage = () => {
-        if (status === StudyParticipantStatus.NEED_EIC) {
-            navigate(`/mdpp/eic/${study.std_no}`, { state: { study } });
-        }
-    };
+    // const handleEicPage = () => {
+        
+    // };
 
     return (
-        <Box p="20px 25px" borderBottom="1px solid #E0E5E9" position="relative">
-            <div onClick={() => handleSelectStudy(study)}>
+        <Box p="20px 25px" borderBottom="1px solid #E0E5E9" position="relative"  onClick={() => handleSelectStudy(study)}>
+            <div>
                 <Box display="flex" height="21px" alignItems="center" gap="10px">
                     <S.StudyStatus studyStatus={status}>{statusLabel}</S.StudyStatus>
                     <S.StudyTitle>{study.title}</S.StudyTitle>
@@ -90,7 +91,7 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
                     color: status === StudyParticipantStatus.NEED_EIC ? '#AFB3BA' : '#000001', // 색상 변경 예시
                     cursor: status === StudyParticipantStatus.NEED_EIC ? 'pointer' : undefined
                 }}
-                onClick={handleEicPage}
+                // onClick={handleEicPage}
             >
                 <svg
                     width="21"
