@@ -56,7 +56,7 @@ export interface ParticipantStudyList {
     number_answer: number;
     participation_organization: string;
     signature_eic_extension: string | null;
-    signature_eic_name: string | null;
+    signature_eic_name: string;
     std_end_date: string;
     std_no: number;
     std_payment_status: string;

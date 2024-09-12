@@ -235,6 +235,20 @@ export const actionMessages = {
     progression: '재시작',
 };
 
+export const actionMessagesEn = {
+    delete: 'Delete',
+    pause: 'Pause',
+    done: 'Complete',
+    progression: 'Restart',
+};
+
+export const actionMessagesEnPast = {
+	delete: 'deleted',
+    pause: 'paused',
+    done: 'completed',
+    progression: 'restarted',
+}
+
 // Study 연령별 참여율
 export interface ParticipationRateByAge {
     std_no: number;

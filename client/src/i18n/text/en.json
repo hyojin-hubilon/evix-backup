@@ -22,7 +22,8 @@
 		"close" : "Close",
 		"confirm" : "Confirm",
 		"delete" : "Delete",
-		"save" : "Save"
+		"save" : "Save",
+		"list" : "List"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -142,6 +143,7 @@
         }
     },
     "study": {
+		"study": "Study",
 		"search_by" : "Search by title, disease, status",
 		"all_studies" : "All Studies",
 		"my_studies" : "My Studies",
@@ -252,7 +254,17 @@
 		"function" : "Function",
 		"affiliation" : "Affiliation",
 		"invitation_sending_date" : "Invitation sending date",
-		"approval_status" : "Approval status"
+		"approval_status" : "Approval status",
+		"send" : "Send",
+		"no_members" : "There are no members.",
+		"invitation_email_sent" : "Invitation email sent",
+		"success" : "Success",
+		"select" : "Select",
+		"survey_title" :"Survey Ttile",
+		"updated_at" : "Updated at",
+		"none" : "None",
+		"and" : "and",
+		"other_person" : " other person"
 	},
 	"eic" : {
 		"has_been_saved" : "Your electronic consent form has been saved.",
@@ -292,7 +304,11 @@
 		"add_etc_item" : "Add etc item",
 		"copy_question" : "Copy Question",
 		"delete_question" : "Delete Question",
-		"required" : "Required"
+		"required" : "Required",
+		"large_screen" : "Large screen",
+		"mobile_screen" : "Mobile screen",
+		"end_preview" : "End preview",
+		"add_a_question" : "Add a question"
 	},
     "user": {},
     "settings": {
@@ -326,5 +342,12 @@
 		"faq" : "FAQ",
 		"service_introduction": "Service Introduction",
 		"member_management" : "Member Management"
+	},
+	"auth" : {
+		"study_invitation_completed" : "Your study invitation has been completed.",
+		"register_member_first" : "Please register as a member first.",
+		"token_expired" : "The token has expired.",
+		"error_occurred" : "An error occurred.",
+		"password_changed" : "Your password has been successfully changed."
 	}
 }

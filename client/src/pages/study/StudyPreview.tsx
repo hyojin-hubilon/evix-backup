@@ -4,14 +4,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useTheme } from '@mui/material';
 import MainCard from '@/components/MainCard';
-import { surveyCycle } from '@/types/study';
+import { surveyCycle, surveyCycleEn } from '@/types/study';
+import { useTranslation } from 'react-i18next';
 
 const StudyPreviewPage = () => {
     const theme = useTheme();
     const { divider, primary } = theme.palette;
     const navigate = useNavigate();
     const location = useLocation();
-
+	const { t, i18n } = useTranslation();
     const studyDetail = location.state?.studyDetail;
 
     console.log('studyDetail: ', studyDetail);
@@ -24,16 +25,17 @@ const StudyPreviewPage = () => {
         const members = studyDetail.managerList.filter(
             (member) => member.std_privilege === privilege
         );
-        if (members.length === 0) return '없음';
+        if (members.length === 0) return t('study.none');
 
         const names = members.map((member) => `${member.first_name} ${member.last_name}`);
-        return names.length > 1 ? `${names[0]} 외 ${names.length - 1}명` : names[0];
+        return names.length > 1 ? `${names[0]} ${t('study.and')} ${names.length - 1}${t('study.other_person')}` : names[0];
     };
 
     return (
         <Container>
             <Typography variant="h2" mb={2}>
-                미리보기
+                {t('common.preview')}
+				{/* 미리보기 */}
             </Typography>
             <Box
                 sx={{
@@ -65,7 +67,8 @@ const StudyPreviewPage = () => {
                     <Grid container alignItems="flex-start">
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">제목</Typography>
+								{/* 제목 */}
+                                <Typography variant="h5">{t('study.title')}</Typography>
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
@@ -77,19 +80,21 @@ const StudyPreviewPage = () => {
                     <Grid container alignItems="flex-start">
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">대상인원</Typography>
+								{/* 대상인원 */}
+                                <Typography variant="h5">{t('study.target_number')}</Typography>
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography>{studyDetail.target_number} 명</Typography>
+                                <Typography>{studyDetail.target_number} {t('study.person')}</Typography>
                             </Box>
                         </Grid>
                     </Grid>
                     <Grid container alignItems="flex-start">
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">개요</Typography>
+								{/* 개요 */}
+                                <Typography variant="h5">{t('study.summary')}</Typography>
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
@@ -101,7 +106,8 @@ const StudyPreviewPage = () => {
                     <Grid container alignItems="flex-start">
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">질환</Typography>
+								{/* 질환 */}
+                                <Typography variant="h5">{t('study.disease')}</Typography>
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
@@ -112,8 +118,9 @@ const StudyPreviewPage = () => {
                     </Grid>
                     <Grid container alignItems="flex-start">
                         <Grid item xs={3}>
-                            <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">의약품 정보</Typography>
+                            <Box display="flex" alignItems="center" sx={{ pt: '0.2rem', maxWidth: '100px' }} gap={0.5}>
+							{/* 의약품 정보 */}
+                                <Typography variant="h5">{t('study.pharmaceutical_information')}</Typography>
                             </Box>
                         </Grid>
                         {studyDetail.drug_code ? (
@@ -134,9 +141,12 @@ const StudyPreviewPage = () => {
                                                 listStyle: 'disc',
                                             }}
                                         >
-                                            <li>제품명: {studyDetail.drug_manufacturer_name}</li>
-                                            <li>업체명: {studyDetail.drug_brand_name}</li>
-                                            <li>품목기준코드: {studyDetail.drug_code}</li>
+											{/* 제품명 */}
+                                            <li>{t('study.product_name')} : {studyDetail.drug_manufacturer_name}</li>
+											{/* 업체명 */}
+                                            <li>{t('study.company_name')} : {studyDetail.drug_brand_name}</li>
+											{/* 품목기준코드 */}
+                                            <li>{t('study.item_standard_code')} : {studyDetail.drug_code}</li>
                                         </ul>
                                     </Card>
                                 </Box>
@@ -149,7 +159,10 @@ const StudyPreviewPage = () => {
                                     sx={{ pt: '0.2rem' }}
                                     gap={0.5}
                                 >
-                                    <Typography>없음</Typography>
+                                    <Typography>
+										{t('study.none')}
+										{/* 없음 */}
+									</Typography>
                                 </Box>
                             </Grid>
                         )}
@@ -178,13 +191,17 @@ const StudyPreviewPage = () => {
                                                         <Box display="flex" gap={1}>
                                                             <Link>{survey.title}</Link>
                                                             <Typography>
-                                                                {
-                                                                    surveyCycle[
-                                                                        surveySet.survey_cycle
-                                                                    ]
-                                                                }
-                                                                마다 {surveySet.number_in_cycle}회
-                                                                반복
+															{
+																i18n.language === 'en' ? 
+																<>
+																	{t('study.repeat')} { surveySet.number_in_cycle === 1 ? 'once a' : surveySet.number_in_cycle + t('study.time_per') } {surveyCycleEn[surveySet.survey_cycle]}
+																</>
+																:
+																<>
+																	{surveyCycle[surveySet.survey_cycle]}{t('study.repeat')}{' '}
+																	{surveySet.number_in_cycle}{t('study.time_per')}
+																</>
+															}	           
                                                             </Typography>
                                                         </Box>
                                                     </ListItem>
@@ -199,9 +216,13 @@ const StudyPreviewPage = () => {
                                     sx={{ pt: '0.2rem' }}
                                     gap={0.5}
                                 >
-                                    <Typography>없음</Typography>
+                                    <Typography>
+										{t('study.none')}
+										{/* 없음 */}
+									</Typography>
                                     <Typography variant="body2" color="error">
-                                        * Study 배포전에 반드시 업로드해주세요.
+										{t('study.make_sure_connect')}
+                                        {/* * Study 배포전에 반드시 업로드해주세요. */}
                                     </Typography>
                                 </Box>
                             )}
@@ -209,8 +230,8 @@ const StudyPreviewPage = () => {
                     </Grid>
                     <Grid container alignItems="flex-start">
                         <Grid item xs={3}>
-                            <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">EIC(전자동의서)</Typography>
+                            <Box display="flex" alignItems="center" sx={{ pt: '0.2rem', maxWidth: '150px' }} gap={0.5}>
+                                <Typography variant="h5">{t('study.eic')}</Typography>
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
@@ -219,9 +240,9 @@ const StudyPreviewPage = () => {
                                     <Typography>{studyDetail.eic_name}</Typography>
                                 ) : (
                                     <>
-                                        <Typography>없음</Typography>
+                                        <Typography>{t('study.none')}</Typography>
                                         <Typography variant="body2" color="error">
-                                            * Study 배포전에 반드시 업로드해주세요.
+											{t('study.make_sure_connect')}
                                         </Typography>
                                     </>
                                 )}
@@ -231,14 +252,15 @@ const StudyPreviewPage = () => {
                     <Grid container alignItems="flex-start">
                         <Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
-                                <Typography variant="h5">멤버</Typography>
+                                <Typography variant="h5">{t('study.members')}</Typography>
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
                             <ul style={{ margin: 0, paddingLeft: '20px' }}>
                                 <li>
                                     <Typography>
-                                        Owner (Study의 생성, 수정, 배포, 멤버 초대) :{' '}
+										{t('study.owner_permission')}
+                                        {/* Owner (Study의 생성, 수정, 배포, 멤버 초대) :{' '} */}
                                         <span
                                             style={{
                                                 fontWeight: 'bold',
@@ -251,7 +273,8 @@ const StudyPreviewPage = () => {
                                 </li>
                                 <li>
                                     <Typography>
-                                        Maintainer (Study의 수정, 멤버 초대) :{' '}
+									{t('study.maintainer')}
+                                        {/* Maintainer (Study의 수정, 멤버 초대) :{' '} */}
                                         <span
                                             style={{
                                                 fontWeight: 'bold',
@@ -264,7 +287,8 @@ const StudyPreviewPage = () => {
                                 </li>
                                 <li>
                                     <Typography>
-                                        Developer (Study 조회) :{' '}
+										{t('study.developer')}
+                                        {/* Developer (Study 조회) :{' '} */}
                                         <span
                                             style={{
                                                 fontWeight: 'bold',
@@ -288,10 +312,12 @@ const StudyPreviewPage = () => {
                     sx={{ marginRight: 1 }}
                     onClick={handleEditClick}
                 >
-                    수정
+					{t('common.edit')}
+                    {/* 수정 */}
                 </Button>
                 <Button variant="outlined" onClick={() => navigate('/study')}>
-                    목록
+					{t('common.list')}
+                    {/* 목록 */}
                 </Button>
             </Box>
         </Container>

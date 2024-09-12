@@ -5,13 +5,14 @@ import * as S from '../styles';
 type MdppHeaderType = {
     title?: string;
     backBtn?: boolean;
+	backExitWebview? : boolean;
 };
-const MdppHeader = ({ title, backBtn }: MdppHeaderType) => {
+const MdppHeader = ({ title, backBtn, backExitWebview }: MdppHeaderType) => {
     const navigate = useNavigate();
 
     const exitWebView = () => {
         const webView = (window as any).ReactNativeWebView;
-        if (webView) {
+        if (webView && backExitWebview) {//스터디 목록에서만 웹뷰 벗어나도록
             webView.postMessage('exit');
         } else {
             navigate(-1);

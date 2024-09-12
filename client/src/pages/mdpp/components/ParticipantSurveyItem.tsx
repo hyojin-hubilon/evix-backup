@@ -36,7 +36,7 @@ const ParticipantSurveyItem = ({survey, study, selectSurvey}: ParticipantSurveyI
 							</S.StudyTitle>
 						</Box>
 						<Box display="flex" justifyContent="space-between" alignItems="flex-end">
-							<Box>
+							<Box maxWidth="70%">
 								<S.SurveyDetail>{ surveyCycle[survey.survey_cycle] } { survey.number_in_cycle }회, {surveySet.number_answer}회 참여 </S.SurveyDetail>
 								<S.SurveyTags>
 									{

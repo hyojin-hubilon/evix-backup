@@ -22,7 +22,8 @@
 		"close" : "닫기",
 		"confirm" :  "확인",
 		"delete" : "삭제",
-		"save" : "저장"
+		"save" : "저장",
+		"list" : "목록"
     },
     "landing": {
         "make_the_world": "Make the world healthy",
@@ -142,6 +143,7 @@
         }
     },
     "study": {
+		"stduy": "스터디",
 		"search_by" : "타이틀, 질환명, 상태 검색",
 		"all_studies" : "All Studies",
 		"my_studies" : "My Studies",
@@ -247,7 +249,17 @@
 		"function" : "권한",
 		"affiliation" : "소속",
 		"invitation_sending_date" : "초대발송일자",
-		"approval_status" : "승인상태"
+		"approval_status" : "승인상태",
+		"send" : "보내기",
+		"no_members" : "멤버가 없습니다.",
+		"invitation_email_sent" : "초대메일 발송 완료",
+		"success" : "성공",
+		"select" : "선택",
+		"survey_title" : "Survey 제목",
+		"updated_at" : "업데이트",
+		"none" : "없음",
+		"and" : "외",
+		"other_person" : "명"
 	},
 	"eic" : {
 		"has_been_saved" : "전자동의서가 저장되었습니다.",
@@ -287,7 +299,11 @@
 		"add_etc_item" : "기타 추가",
 		"copy_question" : "질문 복사",
 		"delete_question" : "질문 삭제",
-		"required" : "필수"
+		"required" : "필수",
+		"large_screen_size" : "PC 화면",
+		"mobile_screen" : "모바일 화면",
+		"end_preview" : "미리보기 종료",
+		"add_a_question" : "질문 추가"
 	},
     "user": {},
     "settings": {
@@ -321,5 +337,12 @@
 		"faq" : "자주찾는 도움말",
 		"service_introduction": "서비스 소개",
 		"member_management" : "멤버관리"
+	},
+	"auth" : {
+		"study_invitation_completed" : "스터디 초대가 완료되었습니다.",
+		"register_member_first" : "회원가입을 먼저 진행해주십시오.",
+		"token_expired" : "토큰이 만료되었습니다.",
+		"error_occurred" : "에러가 발생했습니다.",
+		"password_changed" : "비밀번호 변경 성공"
 	}
 }

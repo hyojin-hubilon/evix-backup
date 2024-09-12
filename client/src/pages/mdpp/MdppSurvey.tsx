@@ -130,7 +130,12 @@ const MdppSurvey = () => {
 					description:'설문에 참여해주셔서 감사합니다.',
 					variant: 'info'
 				}).then(() => {
-					navigate('/mdpp/studies');
+					const webView = (window as any).ReactNativeWebView;
+					if (webView) {
+						webView.postMessage('exit');
+					} else {
+						navigate('/mdpp/studies');
+					}
 				});
 
             }

@@ -34,6 +34,7 @@ import MemberListItem from './MemberListItem';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import studyApi from '@/apis/study';
 import { MemberTempType } from '@/types/study';
+import { t } from 'i18next';
 
 const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
     const [activeTab, setActiveTab] = useState('0');
@@ -71,7 +72,7 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
         const errorEmail = value.find((email) => !emailSchema.isValidSync(email));
         if (errorEmail) {
             setEmailInput(errorEmail);
-            setEmailError('이메일을 확인해주세요.');
+            setEmailError(t('study.check_your_email'));//이메일을 확인해주세요
         } else {
             setEmailError('');
         }
@@ -84,12 +85,12 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
 
     const handleSendInvite = async () => {
         if (emails.length === 0) {
-            setEmailError('이메일을 확인해주세요.');
+            setEmailError(t('study.check_your_email'));//이메일을 확인해주세요
             return;
         }
 
         if (!newAuthority) {
-            setAuthorityError('권한을 설정해주세요.');
+            setAuthorityError(t('study.set_the_permissions'));//'권한을 설정해주세요.'
             return;
         }
 
@@ -244,7 +245,8 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
                 maxWidth="sm"
             >
                 <DialogTitle id="member-management-title" variant="h4" width={600}>
-                    멤버관리 <span style={{ color: primary.main }}>({memberCount})</span>
+				{/* 멤버관리 */}
+                    {t('study.member_management')} <span style={{ color: primary.main }}>({memberCount})</span>
                     <IconButton
                         size="small"
                         sx={{ position: 'absolute', top: '10px', right: '10px' }}
@@ -280,7 +282,8 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
                         p="1rem"
                     >
                         <Typography variant="h6" fontWeight="600">
-                            초대받을 사람
+							{t('study.people_invited')}
+                            {/* 초대받을 사람 */}
                         </Typography>
                         <Autocomplete
                             multiple
@@ -297,7 +300,7 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
                                 ))
                             }
                             renderInput={(params) => (
-                                <TextField {...params} placeholder="메일 주소 입력" />
+                                <TextField {...params} placeholder={t('study.enter_emails')} /> //메일 주소 입력
                             )}
                         />
                         {emailError && <FormHelperText error>{emailError}</FormHelperText>}
@@ -312,7 +315,10 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
                                     sx={{ width: 1, backgroundColor: 'white' }}
                                     displayEmpty
                                 >
-                                    <MenuItem value="">권한</MenuItem>
+                                    <MenuItem value="">
+										{t('study.permission')}
+										{/* 권한 */}
+									</MenuItem> 
                                     <MenuItem value="MAINTAINER">Maintainer</MenuItem>
                                     <MenuItem value="DEVELOPER">Developer</MenuItem>
                                 </Select>
@@ -322,7 +328,8 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
                                 sx={{ ml: 'auto' }}
                                 onClick={handleSendInvite}
                             >
-                                보내기
+								{t('study.send')}
+                                {/* 보내기 */}
                             </Button>
                         </Box>
                         {authorityError && <FormHelperText error>{authorityError}</FormHelperText>}
@@ -333,10 +340,10 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
                             onChange={handleChangeTab}
                             aria-label="Study Status Tab"
                         >
-                            <Tab label="전체" value="0" />
+                            <Tab label={t('study.all')} value="0" />
                             <Tab label="Maintainer" value="1" />
                             <Tab label="Developer" value="2" />
-                            <Tab label="대기" value="3" />
+                            <Tab label={t('study.waiting')} value="3" />
                         </Tabs>
                         <List>
                             {filteredMembers.length > 0 ? (
@@ -351,7 +358,10 @@ const MemberManagement = ({ isOpen, handleClose, studyNo }) => {
                                 ))
                             ) : (
                                 <ListItem>
-                                    <Typography variant="body1">멤버가 없습니다.</Typography>
+                                    <Typography variant="body1">
+										{t('study.no_members')}
+										{/* 멤버가 없습니다. */}
+										</Typography>
                                 </ListItem>
                             )}
                         </List>

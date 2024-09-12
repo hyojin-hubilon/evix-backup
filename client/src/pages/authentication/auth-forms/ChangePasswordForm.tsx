@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
+import { t } from 'i18next';
 
 const validationSchema = yup.object({
     password: yup
@@ -41,7 +42,7 @@ const ChangePasswordForm = () => {
                     new_password: values.password,
                 });
 				if(response.code == 200) {
-					confirm({description : '비밀번호 변경 성공', variant: 'info'});
+					confirm({description : t('auth.password_changed'), variant: 'info'});//'비밀번호 변경 성공'
                 	navigate('/login');
 				} else {
 					confirm({description : 'Failed to reset password. Please try again.', variant: 'info'});

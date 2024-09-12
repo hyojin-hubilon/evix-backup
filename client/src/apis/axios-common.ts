@@ -146,7 +146,7 @@ export async function api<T>(
             loadingEle.style.display = 'none';
         }
 
-		if(res.data && res.data.code !== 200) { //alert snack bar
+		if(res.data && res.data.code !== 200 && res.data.message) { //alert snack bar
 			dispatch(setAlert({ alertOpen: true, alertText: res.data.message, alertType: 'error' }));
 		}
 
@@ -160,7 +160,7 @@ export async function api<T>(
             loadingEle.style.display = 'none';
         }
         if (Axios.isCancel(error)) {
-			dispatch(setAlert({ alertOpen: true, alertText: error.message, alertType: AlertType.error }));
+			// dispatch(setAlert({ alertOpen: true, alertText: error.message, alertType: AlertType.error }));
             throw generateError(ResCustomErrorCode.TIMEOUT, null, null, error.message);
         }
         if (Axios.isAxiosError<ResCommonError>(error)) {
@@ -169,11 +169,11 @@ export async function api<T>(
                 errorResult.code == error.response.status;
                 throw errorResult;
             } else {
-				dispatch(setAlert({ alertOpen: true, alertText: error.message, alertType: AlertType.error }));
+				// dispatch(setAlert({ alertOpen: true, alertText: error.message, alertType: AlertType.error }));
                 throw generateError(ResCustomErrorCode.NONE_RESPONSE, null, null, error.message);
             }
         } else {
-			dispatch(setAlert({ alertOpen: true, alertText: (error as Error).message, alertType: AlertType.error }));
+			// dispatch(setAlert({ alertOpen: true, alertText: (error as Error).message, alertType: AlertType.error }));
             throw generateError(ResCustomErrorCode.OTHERS, null, null, (error as Error).message);
         }
     }
@@ -186,14 +186,14 @@ export async function file_api<T>(
     config?: AxiosRequestConfig
 ): Promise<ResCommonSuccess<T>> {
     let res;
-	let loadingEle;
+	// let loadingEle;
 
-	if (typeof window != 'undefined') {
-        loadingEle = document.getElementById('loadingContainer');
-        if (loadingEle) {
-            loadingEle.style.display = 'block';
-        }
-    }
+	// if (typeof window != 'undefined') {
+    //     loadingEle = document.getElementById('loadingContainer');
+    //     if (loadingEle) {
+    //         loadingEle.style.display = 'block';
+    //     }
+    // }
 
     try {
         if (method === 'post') {
@@ -204,14 +204,14 @@ export async function file_api<T>(
         } else {
             res = await axios_file_instance.get(url);
         }
-        if (loadingEle) {
-            loadingEle.style.display = 'none';
-        }
+        // if (loadingEle) {
+        //     loadingEle.style.display = 'none';
+        // }
         return res.data as ResCommonSuccess<T>;
     } catch (error) {
-		if (loadingEle) {
-            loadingEle.style.display = 'none';
-        }
+		// if (loadingEle) {
+        //     loadingEle.style.display = 'none';
+        // }
         if (Axios.isCancel(error)) {
             throw generateError(ResCustomErrorCode.TIMEOUT, null, null, error.message);
         }
