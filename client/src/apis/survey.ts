@@ -127,6 +127,19 @@ const surveyApi = {
 			const e = error as ResCommonError;
 			throw e;
 		}
+	},
+	getParticipantsSurveyAnswerList : async(stdNo:number, participantNo:number) => {
+		try {
+			const responseData = await api<{}>(
+				`${BASE_API_URL}/${stdNo}/${participantNo}/list-survey-answer`,
+				'get',
+			)
+			return responseData;
+		
+		} catch(error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
 	}
 };
 

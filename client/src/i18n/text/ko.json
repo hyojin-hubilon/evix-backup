@@ -259,7 +259,8 @@
 		"updated_at" : "업데이트",
 		"none" : "없음",
 		"and" : "외",
-		"other_person" : "명"
+		"other_person" : "명",
+		"view_survey_answers" : "참여자 설문 답변 보기"
 	},
 	"eic" : {
 		"has_been_saved" : "전자동의서가 저장되었습니다.",

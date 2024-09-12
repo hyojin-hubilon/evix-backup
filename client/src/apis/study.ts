@@ -8,6 +8,7 @@ import {
     file_api,
 } from '@/apis/axios-common';
 import * as StudyApiType from '@/types/study';
+import { ParticipantsList } from '@/types/study';
 
 const BASE_API_URL = '/researcher/study';
 
@@ -424,7 +425,7 @@ const studyApi = {
      */
     participantList: async (stdNo: Number) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/list-participant`, 'get');
+            const responseData = await api<ParticipantsList[]>(`${BASE_API_URL}/${stdNo}/list-participant`, 'get');
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;

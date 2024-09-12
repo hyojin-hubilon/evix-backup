@@ -264,7 +264,8 @@
 		"updated_at" : "Updated at",
 		"none" : "None",
 		"and" : "and",
-		"other_person" : " other person"
+		"other_person" : " other person",
+		"view_survey_answers" : "View participant survey answers"
 	},
 	"eic" : {
 		"has_been_saved" : "Your electronic consent form has been saved.",
