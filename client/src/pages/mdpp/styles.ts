@@ -4,6 +4,10 @@ import { Box, styled, Button } from '@mui/material';
 export const Title = styled('h5')`
 	font-size: 18px;
 	font-weight: 600;
+	max-width: 72%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 
 export const CommonText = styled('p')`
@@ -141,7 +145,7 @@ export const SurveyTags = styled('p')`
 	font-size: 13px;
 	font-weight: 500;
 	color: #AFB3BA;
-	line-height: 1;
+	line-height: 1.2;
 	margin-top:0;
 	margin-bottom:0;
 `
