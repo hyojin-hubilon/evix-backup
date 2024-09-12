@@ -6,8 +6,11 @@ import onboardingImg02 from '@assets/images/onboarding/02.jpg';
 import onboardingImg03 from '@assets/images/onboarding/03.jpg';
 import onboardingImg04 from '@assets/images/onboarding/04.jpg';
 import onboardingImg05 from '@assets/images/onboarding/05.jpg';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
+import userApi from "@/apis/user";
+import i18n from "@/i18n";
+import { useNavigate } from "react-router-dom";
 
 export type OnboardingContentsType = {
 	title: string;
@@ -17,6 +20,7 @@ export type OnboardingContentsType = {
 
 const Onboarding = () => {
 	const [activeIndex, setActiveIndex] = useState(0);
+	const navigate = useNavigate();
 	const onboardingContents: OnboardingContentsType[] = [
 		{
 			title: t('onboarding.welcome_to_evix-dct'),
@@ -69,34 +73,52 @@ const Onboarding = () => {
 	}
 
 	const handleSkipOrClose = () => {
-		console.log('skip')
+		navigate('/dashboard')
 	}
 
+	const getUserSetting = async () => {
+		const response = await userApi.getMyProfile();
+		if (response.code === 200) {
+			const user = response.content;
+			const lang = user.language === 'KO_KR' ? 'ko' : 'en';
+			i18n.changeLanguage(lang);
+		}
+	}
+
+	useEffect(() => {
+		getUserSetting();
+	}, [])
+
 	return (
-		<>
+		<Box sx={{position: 'fixed',
+			left:0,
+			top:0,
+			width: '100vw',
+			height: '100vh',
+			zIndex: 1200
+		}}>
 			{
 				onboardingContents.map((contents, index) => 
-					
-					
-						<Box 
-							key={index}
-							sx={{
-								position: 'fixed',
-								opacity: activeIndex == index ? 1 : 0,
-								transition: 'opacity 0.5s'
-							}}>
-							<Introduction
-								contents={contents}
-								next={handleClickNext}
-								activeIndex={activeIndex}
-								contentsLength={onboardingContents.length}
-								skip={handleSkipOrClose}
-								/>
-						</Box>
+					<Box 
+						key={index}
+						sx={{
+							position: 'fixed',
+							opacity: activeIndex == index ? 1 : 0,
+							transition: 'opacity 0.5s',
+							zIndex: 12000
+						}}>
+						<Introduction
+							contents={contents}
+							next={handleClickNext}
+							activeIndex={activeIndex}
+							contentsLength={onboardingContents.length}
+							skip={handleSkipOrClose}
+							/>
+					</Box>
 					
 				)
 			}
-		</>
+		</Box>
 		
 	)
 }

@@ -64,7 +64,12 @@ const AuthLogin = () => {
                         }
                         if (code === 200) {
                             setStatus({ success: true });
-                            navigate('/dashboard');
+							if(content.last_login) {
+								navigate('/dashboard')
+							} else {
+								navigate('/onboarding') //로그인 기록이 없을 시 onboarding화면으로 이동
+							}
+                            
                         }
                     } catch (e) {
 						confirm({description : 'This surfactant is already in use.', variant : 'info'});
