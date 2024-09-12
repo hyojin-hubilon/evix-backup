@@ -349,5 +349,29 @@
 		"token_expired" : "The token has expired.",
 		"error_occurred" : "An error occurred.",
 		"password_changed" : "Your password has been successfully changed."
+	},
+	"onboarding" : {
+		"next" : "Next",
+		"skip" : "Skip",
+		"welcome_to_evix-dct" : "Welcome to evix-DCT",
+		"create_study" : "Create Study",
+		"open_study" : "Open Study",
+		"real-time_monitoring" : "Real-time monitoring",
+		"report_results" : "Report results",
+		"create_surveys" : "Create surveys with ease using our <strong>pre-built templates</strong> for each disease!",
+		"we_provide_survey": "We provide survey templates tailored to the clinical trial disease.",
+		"we_provide_tools" : "We provide tools that allow you to create questions of your choice.",
+		"see_patient_engagement" : "See patient engagement in real time.",
+		"the_collected_data" : "The collected data is presented through visualization tools.",
+		"increase_engagement" : "Increase engagement with <strong>smart notifications</strong>.",
+		"surveys_that_require" : "Surveys that require repeated participation are cycle managed.",
+		"notifications_will_be_sent" : "Notifications will be sent to participants according to the survey cycle.",
+		"participants_participate" : "Participants participate from anywhere on their mobile devices.",
+		"invite_administrators" : "<strong>Invite administrators</strong> to manage your clinical trial with you.",
+		"invite_managers" : "Invite managers and provide collaboration tools.",
+		"provides_effective" :"Provides effective management functions with administrator privileges.",
+		"provides_real-time" : "Provides real-time Analysis & Summary.",
+		"check_the_status" : "Check the status of clinical trial data collection in real time.",
+		"real-time_statistics" : "Real-time statistics allow you to respond flexibly to your projects."
 	}
 }

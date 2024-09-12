@@ -344,5 +344,29 @@
 		"token_expired" : "토큰이 만료되었습니다.",
 		"error_occurred" : "에러가 발생했습니다.",
 		"password_changed" : "비밀번호 변경 성공"
+	},
+	"onboarding" : {
+		"next" : "Next",
+		"skip" : "Skip",
+		"welcome_to_evix-dct" : "Welcome to evix-DCT",
+		"create_study" : "Create Study",
+		"open_study" : "Open Study",
+		"real-time_monitoring" : "Real-time monitoring",
+		"report_results" : "Report results",
+		"create_surveys" : "<strong>질환별 샘플</strong> 양식으로 Survey 생성을 편리하게",
+		"we_provide_survey": "임상시험 질환에 맞는 설문 템플릿을 제공합니다.",
+		"we_provide_tools" : "원하는 문항으로 제작 가능한 툴을 제공합니다.",
+		"see_patient_engagement" : "환자 참여를 실시간으로 확인하세요.",
+		"the_collected_data" : "결과는 시각화 툴로 제공합니다.",
+		"increase_engagement" : "<strong>스마트 알림</strong>으로 참여도를 향상시켜 보세요",
+		"surveys_that_require" : "반복 참여가 필요한 설문은 주기를 관리합니다.",
+		"notifications_will_be_sent" : "주기에 따라 참여자에게 알림이 발송됩니다.",
+		"participants_participate" : "참여자들은 모바일로 어디서든 참여합니다.",
+		"invite_administrators" : "임상시험을 함께 관리해줄 <strong>Manager</strong>를 <strong>초대</strong>해보세요",
+		"invite_managers" : "멤버를 초대하고 협업툴을 제공합니다.",
+		"provides_effective" :"멤버 권한으로 효과적인 관리 기능을 제공합니다.",
+		"provides_real-time" : "<strong>실시간</strong> 데이터와 분석 결과를 확인하세요",
+		"check_the_status" : "임상시험 데이터 수집 현황을 실시간으로 확인합니다.",
+		"real-time_statistics" : "실시간 통계를 통해 프로젝트를 유연하게 대응할 수 있습니다."
 	}
 }
