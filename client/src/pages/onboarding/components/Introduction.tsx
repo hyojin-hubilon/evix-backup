@@ -11,8 +11,8 @@ const Introduction = () => {
 						sx={{
 							fontSize: '3rem',
 							fontWeight: 700,
-							lineHeight: '126px',
 							letterSpacing: '.02em',
+							mt:'2rm',
 							mb: '3rem'
 						}}				
 					>
