@@ -7,6 +7,7 @@ import onboardingImg03 from '@assets/images/onboarding/03.jpg';
 import onboardingImg04 from '@assets/images/onboarding/04.jpg';
 import onboardingImg05 from '@assets/images/onboarding/05.jpg';
 import { useState } from "react";
+import { Box } from "@mui/material";
 
 export type OnboardingContentsType = {
 	title: string;
@@ -15,7 +16,7 @@ export type OnboardingContentsType = {
 }
 
 const Onboarding = () => {
-	const [activeIndex, setActiveIndex] = useState(1);
+	const [activeIndex, setActiveIndex] = useState(0);
 	const onboardingContents: OnboardingContentsType[] = [
 		{
 			title: t('onboarding.welcome_to_evix-dct'),
@@ -64,18 +65,35 @@ const Onboarding = () => {
 		}
 	]
 	const handleClickNext = () => {
+		setActiveIndex(activeIndex+1)
+	}
 
+	const handleSkipOrClose = () => {
+		console.log('skip')
 	}
 
 	return (
 		<>
 			{
 				onboardingContents.map((contents, index) => 
-					<>
-					{
-						activeIndex == index && <Introduction contents={contents} next={handleClickNext} key={index} activeIndex={activeIndex} contentsLength={onboardingContents.length}/>
-					}
-					</>
+					
+					
+						<Box 
+							key={index}
+							sx={{
+								position: 'fixed',
+								opacity: activeIndex == index ? 1 : 0,
+								transition: 'opacity 0.5s'
+							}}>
+							<Introduction
+								contents={contents}
+								next={handleClickNext}
+								activeIndex={activeIndex}
+								contentsLength={onboardingContents.length}
+								skip={handleSkipOrClose}
+								/>
+						</Box>
+					
 				)
 			}
 		</>

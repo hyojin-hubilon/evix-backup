@@ -370,8 +370,9 @@
 		"invite_administrators" : "<strong>Invite administrators</strong> to manage your clinical trial with you.",
 		"invite_managers" : "Invite managers and provide collaboration tools.",
 		"provides_effective" :"Provides effective management functions with administrator privileges.",
-		"provides_real-time" : "Provides real-time Analysis & Summary.",
+		"provides_real-time" : "Provides <strong>real-time Analysis & Summary</strong>.",
 		"check_the_status" : "Check the status of clinical trial data collection in real time.",
-		"real-time_statistics" : "Real-time statistics allow you to respond flexibly to your projects."
+		"real-time_statistics" : "Real-time statistics allow you to respond flexibly to your projects.",
+		"start" : "Start"
 	}
 }

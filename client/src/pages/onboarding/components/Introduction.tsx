@@ -3,15 +3,17 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import logoWhite from '@assets/images/onboarding/logo_white.svg'
 import { OnboardingContentsType } from "..";
 import { Trans } from "react-i18next";
+import { t } from "i18next";
 
 type IntroductionType = {
 	contents: OnboardingContentsType;
 	next:() => void,
 	activeIndex: number,
-	contentsLength: number
+	contentsLength: number,
+	skip: () => void
 }
 
-const Introduction = ({contents, next, activeIndex, contentsLength} : IntroductionType) => {
+const Introduction = ({contents, next, activeIndex, contentsLength, skip} : IntroductionType) => {
 	return (
 		<Box component="section" display="flex" minWidth="100vw" minHeight="100vh" bgcolor="#F9FAFB">
 			<Box width="50%" position="relative">
@@ -48,15 +50,15 @@ const Introduction = ({contents, next, activeIndex, contentsLength} : Introducti
 							}
 					</Box>
 				</Box>
-				<Grid container position="absolute" bottom="0" left="0" width="100%" p="1rem" justifyContent="space-between" borderTop="1px solid #E4E7EC;">
+				<Grid container position="absolute" bottom="0" left="0" width="100%" p="1rem" justifyContent={activeIndex == contentsLength - 1 ? 'center' : 'space-between'} borderTop="1px solid #E4E7EC;">
 					{
 						activeIndex == contentsLength - 1 ? 
 						<Grid item xs={5.9}>
-							<Button variant="contained" fullWidth color="primary" onClick={next} size="large">시작하기</Button>
+							<Button variant="contained" fullWidth color="primary" onClick={skip} size="large">{t('onboarding.start')}</Button>
 						</Grid>:
 						<>
 							<Grid item xs={5.9}>
-								<Button variant="outlined" fullWidth size="large">Skip</Button>
+								<Button variant="outlined" fullWidth size="large" onClick={skip}>Skip</Button>
 							</Grid>	
 							<Grid item xs={5.9}>
 								<Button variant="contained" fullWidth color="primary" onClick={next} size="large">Next</Button>

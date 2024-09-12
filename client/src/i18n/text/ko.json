@@ -367,6 +367,7 @@
 		"provides_effective" :"멤버 권한으로 효과적인 관리 기능을 제공합니다.",
 		"provides_real-time" : "<strong>실시간</strong> 데이터와 분석 결과를 확인하세요",
 		"check_the_status" : "임상시험 데이터 수집 현황을 실시간으로 확인합니다.",
-		"real-time_statistics" : "실시간 통계를 통해 프로젝트를 유연하게 대응할 수 있습니다."
+		"real-time_statistics" : "실시간 통계를 통해 프로젝트를 유연하게 대응할 수 있습니다.",
+		"start" : "시작하기"
 	}
 }
