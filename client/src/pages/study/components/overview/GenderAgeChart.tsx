@@ -11,16 +11,28 @@ const GenderAgeChart = ({
 }) => {
     const theme = useTheme();
 
-    console.log('participationRateByAge: ', participationRateByAge);
+    // console.log('📌📌📌 participationRateByAge📌📌📌: ', participationRateByAge);
+
+    const totalParticipants = participationRateByAge.num_male + participationRateByAge.num_female;
+
+    // console.log('총몇명? totalParticipants:: ', totalParticipants);
 
     const genderChartSeries = [
         {
             name: t('study.male'),
-            data: [participationRateByAge.num_male],
+            data: [
+                totalParticipants > 0
+                    ? (participationRateByAge.num_male / totalParticipants) * 100
+                    : 0,
+            ],
         },
         {
             name: t('study.female'),
-            data: [participationRateByAge.num_female],
+            data: [
+                totalParticipants > 0
+                    ? (participationRateByAge.num_female / totalParticipants) * 100
+                    : 0,
+            ],
         },
     ];
 
@@ -78,7 +90,15 @@ const GenderAgeChart = ({
             colors: ['#fff'],
         },
         xaxis: {
-            categories: [`10${t('study.s')}`, `20${t('study.s')}`, `30${t('study.s')}`, `40${t('study.s')}`, `50${t('study.s')}`, `60${t('study.s')}`, t('study.over_70s')],
+            categories: [
+                `10${t('study.s')}`,
+                `20${t('study.s')}`,
+                `30${t('study.s')}`,
+                `40${t('study.s')}`,
+                `50${t('study.s')}`,
+                `60${t('study.s')}`,
+                t('study.over_70s'),
+            ],
             labels: {
                 show: false,
             },
@@ -131,7 +151,7 @@ const GenderAgeChart = ({
                 <Grid item xs={3}>
                     <Stack>
                         <Typography variant="h6" color="textSecondary">
-							{t('study.participant_gender_age_group')}
+                            {t('study.participant_gender_age_group')}
                             {/* 참여자 성별/연령대 */}
                         </Typography>
                         <ReactApexChart

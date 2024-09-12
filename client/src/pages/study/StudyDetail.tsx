@@ -159,13 +159,11 @@ const StudyDetail = () => {
         setActiveTab(newValue);
     };
 
+    console.log('totalParticipants:: ', totalParticipants);
     const partCompleteRate: ApexDonutChartSeriesType = {
         labels: ['참여완료율', '미완료율'],
         series: totalParticipants
-            ? [
-                  totalParticipants.participation_late * 100,
-                  100 - totalParticipants.participation_late * 100,
-              ]
+            ? [totalParticipants.participation_late, 100 - totalParticipants.participation_late]
             : [0, 100],
     };
 
@@ -180,15 +178,22 @@ const StudyDetail = () => {
 
     return (
         <>
-            <Breadcrumbs2 sub={studyDetail?.title}/>
+            <Breadcrumbs2 sub={studyDetail?.title} />
             <Grid container rowSpacing={3} columnSpacing={1}>
                 <Grid container item xs={12}>
                     <Box display="flex" alignItems="center" gap={1}>
-                        <Chip label={
-							<>
-								<TitleStatusIcon status={studyDetail?.std_status} color="white" /> {statusLabel}
-							</>
-							} color="primary" />
+                        <Chip
+                            label={
+                                <>
+                                    <TitleStatusIcon
+                                        status={studyDetail?.std_status}
+                                        color="white"
+                                    />{' '}
+                                    {statusLabel}
+                                </>
+                            }
+                            color="primary"
+                        />
                         <Typography variant="h3">{studyDetail?.title || ''}</Typography>
                         <Button
                             variant="outlined"
