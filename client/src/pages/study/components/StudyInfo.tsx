@@ -95,7 +95,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
     const { userProfile } = useUserProfile();
     const userId = userProfile?.user_no;
 
-	const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const formatDate = (dateString: string): string => {
         return dayjs(dateString).format('YYYY-MM-DD');
@@ -190,7 +190,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
             if (response.code === 200) {
                 confirm({
                     description: t('eic.has_been_saved'),
-					//'전자동의서가 저장되었습니다.',
+                    //'전자동의서가 저장되었습니다.',
                     variant: 'info',
                 }).then(() => {
                     handleEditViewClose();
@@ -222,8 +222,8 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                 const response = await studyApi.deleteEicFile(studyDetail.std_no);
                 if (response.code === 200) {
                     confirm({
-						description: t('eic.has_been_deleted'),
-						//'전자동의서가 삭제되었습니다.',
+                        description: t('eic.has_been_deleted'),
+                        //'전자동의서가 삭제되었습니다.',
                         variant: 'info',
                     }).then(() => {
                         handleDeleteClose();
@@ -244,9 +244,9 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
         <Grid container item rowSpacing={2} className="study-info">
             <Grid item xs={12}>
                 <Typography variant="h4">
-					{t('study.study_status')}
-					{/* Study 상태 */}
-				</Typography>
+                    {t('study.study_status')}
+                    {/* Study 상태 */}
+                </Typography>
                 <MainCard>
                     <List>
                         <ListItem>
@@ -257,17 +257,17 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                 </Typography>
                                 {studyDetail.updated_at && (
                                     <Typography>
-										{/* 최근 업데이트 */}
-                                        ({t('study.recent_updates')} {formatDate(studyDetail.updated_at)})
+                                        {/* 최근 업데이트 */}({t('study.recent_updates')}{' '}
+                                        {formatDate(studyDetail.updated_at)})
                                     </Typography>
                                 )}
                             </Box>
                         </ListItem>
                         <ListItem>
                             <Typography variant="h5">
-								{t('study.study_period')}
-								{/* Study 기간 */}
-							</Typography>
+                                {t('study.study_period')}
+                                {/* Study 기간 */}
+                            </Typography>
                             <Box display="flex" gap={1}>
                                 <Typography>
                                     {studyDetail.std_start_date} ~ {studyDetail.std_end_date}
@@ -294,9 +294,9 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
             <Grid container item columnSpacing={1.5}>
                 <Grid item xs={7}>
                     <Typography variant="h4">
-						{t('study.study_summary')}
-						{/* Study 개요 */}
-					</Typography>
+                        {t('study.study_summary')}
+                        {/* Study 개요 */}
+                    </Typography>
                 </Grid>
                 <Grid item xs={5}>
                     <Box display="flex" gap={1} alignItems="center">
@@ -308,45 +308,47 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                         <List>
                             <ListItem>
                                 <Typography variant="h5">
-									{t('study.study_type_02')}
-									{/* Study 타입 */}
-									</Typography>
+                                    {t('study.study_type_02')}
+                                    {/* Study 타입 */}
+                                </Typography>
                                 <Box display="flex" gap={1}>
                                     <Chip color="primary" label={studyDetail.std_type} />
                                 </Box>
                             </ListItem>
                             <ListItem>
                                 <Typography variant="h5">
-									{t('study.study_title')}
-									{/* Study 제목 */}
-								</Typography>
+                                    {t('study.study_title')}
+                                    {/* Study 제목 */}
+                                </Typography>
                                 <Box display="flex" gap={1}>
                                     <Typography>{studyDetail.title}</Typography>
                                 </Box>
                             </ListItem>
                             <ListItem>
                                 <Typography variant="h5">
-									{t('study.target_number')}
-									{/* 대상인원 */}
-								</Typography>
+                                    {t('study.target_number')}
+                                    {/* 대상인원 */}
+                                </Typography>
                                 <Box display="flex" gap={1}>
-                                    <Typography>{studyDetail.target_number} {t('study.person')}</Typography>
+                                    <Typography>
+                                        {studyDetail.target_number} {t('study.person')}
+                                    </Typography>
                                 </Box>
                             </ListItem>
                             <ListItem>
                                 <Typography variant="h5">
-									{t('study.summary')}
-									{/* 개요 */}
-								</Typography>
+                                    {t('study.summary')}
+                                    {/* 개요 */}
+                                </Typography>
                                 <Box display="flex" gap={1}>
                                     <Typography>{studyDetail.description}</Typography>
                                 </Box>
                             </ListItem>
                             <ListItem>
                                 <Typography variant="h5">
-									{t('study.disease')}
-									{/* 질환 */}
-								</Typography>
+                                    {t('study.disease')}
+                                    {/* 질환 */}
+                                </Typography>
                                 <Box display="flex" gap={1}>
                                     <Typography>{studyDetail.disease}</Typography>
                                 </Box>
@@ -354,9 +356,9 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                             {studyDetail.drug_code && (
                                 <ListItem sx={{ alignItems: 'flex-start' }}>
                                     <Typography variant="h5">
-										{t('study.pharmaceutical_information')}
-										{/* 의약품 정보 */}
-									</Typography>
+                                        {t('study.pharmaceutical_information')}
+                                        {/* 의약품 정보 */}
+                                    </Typography>
                                     <Box>
                                         <Typography>
                                             {studyDetail.drug_manufacturer_name}
@@ -376,10 +378,16 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                                     listStyle: 'disc',
                                                 }}
                                             >
-												{/* 업체명 */}
-                                                <li>{t('study.company_name')} : {studyDetail.drug_brand_name}</li>
-												{/* 품목기준코드 */}
-                                                <li>{t('study.item_standard_code')} : {studyDetail.drug_code}</li>
+                                                {/* 업체명 */}
+                                                <li>
+                                                    {t('study.company_name')} :{' '}
+                                                    {studyDetail.drug_brand_name}
+                                                </li>
+                                                {/* 품목기준코드 */}
+                                                <li>
+                                                    {t('study.item_standard_code')} :{' '}
+                                                    {studyDetail.drug_code}
+                                                </li>
                                             </ul>
                                         </Card>
                                     </Box>
@@ -437,17 +445,23 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                                     {survey.title}
                                                 </Link>
                                                 <Typography sx={{ display: 'inline-block' }}>
-												{
-														i18n.language === 'en' ? 
-														<>
-															{t('study.repeat')} { surveySet.number_in_cycle === 1 ? 'once a' : surveySet.number_in_cycle + t('study.time_per') } {surveyCycleEn[surveySet.survey_cycle]}
-														</>
-														:
-														<>
-															{surveyCycle[surveySet.survey_cycle]}{t('study.repeat')}{' '}
-															{surveySet.number_in_cycle}{t('study.time_per')}
-														</>
-													}
+                                                    {i18n.language === 'en' ? (
+                                                        <>
+                                                            {t('study.repeat')}{' '}
+                                                            {surveySet.number_in_cycle === 1
+                                                                ? 'once a'
+                                                                : surveySet.number_in_cycle +
+                                                                  t('study.time_per')}{' '}
+                                                            {surveyCycleEn[surveySet.survey_cycle]}
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            {surveyCycle[surveySet.survey_cycle]}
+                                                            {t('study.repeat')}{' '}
+                                                            {surveySet.number_in_cycle}
+                                                            {t('study.time_per')}
+                                                        </>
+                                                    )}
                                                     {/* {surveyCycle[surveySet.survey_cycle]}마다{' '}
                                                     {surveySet.number_in_cycle}회 반복 */}
                                                 </Typography>
@@ -464,7 +478,9 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                             }}
                         >
                             <Box display="flex" alignItems="center" justifyContent="space-between">
-                                <Typography variant="h5">{t('study.electronic_consent_form')}</Typography>
+                                <Typography variant="h5">
+                                    {t('study.electronic_consent_form')}
+                                </Typography>
                                 <Box display="flex" gap={0.5}>
                                     {userId === ownerId && studyDetail.eic_origin_name && (
                                         <>
@@ -473,11 +489,11 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                                 color="error"
                                                 onClick={handleDeleteOpen}
                                             >
-												{t('common.delete')}
+                                                {t('common.delete')}
                                                 {/* Delete */}
                                             </Button>
                                             <Button variant="outlined" onClick={handleEditViewOpen}>
-												{t('common.edit')}
+                                                {t('common.edit')}
                                                 {/* Edit */}
                                             </Button>
                                         </>
@@ -542,7 +558,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                             <Typography variant="h4">{t('study.members')}</Typography>
                             <Typography variant="caption">
                                 {t('study.displayed_most_recent_approval')}
-								{/* *최근 승인일 순으로 보여집니다. */}
+                                {/* *최근 승인일 순으로 보여집니다. */}
                             </Typography>
                         </Box>
                     </Grid>
@@ -554,7 +570,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                 sx={{ mb: '0.3rem' }}
                                 variant="contained"
                             >
-								{t('study.member_management')}
+                                {t('study.member_management')}
                                 {/* 멤버관리 */}
                             </Button>
                         </Box>

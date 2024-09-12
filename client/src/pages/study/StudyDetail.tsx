@@ -21,6 +21,7 @@ const StudyDetail = () => {
         useState<ParticipationRateByAge | null>(null);
     const [participantList, setParticipantList] = useState<ParticipantsList[]>([]);
     const [recentParticipantList, setRecentParticipantList] = useState<ParticipantsList[]>([]);
+    const [participationRateByPeriod, setParticipationRateByPeriod] = useState<any>();
 
     const navigate = useNavigate();
 
@@ -33,6 +34,7 @@ const StudyDetail = () => {
             fetchOverviewByAge(stdNoParsed);
             fetchParticipantsList(stdNoParsed);
             fetchRecentParticipantList(stdNoParsed);
+            fetchOverviewByPeriod(stdNoParsed, 'WEEK');
         }
     }, [stdNo]);
 
@@ -152,11 +154,27 @@ const StudyDetail = () => {
         }
     };
 
+    const fetchOverviewByPeriod = async (stdNo: number, periodType: 'WEEK' | 'MONTH' | 'YEAR') => {
+        try {
+            const response = await studyApi.participantCountByPeriod(stdNo, periodType);
+            setParticipationRateByPeriod(response.content);
+        } catch (error) {
+            console.error('Failed to fetch participation rate by period: ', error);
+        }
+    };
+
     const [activeTab, setActiveTab] = useState('0');
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         event.preventDefault();
         setActiveTab(newValue);
+    };
+
+    const handlePeriodChange = (newPeriod: 'WEEK' | 'MONTH' | 'YEAR') => {
+        console.log('handlePeriodChange newPeriod :: ', newPeriod);
+        if (stdNo) {
+            fetchOverviewByPeriod(parseInt(stdNo, 10), newPeriod);
+        }
     };
 
     console.log('totalParticipants:: ', totalParticipants);
@@ -264,6 +282,8 @@ const StudyDetail = () => {
                             totalParticipants={totalParticipants}
                             participationRateByAge={participationRateByAge}
                             participantList={recentParticipantList}
+                            participationRateByPeriod={participationRateByPeriod}
+                            onPeriodChange={handlePeriodChange}
                             onMoreClick={() => setActiveTab('2')} // 최근 참여자 More 버튼 클릭 시 Participants 탭으로 이동
                         />
                     )}
