@@ -2,6 +2,7 @@ import {
     ResCommonError,
     api
 } from '@/apis/axios-common';
+import { ParticipantSurveyDetail } from '@/types/participant';
 import {
 	ParticipantSurveyAnswerSet,
     RegistrableSurvey,
@@ -129,7 +130,7 @@ const surveyApi = {
 			throw e;
 		}
 	},
-	getParticipantsSurveySets : async(stdNo:number, participantNo:number) => {
+	getParticipantsSurveySets : async(stdNo:number, participantNo:number) => {//참여자 참여한 설문 목록가져오기
 		try {
 			const responseData = await api<ParticipantSurveyAnswerSet[]>(
 				`${BASE_API_URL}/${stdNo}/${participantNo}/list-survey-answer`,
@@ -141,6 +142,19 @@ const surveyApi = {
 			const e = error as ResCommonError;
 			throw e;
 		}
+	},
+	getParticipantSurveyDetail: async (setNo: number, surveyNo:number,answerCycle:string | Date,answerTurn:number,participantNo ) => {
+		try {
+			const responseData = await api<ParticipantSurveyDetail>(
+				`${BASE_API_URL}/answer/${setNo}/${surveyNo}/${answerCycle}/${answerTurn}/${participantNo}`,
+				'get',
+			)
+			return responseData;
+		} catch(error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+		
 	}
 };
 

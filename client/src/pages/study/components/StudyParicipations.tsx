@@ -7,7 +7,7 @@ import {
 import { Box, Grid, useTheme } from '@mui/material';
 import { ParticipantsList } from '@/types/study';
 import { useState } from 'react';
-import SurveyAnswerView from './study-info/SurveyAnswerView';
+import SurveyAnswerView from './participants/SurveyAnswerView';
 
 function CustomToolbar() {
     return (
