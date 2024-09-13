@@ -3,6 +3,7 @@ import {
     api
 } from '@/apis/axios-common';
 import {
+	ParticipantSurveyAnswerSet,
     RegistrableSurvey,
     SampleSurveyList,
     SurveyApiResponse,
@@ -128,9 +129,9 @@ const surveyApi = {
 			throw e;
 		}
 	},
-	getParticipantsSurveyAnswerList : async(stdNo:number, participantNo:number) => {
+	getParticipantsSurveySets : async(stdNo:number, participantNo:number) => {
 		try {
-			const responseData = await api<{}>(
+			const responseData = await api<ParticipantSurveyAnswerSet[]>(
 				`${BASE_API_URL}/${stdNo}/${participantNo}/list-survey-answer`,
 				'get',
 			)

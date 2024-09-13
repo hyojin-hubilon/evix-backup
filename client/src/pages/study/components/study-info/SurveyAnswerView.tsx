@@ -1,8 +1,12 @@
 import surveyApi from "@/apis/survey";
-import { Dialog, DialogTitle, IconButton } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, Grid, IconButton } from "@mui/material";
 import { SelectedParticipantType } from "../StudyParicipations";
 import CloseIcon from '@mui/icons-material/Close';
 import { t } from "i18next";
+import { Container } from '../../../survey/components/FormBuilder/ItemTypeSection/styles';
+import { useEffect, useState } from "react";
+import { ParticipantSurveyAnswerSet } from "@/types/survey";
+import dayjs from 'dayjs';
 
 type SurveyAnswerViewType ={
 	isOpen:boolean,
@@ -15,10 +19,19 @@ const SurveyAnswerView = ({
     participant
 } : SurveyAnswerViewType) => {
 
-	const getSurveyAnswers = async (stdNo, participantNo) => {
-		const response = await surveyApi.getParticipantsSurveyAnswerList(stdNo, participantNo);
+	const [surveySets, setSurveySets] = useState<ParticipantSurveyAnswerSet[]>([])
+
+	const getSurveyAnswerSets = async (stdNo, participantNo) => {
+		const response = await surveyApi.getParticipantsSurveySets(stdNo, participantNo);
+		setSurveySets(response.content);
 		console.log(response)
 	}
+
+	useEffect(() => {
+		if(participant.stdNo && participant.participantNo) {
+			getSurveyAnswerSets(participant.stdNo, participant.participantNo)
+		}
+	}, [participant])
 
 	
 	return (
@@ -27,20 +40,36 @@ const SurveyAnswerView = ({
                 onClose={handleClose}
                 aria-labelledby="survey-answer-view-title"
                 aria-describedby="survey-answer-view-description"
-                maxWidth="lg"
-                scroll="body"
+				fullWidth
             >
 				<DialogTitle id="survey-answer-view-title" variant="h4">
-							{t('study.view_survey_answers')}
-                            {/* 참여자 답변 보기 */}
-                            <IconButton
-                                size="small"
-                                sx={{ position: 'absolute', top: '10px', left: '680px' }}
-                                onClick={handleClose}
-                            >
-                                <CloseIcon />
-                            </IconButton>
-                        </DialogTitle>
+					{t('study.view_survey_answers')}
+					{/* 참여자 답변 보기 */}
+					<IconButton
+						size="small"
+						sx={{ position: 'absolute', top: '10px', right: '10px' }}
+						onClick={handleClose}
+					>
+						<CloseIcon />
+					</IconButton>
+				</DialogTitle>
+				<DialogContent>
+					<Grid container minWidth="lg">
+						<Grid item xs={3} sx={{borderRight: '1px solid #ddd'}}>
+							{
+								surveySets.map(surveySet => 
+								<>
+									{surveySet.survey_title}
+									{dayjs(surveySet.created_at).format('YYYY-MM-DD')}
+								</>
+								)
+							}
+						</Grid>
+						<Grid item xs={9}>
+
+						</Grid>
+					</Grid>
+				</DialogContent>
 		</Dialog>
 	)
 }
