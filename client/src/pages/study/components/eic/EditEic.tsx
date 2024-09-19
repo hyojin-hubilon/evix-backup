@@ -20,9 +20,10 @@ interface EditEicProps {
     onClose: () => void;
     eicFile: any;
     studyDetail: StudyDetail;
+    fetchStudyDetail: () => void;
 }
 
-const EditEic = ({ open, onClose, eicFile, studyDetail }: EditEicProps) => {
+const EditEic = ({ open, onClose, eicFile, studyDetail, fetchStudyDetail }: EditEicProps) => {
     return (
         <>
             <Dialog
@@ -33,7 +34,7 @@ const EditEic = ({ open, onClose, eicFile, studyDetail }: EditEicProps) => {
                 sx={{ padding: '0 !important' }}
                 scroll="body"
             >
-                <EditViewer eicFile={eicFile} onClose={onClose} studyDetail={studyDetail} />
+                <EditViewer eicFile={eicFile} onClose={onClose} studyDetail={studyDetail} fetchStudyDetail={fetchStudyDetail}/>
             </Dialog>
         </>
     );
