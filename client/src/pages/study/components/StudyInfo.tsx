@@ -194,7 +194,6 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
             if (response.code === 200) {
                 confirm({
                     description: t('eic.has_been_saved'),
-                    //'전자동의서가 저장되었습니다.',
                     variant: 'info',
                 }).then(() => {
                     handleEditViewClose();
@@ -227,7 +226,6 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                 if (response.code === 200) {
                     confirm({
                         description: t('eic.has_been_deleted'),
-                        //'전자동의서가 삭제되었습니다.',
                         variant: 'info',
                     }).then(() => {
                         handleDeleteClose();
@@ -240,10 +238,8 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
         }
     };
 
-
 	const [ surveyNo, setSurveyNo ] = useState<number|null>(null);
 	const [ isPreview, setIsPreview ] = useState(false);
-
 
 	const handleShowSurvey = (surveyNo) => {
 		setSurveyNo(surveyNo);
@@ -257,7 +253,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
 
     useEffect(() => {
         handleDownloadEicFile();
-    }, []);
+    }, [studyDetail.eic_name]);
 
     return (
         <Grid container item rowSpacing={2} className="study-info">
@@ -626,6 +622,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                 onClose={handleEditViewClose}
                 eicFile={eicFile}
                 studyDetail={studyDetail}
+                fetchStudyDetail={onSurveyClose}
             />
             <EicParent
                 isUploadBasePdfOpen={isUploadBasePdfOpen}
