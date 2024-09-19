@@ -104,7 +104,6 @@ const Previewer = ({ eicFile, onClose }) => {
                 }}
             >
                 <strong>Preview</strong>
-                
             </header>
             <div ref={uiRef} style={{ width: '100%', height: `calc(100vh - ${headerHeight}px)` }} />
 			<DialogActions>

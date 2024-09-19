@@ -269,7 +269,9 @@
 	},
 	"eic" : {
 		"has_been_saved" : "Your electronic consent form has been saved.",
-		"has_been_deleted" : "The electronic consent form has been deleted."
+		"has_been_deleted" : "The electronic consent form has been deleted.",
+		"duplicate_field_found" :"Duplicate field found",
+		"different_field_names" : "It must have different field names."
 	},
     "survey": {
 		"survey_list" : "Survey",

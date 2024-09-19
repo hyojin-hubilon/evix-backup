@@ -33,7 +33,7 @@ const GoogleSocial = () => {
     };
 
     return (
-        <GoogleOAuthProvider clientId="708293827981-7f40urii58s2e9kt81m70rgppsog733p.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId="545905477496-f3couvc4id3dcv3dibq2m1jpd6jilpia.apps.googleusercontent.com">
             <Stack
                 direction="row"
                 spacing={matchDownSM ? 1 : 2}
