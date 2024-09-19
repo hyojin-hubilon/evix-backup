@@ -40,9 +40,10 @@ interface EditViewerProps {
     eicFile: any;
     onClose: () => void;
     studyDetail: StudyDetail;
+    fetchStudyDetail : () => void;
 }
 
-const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
+const EditViewer = ({ eicFile, onClose, studyDetail, fetchStudyDetail }: EditViewerProps) => {
     const navigate = useNavigate();
     const confirm = useConfirmation();
 
@@ -159,6 +160,7 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
                     description: '전자동의서가 변경되었습니다.',
                     variant: 'info',
                 });
+                fetchStudyDetail();
             }
         } catch (error) {
             console.error('Failed to deploy study: ', error);
