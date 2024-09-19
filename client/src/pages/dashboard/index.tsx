@@ -77,6 +77,7 @@ const DashboardDefault = () => {
     };
 
     const getStudyGoalByMonthly = async (stdNo: string) => {
+        if (!stdNo) return;
         const response = await dashboardApi.getStudyGoalByMonthly(stdNo);
         if (response.code === 200) {
             const firstItem = response.content.at(0);
