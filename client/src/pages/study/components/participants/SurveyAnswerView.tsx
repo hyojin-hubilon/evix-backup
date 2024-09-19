@@ -1,5 +1,5 @@
 import surveyApi from "@/apis/survey";
-import { Dialog, DialogContent, DialogTitle, Grid, IconButton, List, ListItem, ListItemButton, Typography, useTheme } from "@mui/material";
+import { Box, Dialog, DialogContent, DialogTitle, Grid, IconButton, List, ListItem, ListItemButton, Typography, useTheme } from "@mui/material";
 import { SelectedParticipantType } from "../StudyParicipations";
 import CloseIcon from '@mui/icons-material/Close';
 import { t } from "i18next";
@@ -40,11 +40,14 @@ const SurveyAnswerView = ({
 
 	const getSurveyAnswer = async (surveySet:ParticipantSurveyAnswerSet) => {
 		const response = await surveyApi.getParticipantSurveyDetail(surveySet.set_no, surveySet.survey_no, surveySet.answer_cycle, surveySet.answer_turn, surveySet.participant_no)
-		setSurveyAnswer(response.content);
+		if(response.code == 200 && response.content) setSurveyAnswer(response.content);
+		else setSurveyAnswer(null);
 		console.log(response.content)
 	}
 
-
+	useEffect(() => {
+		setSurveyAnswer(null);
+	}, [])
 	
 	
 	return (
@@ -53,8 +56,8 @@ const SurveyAnswerView = ({
                 onClose={handleClose}
                 aria-labelledby="survey-answer-view-title"
                 aria-describedby="survey-answer-view-description"
-				fullWidth
-				maxWidth="lg"
+				fullWidth={surveySets.length === 0 ? false : true}
+				maxWidth={surveySets.length === 0 ? 'sm' : 'lg' }
             >
 				<DialogTitle id="survey-answer-view-title" variant="h4" sx={{borderBottom: `1px solid ${theme.palette.divider}`}}>
 					{t('study.view_survey_answers')}
@@ -68,12 +71,25 @@ const SurveyAnswerView = ({
 					</IconButton>
 				</DialogTitle>
 				<DialogContent sx={{p:0}}>
-					<Grid container minWidth="lg">
+					
+
+					 {
+					 	surveySets.length === 0 ? 
+					 	
+						<Box minHeight="6rem" justifyContent="center">
+							<Typography textAlign="center" pt="2rem">
+								{t('study.no_record_survey')}
+								{/* 이 참여자의 설문참여 기록이 없습니다. */}
+							</Typography>
+						</Box>
+						
+						:
+						<Grid container minWidth="lg" minHeight="20rem">
 						<Grid item xs={3} sx={{borderRight: `1px solid ${theme.palette.divider}`}}>
 							<List>
 							{
 								surveySets.map(surveySet => 
-									<ListItem  key={surveySet.survey_answer_no} sx={{p:0}}>
+									<ListItem key={surveySet.survey_answer_no} sx={{p:0}}>
 										<ListItemButton sx={{
 											flexDirection: 'column',
 											alignItems: 'flex-start',
@@ -94,6 +110,7 @@ const SurveyAnswerView = ({
 							<AnswerDetailView survey={surveyAnswer} />
 						</Grid>
 					</Grid>
+					}
 				</DialogContent>
 		</Dialog>
 	)

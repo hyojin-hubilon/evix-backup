@@ -260,13 +260,14 @@
 		"none" : "없음",
 		"and" : "외",
 		"other_person" : "명",
-		"view_survey_answers" : "참여자 설문 답변 보기"
+		"view_survey_answers" : "참여자 설문 답변 보기",
+		"no_record_survey" : "이 참여자의 설문참여 기록이 없습니다."
 	},
 	"eic" : {
 		"has_been_saved" : "전자동의서가 저장되었습니다.",
 		"has_been_deleted" : "전자동의서가 삭제되었습니다.",
-		"duplicate_field_found" :"Duplicate field found",
-		"different_field_names" : "It must have different field names."
+		"duplicate_field_found" :"중복된 필드가 있습니다.",
+		"different_field_names" : "서로 다른 필드 명을 가지고 있어야합니다."
 	},
     "survey": {
 		"survey_list" : "Survey 목록",

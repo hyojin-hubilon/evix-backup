@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import * as S from './styles';
 import { QuestionTypes } from "@/types/survey";
 import RadioAnswer from "./RadioAnswer";
+import CheckboxAnswer from "./CheckboxAnswer";
 
 type AnswerDetailViewType = {
 	survey: ParticipantSurveyDetail | null
@@ -50,20 +51,18 @@ const AnswerDetailView = ({survey} : AnswerDetailViewType) => {
 
 								{ question.question_type === QuestionTypes.WRITE ? 
 									//주관식 답변
-									<OutlinedInput
+									<Box
 										sx={{
-											'.MuiInputBase-input.Mui-disabled' : {
-												color: `${theme.palette.common.black}`,
-												WebkitTextFillColor : `${theme.palette.common.black}`,
-												TextFillColor : `${theme.palette.common.black}`
-											}
+											border: `1px solid ${theme.palette.grey[300]}`,
+											p: '10px',
+											borderRadius: '5px'
 										}}
-										value={question.surveyQuestionAnswer?.answer_write}
-										disabled
-									/>
+									>
+										{question.surveyQuestionAnswer?.answer_write}
+									</Box>
 								: null } 
 								{ (question.question_type  === QuestionTypes.SINGLE || question.question_type  === QuestionTypes.RADIO) ? <RadioAnswer exampleList={question.exampleList} answer={question.surveyQuestionAnswer}  /> : null }
-								{/* { answer.question_type  === QuestionTypes.MULTIPLE ? <InputCheckbox cardId={card.cardId} questionIndex={index}  /> : null } */}
+								{ question.question_type  === QuestionTypes.MULTIPLE ? <CheckboxAnswer  exampleList={question.exampleList} answer={question.surveyQuestionAnswer}  /> : null }
 							</S.SCard>
 						)
 					}

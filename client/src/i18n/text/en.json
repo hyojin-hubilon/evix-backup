@@ -265,7 +265,8 @@
 		"none" : "None",
 		"and" : "and",
 		"other_person" : " other person",
-		"view_survey_answers" : "View participant survey answers"
+		"view_survey_answers" : "View participant survey answers",
+		"no_record_survey":"There is no record of this participant's participation in the survey."
 	},
 	"eic" : {
 		"has_been_saved" : "Your electronic consent form has been saved.",

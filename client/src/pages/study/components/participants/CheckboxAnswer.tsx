@@ -11,47 +11,45 @@ type CheckboxAnswerType = {
 }
 const CheckboxAnswer = ({exampleList, answer} : CheckboxAnswerType) => {
 	const theme = useTheme();
-	console.log(exampleList, answer)
-	const isSelectedAnswer = () => {
 
+	const isSelectedAnswer = (exampleValue) => {
+		if(answer.multipleAnswerList && answer.multipleAnswerList.includes(exampleValue)) return true;
+		else return false;
 	}
 	
 	return (<>
 		{
 			exampleList.map(example => 
-				<Box key={example.example_no} display="flex" gap={1} pl="30px" position="relative" mb="10px">
+				<Box key={example.example_no} display="flex" gap={1} mb="10px">
 					<Box sx={{
-						position: 'absolute',
-						left:0,
-						top:0,
-						'&::after' : {
-							display: answer.answer_select === example.example_value ? 'block' : 'none',
-							content: '""',
-							width: '9px',
-							height: '9px',
-							borderRadius: '50%',
-							position:'absolute',
-							left:'7px',
-							top:'7px',
-							backgroundColor: theme.palette.primary.main
-						}
+						width: '20px',
+						height: '20px',
+						border: isSelectedAnswer(example.example_value) ? `2px solid ${theme.palette.primary.main}` : `2px solid ${theme.palette.grey[500]}`,
+						backgroundColor: isSelectedAnswer(example.example_value) ? theme.palette.primary.main : 'white',
+						borderRadius: '4px',
+						position: 'relative'
 					}}>
-						<CropSquareIcon sx={{
-							color: theme.palette.grey[500],
-							width: '23px',
-							height: '23px',
-							position: 'absolute',
-							
-						}}/>
+						{
+							isSelectedAnswer(example.example_value) &&
+								<Box sx={{
+									display:'block',
+									position:'absolute',
+									left: '50%',
+									top: '50%',
+									marginLeft:'-4px',
+									marginTop:'-7px',
+									width:'7px',
+									height: '10px',
+									border: 'solid white',
+									borderWidth: '0 2px 2px 0',
+									webkitTransform: 'rotate(45deg)',
+									transform: 'rotate(45deg)'
+								}}/>
+						}
 					</Box>
+					<Typography>{ example.example_title }</Typography>
 					{
-						answer.answer_write ? 
-						<Box display="flex" gap={1} sx={{width: `calc(100% - 30px)`}}>
-							<Typography>{t('survey.etc')}</Typography>
-							<Box sx={{borderBottom: `1px solid ${theme.palette.grey[500]}`, width:'auto'}}>{ answer.answer_write }</Box>
-						</Box>
-						:
-						<Typography>{ example.example_title }</Typography>
+						answer.answer_write && example.example_type == 'OTHER' && <Typography> : {answer.answer_write}</Typography>
 					}
 				</Box>
 			)

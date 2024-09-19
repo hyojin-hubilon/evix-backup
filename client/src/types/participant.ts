@@ -134,7 +134,7 @@ export interface SurveyQuestionAnswer  {
 	participant_no: number,
 	answer_select: string | number | null,
 	answer_write: string | null,
-	multipleAnswerList: string | number |null
+	multipleAnswerList: number[] | null
 }
 
 export interface ParticipantSurveyExampleList {
