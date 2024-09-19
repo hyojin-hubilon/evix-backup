@@ -12,7 +12,7 @@ const ParticipantStudies = () => {
 	const navigate = useNavigate();
 
     useEffect(() => {
-        // login(); //TODO: 임시 로그인임,  삭제 처리할 것..
+        login(); //TODO: 임시 로그인임,  삭제 처리할 것..
         fetchStudyList();
     }, []);
 

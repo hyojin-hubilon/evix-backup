@@ -92,6 +92,8 @@ interface StudyInfoProps {
 const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
     const theme = useTheme();
     const navigate = useNavigate();
+	const { stdStatus } = theme.palette;
+	
 
     const confirm = useConfirmation();
     const { userProfile } = useUserProfile();
@@ -267,7 +269,19 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                         <ListItem>
                             <Typography variant="h5">Study Status</Typography>
                             <Box display="flex" gap={1}>
-                                <Typography variant="h6" color="primary">
+                                <Typography variant="h6" sx={{
+									color: stdStatus.new,
+									...(studyDetail?.std_status === 'STD-PROGRESSION' && {
+										color: stdStatus.ongoing,
+									}), //Ongoing
+									...(studyDetail?.std_status === 'STD-DONE' && {
+										color: stdStatus.completed,
+									}), //Completed
+									...(endDate < today &&
+										'STD-Expired' && {
+											color: stdStatus.expired,
+										}), //Expired
+								}}>
                                     {statusLabel}
                                 </Typography>
                                 {studyDetail.updated_at && (

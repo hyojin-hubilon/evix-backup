@@ -1,6 +1,6 @@
 import Breadcrumbs2 from '@/components/@extended/Breadcrumbs2';
 import { EditOutlined } from '@ant-design/icons';
-import { Avatar, Box, Button, Chip, Grid, Tab, Tabs, Typography } from '@mui/material';
+import { Avatar, Box, Button, Chip, Grid, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ApexDonutChartSeriesType } from './components/overview/CircleChart';
 import StudyOverView from './components/StudyOverview';
@@ -10,6 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import studyApi from '@/apis/study';
 import { STUDY_STATUS, STUDY_STATUS_KEY, TitleStatusIcon } from './components/StudyListItem';
 import { ParticipantsList, ParticipationRateByAge, totalParticipants } from '@/types/study';
+import dayjs from 'dayjs';
 
 const StudyDetail = () => {
     const { stdNo } = useParams<{ stdNo: string | undefined }>();
@@ -24,6 +25,9 @@ const StudyDetail = () => {
     const [participationRateByPeriod, setParticipationRateByPeriod] = useState<any>();
 
     const navigate = useNavigate();
+	const theme = useTheme();
+	const { stdStatus } = theme.palette;
+	const today = dayjs().format('YYYY-MM-DD');
 
     useEffect(() => {
         if (stdNo) {
@@ -210,7 +214,21 @@ const StudyDetail = () => {
                                     {statusLabel}
                                 </>
                             }
-                            color="primary"
+                            sx={{
+								bgcolor: stdStatus.new,
+                                ...(studyDetail?.std_status === 'STD-PROGRESSION' && {
+                                    bgcolor: stdStatus.ongoing,
+                                }), //Ongoing
+                                ...(studyDetail?.std_status === 'STD-DONE' && {
+                                    bgcolor: stdStatus.completed,
+                                }), //Completed
+                                ...(studyDetail?.endDate < today &&
+                                    'STD-Expired' && {
+                                        bgcolor: stdStatus.expired,
+                                    }), //Expired
+								color: 'white'
+							}}
+							
                         />
                         <Typography variant="h3">{studyDetail?.title || ''}</Typography>
                         <Button

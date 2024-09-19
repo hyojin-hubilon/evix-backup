@@ -2,7 +2,7 @@ import { ParticipantSurveyExampleList, SurveyQuestionAnswer } from "@/types/part
 import { ExampleList } from "@/types/survey";
 import * as S from './styles';
 import { Box, Typography, useTheme } from "@mui/material";
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import CropSquareIcon from '@mui/icons-material/CropSquare';
 import { t } from "i18next";
 
 type CheckboxAnswerType = {
@@ -12,6 +12,10 @@ type CheckboxAnswerType = {
 const CheckboxAnswer = ({exampleList, answer} : CheckboxAnswerType) => {
 	const theme = useTheme();
 	console.log(exampleList, answer)
+	const isSelectedAnswer = () => {
+
+	}
+	
 	return (<>
 		{
 			exampleList.map(example => 
@@ -32,7 +36,7 @@ const CheckboxAnswer = ({exampleList, answer} : CheckboxAnswerType) => {
 							backgroundColor: theme.palette.primary.main
 						}
 					}}>
-						<CircleOutlinedIcon sx={{
+						<CropSquareIcon sx={{
 							color: theme.palette.grey[500],
 							width: '23px',
 							height: '23px',
