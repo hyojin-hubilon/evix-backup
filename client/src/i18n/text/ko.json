@@ -263,7 +263,9 @@
 	},
 	"eic" : {
 		"has_been_saved" : "전자동의서가 저장되었습니다.",
-		"has_been_deleted" : "전자동의서가 삭제되었습니다."
+		"has_been_deleted" : "전자동의서가 삭제되었습니다.",
+		"duplicate_field_found" :"Duplicate field found",
+		"different_field_names" : "It must have different field names."
 	},
     "survey": {
 		"survey_list" : "Survey 목록",
