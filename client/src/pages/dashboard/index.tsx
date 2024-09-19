@@ -30,6 +30,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import divider from 'antd/es/divider';
 import { useNavigate } from 'react-router-dom';
+import { t } from 'i18next';
 
 interface Logs {
     study: string;
@@ -84,7 +85,7 @@ const DashboardDefault = () => {
             if (!firstItem) return;
             const content = [
                 {
-                    name: '참여자',
+                    name: t('study.participants'),
                     data: [
                         [dayjs(firstItem.ago_5_month).valueOf(), firstItem.num_ago_5_month], //날짜, 참여자 수
                         [dayjs(firstItem.ago_4_month).valueOf(), firstItem.num_ago_4_month],

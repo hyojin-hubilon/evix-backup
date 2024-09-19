@@ -120,7 +120,7 @@ const GenderAgeChart = ({
 
     const ageChartSeries = [
         {
-            name: '남성',
+            name: t('study.male'), //남성
             data: [
                 participationRateByAge.num_age_10s_m,
                 participationRateByAge.num_age_20s_m,
@@ -132,7 +132,7 @@ const GenderAgeChart = ({
             ],
         },
         {
-            name: '여성',
+            name: t('study.female'), //여성
             data: [
                 participationRateByAge.num_age_10s_f,
                 participationRateByAge.num_age_20s_f,

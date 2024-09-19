@@ -8,7 +8,7 @@ type PeriodType = 'WEEK' | 'MONTH' | 'YEAR';
 
 const areaChartOptions: ApexOptions = {
     chart: {
-        height: 250,
+        height: 230,
         type: 'line',
         toolbar: {
             show: false,
@@ -292,7 +292,7 @@ const AllPartTransitionChart = ({
                 </Grid>
             </Grid>
             <Box sx={{ pt: 2 }}>
-                <ReactApexChart options={options} series={series} type="line" height={250} />
+                <ReactApexChart options={options} series={series} type="line" height={230} />
             </Box>
         </>
     );
