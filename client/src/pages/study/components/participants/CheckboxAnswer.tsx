@@ -5,11 +5,11 @@ import { Box, Typography, useTheme } from "@mui/material";
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import { t } from "i18next";
 
-type RadioAnswerType = {
+type CheckboxAnswerType = {
 	exampleList: ExampleList[], 
 	answer : SurveyQuestionAnswer
 }
-const RadioAnswer = ({exampleList, answer} : RadioAnswerType) => {
+const CheckboxAnswer = ({exampleList, answer} : CheckboxAnswerType) => {
 	const theme = useTheme();
 	console.log(exampleList, answer)
 	return (<>
@@ -55,4 +55,4 @@ const RadioAnswer = ({exampleList, answer} : RadioAnswerType) => {
 	</>)
 };
 
-export default RadioAnswer;
+export default CheckboxAnswer;
