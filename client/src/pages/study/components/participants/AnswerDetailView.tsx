@@ -3,6 +3,7 @@ import { Box, Card, OutlinedInput, Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import * as S from './styles';
 import { QuestionTypes } from "@/types/survey";
+import RadioAnswer from "./RadioAnswer";
 
 type AnswerDetailViewType = {
 	survey: ParticipantSurveyDetail | null
@@ -38,29 +39,31 @@ const AnswerDetailView = ({survey} : AnswerDetailViewType) => {
 					</Card>
 
 					{
-						survey.questionList.map(answer => 
-							<S.SCard key={answer.question_no}>
+						survey.questionList.map(question => 
+							<S.SCard key={question.question_no}>
 								<Box mb={1}>
 									<Typography variant="h4">
-										{answer.question}
-										{answer.required_answer_yn == 'Y' ? <S.RequireMark>*</S.RequireMark> : null}
+										{question.question}
+										{question.required_answer_yn == 'Y' ? <S.RequireMark>*</S.RequireMark> : null}
 									</Typography>
 								</Box>
 
-								{ answer.question_type === QuestionTypes.WRITE ? 
+								{ question.question_type === QuestionTypes.WRITE ? 
+									//주관식 답변
 									<OutlinedInput
 										sx={{
 											'.MuiInputBase-input.Mui-disabled' : {
 												color: `${theme.palette.common.black}`,
-												'-webkit-text-fill-color' : `${theme.palette.common.black}`
+												WebkitTextFillColor : `${theme.palette.common.black}`,
+												TextFillColor : `${theme.palette.common.black}`
 											}
 										}}
-										value={answer.surveyQuestionAnswer?.answer_write}
+										value={question.surveyQuestionAnswer?.answer_write}
 										disabled
 									/>
 								: null } 
-								{/* { (answer.question_type  === QuestionTypes.SINGLE || answer.question_type  === QuestionTypes.RADIO) ? <InputRadio cardId={card.cardId} questionIndex={index}  /> : null }
-								{ answer.question_type  === QuestionTypes.MULTIPLE ? <InputCheckbox cardId={card.cardId} questionIndex={index}  /> : null } */}
+								{ (question.question_type  === QuestionTypes.SINGLE || question.question_type  === QuestionTypes.RADIO) ? <RadioAnswer exampleList={question.exampleList} answer={question.surveyQuestionAnswer}  /> : null }
+								{/* { answer.question_type  === QuestionTypes.MULTIPLE ? <InputCheckbox cardId={card.cardId} questionIndex={index}  /> : null } */}
 							</S.SCard>
 						)
 					}

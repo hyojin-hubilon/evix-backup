@@ -1,4 +1,4 @@
-import { QuestionDivision, QuestionTypes, SurveyDetail } from "./survey";
+import { ExampleList, QuestionDivision, QuestionTypes, SurveyDetail } from "./survey";
 
 export interface SurveyAnswerReqBody {
     set_no: number;
@@ -132,7 +132,7 @@ export interface SurveyQuestionAnswer  {
 	answer_turn: number,
 	question_no: number,
 	participant_no: number,
-	answer_select: number | null,
+	answer_select: string | number | null,
 	answer_write: string | null,
 	multipleAnswerList: string | number |null
 }
@@ -150,7 +150,7 @@ export interface ParticipantSurveyExampleList {
 	survey_no: number;
 }
 export interface ParticipantSurveyQuestionList  {
-	exampleList : ParticipantSurveyExampleList[];
+	exampleList : ExampleList[];
 	level: number;
 	parent: string;
 	question: string;
