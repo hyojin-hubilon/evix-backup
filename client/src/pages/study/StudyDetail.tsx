@@ -11,6 +11,7 @@ import studyApi from '@/apis/study';
 import { STUDY_STATUS, STUDY_STATUS_KEY, TitleStatusIcon } from './components/StudyListItem';
 import { ParticipantsList, ParticipationRateByAge, totalParticipants } from '@/types/study';
 import dayjs from 'dayjs';
+import { t } from 'i18next';
 
 const StudyDetail = () => {
     const { stdNo } = useParams<{ stdNo: string | undefined }>();
@@ -183,7 +184,7 @@ const StudyDetail = () => {
 
     console.log('totalParticipants:: ', totalParticipants);
     const partCompleteRate: ApexDonutChartSeriesType = {
-        labels: ['참여완료율', '미완료율'],
+        labels: [t('study.completion_rate'), t('study.incomplete_rate')], //"참여완료율","미완료율"
         series: totalParticipants
             ? [totalParticipants.participation_late, 100 - totalParticipants.participation_late]
             : [0, 100],

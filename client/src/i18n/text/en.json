@@ -266,7 +266,11 @@
 		"and" : "and",
 		"other_person" : " other person",
 		"view_survey_answers" : "View participant survey answers",
-		"no_record_survey":"There is no record of this participant's participation in the survey."
+		"no_record_survey":"There is no record of this participant's participation in the survey.",
+		"completion_rate" : "Completion Rate",
+		"incomplete_rate" : "Incomplete Rate",
+		"completion" : "Completion",
+		"incomplete" : "Incomplete"
 	},
 	"eic" : {
 		"has_been_saved" : "Your electronic consent form has been saved.",

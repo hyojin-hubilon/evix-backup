@@ -261,7 +261,11 @@
 		"and" : "외",
 		"other_person" : "명",
 		"view_survey_answers" : "참여자 설문 답변 보기",
-		"no_record_survey" : "이 참여자의 설문참여 기록이 없습니다."
+		"no_record_survey" : "이 참여자의 설문참여 기록이 없습니다.",
+		"completion_rate" : "참여완료율",
+		"incomplete_rate" : "미완료율",
+		"completion" : "참여자",
+		"incomplete" : "미참여자"
 	},
 	"eic" : {
 		"has_been_saved" : "전자동의서가 저장되었습니다.",
