@@ -37,7 +37,7 @@ const EICAgreement = () => {
     const confirm = useConfirmation();
     const mode: Mode = 'form';
 
-	const pdfArea = React.useMemo(() => <div ref={uiRef} style={{ width: '100%', height: `calc(100vh - 300px)` }} />, []);
+	const pdfArea = React.useMemo(() => <div ref={uiRef} style={{ width: '100%', minHeight: '500px' }} />, []);
 
     const buildUi = (mode: Mode) => {
         const template = initTemplate();
