@@ -86,7 +86,7 @@ export default function LandingPage() {
     }
 
     return (
-        <Box className="landing" sx={{bgcolor: 'white'}}>
+        <Box className="landing" sx={{bgcolor: 'white'}} id="top">
             {/* Section 01*/}
             <Box className="section section-01">
                 <Container maxWidth="xl">
@@ -197,7 +197,7 @@ export default function LandingPage() {
             </Box>
 
             {/* Section 03*/}
-            <Box className="section section-03">
+            <Box className="section section-03" id="products">
                 <Box
                     sx={{
                         bgcolor: '#f7f9ff',
@@ -378,7 +378,7 @@ export default function LandingPage() {
             </Box>
 
             {/* Section 05 */}
-            <Box className="section section-05">
+            <Box className="section section-05" id="case">
                 <Container maxWidth="xl">
                     <Grid container alignItems="center" justifyContent="center" gap={4}>
                         <Grid item xs={5}>
@@ -490,6 +490,7 @@ export default function LandingPage() {
             </Box>
 
             {/* Section 07 */}
+            <div id="price" />
             <Box
                 className="section section-07"
                 sx={{
