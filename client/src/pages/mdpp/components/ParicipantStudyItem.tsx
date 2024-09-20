@@ -42,25 +42,28 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
         [StudyParticipantStatus.DONE]: '참여종료',
     };
 
-    const status = getStudyStatus(now, startDate, endDate, study.eic_name);
+    const status = getStudyStatus(now, startDate, endDate, study.signature_eic_name);
     const statusLabel = studyStatusKr[status];
 
     const handleSelectStudy = (study) => {
-        if (study.status !== StudyParticipantStatus.DONE) {
+		if (status === StudyParticipantStatus.NEED_EIC) {
+            navigate(`/mdpp/eic/${study.std_no}`, { state: { study } });
+        }
+        else if (study.status !== StudyParticipantStatus.DONE) {
             selectStudy(study);
         }
     };
 
     const navigate = useNavigate();
-    const handleEicPage = () => {
-        if (status === StudyParticipantStatus.NEED_EIC) {
-            navigate(`/mdpp/eic/${study.std_no}`, { state: { study } });
-        }
-    };
+    // const handleEicPage = () => {
+        
+    // };
 
     return (
-        <Box p="20px 25px" borderBottom="1px solid #E0E5E9" position="relative">
-            <div onClick={() => handleSelectStudy(study)}>
+        <Box p="20px 25px" borderBottom="1px solid #E0E5E9" position="relative" 
+			sx={{cursor: status === StudyParticipantStatus.DONE ?  undefined : 'pointer'}}
+			onClick={() => handleSelectStudy(study)}>
+            <div>
                 <Box display="flex" height="21px" alignItems="center" gap="10px">
                     <S.StudyStatus studyStatus={status}>{statusLabel}</S.StudyStatus>
                     <S.StudyTitle>{study.title}</S.StudyTitle>
@@ -87,10 +90,9 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
                     width: '21px',
                     height: '21px',
                     marginTop: '-10px',
-                    color: status === StudyParticipantStatus.NEED_EIC ? '#AFB3BA' : '#000001', // 색상 변경 예시
-                    cursor: status === StudyParticipantStatus.NEED_EIC ? 'pointer' : undefined
+                    color: status === StudyParticipantStatus.DONE ? '#000001' : '#AFB3BA' , // 색상 변경 예시
                 }}
-                onClick={handleEicPage}
+                // onClick={handleEicPage}
             >
                 <svg
                     width="21"
@@ -101,13 +103,13 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
                 >
                     <path
                         d="M8.85712 6L13.1428 10.2857L8.85712 14.5714"
-                        stroke={status !== StudyParticipantStatus.NEED_EIC ? '#AFB3BA' : '#000001'}
+                        stroke={status !== StudyParticipantStatus.DONE ? '#000001': '#AFB3BA'}
                         strokeLinecap="round"
                         strokeLinejoin="round"
                     />
                     <path
                         d="M10.2857 19.5714C15.4141 19.5714 19.5714 15.4141 19.5714 10.2857C19.5714 5.15736 15.4141 1 10.2857 1C5.15736 1 1 5.15736 1 10.2857C1 15.4141 5.15736 19.5714 10.2857 19.5714Z"
-                        stroke={status !== StudyParticipantStatus.NEED_EIC ? '#AFB3BA' : '#000001'}
+                        stroke={status !== StudyParticipantStatus.DONE ? '#000001' : '#AFB3BA'}
                         strokeLinecap="round"
                         strokeLinejoin="round"
                     />

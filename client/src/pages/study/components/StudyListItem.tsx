@@ -22,7 +22,7 @@ import MemberManagement from './study-new/MemberManagement';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
     CompletedIcon,
-    ExpirationIcon,
+    ExpiredIcon,
     NewIcon,
     OngoingIcon,
     PauseIcon,
@@ -30,6 +30,7 @@ import {
 } from '@/components/StatusIcons';
 import { useUserProfile } from '@/context/UserProfileContext';
 import { t } from 'i18next';
+import moment from 'moment';
 
 // * 진행중인 상태일 경우, 한눈에 알아볼 수 있도록 bg를 다르게 처리함.
 // * 배포전/일시정지/중단: 빨간색 txt 처리
@@ -39,27 +40,25 @@ export const STUDY_STATUS = {
     'STD-CREATED': 'New', //생성완료
     'STD-PROGRESSION': 'Ongoing', //진행중
     'STD-DONE': 'Completed', //완료
-    'STD-EXPIRATION': 'Expiration', //만료
+    'STD-Expired': 'Expired', //만료
     'STD-PAUSE': 'Pause', //일시정지
-    'STD-STOP': 'Stop', //중지/중단
 } as const;
 
 // 타입으로 추출
 export type STUDY_STATUS_KEY = keyof typeof STUDY_STATUS;
 
-export const TitleStatusIcon = ({ status }: { status: string }) => {
+export const TitleStatusIcon = ({ status, color }: { status: string, color?: string }) => {
     const theme = useTheme();
     const { stdStatus } = theme.palette;
     return (
         <span>
             {
                 {
-                    'STD-CREATED': <NewIcon color={stdStatus.new} />,
-                    'STD-PROGRESSION': <OngoingIcon color={stdStatus.ongoing} />,
-                    'STD-DONE': <CompletedIcon color={stdStatus.completed} />,
-                    'STD-EXPIRATION': <ExpirationIcon color={stdStatus.expired} />,
-                    'STD-PAUSE': <PauseIcon color={stdStatus.pause} />,
-                    'STD-STOP': <StopIcon color={stdStatus.stop} />,
+                    'STD-CREATED': <NewIcon color={color ? color : stdStatus.new} />,
+                    'STD-PROGRESSION': <OngoingIcon color={color ? color : stdStatus.ongoing} />,
+                    'STD-DONE': <CompletedIcon color={color ? color : stdStatus.completed} />,
+                    'STD-Expired': <ExpiredIcon color={color ? color : stdStatus.expired} />,
+                    'STD-PAUSE': <PauseIcon color={color ? color : stdStatus.pause} />,
                 }[status]
             }
         </span>
@@ -68,14 +67,13 @@ export const TitleStatusIcon = ({ status }: { status: string }) => {
 
 const StudyListItem = ({ study }: StudyListItemProps) => {
     const theme = useTheme();
-    const statusLabel = STUDY_STATUS[study.std_status as STUDY_STATUS_KEY];
-	const [ isEditable, setIsEditable ] = useState(false);
+    // const statusLabel = STUDY_STATUS[study.std_status as STUDY_STATUS_KEY];
+    const [isEditable, setIsEditable] = useState(false);
     const { stdStatus } = theme.palette;
 
-	const { userProfile } = useUserProfile();
+    const { userProfile } = useUserProfile();
 
     const managerList: ManagerList[] = study.managerList;
-
 
     const navigate = useNavigate();
 
@@ -111,18 +109,30 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
         navigate(`/study/detail/${study.std_no}`);
     };
 
-	useEffect(() => {
-		const user_no = userProfile?.user_no;
+    useEffect(() => {
+        const user_no = userProfile?.user_no;
 
-		if(user_no) {			
-			const isEditable = managerList.some(
-				(manager) =>
-					(manager.user_no === user_no && manager.std_privilege === 'OWNER') ||
-					(manager.user_no === user_no && manager.std_privilege === 'MAINTAINER')
-			);
-			setIsEditable(isEditable);
-		}
-	}, [])
+        if (user_no) {
+            const isEditable = managerList.some(
+                (manager) =>
+                    (manager.user_no === user_no && manager.std_privilege === 'OWNER') ||
+                    (manager.user_no === user_no && manager.std_privilege === 'MAINTAINER')
+            );
+            setIsEditable(isEditable);
+        }
+    }, []);
+
+    const today = moment().format('YYYY-MM-DD');
+    const endDate = study.std_end_date;
+
+    const getStatusLabel = () => {
+        if (endDate < today) {
+            return 'Expired';
+        }
+        return STUDY_STATUS[study.std_status as STUDY_STATUS_KEY];
+    };
+
+    const statusLabel = getStatusLabel();
 
     return (
         <>
@@ -135,9 +145,10 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                     ...(study.std_status === 'STD-DONE' && {
                         bgcolor: theme.palette.success.lighter,
                     }), //Completed
-                    ...(study.std_status === 'STD-EXPIRATION' && {
-                        bgcolor: theme.palette.purple.lighter,
-                    }), //EXPIRATION
+                    ...(endDate < today &&
+                        'STD-Expired' && {
+                            bgcolor: theme.palette.purple.lighter,
+                        }), //Expired
                     p: '1rem',
                     cursor: 'pointer',
                 }}
@@ -155,19 +166,29 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                                 ...(study.std_status === 'STD-DONE' && {
                                     color: stdStatus.completed,
                                 }), //Completed
-                                ...(study.std_status === 'STD-EXPIRATION' && {
-                                    color: stdStatus.expired,
-                                }), //EXPIRATION
+                                ...(endDate < today &&
+                                    'STD-Expired' && {
+                                        color: stdStatus.expired,
+                                    }), //Expired
                             }}
                             fontWeight="600"
                         >
-                            <TitleStatusIcon status={study.std_status} /> {statusLabel}
+                            {/* <TitleStatusIcon status={study.std_status} /> {statusLabel} */}
+                            <TitleStatusIcon
+                                status={endDate < today ? 'STD-Expired' : study.std_status}
+                            />{' '}
+                            {statusLabel}
                         </Typography>
-                        <Typography variant="h4" onClick={handleShowStudy} sx={{
-							maxHeight: "30px",
-							textOverflow: "ellipsis",
-							whiteSpace: "nowrap",
-							overflow: "hidden"}}>
+                        <Typography
+                            variant="h4"
+                            onClick={handleShowStudy}
+                            sx={{
+                                maxHeight: '30px',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                            }}
+                        >
                             {study.title}
                         </Typography>
                         <Typography variant="caption" sx={{ color: theme.palette.grey[500] }}>
@@ -226,22 +247,23 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                                     <Paper>
                                         <ClickAwayListener onClickAway={handleClose}>
                                             <MenuList id="study-button-menu" autoFocusItem>
-                                                {study.std_privilege === "OWNER" && study.std_status !== 'STD-DONE' && (
-                                                    <MenuItem
-                                                        onClick={() =>
-                                                            handleInviteMember(study.std_no)
-                                                        }
-                                                    >	
-														{t('study.invite_members')}
-                                                        {/* Invite members */}
-                                                    </MenuItem>
-                                                )}
+                                                {study.std_privilege === 'OWNER' &&
+                                                    study.std_status !== 'STD-DONE' && (
+                                                        <MenuItem
+                                                            onClick={() =>
+                                                                handleInviteMember(study.std_no)
+                                                            }
+                                                        >
+                                                            {t('study.invite_members')}
+                                                            {/* Invite members */}
+                                                        </MenuItem>
+                                                    )}
                                                 {study.std_status !== 'STD-CREATED' && (
                                                     <MenuItem
                                                         component={Link}
                                                         to={`/study/detail/${study.std_no}`}
                                                     >
-														{t('study.veiw_results')}
+                                                        {t('study.veiw_results')}
                                                         {/* Veiw Results */}
                                                     </MenuItem>
                                                 )}

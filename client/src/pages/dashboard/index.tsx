@@ -30,6 +30,16 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import divider from 'antd/es/divider';
 import { useNavigate } from 'react-router-dom';
+import { t } from 'i18next';
+
+interface Logs {
+    study: string;
+    name: string;
+    dateOfBirth: string;
+    enrollmentDate: string;
+    roundInfo: number[];
+    status: string;
+}
 
 const DashboardDefault = () => {
     const theme = useTheme();
@@ -41,7 +51,7 @@ const DashboardDefault = () => {
     const [studyGoal, setStudyGoal] = useState<NumOfParticipantByStudy | null>(null);
     const [monthlyStudyGoalChart, setMonthlyStudyGoalChart] = useState<StudyGoalByMonthlyChart[]>([]);
     const [studyGoalNo, setStudyGoalNo] = useState('');
-
+    const [participantLogs, setParticipantLogs] = useState<Logs[]>([]);
     const navigate = useNavigate();
 
     const getNumberParticipant = async () => {
@@ -68,13 +78,14 @@ const DashboardDefault = () => {
     };
 
     const getStudyGoalByMonthly = async (stdNo: string) => {
+        if (!stdNo) return;
         const response = await dashboardApi.getStudyGoalByMonthly(stdNo);
         if (response.code === 200) {
             const firstItem = response.content.at(0);
             if (!firstItem) return;
             const content = [
                 {
-                    name: '참여자',
+                    name: t('study.participants'),
                     data: [
                         [dayjs(firstItem.ago_5_month).valueOf(), firstItem.num_ago_5_month], //날짜, 참여자 수
                         [dayjs(firstItem.ago_4_month).valueOf(), firstItem.num_ago_4_month],
@@ -111,13 +122,32 @@ const DashboardDefault = () => {
         }
     };
 
+    const createData = (
+        study: string,
+        name: string,
+        dateOfBirth: string,
+        enrollmentDate: string,
+        roundInfo: number[],
+        status: string
+    ) => {
+        return { study, name, dateOfBirth, enrollmentDate, roundInfo, status };
+    };
+
     const getRecentParticipantLogs = async () => {
         const response = await dashboardApi.getRecentParticipantLogs();
+        if (response.code === 200) {
+            const content = response.content;
+            const result = content.map((item) => {
+                return createData(item.study_title, item.full_name, item.birthday, item.created_at, [item.number_answer, item.total_number_survey], item.participation_status);
+            });
+            setParticipantLogs(result);
+        }
     };
 
     useEffect(() => {
         getNumberParticipant();
         getStudyGoalByWeekly();
+        getRecentParticipantLogs();
     }, []);
 
     useEffect(() => {
@@ -230,62 +260,8 @@ const DashboardDefault = () => {
 
     const [goalPercentage, setGoalPercentage] = useState(0);
 
-    const createData = (
-        study: string,
-        name: string,
-        dateOfBirth: string,
-        enrollmentDate: string,
-        roundInfo: number[],
-        status: string
-    ) => {
-        return { study, name, dateOfBirth, enrollmentDate, roundInfo, status };
-    };
-
     const normalise = (value: number[]) => Math.ceil((value[0] / value[1]) * 100);
-
-    const rows = [
-        createData(
-            '레켐비 임상 4상',
-            'Kate Brown',
-            'Dec 10, 2000',
-            'Jun 10, 2024',
-            [3, 12],
-            'In Progress'
-        ),
-        createData(
-            '아토피 부작용 연구',
-            'Daniel Heny',
-            'Nov 20, 1999',
-            'Jun 10, 2024',
-            [12, 12],
-            'Complete'
-        ),
-        createData(
-            '레켐비 임상 4상',
-            'Julia hose Yoon',
-            'Oct 24, 1982',
-            'Jun 10, 2024',
-            [2, 12],
-            'Pending'
-        ),
-        createData(
-            '삭센다 임상 4상',
-            'Clara dew Mio',
-            'Mar 11, 1988',
-            'Jun 10, 2024',
-            [11, 12],
-            'Approved'
-        ),
-        createData(
-            '아토피 삶의 질 연구',
-            'Lily Kim',
-            'Jul 01, 1999',
-            'Jun 10, 2024',
-            [8, 12],
-            'In Progress'
-        ),
-    ];
-
+    
     return (
         <div style={{ position: 'relative' }}>
             <Grid item container rowSpacing={2} columnSpacing={1} flexDirection="row">
@@ -320,6 +296,7 @@ const DashboardDefault = () => {
                                 onChange={handleChangeStudyGoal}
                                 value={studyGoalNo}
                                 size="small"
+								sx={{maxWidth: "200px"}}
                             >
                                 {participantNumber.map((study, index) => (
                                     <MenuItem key={index} value={String(study.std_no)}>
@@ -382,7 +359,7 @@ const DashboardDefault = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {rows.map((row) => (
+                                    {participantLogs.map((row) => (
                                         <TableRow
                                             key={row.name}
                                             sx={{

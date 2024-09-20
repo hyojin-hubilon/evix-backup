@@ -14,6 +14,7 @@ import { Box, Button, DialogActions, InputLabel, Typography } from '@mui/materia
 import studyApi from '@/apis/study';
 import { useNavigate } from 'react-router-dom';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
+import { t } from 'i18next';
 
 const headerHeight = 80;
 
@@ -40,15 +41,18 @@ interface EditViewerProps {
     eicFile: any;
     onClose: () => void;
     studyDetail: StudyDetail;
+    fetchStudyDetail : () => void;
 }
 
-const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
+const EditViewer = ({ eicFile, onClose, studyDetail, fetchStudyDetail }: EditViewerProps) => {
     const navigate = useNavigate();
     const confirm = useConfirmation();
 
     const designerRef = useRef<HTMLDivElement | null>(null);
     const designer = useRef<Designer | null>(null);
     const [lang, setLang] = useState<Lang>('en');
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+
     const [templatePreset, setTemplatePreset] = useState<string>(
         localStorage.getItem('templatePreset') || initialTemplatePresetKey
     );
@@ -125,7 +129,8 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
                 for (const key in schema) {
                     if (seenKeys.has(key)) {
                         confirm({
-                            description: `중복된 필드가 있습니다 Duplicating field name is = (${key}) 서로 다른 필드 명을 가지고 있어야합니다.`,
+							description: t('eic.duplicate_field_found') + ` Duplicating field name is = (${key}) ` + t('eic.different_field_names'),
+                            // description: `중복된 필드가 있습니다 Duplicating field name is = (${key}) 서로 다른 필드 명을 가지고 있어야합니다.`,
                             variant: 'info',
                         });
                         return;
@@ -154,13 +159,18 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
             const response = await studyApi.editEicFile(studyDetail.std_no, formData);
             if (response.code === 200) {
                 confirm({
-                    description: '전자동의서가 변경되었습니다.',
+                    description: t('eic.has_been_saved'), //'전자동의서가 변경되었습니다.',
                     variant: 'info',
                 });
+                fetchStudyDetail();
             }
         } catch (error) {
             console.error('Failed to deploy study: ', error);
         }
+    };
+
+    const handleButtonClick = () => {
+        fileInputRef.current?.click();
     };
 
     useEffect(() => {
@@ -192,7 +202,12 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
                 <Button sx={{ width: '50%', height: '40px' }} variant="outlined" onClick={onClose}>
                     Cancel
                 </Button>
-                <Button sx={{ width: '50%', height: '40px' }} variant="contained" color="primary">
+                <Button
+                    sx={{ width: '50%', height: '40px' }}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleButtonClick}
+                >
                     <InputLabel htmlFor="upload-pdf" style={{ width: 180, color: 'white' }}>
                         Change Base PDF
                     </InputLabel>
@@ -201,6 +216,7 @@ const EditViewer = ({ eicFile, onClose, studyDetail }: EditViewerProps) => {
                         type="file"
                         accept="application/pdf"
                         onChange={onChangeBasePDF}
+                        ref={fileInputRef}
                         hidden
                     />
                 </Button>

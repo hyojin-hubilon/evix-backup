@@ -15,6 +15,7 @@ import EICImage from '@assets/images/eicAgreement.png';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import participantStudyApi from '@/apis/participantStudy';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
+import React from 'react';
 
 const EICAgreement = () => {
     const [participantName, setParticipantName] = useState<string>('');
@@ -36,18 +37,11 @@ const EICAgreement = () => {
     const confirm = useConfirmation();
     const mode: Mode = 'form';
 
+	const pdfArea = React.useMemo(() => <div ref={uiRef} style={{ width: '100%', minHeight: '500px' }} />, []);
+
     const buildUi = (mode: Mode) => {
         const template = initTemplate();
         let inputs = getInputFromTemplate(template);
-        try {
-            const inputsString = localStorage.getItem('inputs');
-            if (inputsString) {
-                const inputsJson = JSON.parse(inputsString);
-                inputs = inputsJson;
-            }
-        } catch {
-            localStorage.removeItem('inputs');
-        }
 
         getFontsData().then((font) => {
             if (uiRef.current) {
@@ -123,6 +117,10 @@ const EICAgreement = () => {
         })
     }, []);
 
+	useEffect(() => {
+		console.log(uiRef);
+	}, [uiRef]);
+
     return (
         <Box sx={{ bgcolor: 'white', minHeight: '100vh', pt: '22px' }}>
             {!submitted ? (
@@ -135,7 +133,7 @@ const EICAgreement = () => {
                         </S.CommonText>
                     </Box>
                     <Box m="20px">
-                        <div ref={uiRef} style={{ width: '100%', height: `calc(100vh - 300px)` }} />
+                        { pdfArea }
                     </Box>
                     <Box mt="80px" m="20px">
                         <S.BigButton fullWidth variant="contained" onClick={handleSubmit}>

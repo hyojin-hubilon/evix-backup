@@ -15,6 +15,7 @@ import * as S from "./styles";
 import { Box, Container, useTheme } from "@mui/material";
 import { QuestionTypes } from '@/types/survey';
 import { Field } from "formik";
+import { t } from "i18next";
 
 type ItemTypeSectionProps = {
 	id: string,
@@ -93,7 +94,7 @@ const ItemTypeSection = ({ id, cardIndex }: ItemTypeSectionProps) => {
 											}
 											
 										}}
-										defaultValue={content.isEtc ? "기타 : " : content.text}
+										defaultValue={content.isEtc ? t('survey.etc') : content.text}
 										disabled={content.isEtc}
 									/>
 									)}
@@ -130,16 +131,17 @@ const ItemTypeSection = ({ id, cardIndex }: ItemTypeSectionProps) => {
 						addSelectItem({
 							id,
 							contentId,
-							text: `옵션 ${contents.filter((content) => !content.isEtc).length + 1}`,
+							text: `${t('survey.option')} ${contents.filter((content) => !content.isEtc).length + 1}`,
 						}),
 					);
 					}}
 				>
-					옵션 추가
+					{t('survey.add_option')}
+					{/* 옵션 추가 */}
 				</S.ItemAddButton>
 				{(inputType === QuestionTypes.SINGLE || inputType === QuestionTypes.MULTIPLE) && !haveEtc ? (
 					<>
-						<span style={{marginLeft: '4px'}}>또는</span>
+						<span style={{marginLeft: '4px'}}>{t('survey.or')}</span>
 						<S.EtcAddButton
 							type="button"
 							onClick={() => {
@@ -152,7 +154,8 @@ const ItemTypeSection = ({ id, cardIndex }: ItemTypeSectionProps) => {
 								);
 							}}
 						>
-							기타 추가
+							{t('survey.add_etc_item')}
+							{/* 기타 추가 */}
 						</S.EtcAddButton>
 					</>
 				) : null}

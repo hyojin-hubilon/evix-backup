@@ -1,6 +1,6 @@
 import Breadcrumbs2 from '@/components/@extended/Breadcrumbs2';
 import { EditOutlined } from '@ant-design/icons';
-import { Avatar, Box, Button, Chip, Grid, Tab, Tabs, Typography } from '@mui/material';
+import { Avatar, Box, Button, Chip, Grid, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ApexDonutChartSeriesType } from './components/overview/CircleChart';
 import StudyOverView from './components/StudyOverview';
@@ -8,8 +8,10 @@ import StudyInfo from './components/StudyInfo';
 import StudyParticipants from './components/StudyParicipations';
 import { useNavigate, useParams } from 'react-router-dom';
 import studyApi from '@/apis/study';
-import { STUDY_STATUS, STUDY_STATUS_KEY } from './components/StudyListItem';
+import { STUDY_STATUS, STUDY_STATUS_KEY, TitleStatusIcon } from './components/StudyListItem';
 import { ParticipantsList, ParticipationRateByAge, totalParticipants } from '@/types/study';
+import dayjs from 'dayjs';
+import { t } from 'i18next';
 
 const StudyDetail = () => {
     const { stdNo } = useParams<{ stdNo: string | undefined }>();
@@ -21,8 +23,12 @@ const StudyDetail = () => {
         useState<ParticipationRateByAge | null>(null);
     const [participantList, setParticipantList] = useState<ParticipantsList[]>([]);
     const [recentParticipantList, setRecentParticipantList] = useState<ParticipantsList[]>([]);
+    const [participationRateByPeriod, setParticipationRateByPeriod] = useState<any>();
 
     const navigate = useNavigate();
+	const theme = useTheme();
+	const { stdStatus } = theme.palette;
+	const today = dayjs().format('YYYY-MM-DD');
 
     useEffect(() => {
         if (stdNo) {
@@ -33,6 +39,7 @@ const StudyDetail = () => {
             fetchOverviewByAge(stdNoParsed);
             fetchParticipantsList(stdNoParsed);
             fetchRecentParticipantList(stdNoParsed);
+            fetchOverviewByPeriod(stdNoParsed, 'WEEK');
         }
     }, [stdNo]);
 
@@ -152,6 +159,15 @@ const StudyDetail = () => {
         }
     };
 
+    const fetchOverviewByPeriod = async (stdNo: number, periodType: 'WEEK' | 'MONTH' | 'YEAR') => {
+        try {
+            const response = await studyApi.participantCountByPeriod(stdNo, periodType);
+            setParticipationRateByPeriod(response.content);
+        } catch (error) {
+            console.error('Failed to fetch participation rate by period: ', error);
+        }
+    };
+
     const [activeTab, setActiveTab] = useState('0');
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -159,13 +175,18 @@ const StudyDetail = () => {
         setActiveTab(newValue);
     };
 
+    const handlePeriodChange = (newPeriod: 'WEEK' | 'MONTH' | 'YEAR') => {
+        console.log('handlePeriodChange newPeriod :: ', newPeriod);
+        if (stdNo) {
+            fetchOverviewByPeriod(parseInt(stdNo, 10), newPeriod);
+        }
+    };
+
+    console.log('totalParticipants:: ', totalParticipants);
     const partCompleteRate: ApexDonutChartSeriesType = {
-        labels: ['참여완료율', '미완료율'],
+        labels: [t('study.completion_rate'), t('study.incomplete_rate')], //"참여완료율","미완료율"
         series: totalParticipants
-            ? [
-                  totalParticipants.participation_late * 100,
-                  100 - totalParticipants.participation_late * 100,
-              ]
+            ? [totalParticipants.participation_late, 100 - totalParticipants.participation_late]
             : [0, 100],
     };
 
@@ -180,11 +201,36 @@ const StudyDetail = () => {
 
     return (
         <>
-            <Breadcrumbs2 />
+            <Breadcrumbs2 sub={studyDetail?.title} />
             <Grid container rowSpacing={3} columnSpacing={1}>
                 <Grid container item xs={12}>
                     <Box display="flex" alignItems="center" gap={1}>
-                        <Chip label={statusLabel} color="primary" />
+                        <Chip
+                            label={
+                                <>
+                                    <TitleStatusIcon
+                                        status={studyDetail?.std_status}
+                                        color="white"
+                                    />{' '}
+                                    {statusLabel}
+                                </>
+                            }
+                            sx={{
+								bgcolor: stdStatus.new,
+                                ...(studyDetail?.std_status === 'STD-PROGRESSION' && {
+                                    bgcolor: stdStatus.ongoing,
+                                }), //Ongoing
+                                ...(studyDetail?.std_status === 'STD-DONE' && {
+                                    bgcolor: stdStatus.completed,
+                                }), //Completed
+                                ...(studyDetail?.endDate < today &&
+                                    'STD-Expired' && {
+                                        bgcolor: stdStatus.expired,
+                                    }), //Expired
+								color: 'white'
+							}}
+							
+                        />
                         <Typography variant="h3">{studyDetail?.title || ''}</Typography>
                         <Button
                             variant="outlined"
@@ -255,6 +301,8 @@ const StudyDetail = () => {
                             totalParticipants={totalParticipants}
                             participationRateByAge={participationRateByAge}
                             participantList={recentParticipantList}
+                            participationRateByPeriod={participationRateByPeriod}
+                            onPeriodChange={handlePeriodChange}
                             onMoreClick={() => setActiveTab('2')} // 최근 참여자 More 버튼 클릭 시 Participants 탭으로 이동
                         />
                     )}

@@ -366,7 +366,7 @@ const SurveyConnectDialog = ({
                                 <Box display="flex" mt="1rem" mb="1rem" gap={1}>
                                     <FormControl size="small" sx={{ width: '400px' }}>
                                         <OutlinedInput
-                                            placeholder="Survey 제목"
+                                            placeholder={t('study.survey_title')}
                                             value={searchText}
                                             onChange={(e) => setSearchText(e.target.value)}
                                         />

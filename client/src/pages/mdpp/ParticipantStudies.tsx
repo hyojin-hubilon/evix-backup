@@ -39,7 +39,7 @@ const ParticipantStudies = () => {
 
     return (
         <Box sx={{ bgcolor: 'white', minHeight: '100vh', pt: '22px' }}>
-            <MdppHeader title="임상연구 설문 참여" backBtn></MdppHeader>
+            <MdppHeader title="임상연구 설문 참여" backBtn backExitWebview></MdppHeader>
             <Box p="23px">
                 <S.CommonText>
                     임상연구에 참여해 주셔서 감사드립니다. 참여하고 있는 연구를 확인하고, 설문을

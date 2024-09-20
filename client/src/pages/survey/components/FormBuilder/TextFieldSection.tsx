@@ -4,6 +4,7 @@ import { CardProps, setText, StateProps } from "@store/reducers/survey";
 import { Input, useTheme } from "@mui/material";
 import { QuestionTypes } from '@/types/survey';
 import { Field } from "formik";
+import { t } from "i18next";
 
 type TextFieldSectionType = {
 	id:string,
@@ -51,7 +52,8 @@ const TextFieldSection = ({ id, cardIndex }:TextFieldSectionType) => {
 						field.onChange(e.target.value);
 						handleDescriptionChange(e);
 					}}
-					placeholder={isTitle ? "설문지 설명" : "답변"}
+					placeholder={isTitle ? t('survey.survey_description') : t('survey.answer')}
+					// "설문지 설명" : "답변" 
 					disabled={!isTitle}
 				/>
 			)}

@@ -86,7 +86,7 @@ export default function LandingPage() {
     }
 
     return (
-        <Box className="landing" sx={{bgcolor: 'white'}}>
+        <Box className="landing" sx={{bgcolor: 'white'}} id="top">
             {/* Section 01*/}
             <Box className="section section-01">
                 <Container maxWidth="xl">
@@ -110,9 +110,9 @@ export default function LandingPage() {
                             },
                         }}
                     >
-                        {t('landing.make_the_world')}
+                        {t('landing.new_metrics')}
                         <br />
-                        {t('landing.with_data')}
+                        {t('landing.decentralized_clinical')}
                     </Typography>
                     <Typography
                         sx={{
@@ -131,9 +131,9 @@ export default function LandingPage() {
                             lineHeight: 1.56,
                         }}
                     >
-                        {t('landing.initiation_of_a')}
+                        {t('landing.enhance_evidence_based')}
                         <br />
-                        {t('landing.join_us_with')}
+                        {t('landing.of_participant')}
                     </Typography>
                 </Container>
             </Box>
@@ -156,7 +156,7 @@ export default function LandingPage() {
                                 },
                             }}
                         >
-							{t('landing.it_increase')}
+							{t('landing.boost_convenience')}
                         </Typography>
                         <Typography
                             variant="h2"
@@ -167,7 +167,7 @@ export default function LandingPage() {
                                 },
                             }}
                         >
-                        	{t('landing.of_the_clinical')}
+                        	{t('landing.with_our')}
                         </Typography>
                         <Typography
                             sx={{
@@ -185,15 +185,11 @@ export default function LandingPage() {
                                 },
                             }}
                         >
-                            <SpanStyled>{t('landing.evix_dct_platform_is')}</SpanStyled>
                             <SpanStyled>
-                                {t('landing.it_provides_optimized')}
+                                {t('landing.discover_how')}
                             </SpanStyled>
                             <SpanStyled>
-                                {t('landing.and_report_collected')}
-                            </SpanStyled>
-                            <SpanStyled>
-                                {t('landing.linkage_analysis_and')}
+                                {t('landing.for_seamless')}
                             </SpanStyled>
                         </Typography>
                     </Box>
@@ -201,7 +197,7 @@ export default function LandingPage() {
             </Box>
 
             {/* Section 03*/}
-            <Box className="section section-03">
+            <Box className="section section-03" id="products">
                 <Box
                     sx={{
                         bgcolor: '#f7f9ff',
@@ -226,19 +222,7 @@ export default function LandingPage() {
                                 <Section03H4>{t('landing.electronic_patient')}</Section03H4>
                                 <Section03P>
                                     <SpanStyled>
-                                        {t('landing.it_provides_important')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.provides_key_information')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.and_safety_evaluation')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.improved_data_accuracy')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.there_is_a_reduction')}
+                                        {t('landing.e_pro_description')}
                                     </SpanStyled>
                                 </Section03P>
                             </Grid>
@@ -271,22 +255,7 @@ export default function LandingPage() {
                                 <Section03H4>{t('landing.electronic_clinical')}</Section03H4>
                                 <Section03P>
                                     <SpanStyled>
-                                        {t('landing.including_not_only')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.healthcare_providers')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.comprehensive_data')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.reliability_of_data')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.in_paper-based_data')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.and_analysis')}
+                                        {t('landing.e_coa_description')}
                                     </SpanStyled>
                                 </Section03P>
                             </Grid>
@@ -320,19 +289,7 @@ export default function LandingPage() {
                                 <Section03H4>{t('landing.electronic_case')}</Section03H4>
                                 <Section03P>
                                     <SpanStyled>
-                                        {t('landing.it_provides_a_variety')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.verification_reporting')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.and_reducing_errors')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.the_system_allows')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.necessary_and_improve')}
+                                        {t('landing.e_crf_description')}
                                     </SpanStyled>
                                 </Section03P>
                             </Grid>
@@ -365,16 +322,7 @@ export default function LandingPage() {
                                 <Section03H4>{t('landing.clinical_data')}</Section03H4>
                                 <Section03P>
                                     <SpanStyled>
-                                        {t('landing.clinical_data_provides')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.in_conjunction_with')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.the_rwe_big')}
-                                    </SpanStyled>
-                                    <SpanStyled>
-                                        {t('landing.and_learning_outcomes')}
+                                        {t('landing.cdms_desciprion')}
                                     </SpanStyled>
                                 </Section03P>
                             </Grid>
@@ -430,7 +378,7 @@ export default function LandingPage() {
             </Box>
 
             {/* Section 05 */}
-            <Box className="section section-05">
+            <Box className="section section-05" id="case">
                 <Container maxWidth="xl">
                     <Grid container alignItems="center" justifyContent="center" gap={4}>
                         <Grid item xs={5}>
@@ -448,7 +396,7 @@ export default function LandingPage() {
                                     mb: { xs: '1rem', md: '1.2rem' },
                                 }}
                             >
-                                {t('landing.e_crf_system')}
+                                {t('landing.study_case')}
                             </Typography>
                             <Typography
                                 variant="h3"
@@ -457,9 +405,7 @@ export default function LandingPage() {
                                     mb: { xs: '1rem', md: '1.9rem' },
                                 }}
                             >
-                                <SpanStyled>{t('landing.it_s_a_treatment')}</SpanStyled>
-                                <SpanStyled>{t('landing.dermatitis_safety')}</SpanStyled>
-                                <SpanStyled>{t('landing.study')}</SpanStyled>
+                                <SpanStyled>{t('landing.study_on_adverse')}</SpanStyled>
                             </Typography>
                             <Typography
                                 sx={{
@@ -471,10 +417,7 @@ export default function LandingPage() {
                                 }}
                             >
                                 <SpanStyled>
-                                    {t('landing.participation_of_soonchunhyang')}
-                                </SpanStyled>
-                                <SpanStyled>
-                                    {t('landing.korean_hospitals')}
+                                    {t('landing.study_on_adverse_description')}
                                 </SpanStyled>
                             </Typography>
                             <Typography>{t('landing.hospital')}</Typography>
@@ -502,7 +445,7 @@ export default function LandingPage() {
                                     mb: { xs: '1rem', md: '1.2rem' },
                                 }}
                             >
-								{t('landing.e_crf_system')}
+								{t('landing.study_case')}
                             </Typography>
                             <Typography
                                 variant="h3"
@@ -511,9 +454,7 @@ export default function LandingPage() {
                                     mb: { xs: '1rem', md: '1.9rem' },
                                 }}
                             >
-                                <SpanStyled>{t('landing.it_s_a_treatment')}</SpanStyled>
-                                <SpanStyled>{t('landing.dermatitis_safety')}</SpanStyled>
-                                <SpanStyled>{t('landing.study')}</SpanStyled>
+                                <SpanStyled>{t('landing.predictive_study')}</SpanStyled>
                             </Typography>
                             <Typography
                                 sx={{
@@ -525,10 +466,7 @@ export default function LandingPage() {
                                 }}
                             >
                                 <SpanStyled>
-									{t('landing.participation_of_soonchunhyang')}
-                                </SpanStyled>
-                                <SpanStyled>
-									{t('landing.korean_hospitals')}
+									{t('landing.predictive_study_description')}
                                 </SpanStyled>
                             </Typography>
                             <Typography>{t('landing.hospital')}</Typography>
@@ -552,6 +490,7 @@ export default function LandingPage() {
             </Box>
 
             {/* Section 07 */}
+            <div id="price" />
             <Box
                 className="section section-07"
                 sx={{
@@ -567,9 +506,9 @@ export default function LandingPage() {
                             mb: { xs: '2rem', md: '4.375rem' },
                         }}
                     >
-                        {t('landing.on_a_monthly')}
+                        {t('landing.a_monthly_subscription')}
                         <br />
-                        {t('landing.it_will_be_paid')}
+                        {t('landing.based_on_the_duration')}
                         <br />
                     </Typography>
                     <Box
@@ -610,7 +549,7 @@ export default function LandingPage() {
                             </Box>
                         </Button>
                     </Box>
-                    <Grid
+                    {/* <Grid
                         container
                         spacing={{ xs: 4, md: 5 }}
                         alignItems="center"
@@ -658,7 +597,7 @@ export default function LandingPage() {
                                 {t('landing.e_crf')}
                             </Typography>
                         </Grid>
-                    </Grid>
+                    </Grid> */}
                 </Container>
             </Box>
 
@@ -749,35 +688,23 @@ export default function LandingPage() {
                                 variant="h2"
                                 sx={{
                                     fontWeight: 700,
-                                    fontSize: { sx: '1.5rem', md: '3.125rem' },
+                                    fontSize: { sx: '1.5rem', md: '2.7rem' },
                                     mt: { xs: '2.5rem', md: '5.25rem' },
                                 }}
                             >
-								{t('landing.healthcare_mydata')}
+								{t('landing.ready_to_partner')}
                                 <br />
-								{t('landing.rwe_big_data')}
-                                <br />
-                                {t('landing.work_together')}
+								{t('landing.the_smart_platform')}
                             </Typography>
                             <Typography
                                 variant="h5"
                                 sx={{
                                     mt: { xs: '1.5rem', md: '3rem' },
                                     fontWeight: 300,
-                                    fontSize: { xs: '0.9rem', md: '1.5rem' },
+                                    fontSize: { xs: '0.9rem', md: '1.3rem' },
                                 }}
                             >
-                                <SpanStyled>{t('landing.evix-dct_platform_is')}</SpanStyled>
-                                <SpanStyled>
-									{t('landing.it_provides_optimized_02')}
-                                </SpanStyled>
-                                <SpanStyled>
-                                    {t('landing.analyze_and_report')}
-                                </SpanStyled>
-                                <SpanStyled>{t('landing.conjunction_with_medical')}</SpanStyled>
-                                <SpanStyled>
-                                    {t('landing.linkage_analysis')}
-                                </SpanStyled>
+                                <SpanStyled>{t('landing.evix-dct_is_a_clinical')}</SpanStyled>
                             </Typography>
                         </Grid>
                         <Grid

@@ -221,13 +221,33 @@ export const surveyCycle = {
     DAILY: '일',
 };
 
+export const surveyCycleEn = {
+    WEEKLY: 'week',
+    MONTHLY: 'month',
+    DAILY: 'day',
+};
+
 // 액션 타입에 대한 한글 메시지 매핑
 export const actionMessages = {
     delete: '삭제',
     pause: '일시정지',
-    stop: '중지',
+    done: '완료',
     progression: '재시작',
 };
+
+export const actionMessagesEn = {
+    delete: 'Delete',
+    pause: 'Pause',
+    done: 'Complete',
+    progression: 'Restart',
+};
+
+export const actionMessagesEnPast = {
+	delete: 'deleted',
+    pause: 'paused',
+    done: 'completed',
+    progression: 'restarted',
+}
 
 // Study 연령별 참여율
 export interface ParticipationRateByAge {

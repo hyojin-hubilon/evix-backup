@@ -5,6 +5,9 @@ import {
     gridClasses,
 } from '@mui/x-data-grid';
 import { Box, Grid, useTheme } from '@mui/material';
+import { ParticipantsList } from '@/types/study';
+import { useState } from 'react';
+import SurveyAnswerView from './participants/SurveyAnswerView';
 
 function CustomToolbar() {
     return (
@@ -14,7 +17,12 @@ function CustomToolbar() {
     );
 }
 
-const StudyParticipants = ({ participantList }) => {
+export type SelectedParticipantType = {
+	stdNo:number | null,
+	participantNo: number | null
+}
+
+const StudyParticipants = ({ participantList } : {participantList: ParticipantsList[]}) => {
     const theme = useTheme();
     const rows = participantList.map((participant, index) => ({
         id: participant.participant_no,
@@ -25,7 +33,12 @@ const StudyParticipants = ({ participantList }) => {
         roundInfo: participant.number_answer + '/' + participant.total_number_survey,
         institution: participant.allotment_agency_name,
         status: participant.participation_status === 'PROGRESS' ? 'In Progress' : 'Complete',
+		stdNo: participant.std_no,
+		participantNo: participant.participant_no
     }));
+
+	const [ selectedParticipant, setSelectedParticipant ] = useState<SelectedParticipantType>({stdNo: null, participantNo: null });
+	const [ showSurveyList, setShowSurveyList] = useState<boolean>(false);
 
     const columns = [
         { field: 'name', headerName: 'Name', width: 150 },
@@ -37,8 +50,23 @@ const StudyParticipants = ({ participantList }) => {
         { field: 'status', headerName: 'Status', width: 150 },
     ];
 
+
+	
+	const handleSelectOne = (e) => {
+		console.log(e);
+		if(e.row.stdNo && e.row.participantNo) {
+			setSelectedParticipant({stdNo: e.row.stdNo, participantNo: e.row.participantNo })
+			setShowSurveyList(true);
+		}	
+	}
+
+	const handleCloseSurveyDialog = () => {
+		setShowSurveyList(false);
+		setSelectedParticipant({stdNo: null, participantNo: null })
+	}
+
     return (
-        <Grid xs={12}>
+        <Grid item xs={12}>
             <Box sx={{ minHeight: 400, width: '100%' }}>
                 <DataGrid
                     columns={columns}
@@ -47,6 +75,7 @@ const StudyParticipants = ({ participantList }) => {
                     disableColumnFilter
                     disableColumnSelector
                     disableDensitySelector
+					onRowClick={handleSelectOne}
                     slots={{ toolbar: CustomToolbar }}
                     sx={{
                         border: '1px solid #ddd',
@@ -61,6 +90,11 @@ const StudyParticipants = ({ participantList }) => {
                     }}
                 />
             </Box>
+			<SurveyAnswerView
+				isOpen={showSurveyList}
+				handleClose={handleCloseSurveyDialog}
+				participant={selectedParticipant}
+			/>
         </Grid>
     );
 };

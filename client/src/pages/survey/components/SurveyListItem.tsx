@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { useRef, useState } from 'react';
 import surveyApi from '@/apis/survey';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
+import { t } from 'i18next';
 
 type SurveyListItemProps = {
 	survey: MySurveyList,
@@ -42,8 +43,8 @@ const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
 
 	const handleCopy = () => {
 		confirm({
-			title: "설문 복제",
-			description: "이 설문을 복제하시겠습니까?"
+			title: t('survey.duplicate_the_survey'), //"설문 복제"
+			description: t('survey.would_duplicate_survey')//"이 설문을 복제하시겠습니까?"
 		})
 		.then(() => { 
 			navigate(`/survey/copy/${survey.survey_no}`, {state: 'copy'});
@@ -52,8 +53,8 @@ const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
 
 	const handleDelete = () => {
 		confirm({
-			title: "설문 삭제",
-			description: "이 설문을 삭제하시겠습니까?"
+			title: t('survey.delete_survey'),//"설문 삭제",
+			description: t('survey.sure_delete_survey')//"이 설문을 삭제하시겠습니까?"
 		})
 		.then(() => { 
 			deleteThisSurvey()
@@ -79,22 +80,26 @@ const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
             >
                 <Grid container>
                     <Grid item xs={8}>
-                        {/* 임시저장 등 status 추가되어야 함 */}
                         
 						{ survey.study_title ? 
 							<Typography variant="h6" color="primary.main">
-								<LinkOutlined /><span style={{fontSize:"0.9rem", marginLeft: "0.3rem", marginRight: "0.5rem"}}>{ survey.study_title }</span> <Link to={`/study/detail/${survey.std_no}`} style={{color: theme.palette.secondary.dark}}>Study 바로가기</Link>
+								<LinkOutlined />
+								<span style={{fontSize:"0.9rem", marginLeft: "0.3rem", marginRight: "0.5rem"}}>{ survey.study_title }</span>
+								<Link to={`/study/detail/${survey.std_no}`} style={{color: theme.palette.secondary.dark}}>
+								{t('survey.go_to_study')}
+								{/* Study 바로가기 */}
+								</Link>
 							</Typography>
 							:
-							<Typography variant="h6" color="secondary.main">작성중</Typography> 
+							<Typography variant="h6" color="secondary.main">{t('survey.under_construction')}</Typography> 
 						} 
 					
                         <Typography variant="h4" mt="0.3rem" mb="0.3rem">{survey.title}</Typography>
 						<Typography>
-							<span style={{fontWeight:600}}>{ survey.created_user_first_name } { survey.created_user_last_name }</span> | <span>{survey.question_number}문항</span>
+							<span style={{fontWeight:600}}>{ survey.created_user_first_name } { survey.created_user_last_name }</span> | <span>{survey.question_number}{t('survey.questions')}</span>
                         </Typography>
                         <Typography variant="caption" sx={{ color: theme.palette.grey[500] }} mb="0">
-                            생성일 { dayjs(survey.created_at).format('YYYY.MM.DD') }
+                            {t('survey.created_date')} { dayjs(survey.created_at).format('YYYY.MM.DD') }
                         </Typography>
                       
                     </Grid>
@@ -148,9 +153,18 @@ const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
 								<Paper>
 								<ClickAwayListener onClickAway={handleClose}>
 									<MenuList id="split-button-menu" autoFocusItem>
-										<MenuItem onClick={handlePreview}>미리보기</MenuItem>
-										<MenuItem onClick={handleCopy}>설문복사</MenuItem>
-										<MenuItem onClick={handleDelete}>삭제</MenuItem>
+										<MenuItem onClick={handlePreview}>
+											{t('survey.preview')}
+											{/* 미리보기 */}
+										</MenuItem>
+										<MenuItem onClick={handleCopy}>
+											{t('survey.duplicate_the_survey')}
+											{/* 설문복사 */}
+										</MenuItem>
+										<MenuItem onClick={handleDelete}>
+											{t('common.delete')}
+											{/* 삭제 */}
+										</MenuItem>
 									</MenuList>
 								</ClickAwayListener>
 								</Paper>

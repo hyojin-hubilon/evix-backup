@@ -13,6 +13,7 @@ import {
     Typography,
     useTheme,
 } from '@mui/material';
+import { t } from 'i18next';
 
 const RecentParticipant = ({ participantList, onMoreClick }) => {
     const theme = useTheme();
@@ -34,7 +35,7 @@ const RecentParticipant = ({ participantList, onMoreClick }) => {
             <Grid container>
                 <Grid item xs={6}>
                     <Typography variant="h6" color="textSecondary">
-                        최근 참여자
+                        {t('study.recent_participant_logs')}
                     </Typography>
                 </Grid>
                 <Grid item xs={6} display="flex" justifyContent="flex-end">
