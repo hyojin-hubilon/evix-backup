@@ -5,6 +5,7 @@ import { NumOfParticipantByStudy } from "@/types/dashboard"
 
 
 import Carousel from 'react-multi-carousel';
+import { t } from "i18next";
 
 
 type ParticipantNumsType = {
@@ -16,7 +17,7 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 		const targetNumber = studyNum.target_number;
 		
 		return {
-			labels: ['참여자', '미참여자'],
+			labels: [t('study.completion'), t('study.incomplete')], //참여자, 미참여자
 			series: [studyNum.number_participant, (targetNumber - studyNum.number_participant)],
 		};
 	}

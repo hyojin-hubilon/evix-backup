@@ -16,6 +16,8 @@ type StudyOverviewProps = {
     };
     participationRateByAge: ParticipationRateByAge;
     participantList: ParticipantsList[];
+    participationRateByPeriod: any;
+    onPeriodChange: (newPeriod: 'WEEK' | 'MONTH' | 'YEAR') => void;
     onMoreClick: () => void;
 };
 
@@ -24,6 +26,8 @@ const StudyOverView = ({
     totalParticipants,
     participationRateByAge,
     participantList,
+    participationRateByPeriod,
+    onPeriodChange,
     onMoreClick,
 }: StudyOverviewProps) => {
     return (
@@ -69,18 +73,21 @@ const StudyOverView = ({
             </Grid>
 
             <Grid container item columnSpacing={1.5}>
-                <Grid item xs={7}>
+                <Grid item xs={12}>
                     <MainCard sx={{ height: '300px' }} overflow="visible">
-                        <AllPartTransitionChart title={t('study.total_participant_trends')} />
+                        <AllPartTransitionChart
+                            title={t('study.total_participant_trends')}
+                            participationRateByPeriod={participationRateByPeriod}
+                            onPeriodChange={onPeriodChange}
+                        />
                         {/* 전체 참여자 추이 */}
                     </MainCard>
                 </Grid>
-                <Grid item xs={5}>
+                {/* <Grid item xs={5}>
                     <MainCard sx={{ height: '300px' }}>
                         <PartByHospitalsChart title={t('study.status_by_institution')} />
-                        {/* 병원별 참여자 */}
                     </MainCard>
-                </Grid>
+                </Grid> */}
             </Grid>
 
             <Grid item xs={12}>

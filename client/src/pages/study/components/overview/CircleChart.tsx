@@ -22,7 +22,7 @@ const CircleChart = (props: CircleChartProps) => {
 	useEffect(() => {
 		setChartOptions((prevState) => ({
 			...prevState,
-			colors: [theme.palette.primary.main, theme.palette.grey[300]],
+			colors: [theme.palette.primary.main, theme.palette.grey[400]],
 			legend: {
 				show: false
 			},

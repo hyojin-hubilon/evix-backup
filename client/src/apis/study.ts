@@ -8,6 +8,7 @@ import {
     file_api,
 } from '@/apis/axios-common';
 import * as StudyApiType from '@/types/study';
+import { ParticipantsList } from '@/types/study';
 
 const BASE_API_URL = '/researcher/study';
 
@@ -405,7 +406,7 @@ const studyApi = {
     /**
      * Study에 연결된 EIC 파일 수정
      */
-    editEicFile: async (stdNo:number, formData: FormData) => {
+    editEicFile: async (stdNo: number, formData: FormData) => {
         try {
             const responseData = await file_api<{ std_no: number }>(
                 `${BASE_API_URL}/upload-eic?std_no=${stdNo}`,
@@ -424,7 +425,7 @@ const studyApi = {
      */
     participantList: async (stdNo: Number) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/list-participant`, 'get');
+            const responseData = await api<ParticipantsList[]>(`${BASE_API_URL}/${stdNo}/list-participant`, 'get');
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
@@ -440,6 +441,25 @@ const studyApi = {
         try {
             const responseData = await api<{}>(
                 `${BASE_API_URL}/${stdNo}/overview/recent-participant-logs`,
+                'get'
+            );
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+
+    /**
+     * Study 전체 참여자 추이
+     * @param stdNo
+     * @param periodType (연간-YEAR, 월간-MONTH, 주간-WEEK)
+     * @returns
+     */
+    participantCountByPeriod: async (stdNo: Number, periodType: 'YEAR' | 'MONTH' | 'WEEK') => {
+        try {
+            const responseData = await api<{}>(
+                `${BASE_API_URL}/${stdNo}/overview/number-of-gender-participant-by-study/${periodType}`,
                 'get'
             );
             return responseData;

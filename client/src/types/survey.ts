@@ -15,7 +15,7 @@ export interface ExampleList { //예시목록
 	example_no: number,
 	example_title: string,
 	example_type: ExampleTypes,
-	example_value: string,
+	example_value: number,
 	sort: number
 }
 export interface QuestionList {
@@ -144,4 +144,15 @@ export interface SurveyPostResponse {
 
 export interface SurveyPutReqBody extends SurveyPostReqBody {
 	survey_no: number | string;
+}
+
+export interface ParticipantSurveyAnswerSet {
+	answer_cycle: string | Date;
+	answer_turn: number;
+	created_at: string | Date;
+	participant_no : number;
+	set_no : number;
+	survey_answer_no: number;
+	survey_no: number;
+	survey_title: string;
 }
