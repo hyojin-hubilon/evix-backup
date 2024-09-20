@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import SurveyPreview from "./SurveyPreview";
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { Label } from "./components/FromView/InputRadio/styles";
+import mastersApi from "@/apis/masters";
 
 const SurveySampleNew = () => {
 	const { ref, isSticky } = useSticky();
@@ -61,7 +62,7 @@ const SurveySampleNew = () => {
 
 	const postNewSurvey = async (survey:SurveyPostReqBody, temp:boolean) => {
 		try {
-			const response = await surveyApi.postNewSurvey(survey); 
+			const response = await mastersApi.postNewSurveySample(survey); 
 			if (response.result && response.code === 200) {
 				console.log(response);
 
@@ -80,7 +81,7 @@ const SurveySampleNew = () => {
 	const putSurvey = async (survey:SurveyPutReqBody, temp:boolean) => {
 		
 		try {
-			const response = await surveyApi.saveSurvey(survey); 
+			const response = await mastersApi.saveSurveySample(survey); 
 			if (response.result && response.code === 200) {
 				console.log(response);
 
@@ -106,7 +107,7 @@ const SurveySampleNew = () => {
 		const newSurvey : SurveyPostReqBody = {
 			title: '',
 			description: '',
-			sample_yn: 'Y',
+			// sample_yn: 'Y',
 			questionList: [],
 			disease: disease
 		}

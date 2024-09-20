@@ -219,9 +219,9 @@ const SurveyNew = () => {
 		const newSurvey : SurveyPostReqBody = {
 			title: '',
 			description: '',
-			sample_yn: 'N',
+			// sample_yn: 'N',
 			questionList: [],
-			disease: disease ? disease : ''
+			// disease: disease ? disease : ''
 		}
 		
 		cards.forEach((card : CardProps, index:number) => {

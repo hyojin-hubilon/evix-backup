@@ -292,7 +292,8 @@
 		"large_screen" : "Large screen",
 		"mobile_screen" : "Mobile screen",
 		"end_preview" : "End preview",
-		"add_a_question" : "Add a question"
+		"add_a_question" : "Add a question",
+		"new_survey_sample" : "New Survey Sample"
 	},
     "user": {},
     "settings": {

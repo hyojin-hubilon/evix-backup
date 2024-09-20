@@ -4,7 +4,7 @@ export interface LoginReq {
 }
 
 export enum PrivilegeTypes { // 사용자 권한
-	Master = "Master",//시스템 마스터(최상위 개념)
+	Master = "MASTER",//시스템 마스터(최상위 개념)
 	Manager = "Manager",//서비스 관리자
 	Researcher = "Researcher",//연구원(일반)
 	Caregiver = "Caregiver",//간병인(요양사)

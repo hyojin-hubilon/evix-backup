@@ -11,9 +11,9 @@ const SurveySampleNew = Loadable(lazy(() => import('@pages/survey/SurveySampleNe
 import SurveyPreview from '@pages/survey/SurveyPreview';
 const SampleList = Loadable(lazy(() => import('@pages/survey/SampleList')));
 
-// ==============================|| STUDY ROUTING ||============================== //
+// ==============================|| SURVEY ROUTING ||============================== //
 
-const SettingsRoutes = {
+const SurveyRoutes = {
     path: '/survey',
     element: <MainLayout />,
     children: [
@@ -54,4 +54,4 @@ const SettingsRoutes = {
     ],
 };
 
-export default SettingsRoutes;
+export default SurveyRoutes;

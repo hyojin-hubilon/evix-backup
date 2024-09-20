@@ -64,7 +64,12 @@ const AuthLogin = () => {
                         }
                         if (code === 200) {
                             setStatus({ success: true });
-                            navigate('/dashboard');
+                            
+							if(content.privilege === AuthApiType.PrivilegeTypes.Master) {
+								navigate('/master/samples');
+							} else {
+								navigate('/dashboard');
+							}
                         }
                     } catch (e) {
 						confirm({description : 'This surfactant is already in use.', variant : 'info'});
