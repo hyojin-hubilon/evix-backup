@@ -42,7 +42,7 @@ const Help = () => {
 					mt={1}
 					
 				>
-					<Grid item xs={8}>
+					<Grid item xs={10}>
 						<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
 							startAdornment={
 								<InputAdornment position="start">
@@ -54,9 +54,9 @@ const Help = () => {
 							placeholder={t('help.search_placeholder')} //도움말을 검색해보세요.
 						/>
 					</Grid>
-					<Grid item xs={2}>
+					<Grid item xs={1.9}>
 						<Button variant="contained" onClick={handleMoveToSupport} fullWidth>
-							<LiveHelpIcon sx={{mr:'0.5rem'}}/>
+							<LiveHelpIcon sx={{fontSize:'1rem', mr:'0.5rem'}}/>
 							<Typography>
 								{t('help.contact_us')}
 								{/* 문의하기 */}
