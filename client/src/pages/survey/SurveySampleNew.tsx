@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import SurveyPreview from "./SurveyPreview";
 import mastersApi from "@/apis/masters";
 import { useConfirmation } from "@/context/ConfirmDialogContext";
+import { t } from "i18next";
 
 const SurveySampleNew = () => {
 	const { ref, isSticky } = useSticky();
@@ -248,8 +249,7 @@ const SurveySampleNew = () => {
 				const survey = response.content;
 				setSurveyDetail(survey);
 
-				if(survey.sample_yn === 'Y') {
-					
+				if(survey.disease) {
 					setDisease(survey.disease);
 				}
 
@@ -273,7 +273,7 @@ const SurveySampleNew = () => {
 	useEffect(() => {
 		if(parmas.survey_no) {
 			setSurveyNo(Number(parmas.survey_no));
-			getSampleSurveyDeatil(parmas.survey_no)
+			getSampleSurveyDeatil(parmas.survey_no);
 		}
 	}, [])
 
@@ -304,16 +304,16 @@ const SurveySampleNew = () => {
 									>
 										<Box display="flex" alignItems="center">
 											{
-												!isSticky && <Typography variant="h3" color="secondary.dark">Sample Survey 생성</Typography>
+												!isSticky && <Typography variant="h3" color="secondary.dark">{t('survey.new_survey_sample')}</Typography>
 											}
 											
 											<Box display="flex" justifyContent="flex-end" gap={1} sx={{ml: 'auto'}}>
 												{
-													surveyNo && <Button variant="outlined" onClick={handlePreview}>미리보기</Button>
+													surveyNo && <Button variant="outlined" onClick={handlePreview}>{t('common.preview')}</Button>
 												}
 												
-												<Button variant="outlined" disabled={isSubmitting} onClick={() => handleButtonClick(true, formikProps)}>임시저장</Button>
-												<Button variant="contained" disabled={isSubmitting} onClick={() => handleButtonClick(false, formikProps)}>저장</Button>
+												<Button variant="outlined" disabled={isSubmitting} onClick={() => handleButtonClick(true, formikProps)}>{t('survey.save_temporarily')}</Button>
+												<Button variant="contained" disabled={isSubmitting} onClick={() => handleButtonClick(false, formikProps)}>{t('common.save')}</Button>
 											</Box>
 										</Box>
 									
