@@ -62,7 +62,7 @@ const SurveyPreview = ({surveyNo, handleClose, isDialog, headerHide, isMaster} :
 				
 				<Grid item xs={12} justifyContent="center">
 					<Box width={tab == '0' ? '80%' : '390px'} sx={{margin:'0 auto'}}>
-						<SurveyView preview={true} surveyNo={surveyNo} isMaster={true}/>
+						<SurveyView preview={true} surveyNo={surveyNo} isMaster={isMaster}/>
 					</Box>
 				</Grid>
 			</Grid>
