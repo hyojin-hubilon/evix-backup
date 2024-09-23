@@ -18,7 +18,9 @@ const GenderAgeChart = ({
             name: t('study.male'),
             data: [
                 totalParticipants > 0
-                    ? Number((participationRateByAge.num_male / totalParticipants) * 100).toFixed()
+                    ? Number(
+                          ((participationRateByAge.num_male / totalParticipants) * 100).toFixed()
+                      )
                     : 0,
             ],
         },
@@ -27,8 +29,8 @@ const GenderAgeChart = ({
             data: [
                 totalParticipants > 0
                     ? Number(
-                          (participationRateByAge.num_female / totalParticipants) * 100
-                      ).toFixed()
+                          ((participationRateByAge.num_female / totalParticipants) * 100).toFixed()
+                      )
                     : 0,
             ],
         },
