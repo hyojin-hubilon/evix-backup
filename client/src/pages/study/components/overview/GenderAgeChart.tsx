@@ -11,18 +11,16 @@ const GenderAgeChart = ({
 }) => {
     const theme = useTheme();
 
-    // console.log('📌📌📌 participationRateByAge📌📌📌: ', participationRateByAge);
-
     const totalParticipants = participationRateByAge.num_male + participationRateByAge.num_female;
-
-    // console.log('총몇명? totalParticipants:: ', totalParticipants);
 
     const genderChartSeries = [
         {
             name: t('study.male'),
             data: [
                 totalParticipants > 0
-                    ? (participationRateByAge.num_male / totalParticipants) * 100
+                    ? Number(
+                          ((participationRateByAge.num_male / totalParticipants) * 100).toFixed()
+                      )
                     : 0,
             ],
         },
@@ -30,7 +28,9 @@ const GenderAgeChart = ({
             name: t('study.female'),
             data: [
                 totalParticipants > 0
-                    ? (participationRateByAge.num_female / totalParticipants) * 100
+                    ? Number(
+                          ((participationRateByAge.num_female / totalParticipants) * 100).toFixed()
+                      )
                     : 0,
             ],
         },

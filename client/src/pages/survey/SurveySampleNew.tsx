@@ -5,13 +5,14 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addExistCard, CardProps, ItemTypeProps, resetAll, resetCards, StateProps } from "@/store/reducers/survey";
 import { ExampleTypes, QuestionDivision, QuestionTypes, SurveyDetail, SurveyPostReqBody, SurveyPutReqBody, SurveyQuestion } from "@/types/survey";
-import surveyApi from "@/apis/survey";
+
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
 import SurveyPreview from "./SurveyPreview";
-import { useConfirmation } from '@/context/ConfirmDialogContext';
-import { Label } from "./components/FromView/InputRadio/styles";
+import mastersApi from "@/apis/masters";
+import { useConfirmation } from "@/context/ConfirmDialogContext";
+import { t } from "i18next";
 
 const SurveySampleNew = () => {
 	const { ref, isSticky } = useSticky();
@@ -58,10 +59,14 @@ const SurveySampleNew = () => {
 	
 	const [ surveyNo, setSurveyNo ] = useState<string | number | null>(null);
 	const [ isPreview, setIsPreview ] = useState(false);
+	const [ surveyDetail, setSurveyDetail ] = useState<SurveyDetail | null>(null);
+
+	const parmas = useParams();
+	const confirm = useConfirmation();
 
 	const postNewSurvey = async (survey:SurveyPostReqBody, temp:boolean) => {
 		try {
-			const response = await surveyApi.postNewSurvey(survey); 
+			const response = await mastersApi.postNewSurveySample(survey); 
 			if (response.result && response.code === 200) {
 				console.log(response);
 
@@ -69,7 +74,7 @@ const SurveySampleNew = () => {
 				
 				if(!temp) {//임시저장이 아닐경우
 					dispatch(resetCards()); //localStorage에 저장된 설문내용 삭제
-					navigate('/survey');//서베이 리스트로 이동
+					navigate('/master/samples');//서베이 리스트로 이동
 				}
 			}
 		} catch (error) {
@@ -80,7 +85,7 @@ const SurveySampleNew = () => {
 	const putSurvey = async (survey:SurveyPutReqBody, temp:boolean) => {
 		
 		try {
-			const response = await surveyApi.saveSurvey(survey); 
+			const response = await mastersApi.saveSurveySample(survey); 
 			if (response.result && response.code === 200) {
 				console.log(response);
 
@@ -88,7 +93,7 @@ const SurveySampleNew = () => {
 				
 				if(!temp) {//임시저장이 아닐경우
 					dispatch(resetCards()); //localStorage에 저장된 설문내용 삭제
-					navigate('/survey');//서베이 리스트로 이동
+					navigate('/master/samples');//서베이 리스트로 이동
 				}
 			}
 		} catch (error) {
@@ -196,10 +201,86 @@ const SurveySampleNew = () => {
 		setIsPreview(false);
 	}
 
+	const setCards = (survey:SurveyDetail) => {
+		dispatch(resetAll())
+		
+		
+		dispatch(addExistCard({
+			cardId: "TitleCard",
+			cardTitle: survey.title,
+			inputType: QuestionTypes.TITLE,
+			contents: survey.description,
+			isFocused: 'Y'
+		}));
+
+		if(survey.questionList) {
+			survey.questionList.forEach(question => {
+			
+				const exampleList: ItemTypeProps[] = [];
+	
+				const cardId = question.question_no + String(Date.now());
+				
+				question.exampleList.forEach(example => {
+				exampleList.push({
+						id: cardId + example.example_no,
+						text: example.example_title,
+						example_title: example.example_title,
+						isEtc: example.example_type === 'OTHER' ? true : false,
+					})
+				});
+	
+				dispatch(addExistCard({
+					cardId: question.question_no + String(Date.now()),
+					cardTitle: question.question,
+					inputType: question.question_type in QuestionTypes ? question.question_type : "WRITE",
+					contents: exampleList.length === 1 ? '' : exampleList,
+					isRequired: question.required_answer_yn == 'Y' ? true : false
+				}));
+			})
+		}
+		
+	}
+
+
+	const getSampleSurveyDeatil = async (surveyNo) => {
+		try {
+			const response = await mastersApi.getSurveySample(surveyNo);
+			if (response.result && response.code === 200) {				
+				const survey = response.content;
+				setSurveyDetail(survey);
+
+				if(survey.disease) {
+					setDisease(survey.disease);
+				}
+
+				setCards(survey);
+			} else {
+				dispatch(resetCards())
+			}
+		} catch (error) {
+			console.error('Failed to fetch survey:', error);	
+			dispatch(resetAll());
+			confirm({
+				description: 'Failed to fetch survey',
+				variant: 'info'
+			})
+			.then(() => { 
+				navigate('/survey');
+			});
+		}
+	}
+
+	useEffect(() => {
+		if(parmas.survey_no) {
+			setSurveyNo(Number(parmas.survey_no));
+			getSampleSurveyDeatil(parmas.survey_no);
+		}
+	}, [])
+
 	return (
 		<>
 		<Container maxWidth="md">
-			<Grid container flexDirection="column" sx={{minHeight: '100vh'}}>
+			<Grid container flexDirection="column" sx={{minHeight: '100vh', pb:'2rem'}}>
 				<Formik
 					initialValues={initialValues}
 					validationSchema={schema}
@@ -217,29 +298,29 @@ const SurveySampleNew = () => {
 							<Form>
 								<AppBar
 									position="sticky"
-									sx={{bgcolor: isSticky ? `rgba(255, 255, 255, 0.7)` : "transparent", boxShadow: "none", height: '60px', top: '60px', p: '10px', width: '89%'}}
+									sx={{bgcolor: isSticky ? `rgba(255, 255, 255, 0.7)` : "transparent", boxShadow: "none", height: '60px', top: '0', p: '10px', width: '89%'}}
 									ref={ref}
 									
 									>
 										<Box display="flex" alignItems="center">
 											{
-												!isSticky && <Typography variant="h3" color="secondary.dark">Sample Survey 생성</Typography>
+												!isSticky && <Typography variant="h3" color="secondary.dark">{t('survey.new_survey_sample')}</Typography>
 											}
 											
 											<Box display="flex" justifyContent="flex-end" gap={1} sx={{ml: 'auto'}}>
 												{
-													surveyNo && <Button variant="outlined" onClick={handlePreview}>미리보기</Button>
+													surveyNo && <Button variant="outlined" onClick={handlePreview}>{t('common.preview')}</Button>
 												}
 												
-												<Button variant="outlined" disabled={isSubmitting} onClick={() => handleButtonClick(true, formikProps)}>임시저장</Button>
-												<Button variant="contained" disabled={isSubmitting} onClick={() => handleButtonClick(false, formikProps)}>저장</Button>
+												<Button variant="outlined" disabled={isSubmitting} onClick={() => handleButtonClick(true, formikProps)}>{t('survey.save_temporarily')}</Button>
+												<Button variant="contained" disabled={isSubmitting} onClick={() => handleButtonClick(false, formikProps)}>{t('common.save')}</Button>
 											</Box>
 										</Box>
 									
 								</AppBar>	
 
-								<Card sx={{ width: '89%', mb: '10px', p: '0.5rem'}}>
-									<OutlinedInput placeholder="질병(분류용)" size="small" onChange={(e) => setDisease(e.target.value)} fullWidth />
+								<Card sx={{ width: '89%', mt:'20px', mb: '10px', p: '0.5rem'}}>
+									<OutlinedInput placeholder="질병(분류용)" size="small" onChange={(e) => setDisease(e.target.value)} fullWidth value={surveyDetail?.disease} />
 								</Card>
 								{
 									cards && <FormBuilder />

@@ -282,7 +282,9 @@
 		"large_screen_size" : "PC 화면",
 		"mobile_screen" : "모바일 화면",
 		"end_preview" : "미리보기 종료",
-		"add_a_question" : "질문 추가"
+		"add_a_question" : "질문 추가",
+		"new_survey_sample" : "Survey 샘플 생성",
+		"add_new_sample" : "새 샘플 추가"
 	},
     "user": {},
     "settings": {
