@@ -1,56 +1,21 @@
 import React, { useMemo } from 'react';
-import {
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    Typography,
-    List,
-    ListItem,
-    IconButton,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import EnglishTerms from './terms/EnglishTerms';
+import KoreanTerms from './terms/KoreanTerms';
+import Logo from '@/components/Logo/Logo';
+import CloseIcon from '@mui/icons-material/Close';
 
 type Props = { isOpen: boolean; handleClose: () => void };
-type Term = {
-    title: string;
-    description: string;
-};
 
 const Terms: React.FC<Props> = ({ isOpen, handleClose }) => {
     const { t, i18n } = useTranslation();
-    const termsGenerator = (): Term[] => {
-        return [
-            {
-                title: t('landing.terms.last_revised'),
-                description: '',
-            },
-            {
-                title: '',
-                description: t('landing.terms.description'),
-            },
-            { title: '1. Terms of Use: ', description: '' },
-            { title: '2. Not Health Advice: ', description: '' },
-            { title: '3. DISCLAIMER OF WARRANTIES: ', description: '' },
-            { title: '4. LIABILITY: ', description: '' },
-            { title: '5. INDEMNITY: ', description: '' },
-            { title: '6. Third Party Content: ', description: '' },
-            { title: '7. Copyright and Trademark: ', description: '' },
-            {
-                title: '8. No Offers or Solicitations; Forward-Looking Statements: ',
-                description: '',
-            },
-        ];
-    };
-
-    const terms: Term[] = useMemo(() => {
-        return termsGenerator();
-    }, [i18n.language]);
+    const isLanguageEnglish = i18n.language === 'en';
 
     return (
         <Dialog open={isOpen} onClose={handleClose}>
             <DialogTitle>
-                <Typography variant='h3'>{t('landing.terms.title')}</Typography>
+                <Logo width={130} />
                 <IconButton
                     aria-label="close"
                     onClick={handleClose}
@@ -64,18 +29,7 @@ const Terms: React.FC<Props> = ({ isOpen, handleClose }) => {
                     <CloseIcon />
                 </IconButton>
             </DialogTitle>
-            <DialogContent dividers>
-                <List>
-                    {terms.map((term, index) => (
-                        <ListItem key={index}>
-                            <Typography variant="body1" gutterBottom>
-                                {term.title}
-                                {term.description}
-                            </Typography>
-                        </ListItem>
-                    ))}
-                </List>
-            </DialogContent>
+            <DialogContent>{isLanguageEnglish ? <EnglishTerms /> : <KoreanTerms />}</DialogContent>
         </Dialog>
     );
 };
