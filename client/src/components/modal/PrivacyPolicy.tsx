@@ -3,12 +3,7 @@ import {
     Dialog,
     DialogContent,
     DialogTitle,
-    Typography,
-    List,
-    ListItem,
     IconButton,
-    Container,
-    Box,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';

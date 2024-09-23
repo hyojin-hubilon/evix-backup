@@ -42,7 +42,7 @@ const EnglishPrivacyPolicy: React.FC = () => {
                     1. The Company collects the following minimum personal information as required
                     fields for membership registration, identity verification, smooth customer
                     consultation, document verification, and provision of various services :
-                    <ol type="a">
+                    <ol type="a" style={{margin : 0}}>
                         <li>
                             Members: [General Personal Information] Name, Email, Password, Mobile
                             Number, Affiliation, Job Title
@@ -58,7 +58,7 @@ const EnglishPrivacyPolicy: React.FC = () => {
                     2. During the process of using the service or handling service-related tasks,
                     the following information may be automatically generated or additionally
                     collected:
-                    <ol type="a">
+                    <ol type="a" style={{margin : 0}}>
                         <li>
                             Service usage records, access logs, cookies, IP address, device unique
                             identifiers (Device ID or IMEI), records of fraudulent use, advertising
@@ -67,7 +67,7 @@ const EnglishPrivacyPolicy: React.FC = () => {
                     </ol>
                     3. Methods of Collecting Personal Information: The Company collects personal
                     information through the following methods:
-                    <ol type="a">
+                    <ol type="a" style={{margin : 0}}>
                         <li>
                             Homepage, screens within the service, written forms, fax, phone,
                             bulletin boards, inquiries.
@@ -118,7 +118,7 @@ const EnglishPrivacyPolicy: React.FC = () => {
                     "Items of Personal Information Collection and Purpose of Use" and does not
                     disclose personal information externally without prior consent. However,
                     personal information may be provided to third parties in the following cases:
-                    <ol type="a">
+                    <ol type="a" style={{margin : 0}}>
                         <li>
                             In the case of using paid services, the following items are provided to
                             the payment agency within the service:
@@ -152,7 +152,7 @@ const EnglishPrivacyPolicy: React.FC = () => {
                         </li>
                     </ol>
                     2. Entrustment of Personal Information Processing:
-                    <ol type="a">
+                    <ol type="a" style={{margin : 0}}>
                         <li>
                             The Company may entrust the processing of personal information to
                             enhance services. When entrusting tasks, the Company informs the user
@@ -213,7 +213,7 @@ const EnglishPrivacyPolicy: React.FC = () => {
                 </Typography>
                 <Typography variant="body1" paragraph>
                     1. Retention Reasons According to Internal Policies of the Company:
-                    <ol type="a">
+                    <ol type="a" style={{margin : 0}}>
                         <li>Records of fraudulent use: Prevention of fraudulent use (1 year).</li>
                         <li>
                             Inquiries/partnership details (if separate consent is obtained from the
@@ -225,7 +225,7 @@ const EnglishPrivacyPolicy: React.FC = () => {
                         </li>
                     </ol>
                     2. Retention Reasons According to Relevant Laws:
-                    <ol type="a">
+                    <ol type="a" style={{margin : 0}}>
                         <li>
                             Records regarding contract or withdrawal of application: Consumer
                             Protection Act in Electronic Commerce (5 years).
@@ -316,7 +316,7 @@ const EnglishPrivacyPolicy: React.FC = () => {
                     security access status, user scale, etc., to provide optimized information to
                     users. <br />
                     2. Installation/Operation and Refusal of Cookies:
-                    <ol type="a">
+                    <ol type="a" style={{margin : 0}}>
                         <li>
                             Users have the option to allow or deny the installation of cookies.
                             Users can set options in their web browsers to accept all cookies,
