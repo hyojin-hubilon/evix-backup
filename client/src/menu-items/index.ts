@@ -1,13 +1,15 @@
 // project import
 import { MenuItems } from '@/types/menu';
-import { OrderedListOutlined, AppstoreAddOutlined, DashboardOutlined, BarChartOutlined, SettingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { OrderedListOutlined, AppstoreAddOutlined, DashboardOutlined, BarChartOutlined, SettingOutlined, QuestionCircleOutlined, DollarOutlined, LineChartOutlined } from '@ant-design/icons';
 const icons = {
     OrderedListOutlined,
     AppstoreAddOutlined,
 	DashboardOutlined,
 	BarChartOutlined,
 	SettingOutlined,
-	QuestionCircleOutlined
+	QuestionCircleOutlined,
+	DollarOutlined,
+	LineChartOutlined
 };
 
 
@@ -30,11 +32,20 @@ const menuItems: MenuItems = {
 				},
 				{
 					id: 'study-list',
-					title: 'Study',
+					title: 'Studies',
 					type: 'item',
 					url: '/study',
 					icon: icons.OrderedListOutlined,
 					breadcrumbs: false
+				},
+				{
+					id: 'report',
+					title: 'Report',
+					type: 'item',
+					url: '/report',
+					icon: icons.LineChartOutlined,
+					breadcrumbs: false,
+					disabled: true
 				},
 				{
 					id: 'survey-list',
@@ -43,7 +54,7 @@ const menuItems: MenuItems = {
 					url: '/survey',
 					icon: icons.BarChartOutlined,
 					breadcrumbs: false
-				},
+				}
 			]	
 		},
 		{
@@ -51,6 +62,15 @@ const menuItems: MenuItems = {
 			title: 'evix-info',
 			type: 'group',
 			children: [
+				{
+					id: 'billing',
+					title: 'Billing',
+					type: 'item',
+					url: '/billing',
+					icon: icons.DollarOutlined,
+					breadcrumbs: false,
+					disabled: true
+				},
 				{
 					id: 'help',
 					title: 'Help',

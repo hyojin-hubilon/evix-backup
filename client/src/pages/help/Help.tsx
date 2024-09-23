@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router';
 import './Help.scss';
 import enHelps from './helpContentsEn.json';
 import krHelps from './helpContentsKr.json';
-import EvixDCTInfoKr from "./EvixDCTInfoKR";
 import { useTranslation } from "react-i18next";
 import { Helps } from "@/types/help";
 
@@ -167,6 +166,14 @@ const Help = () => {
 																)
 															}
 														</div>
+														{/* <div>
+														도움이 더 필요하신가요?
+														다음 단계를 시도해 보세요.
+
+
+														문의하기
+														자세히 알려주시면 도움을 드리겠습니다.
+														</div> */}
 													</AccordionDetails>
 												</Accordion>
 											)
