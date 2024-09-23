@@ -74,11 +74,6 @@
 		"general_hospital" : "General hospital",
 		"10yr" : "10yr +",
 		"time_series_data" : "Time series data",
-        "privacy_policy" : {
-            "title" : "개인정보 처리 방침",
-            "last_revised" : "최근 수정일: 2022년 11월",
-            "description" : "본 약관은 개인 정보 보호 공지와 함께 사용자가 본 웹 사이트(사이트)를 이용하거나 시청하는 것과 사이트 소유자인 로슈 진단(사이트 소유자)과의 관계를 관리합니다. 로슈 진단에 문의할 수 있습니다. 본 사이트를 이용함으로써 본 약관에 구속되는 것에 동의하는 것입니다."
-        },
         "terms" : {
             "title" : "이용 약관",
             "last_revised" : "최근 수정일: 2022년 11월",
