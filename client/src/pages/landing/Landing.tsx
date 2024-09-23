@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 //Landing Images
 //Section 03
 import landingImg031 from '@assets/images/landing/img-01@2x.png';
+import landingImg031En from '@assets/images/landing/img-01en@2x.png';
 import landingImg032 from '@assets/images/landing/img-02@2x.png';
 import landingImg033 from '@assets/images/landing/img-03@2x.png';
 import landingImg034 from '@assets/images/landing/img-04@2x.png';
@@ -30,7 +31,7 @@ import './Landing.scss';
 
 export default function LandingPage() {
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const toApplyPage = () => {
         navigate('/apply');
@@ -215,7 +216,13 @@ export default function LandingPage() {
                             gap={{ sm: 10, lg: 12 }}
                         >
                             <Grid item xs={12} sm={4} lg={6}>
-                                <img src={landingImg031} alt="ePRO" style={{ maxWidth: '100%' }} />
+								{
+									i18n.language === 'en' 
+									?
+									<img src={landingImg031En} alt="ePRO" style={{ maxWidth: '100%' }} />
+									:
+									<img src={landingImg031} alt="ePRO" style={{ maxWidth: '100%' }} />
+								}
                             </Grid>
                             <Grid item xs={12} sm={6} lg={4}>
                                 <Section03H2>{t('landing.e_pro')}</Section03H2>

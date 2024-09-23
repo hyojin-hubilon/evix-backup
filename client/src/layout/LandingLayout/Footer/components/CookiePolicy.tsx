@@ -59,7 +59,7 @@ const CookiePolicy: React.FC<Props> = ({ isOpen, handleClose }) => {
     return (
         <Dialog open={isOpen} onClose={handleClose}>
             <DialogTitle>
-                <strong>Cookie Policy</strong>
+                <Typography variant='h3'>Cookie Policy</Typography>
                 <IconButton
                     aria-label="close"
                     onClick={handleClose}

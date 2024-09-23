@@ -50,7 +50,7 @@ const Terms: React.FC<Props> = ({ isOpen, handleClose }) => {
     return (
         <Dialog open={isOpen} onClose={handleClose}>
             <DialogTitle>
-                <h3>{t('landing.terms.title')}</h3>
+                <Typography variant='h3'>{t('landing.terms.title')}</Typography>
                 <IconButton
                     aria-label="close"
                     onClick={handleClose}
