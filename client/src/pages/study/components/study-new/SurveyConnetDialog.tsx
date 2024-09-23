@@ -29,6 +29,7 @@ import surveyApi from '@/apis/survey';
 import studyApi from '@/apis/study';
 import SurveyDeleteDialog from './SurveyDeleteDialog';
 import { t } from 'i18next';
+import { ResCommonSuccess } from '@/apis/axios-common';
 
 interface SurveyConnectDialogProps {
     isOpen: boolean;
@@ -68,15 +69,22 @@ const SurveyConnectDialog = ({
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [surveyToDelete, setSurveyToDelete] = useState<RegistrableSurvey | null>(null);
 
-    // console.log('initialSurveySetList: ', initialSurveySetList);
-
+    // 등록 가능한 설문 목록 api 분리
     const fetchSurvey = async () => {
         try {
-            const response = await surveyApi.registrableSurvey();
-            if (response.code === 200 && response.result) {
+            let response: ResCommonSuccess<RegistrableSurvey[]>;
+            if (mode === 'edit' && studyNo) {
+                response = await surveyApi.registrableSurveyStudyInfo(studyNo);
+            } else {
+                response = await surveyApi.registrableSurvey();
+            }
+
+            if (response && response.code === 200 && response.result) {
                 const newSurveyList = response.content || [];
                 setSurveyList(newSurveyList);
                 setSearchedResult(newSurveyList);
+            } else {
+                console.warn('Unexpected response:', response);
             }
         } catch (error) {
             console.error('Failed to fetch surveys:', error);
@@ -112,7 +120,7 @@ const SurveyConnectDialog = ({
                 setOpenAlert(true);
             } catch (error) {
                 console.error('Failed to disconnect survey:', error);
-                setSuccessMessage(t('study.failed_delete_survey'));//설문 삭제에 실패했습니다.
+                setSuccessMessage(t('study.failed_delete_survey')); //설문 삭제에 실패했습니다.
                 setOpenAlert(true);
             }
         }
@@ -262,11 +270,11 @@ const SurveyConnectDialog = ({
                     setOpenAlert(true);
                 } catch (error) {
                     console.error('Failed to post survey:', error);
-                    setSuccessMessage(t('study.failed_connect_survey'));//설문 연결에 실패했습니다.
+                    setSuccessMessage(t('study.failed_connect_survey')); //설문 연결에 실패했습니다.
                     setOpenAlert(true);
                 }
             } else {
-                setSuccessMessage(t('study.no_new_surveys'));//새로 추가된 설문이 없습니다.
+                setSuccessMessage(t('study.no_new_surveys')); //새로 추가된 설문이 없습니다.
                 setOpenAlert(true);
             }
         } else if (mode === 'create') {
@@ -338,7 +346,7 @@ const SurveyConnectDialog = ({
                 <Grid container width={previewSurveyNo ? 1100 : 730}>
                     <Grid item xs={previewSurveyNo ? 8 : 12}>
                         <DialogTitle id="survey-connect-title" variant="h4">
-							{t('study.survey_connection')}
+                            {t('study.survey_connection')}
                             {/* Survey 연결 */}
                             <IconButton
                                 size="small"
@@ -357,9 +365,9 @@ const SurveyConnectDialog = ({
                                     },
                                 }}
                             >
-								{/* 1개 이상의 Survey를 연결해주세요. */}
+                                {/* 1개 이상의 Survey를 연결해주세요. */}
                                 <span>{t('study.connect_one_or_more')}</span>
-								{/* Survey가 여러개일 경우, 설정 순서에 따라 진행됩니다. */}
+                                {/* Survey가 여러개일 경우, 설정 순서에 따라 진행됩니다. */}
                                 <span>{t('study.if_there_are_multiple_surveys')}</span>
                             </Typography>
                             <form onSubmit={handleSearchSurvey}>
@@ -377,7 +385,7 @@ const SurveyConnectDialog = ({
                                         type="submit"
                                         onClick={handleSearchSurvey}
                                     >
-										{t('common.search')}
+                                        {t('common.search')}
                                         {/* 검색 */}
                                     </Button>
                                     <Button
@@ -385,7 +393,7 @@ const SurveyConnectDialog = ({
                                         sx={{ flexGrow: 1 }}
                                         onClick={handleSeeAll}
                                     >
-										{t('study.view_all')}
+                                        {t('study.view_all')}
                                         {/* 전체보기 */}
                                     </Button>
                                 </Box>
@@ -421,7 +429,7 @@ const SurveyConnectDialog = ({
                                         variant="contained"
                                         sx={{ width: '10rem' }}
                                     >
-										{t('study.connect')}
+                                        {t('study.connect')}
                                         {/* 연결하기 */}
                                     </Button>
                                 </Box>
