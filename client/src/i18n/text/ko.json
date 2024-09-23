@@ -322,7 +322,8 @@
 		"refunds_returns" : "환불 및 반품",
 		"managing_accounts" : "계정 관리하기",
 		"service_introduction": "서비스 소개",
-		"member_management" : "멤버관리"
+		"member_management" : "멤버관리",
+		"evix-dct_info" : "Evix-DCT 정보"
 	},
 	"auth" : {
 		"study_invitation_completed" : "스터디 초대가 완료되었습니다.",

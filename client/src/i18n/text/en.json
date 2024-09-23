@@ -327,7 +327,8 @@
 		"refunds_returns" : "Refunds & returns",
 		"managing_accounts" : "Managing accounts",
 		"service_introduction": "Service Introduction",
-		"member_management" : "Member Management"
+		"member_management" : "Member Management",
+		"evix-dct_info" : "Evix-DCT Information"
 	},
 	"auth" : {
 		"study_invitation_completed" : "Your study invitation has been completed.",

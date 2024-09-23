@@ -1,15 +1,22 @@
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Container, Grid, InputAdornment, OutlinedInput, Tab, Tabs, Typography } from "@mui/material";
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, Container, Grid, InputAdornment, OutlinedInput, Tab, Tabs, Typography } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useNavigate } from 'react-router';
-import { t } from "i18next";
 
+import './Help.scss';
+import enHelps from './helpContentsEn.json';
+import krHelps from './helpContentsKr.json';
+import EvixDCTInfoKr from "./EvixDCTInfoKR";
+import { useTranslation } from "react-i18next";
+import { Helps } from "@/types/help";
 
 const Help = () => {
 	const [ searchTerm, setSearchTerm] = useState('');
-	const [ activeTab, setActiveTab] = useState('0');
+	const [ activeTab, setActiveTab] = useState(0);
+	const [ helps, setHelps ] = useState<Helps[]>([]);
+	const { t, i18n } = useTranslation();
 
 	const navigate = useNavigate();
 
@@ -21,9 +28,21 @@ const Help = () => {
 		navigate('/user-support')
 	}
 
-	const handleChangeTab = (_event: React.SyntheticEvent, newValue: string) => {
+	const handleChangeTab = (_event: React.SyntheticEvent, newValue: number) => {
 		setActiveTab(newValue);	
 	};
+
+	const getHelps = () => {
+		if(i18n.language == 'en') {
+			setHelps(enHelps);
+		} else {
+			setHelps(krHelps);
+		}
+	}
+
+	useEffect(() => {
+		getHelps();
+	}, [])
 
 	return (
 		<Container maxWidth="lg">
@@ -71,63 +90,95 @@ const Help = () => {
 						onChange={handleChangeTab}
 						aria-label="help-select-tab"
 					>
-						{/* Evix-DCT 시작하기 */}
-						<Tab label={t('help.get_started_with')} value="0" />
-						{/* 자주찾는 도움말 */}
-						<Tab label={t('help.faq')} value="1" />
+						{
+							helps?.map((help, index) => 
+								<Tab label={help.tab} value={index} key={index} />
+							)
+						}
+						
 						{/* Evix-DCT 사용 */}
-						<Tab label={t('help.using_evix-dct')} value="2" disabled />
+						<Tab label={t('help.using_evix-dct')} disabled />
 						{/* 구매 */}
-						<Tab label={t('help.purchasing')} value="3" disabled />
+						<Tab label={t('help.purchasing')} disabled />
 						{/* 환불 및 반품 */}
-						<Tab label={t('help.refunds_returns')} value="4" disabled />
+						<Tab label={t('help.refunds_returns')} disabled />
 						{/* 계정 관리하기 */}
-						<Tab label={t('help.managing_accounts')} value="5" disabled />
+						<Tab label={t('help.managing_accounts')} disabled />
 					</Tabs>
 				
 				</Grid>
 
-
+					
 				<Grid item xs={12}>
-					<Accordion>
-						<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
-						aria-controls="panel1-content"
-						id="panel1-header"
-						>
-						Accordion 1
-						</AccordionSummary>
-						<AccordionDetails>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-						malesuada lacus ex, sit amet blandit leo lobortis eget.
-						</AccordionDetails>
-					</Accordion>
-					<Accordion>
-						<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
-						aria-controls="panel2-content"
-						id="panel2-header"
-						>
-						Accordion 2
-						</AccordionSummary>
-						<AccordionDetails>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-						malesuada lacus ex, sit amet blandit leo lobortis eget.
-						</AccordionDetails>
-					</Accordion>
-					<Accordion defaultExpanded>
-						<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
-						aria-controls="panel3-content"
-						id="panel3-header"
-						>
-						Accordion 3
-						</AccordionSummary>
-						<AccordionDetails>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-						malesuada lacus ex, sit amet blandit leo lobortis eget.
-						</AccordionDetails>
-					</Accordion>
+					{
+						helps?.map((help, helpsIndex) => {
+							return (
+								<Box key={helpsIndex}>
+								{
+									helpsIndex === activeTab &&
+									<Box>
+										{
+											help.helpList.map((helpList, helpListIndex) => 
+												<Accordion defaultExpanded={helpListIndex === 0}>
+													<AccordionSummary
+													expandIcon={<ExpandMoreIcon />}
+													aria-controls={`panel${helpListIndex}`}
+													id={`panel${helpListIndex}`}
+													>
+														{ helpList.helpTitle }
+													</AccordionSummary>
+													<AccordionDetails>
+														<div className="help-box">
+														{
+																helpList.contents.map((content, helpContentsIndex) =>
+																	<div key={helpContentsIndex}>
+																		{
+																			content.title && <h3>{ content.title }</h3>
+																		}
+																		{
+																			content.description && <p>{content.description}</p>
+																		}
+																		{
+																			content.subs && content.subs.map((sub, subsIndex) => 
+																				<div key={subsIndex}>
+																					{
+																						sub.subTitle && <h4>{sub.subTitle}</h4>
+																					}
+																					{
+																						sub.description && <p>{sub.description}</p>
+																					}
+																					{
+																						(sub.exTitle || sub.exList) && 
+																						<ul>
+																							{
+																								sub.exTitle && <li className="sub-title">{ sub.exTitle }</li>
+																							}
+																							{
+																								sub.exList && sub.exList.map((ex, exIndex) => <li key={exIndex}>{ex}</li>)
+																							}
+																						</ul>
+																					}
+																				</div>
+																			)
+																		}
+																		
+																		
+																	</div>
+																)
+															}
+														</div>
+													</AccordionDetails>
+												</Accordion>
+											)
+										}
+										
+									</Box>
+								}
+								
+								</Box>
+							);
+						})
+					}
 				</Grid>
 
 			</Grid>
