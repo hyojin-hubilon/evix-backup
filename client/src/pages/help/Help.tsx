@@ -71,17 +71,18 @@ const Help = () => {
 						onChange={handleChangeTab}
 						aria-label="help-select-tab"
 					>
+						{/* Evix-DCT 시작하기 */}
+						<Tab label={t('help.get_started_with')} value="0" />
 						{/* 자주찾는 도움말 */}
-						<Tab label={t('help.faq')} value="0" />
-						{/* 서비스 소개 */}
-						<Tab label={t('help.service_introduction')} value="1" />
-						<Tab label="Study" value="2" />
-						{/* 멤버관리 */}
-						<Tab label={t('help.member_management')} value="3" />
-						<Tab label="Survey" value="4" />
-						<Tab label="Billing" value="5" />
-						<Tab label="Report" value="6" />
-						<Tab label="Settings" value="7" />
+						<Tab label={t('help.faq')} value="1" />
+						{/* Evix-DCT 사용 */}
+						<Tab label={t('help.using_evix-dct')} value="2" disabled />
+						{/* 구매 */}
+						<Tab label={t('help.purchasing')} value="3" disabled />
+						{/* 환불 및 반품 */}
+						<Tab label={t('help.refunds_returns')} value="4" disabled />
+						{/* 계정 관리하기 */}
+						<Tab label={t('help.managing_accounts')} value="5" disabled />
 					</Tabs>
 				
 				</Grid>

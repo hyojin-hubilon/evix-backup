@@ -325,7 +325,12 @@
 	"help" : {
 		"search_placeholder" : "Try searching for help.",
 		"contact_us" : "Contact Us",
-		"faq" : "FAQ",
+		"get_started_with" : "Get started with Evix-DCT",
+		"faq" : "Popular articles",		
+		"using_evix-dct" : "Using Evix-DCT",
+		"purchasing" : "Purchasing",
+		"refunds_returns" : "Refunds & returns",
+		"managing_accounts" : "Managing accounts",
 		"service_introduction": "Service Introduction",
 		"member_management" : "Member Management"
 	},
@@ -334,6 +339,7 @@
 		"register_member_first" : "Please register as a member first.",
 		"token_expired" : "The token has expired.",
 		"error_occurred" : "An error occurred.",
-		"password_changed" : "Your password has been successfully changed."
+		"password_changed" : "Your password has been successfully changed.",
+		"check_id_password" : "Please check your ID or password"
 	}
 }

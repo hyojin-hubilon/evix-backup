@@ -320,7 +320,12 @@
 	"help" : {
 		"search_placeholder" : "도움말을 검색해보세요.",
 		"contact_us" : "문의하기",
-		"faq" : "자주찾는 도움말",
+		"get_started_with" : "Evix-DCT 시작하기",
+		"faq" : "자주 사용되는 도움말",
+		"using_evix-dct" : "Evix-DCT 사용",
+		"purchasing" : "구매",
+		"refunds_returns" : "환불 및 반품",
+		"managing_accounts" : "계정 관리하기",
 		"service_introduction": "서비스 소개",
 		"member_management" : "멤버관리"
 	},
@@ -329,6 +334,7 @@
 		"register_member_first" : "회원가입을 먼저 진행해주십시오.",
 		"token_expired" : "토큰이 만료되었습니다.",
 		"error_occurred" : "에러가 발생했습니다.",
-		"password_changed" : "비밀번호 변경 성공"
+		"password_changed" : "비밀번호 변경 성공",
+		"check_id_password" : "아이디 또는 패스워드를 확인해주세요"
 	}
 }
