@@ -27,8 +27,25 @@ const PrivacyPolicy: React.FC<Props> = ({ isOpen, handleClose }) => {
 
     return (
         <Dialog open={isOpen} onClose={handleClose}>
-            <Logo width={130} />
+			<DialogTitle>
+            	<Logo width={130} />
+				<IconButton
+                    aria-label="close"
+                    onClick={handleClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+			</DialogTitle>
+			<DialogContent>
+
             {isLanguageEnglish ? <EnglishPrivacyPolicy /> : <KoreanPrivacyPolicy />}
+			</DialogContent>
         </Dialog>
     );
 };
