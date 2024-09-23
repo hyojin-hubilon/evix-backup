@@ -7,7 +7,6 @@ import MainLayout from '@layout/MainLayout';
 // render - dashboard
 const SurveyList = Loadable(lazy(() => import('@pages/survey/SurveyList')));
 const SurveyNew = Loadable(lazy(() => import('@pages/survey/SurveyNew')));
-const SurveySampleNew = Loadable(lazy(() => import('@pages/survey/SurveySampleNew')));
 import SurveyPreview from '@pages/survey/SurveyPreview';
 const SampleList = Loadable(lazy(() => import('@pages/survey/SampleList')));
 
@@ -47,10 +46,6 @@ const SurveyRoutes = {
 			element: <SampleList />
 		},
 
-		{
-			path: 'samples/new',
-			element: <SurveySampleNew />
-		},
     ],
 };
 

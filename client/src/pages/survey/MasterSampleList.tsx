@@ -127,7 +127,7 @@ const MasterSampleList = () => {
 							 }}>
 								<PlusOutlined style={{fontSize: '2rem', color: primary.main}} />
 								<Typography variant="h5" sx={{color: primary.main}}>
-									{t('survey.make_your_own')}
+									{t('survey.add_new_sample')}
 									{/* 직접 만들기 */}
 								</Typography>
 						</Box>

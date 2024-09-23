@@ -133,7 +133,7 @@ export interface SurveyPostReqBody {
 	disease?: string, //샘플작성시에만 추가
 	description: string, //영문
 	// translation?: string, //한글변역?
-	// sample_yn?: string, //Y|N
+	sample_yn?: string, //Y|N
 	questionList: SurveyQuestion[],
 }
 

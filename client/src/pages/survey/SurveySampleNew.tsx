@@ -5,13 +5,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addExistCard, CardProps, ItemTypeProps, resetAll, resetCards, StateProps } from "@/store/reducers/survey";
 import { ExampleTypes, QuestionDivision, QuestionTypes, SurveyDetail, SurveyPostReqBody, SurveyPutReqBody, SurveyQuestion } from "@/types/survey";
-import surveyApi from "@/apis/survey";
+
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
 import SurveyPreview from "./SurveyPreview";
-import { useConfirmation } from '@/context/ConfirmDialogContext';
-import { Label } from "./components/FromView/InputRadio/styles";
 import mastersApi from "@/apis/masters";
 
 const SurveySampleNew = () => {
@@ -70,7 +68,7 @@ const SurveySampleNew = () => {
 				
 				if(!temp) {//임시저장이 아닐경우
 					dispatch(resetCards()); //localStorage에 저장된 설문내용 삭제
-					navigate('/survey');//서베이 리스트로 이동
+					navigate('/master/samples');//서베이 리스트로 이동
 				}
 			}
 		} catch (error) {
@@ -89,7 +87,7 @@ const SurveySampleNew = () => {
 				
 				if(!temp) {//임시저장이 아닐경우
 					dispatch(resetCards()); //localStorage에 저장된 설문내용 삭제
-					navigate('/survey');//서베이 리스트로 이동
+					navigate('/master/samples');//서베이 리스트로 이동
 				}
 			}
 		} catch (error) {
@@ -107,7 +105,7 @@ const SurveySampleNew = () => {
 		const newSurvey : SurveyPostReqBody = {
 			title: '',
 			description: '',
-			// sample_yn: 'Y',
+			sample_yn: 'Y',
 			questionList: [],
 			disease: disease
 		}
@@ -200,7 +198,7 @@ const SurveySampleNew = () => {
 	return (
 		<>
 		<Container maxWidth="md">
-			<Grid container flexDirection="column" sx={{minHeight: '100vh'}}>
+			<Grid container flexDirection="column" sx={{minHeight: '100vh', pb:'2rem'}}>
 				<Formik
 					initialValues={initialValues}
 					validationSchema={schema}
@@ -218,7 +216,7 @@ const SurveySampleNew = () => {
 							<Form>
 								<AppBar
 									position="sticky"
-									sx={{bgcolor: isSticky ? `rgba(255, 255, 255, 0.7)` : "transparent", boxShadow: "none", height: '60px', top: '60px', p: '10px', width: '89%'}}
+									sx={{bgcolor: isSticky ? `rgba(255, 255, 255, 0.7)` : "transparent", boxShadow: "none", height: '60px', top: '0', p: '10px', width: '89%'}}
 									ref={ref}
 									
 									>
@@ -239,7 +237,7 @@ const SurveySampleNew = () => {
 									
 								</AppBar>	
 
-								<Card sx={{ width: '89%', mb: '10px', p: '0.5rem'}}>
+								<Card sx={{ width: '89%', mt:'20px', mb: '10px', p: '0.5rem'}}>
 									<OutlinedInput placeholder="질병(분류용)" size="small" onChange={(e) => setDisease(e.target.value)} fullWidth />
 								</Card>
 								{
