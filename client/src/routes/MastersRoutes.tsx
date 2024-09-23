@@ -23,6 +23,11 @@ const MastersRoutes = {
 			path: 'samples/new',
 			element: <SurveySampleNew />
 		},
+
+		{
+			path: 'samples/edit/:survey_no',
+			element: <SurveySampleNew />
+		},
     ],
 };
 

@@ -141,28 +141,28 @@ const MasterSampleList = () => {
 									borderRadius: '1rem',
 									cursor: 'pointer',
 									display: 'flex',
-									alignItems: 'center',
+									flexDirection:'column',
+									// alignItems: 'center',
 									padding: '2rem',
 									bgcolor: primary.lighter,
 									border: `1px solid ${primary.light}`,
 									position: 'relative',
 									alignSelf: 'stretch',
 									height:'100%',
-									'&:hover' : {
-										'&::after' : {
-											display: 'block',
-											content: "''",
-											position:'absolute',
-											left: '-1px',
-											top:'-1px',
-											right: '-1px',
-											bottom: '-1px',
-											borderRadius: '1rem',
-											border: `2px solid ${primary.main}`,
-										}
-									}
+									// '&:hover' : {
+									// 	'&::after' : {
+									// 		display: 'block',
+									// 		content: "''",
+									// 		position:'absolute',
+									// 		left: '-1px',
+									// 		top:'-1px',
+									// 		right: '-1px',
+									// 		bottom: '-1px',
+									// 		borderRadius: '1rem',
+									// 		border: `2px solid ${primary.main}`,
+									// 	}
+									// }
 								}}
-								onClick={() => handleShowPreview(sample.survey_no)}
 								>
 									<Box>
 										<Typography variant="h5"># {sample.survey_no}</Typography>
@@ -176,7 +176,11 @@ const MasterSampleList = () => {
 										>
 											<SpeakerNotesOutlinedIcon sx={{fontSize:'1rem', marginLeft:'2px'}} />
 											{sample.question_number}</Box>
-									</Box>
+										</Box>
+										<Box mt="1rem" gap={1} display="flex">
+											<Button variant="contained" onClick={() => handleShowPreview(sample.survey_no)}>{t('common.preview')}</Button>
+											<Button variant="outlined" onClick={() => navigate(`/master/samples/edit/${sample.survey_no}`)}>{t('common.edit')}</Button>
+										</Box>
 								</Box>
 							</Grid>
 						)
@@ -188,10 +192,7 @@ const MasterSampleList = () => {
 		{
 			surveyNo && isPreview &&
 				<Dialog open={isPreview} maxWidth="lg" onClose={handleClosePreview} fullWidth>
-					<SurveyPreview surveyNo={surveyNo} handleClose={handleClosePreview} isDialog={true} />
-					<Fab variant="extended" sx={{position: 'sticky', bottom: '5%', left: '80%', width: '200px', padding: '0.7rem'}} color="primary" onClick={() => handleSelectSample()}>
-						<CreateIcon sx={{ mr: 1 }} />{t('survey.write_with_this_sample')}
-					</Fab>
+					<SurveyPreview surveyNo={surveyNo} handleClose={handleClosePreview} isDialog={true} isMaster={true} />
 				</Dialog>
 		}
 		</Box>

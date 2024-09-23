@@ -11,6 +11,7 @@ import { Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
 import SurveyPreview from "./SurveyPreview";
 import mastersApi from "@/apis/masters";
+import { useConfirmation } from "@/context/ConfirmDialogContext";
 
 const SurveySampleNew = () => {
 	const { ref, isSticky } = useSticky();
@@ -57,6 +58,10 @@ const SurveySampleNew = () => {
 	
 	const [ surveyNo, setSurveyNo ] = useState<string | number | null>(null);
 	const [ isPreview, setIsPreview ] = useState(false);
+	const [ surveyDetail, setSurveyDetail ] = useState<SurveyDetail | null>(null);
+
+	const parmas = useParams();
+	const confirm = useConfirmation();
 
 	const postNewSurvey = async (survey:SurveyPostReqBody, temp:boolean) => {
 		try {
@@ -195,6 +200,83 @@ const SurveySampleNew = () => {
 		setIsPreview(false);
 	}
 
+	const setCards = (survey:SurveyDetail) => {
+		dispatch(resetAll())
+		
+		
+		dispatch(addExistCard({
+			cardId: "TitleCard",
+			cardTitle: survey.title,
+			inputType: QuestionTypes.TITLE,
+			contents: survey.description,
+			isFocused: 'Y'
+		}));
+
+		if(survey.questionList) {
+			survey.questionList.forEach(question => {
+			
+				const exampleList: ItemTypeProps[] = [];
+	
+				const cardId = question.question_no + String(Date.now());
+				
+				question.exampleList.forEach(example => {
+				exampleList.push({
+						id: cardId + example.example_no,
+						text: example.example_title,
+						example_title: example.example_title,
+						isEtc: example.example_type === 'OTHER' ? true : false,
+					})
+				});
+	
+				dispatch(addExistCard({
+					cardId: question.question_no + String(Date.now()),
+					cardTitle: question.question,
+					inputType: question.question_type in QuestionTypes ? question.question_type : "WRITE",
+					contents: exampleList.length === 1 ? '' : exampleList,
+					isRequired: question.required_answer_yn == 'Y' ? true : false
+				}));
+			})
+		}
+		
+	}
+
+
+	const getSampleSurveyDeatil = async (surveyNo) => {
+		try {
+			const response = await mastersApi.getSurveySample(surveyNo);
+			if (response.result && response.code === 200) {				
+				const survey = response.content;
+				setSurveyDetail(survey);
+
+				if(survey.sample_yn === 'Y') {
+					
+					setDisease(survey.disease);
+				}
+
+				setCards(survey);
+			} else {
+				dispatch(resetCards())
+			}
+		} catch (error) {
+			console.error('Failed to fetch survey:', error);	
+			dispatch(resetAll());
+			confirm({
+				description: 'Failed to fetch survey',
+				variant: 'info'
+			})
+			.then(() => { 
+				navigate('/survey');
+			});
+		}
+	}
+
+	useEffect(() => {
+		if(parmas.survey_no) {
+			setSurveyNo(Number(parmas.survey_no));
+			getSampleSurveyDeatil(parmas.survey_no)
+		}
+	}, [])
+
 	return (
 		<>
 		<Container maxWidth="md">
@@ -238,7 +320,7 @@ const SurveySampleNew = () => {
 								</AppBar>	
 
 								<Card sx={{ width: '89%', mt:'20px', mb: '10px', p: '0.5rem'}}>
-									<OutlinedInput placeholder="질병(분류용)" size="small" onChange={(e) => setDisease(e.target.value)} fullWidth />
+									<OutlinedInput placeholder="질병(분류용)" size="small" onChange={(e) => setDisease(e.target.value)} fullWidth value={surveyDetail?.disease} />
 								</Card>
 								{
 									cards && <FormBuilder />

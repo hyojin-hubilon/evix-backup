@@ -7,9 +7,10 @@ type SurveyPreviewTypes = {
 	surveyNo?: string | number | undefined,
 	handleClose?: () => void,
 	isDialog?: boolean | undefined,
-	headerHide?: boolean
+	headerHide?: boolean,
+	isMaster?:boolean
 }
-const SurveyPreview = ({surveyNo, handleClose, isDialog, headerHide} : SurveyPreviewTypes) => {
+const SurveyPreview = ({surveyNo, handleClose, isDialog, headerHide, isMaster} : SurveyPreviewTypes) => {
 	//미리보기 / 실제 제출 가능한 서베이 차이
 	//미리보기 : 상단에 PC화면/모바일화면 탭이 있음, 미리보기 종료버튼 있음. 제출 disabled 외에는 그대로?
 	//제출에는 필수 입력사항 등 Validation 필요
@@ -61,7 +62,7 @@ const SurveyPreview = ({surveyNo, handleClose, isDialog, headerHide} : SurveyPre
 				
 				<Grid item xs={12} justifyContent="center">
 					<Box width={tab == '0' ? '80%' : '390px'} sx={{margin:'0 auto'}}>
-						<SurveyView preview={true} surveyNo={surveyNo} />
+						<SurveyView preview={true} surveyNo={surveyNo} isMaster={true}/>
 					</Box>
 				</Grid>
 			</Grid>
