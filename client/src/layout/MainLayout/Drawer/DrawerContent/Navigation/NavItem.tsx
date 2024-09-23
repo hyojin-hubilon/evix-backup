@@ -3,7 +3,6 @@ import { LinkProps, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
 import {
     Avatar,
     Chip,
@@ -12,6 +11,7 @@ import {
     ListItemText,
     Theme,
     Typography,
+	useTheme
 } from '@mui/material';
 
 // project import
@@ -64,6 +64,13 @@ const NavItem = ({ item, level }: CustomProps) => {
                 zIndex: 1201,
                 pl: drawerOpen ? `${level * 28}px` : 1.5,
                 py: !drawerOpen && level === 1 ? 1.25 : 1,
+				'&.Mui-disabled' : {
+					opacity: 1,
+					'.MuiListItemIcon-root, .MuiListItemText-root' : {
+						opacity:0.38
+					}
+
+				},
                 ...(drawerOpen && {
                     '&:hover': {
                         bgcolor: 'primary.lighter',
@@ -105,7 +112,7 @@ const NavItem = ({ item, level }: CustomProps) => {
                             justifyContent: 'center',
                             '&:hover': {
                                 bgcolor: 'secondary.lighter',
-                            },
+                            }
                         }),
                         ...(!drawerOpen &&
                             isSelected && {
@@ -139,6 +146,16 @@ const NavItem = ({ item, level }: CustomProps) => {
                     size={item.chip.size}
                     label={item.chip.label}
                     avatar={item.chip.avatar && <Avatar>{item.chip.avatar}</Avatar>}
+                />
+            )}
+			{(drawerOpen || (!drawerOpen && level !== 1)) && item.disabled && (
+                <Chip
+                    color="warning"
+                    size="small"
+                    label="COMING SOON"
+					sx={{fontSize: '0.6rem',
+						opacity: 1,
+					}}
                 />
             )}
         </ListItemButton>

@@ -1,0 +1,146 @@
+[
+	{
+		"tab" : "Get started with Evix-DCT",
+		"helpList" : [ 
+				{
+					"helpTitle" : "Evix-DCT Information",
+					"contents" : [{
+						"title": "1. Overview of Services",
+						"description": "Our platform offers a variety of tools and services to facilitate decentralized clinical trials (DCTs) with seamless mobile integration, ensuring an efficient and user-friendly experience.",
+						"subs" : [
+							{
+								"subTitle" : "ePRO (Electronic Patient Reported Outcomes)",
+								"description" : "ePRO enables patients to report their health data electronically through their devices, streamlining data collection for clinical studies.",
+								"exTitle" : "Getting Started with ePRO",
+								"exList" : [
+									"Download the mobile app.",
+									"Log in with your credentials.",
+									"Begin entering your health data as prompted."
+								]
+							},
+							{
+								"subTitle": "eCOA (Electronic Clinical Outcome Assessments)",
+								"description" : "eCOA simplifies the process for capturing clinical outcomes through patient, clinician, and caregiver reports.",
+								"exTitle" : "Accessing eCOA Forms",
+								"exList" : [
+									"Navigate to the eCOA section on your dashboard.",
+									"Select the form assigned to your study.",
+									"Fill out the required information and submit."
+								]
+							},
+							{
+								"subTitle" : "eCRF (Electronic Case Report Forms)",
+								"description" :"eCRF allows researchers to collect and manage clinical trial data through secure, electronic forms.",
+								"exTitle" : "Creating eCRF Entries",
+								"exList" : [
+									"Log in to your researcher account.",
+									"Select the trial you are managing.",
+									"Add or update patient case data via the eCRF form."
+								]
+							},
+							{
+								"subTitle" : "CDMS (Clinical Data Management System)",
+								"description": "The CDMS ensures all data collected from trials is securely stored and efficiently managed, with real-time access to all authorized users.",
+								"exTitle" :"Accessing CDMS",
+								"exList" : [
+									"Go to the CDMS tab from the main navigation.",
+									"View all ongoing trials and access data analytics."
+								]
+							}
+						]
+					},
+					{
+						"title" : "2. Mobile Integration Features",
+						"subs" : [
+							{
+								"subTitle" : "Smart Notifications",
+								"description" : "Receive real-time notifications about upcoming survey times, participation encouragement, and clinical trial updates on your mobile phone to keep your participation level in check.",
+								"exTitle" : "Enabling Notifications",
+								"exList":[									
+									"Go to your account settings on the mobile app.",
+									"Toggle the “Enable Smart Notifications” option."
+								]
+							},
+							{
+								"subTitle" : "Remote Care",
+								"description": "Participate in clinical trials without needing to visit the clinic. Communicate with healthcare providers, send reports, and monitor progress remotely.",
+								"exTitle" : "How to Use Remote Care",
+								"exList" : [
+									"Log in to the mobile app.",
+									"Go to the “Remote Care” section to schedule a virtual appointment or submit reports."
+								]
+							},
+							{
+								"subTitle": "eConsent Forms",
+								"description":"Our eConsent tool provides a secure and efficient way to gather informed consent electronically.",
+								"exTitle" :"Completing an eConsent Form",
+								"exList" : [
+									"Navigate to the eConsent section in the app or on the web.",
+									"Review the consent document and sign electronically."
+								]
+							},
+							{
+								"subTitle": "Survey Generation Tools",
+								"description" : "Design and distribute surveys to gather important patient feedback during the trial.",
+								"exTitle": "Creating a New Survey",
+								"exList" :[
+									"Go to the “Survey Tools” on your dashboard.",
+									"Select “Create New Survey” and customize your questions.",
+									"Send the survey directly to participants via mobile or web."
+								]
+							}
+						]
+					}
+				]
+				}
+		]
+	},
+	{
+		"tab" : "Popular articles",
+		"helpList" : [
+			{
+				"helpTitle" : "How do I reset my password?",
+				"contents" : [
+					{
+						"subs" : [
+							{
+								"exList" : ["Click on “Reset Password” in the settings at the top of the page, enter your registered email, and follow the instructions in the email you receive."]
+							}
+						]
+					}
+					
+				]
+			},
+			{
+				"helpTitle" : "Can I access the platform from multiple browsers?",
+				"contents" : [
+					{
+					"subs" : [
+						{
+							"exList" : [
+								"You can access multiple pages within the same browser on the same device.",
+								"However, it’s not possible to log into multiple accounts simultaneously on the same device.",
+								"You cannot access multiple accounts in the same browser; you need to use a separate browser profile for each account."
+							]
+						}
+					]
+					}
+				]
+			},
+			{
+				"helpTitle" : "How do I get technical support?",
+				"contents" : [
+					{
+						"subs" : [
+							{
+								"exList" : [
+									"If you encounter any issues, please contact our support team at evix-dct@evidnet.co.kr"
+								]
+							}
+						]
+					}
+				]
+			}				
+		]
+	}
+]
