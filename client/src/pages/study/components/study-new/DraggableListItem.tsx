@@ -8,9 +8,9 @@ export type DraggableItemListProps = {
     item: RegistrableSurvey;
     index: number;
     itemChanged: (item: RegistrableSurvey, index: number) => void;
-    // deleteItem: (index: number) => void;
     deleteItem: (survey: RegistrableSurvey) => void;
     mode: 'create' | 'edit';
+    isAddedSurvey: boolean;
 };
 
 const DraggableListItem = ({
@@ -19,6 +19,7 @@ const DraggableListItem = ({
     itemChanged,
     deleteItem,
     mode,
+    isAddedSurvey,
 }: DraggableItemListProps) => {
     const [survey, setSurvey] = useState(item);
     const theme = useTheme();
@@ -39,6 +40,9 @@ const DraggableListItem = ({
     const handleDeleteSurvey = () => {
         deleteItem(survey);
     };
+
+    // 기존에 연결된 survey는 disabled 처리, 새로 연결된 survey는 주기, 횟수 설정 가능하도록 함
+    const isDisabled = mode === 'edit' && !isAddedSurvey;
 
     return (
         <Draggable draggableId={item.title} index={index}>
@@ -66,7 +70,7 @@ const DraggableListItem = ({
                             value={survey.frequency}
                             onChange={(e) => handleChangeFrequency(e.target.value)}
                             sx={{ width: '60px', bgcolor: 'white' }}
-                            disabled={mode === 'edit'}
+                            disabled={isDisabled}
                         >
                             <MenuItem value="monthly">월</MenuItem>
                             <MenuItem value="weekly">주</MenuItem>
@@ -78,7 +82,7 @@ const DraggableListItem = ({
                             value={survey.times}
                             onChange={(e) => handleChangeTimes(e.target.value)}
                             sx={{ width: '60px', bgcolor: 'white' }}
-                            disabled={mode === 'edit'}
+                            disabled={isDisabled}
                         >
                             <MenuItem value={1}>1</MenuItem>
                             <MenuItem value={2}>2</MenuItem>

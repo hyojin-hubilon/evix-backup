@@ -26,9 +26,9 @@ const StudyDetail = () => {
     const [participationRateByPeriod, setParticipationRateByPeriod] = useState<any>();
 
     const navigate = useNavigate();
-	const theme = useTheme();
-	const { stdStatus } = theme.palette;
-	const today = dayjs().format('YYYY-MM-DD');
+    const theme = useTheme();
+    const { stdStatus } = theme.palette;
+    const today = dayjs().format('YYYY-MM-DD');
 
     useEffect(() => {
         if (stdNo) {
@@ -182,7 +182,6 @@ const StudyDetail = () => {
         }
     };
 
-    console.log('totalParticipants:: ', totalParticipants);
     const partCompleteRate: ApexDonutChartSeriesType = {
         labels: [t('study.completion_rate'), t('study.incomplete_rate')], //"참여완료율","미완료율"
         series: totalParticipants
@@ -216,7 +215,7 @@ const StudyDetail = () => {
                                 </>
                             }
                             sx={{
-								bgcolor: stdStatus.new,
+                                bgcolor: stdStatus.new,
                                 ...(studyDetail?.std_status === 'STD-PROGRESSION' && {
                                     bgcolor: stdStatus.ongoing,
                                 }), //Ongoing
@@ -227,9 +226,8 @@ const StudyDetail = () => {
                                     'STD-Expired' && {
                                         bgcolor: stdStatus.expired,
                                     }), //Expired
-								color: 'white'
-							}}
-							
+                                color: 'white',
+                            }}
                         />
                         <Typography variant="h3">{studyDetail?.title || ''}</Typography>
                         <Button

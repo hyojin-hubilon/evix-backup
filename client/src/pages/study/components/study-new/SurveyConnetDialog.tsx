@@ -69,6 +69,8 @@ const SurveyConnectDialog = ({
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [surveyToDelete, setSurveyToDelete] = useState<RegistrableSurvey | null>(null);
 
+    // console.log('initialSurveySetList: ', initialSurveySetList);
+
     // 등록 가능한 설문 목록 api 분리
     const fetchSurvey = async () => {
         try {
@@ -149,15 +151,22 @@ const SurveyConnectDialog = ({
         fetchSurvey();
     }, [initialSurveySetList]);
 
+    // Survey 새로 추가되었는지 여부 판별하기 위함
+    const [addedSurveys, setAddedSurveys] = useState(new Set<number>());
+
     const handleSelectedSurvey = (addSurvey: SurveyAdd) => {
         if (addSurvey.type === 'add') {
             const newSurveyItem = { ...addSurvey.survey, frequency: 'monthly', times: 1, sort: 1 };
             setSelectedSurvey([...selectedSurvey, newSurveyItem]);
+            setAddedSurveys(new Set(addedSurveys).add(newSurveyItem.survey_no));
         } else {
             const newItems = selectedSurvey
                 .filter((survey) => survey.survey_no !== addSurvey.survey.survey_no)
                 .map((survey, index) => ({ ...survey, sort: index + 1 }));
             setSelectedSurvey(newItems);
+            setAddedSurveys(
+                new Set([...addedSurveys].filter((no) => no !== addSurvey.survey.survey_no))
+            );
         }
     };
 
@@ -421,6 +430,7 @@ const SurveyConnectDialog = ({
                                             itemChanged={handleChangeSurveyItem}
                                             onDeleteClick={handleDeleteClick}
                                             mode={mode}
+                                            addedSurveys={addedSurveys}
                                         />
                                     </Box>
 

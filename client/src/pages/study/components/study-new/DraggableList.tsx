@@ -9,6 +9,7 @@ export type DraggableListProps = {
     itemChanged: (items) => void;
     onDeleteClick: (survey) => void;
     mode: 'create' | 'edit';
+    addedSurveys: Set<number>;
 };
 
 const DraggableList = ({
@@ -17,6 +18,7 @@ const DraggableList = ({
     itemChanged,
     onDeleteClick,
     mode,
+    addedSurveys,
 }: DraggableListProps) => {
     const handleChangeSurvey = (item: RegistrableSurvey, index: number) => {
         items[index] = item;
@@ -40,6 +42,7 @@ const DraggableList = ({
                                 itemChanged={handleChangeSurvey}
                                 deleteItem={handleDeleteSurvey}
                                 mode={mode}
+                                isAddedSurvey={addedSurveys.has(item.survey_no)}
                             />
                         ))}
                         {provided.placeholder}
