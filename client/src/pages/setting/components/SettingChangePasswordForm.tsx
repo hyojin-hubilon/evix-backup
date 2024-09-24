@@ -5,6 +5,7 @@ import { ModifyPassword } from '@/types/user';
 import { Container, Typography, Stack, OutlinedInput, Button, Modal, Box } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { t } from 'i18next';
 
 type Props = {
     user_no: number;
@@ -24,7 +25,7 @@ const modalStyle = {
 };
 
 const SettingChangePasswordForm: React.FC<Props> = ({ user_no, isOpen, handleClose }) => {
-	const confirm = useConfirmation();
+    const confirm = useConfirmation();
     const validationSchema = yup.object({
         origin_password: yup.string().required('Origin Password is required'),
         new_password: yup
@@ -57,7 +58,7 @@ const SettingChangePasswordForm: React.FC<Props> = ({ user_no, isOpen, handleClo
         try {
             const { content } = await userApi.modifyPassword(body);
             if (content) {
-                confirm({description : '비밀번호 변경이 완료되었습니다.', variant: 'info'});
+                confirm({ description: t('settings.change_password_success'), variant: 'info' });
                 handleClose();
             }
         } catch (error) {
@@ -77,12 +78,11 @@ const SettingChangePasswordForm: React.FC<Props> = ({ user_no, isOpen, handleClo
             <Box sx={modalStyle}>
                 <Container>
                     <Typography variant="h4" gutterBottom>
-                        Change password
+                        {t('settings.change_password')}
                     </Typography>
 
                     <Stack sx={{ mt: 2, mb: 2 }}>
-                        <Typography>Please enter a new password.</Typography>
-                        <Typography>After the change, go to the login screen.</Typography>
+                        <Typography>{t('settings.please_enter_new_password')}</Typography>
                     </Stack>
 
                     <form onSubmit={formik.handleSubmit}>
@@ -149,7 +149,7 @@ const SettingChangePasswordForm: React.FC<Props> = ({ user_no, isOpen, handleClo
                                 variant="contained"
                                 color="primary"
                             >
-                                Change Password
+                                {t('settings.change_password')}
                             </Button>
                         </Stack>
                     </form>

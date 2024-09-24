@@ -74,11 +74,6 @@
 		"general_hospital" : "General hospital",
 		"10yr" : "10yr +",
 		"time_series_data" : "Time series data",
-        "terms" : {
-            "title" : "Website terms and conditions",
-            "last_revised" : "Last Revised: November 2022",
-            "description" : "These Terms and Conditions together with our Privacy Notice govern your use or viewing of this website (the “Site”) and your relationship with the owner of the Site, Roche Diagnostics (the “Site Owner”). You may contact Roche Diagnostics at F. Hoffmann-La Roche Ltd, Corporate Communications, Grenzacherstrasse 124, CH-4070 Basel, Switzerland. By using this Site, you agree to be bound by these Terms and Conditions."
-        },
         "cookie_policy": {
             "what_are_cookies": "What are cookies?",
             "what_are_cookies_description": "When you visit a website such as uMotif.com, the website stores data in small files on your computer, known as cookies. Cookies are used to store information about you and your preferences, so that you don't have to keep re-entering them, and improve your browsing experience.",
@@ -312,7 +307,10 @@
 		"language_settings" : "Language settings",
 		"edit_completed" : "Edit completed",
 		"participate_in_the_study" : "After accepting the invitation, please participate in the Study.",
-		"received_invitations_displayed": "※ Only received invitations are displayed."
+		"received_invitations_displayed": "※ Only received invitations are displayed.",
+		"change_password" : "Change password",
+		"please_enter_new_password" : "Please enter a new password.",
+		"change_password_success" : "The password change has been completed."
 	},
 	"nav": {
 		"welcome" : ", Welcome"
