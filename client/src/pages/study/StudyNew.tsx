@@ -19,7 +19,7 @@ import {
     Divider,
 } from '@mui/material';
 import dayjs from 'dayjs';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import DateRangePicker, { DateRage } from './components/study-new/Daterangepicker';
 import MedicineInfo from './components/study-new/MedicineInfo';
 
@@ -710,7 +710,15 @@ const StudyNew = () => {
                                         gap={0.5}
                                     >
                                         <Typography variant="h5" sx={{ maxWidth: '70%' }}>
-                                            {t('study.eic')}
+                                            {/* {t('study.eic')} */}
+                                            {t('study.eic')
+                                                .split('\n')
+                                                .map((line, index) => (
+                                                    <React.Fragment key={index}>
+                                                        {line}
+                                                        <br />
+                                                    </React.Fragment>
+                                                ))}
                                         </Typography>
                                         <FormTooltip text={t('study.connect_the_eic')} />
                                         {/* Connect the EIC before Study deployment. */}
