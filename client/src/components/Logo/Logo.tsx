@@ -13,7 +13,7 @@ const Logo = ({ width = 170 }: LogoProps) => {
     }, [width]);
 
     return (
-        <Box width={boxWidth}>
+        <Box width={boxWidth} sx={{display: 'flex', alignItems:'center'}}>
             <img src={logo} alt="evix-DCT" width="100%" />
         </Box>
     );

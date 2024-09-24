@@ -385,17 +385,17 @@ export default function LandingPage() {
             </Box>
 
             {/* Section 05 */}
-            <Box className="section section-05" id="case">
+            <Box className="section section-05" id="case" sx={{ padding: { xs : '2rem 0', md: '5rem 0'}}}>
                 <Container maxWidth="xl">
                     <Grid container alignItems="center" justifyContent="center" gap={4}>
-                        <Grid item xs={5}>
+                        <Grid item xs={12} md={5}>
                             <img
                                 src={landingImg051}
                                 alt="eCRF System"
                                 style={{ maxWidth: '100%' }}
                             />
                         </Grid>
-                        <Grid item xs={5}>
+                        <Grid item xs={12} md={5}>
                             <Typography
                                 variant="h6"
                                 sx={{
@@ -443,8 +443,8 @@ export default function LandingPage() {
             {/* Section 06 */}
             <Box className="section section-06">
                 <Container maxWidth="xl">
-                    <Grid container alignItems="center" justifyContent="center" gap={1}>
-                        <Grid item xs={5}>
+                    <Grid container alignItems="center" justifyContent="center" gap={1} sx={{ flexDirection : { xs : 'column-reverse', md : 'row'}, padding: { xs : '2rem 0', md: '5rem 0'}}}>
+                        <Grid item xs={12} md={5}>
                             <Typography
                                 variant="h6"
                                 sx={{
@@ -485,7 +485,7 @@ export default function LandingPage() {
                                 />
                             </Box>
                         </Grid>
-                        <Grid item xs={5}>
+                        <Grid item xs={12} md={5}>
                             <img
                                 src={landingImg061}
                                 alt="eCRF System"
@@ -695,7 +695,7 @@ export default function LandingPage() {
                                 variant="h2"
                                 sx={{
                                     fontWeight: 700,
-                                    fontSize: { sx: '1.5rem', md: '2.7rem' },
+                                    fontSize: { xs: '1.5rem !important', md: '2.5rem !important', lg: '2.7rem !important' },
                                     mt: { xs: '2.5rem', md: '5.25rem' },
                                 }}
                             >
