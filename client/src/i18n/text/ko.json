@@ -323,7 +323,10 @@
 		"managing_accounts" : "계정 관리하기",
 		"service_introduction": "서비스 소개",
 		"member_management" : "멤버관리",
-		"evix-dct_info" : "Evix-DCT 정보"
+		"evix-dct_info" : "Evix-DCT 정보",
+		"need_more_help" : "도움이 더 필요하신가요?",
+		"next_steps" : "다음 단계를 시도해 보세요.",
+		"tell_us_more" : "자세히 알려주시면 도움을 드리겠습니다."
 	},
 	"auth" : {
 		"study_invitation_completed" : "스터디 초대가 완료되었습니다.",

@@ -1,4 +1,5 @@
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, Container, Grid, InputAdornment, OutlinedInput, Tab, Tabs, Typography } from "@mui/material";
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, Card, Container, Grid, InputAdornment, OutlinedInput, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from "react";
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
@@ -18,6 +19,7 @@ const Help = () => {
 	const { t, i18n } = useTranslation();
 
 	const navigate = useNavigate();
+	const theme = useTheme();
 
 	const handleSearch = (e) => {
 		setSearchTerm(e.target.value);
@@ -166,14 +168,42 @@ const Help = () => {
 																)
 															}
 														</div>
-														{/* <div>
-														도움이 더 필요하신가요?
-														다음 단계를 시도해 보세요.
+														<Box border={`1px solid ${theme.palette.divider}`}
+															sx={{
+																borderRadius: '1rem',
+																m: '1rem',
+																p: '2rem',
+																display: 'flex',
+																alignItems:'center',
+																flexDirection: 'column'
+															}}
+														>
+															<Typography variant='h5'>{t('help.need_more_help')}</Typography>
+															<Typography>{t('help.next_steps')}</Typography>
 
 
-														문의하기
-														자세히 알려주시면 도움을 드리겠습니다.
-														</div> */}
+															<Button sx={{
+																display: 'flex',
+																flexDirection: 'row',
+																alignItems: 'center', 
+																gap: '1rem',
+																mt: '2rem'
+															}}
+																color="primary"
+																variant="contained"
+																onClick={handleMoveToSupport}
+															>
+																<SupportAgentIcon />
+																<Box sx={{
+																	display: 'flex',
+																	flexDirection: 'column',
+																	alignItems: 'flex-start'
+																}}>
+																	<Typography variant='h5'>{t('help.contact_us')}</Typography>
+																	<Typography>{t('help.tell_us_more')}</Typography>
+																</Box>
+															</Button>
+														</Box>
 													</AccordionDetails>
 												</Accordion>
 											)
