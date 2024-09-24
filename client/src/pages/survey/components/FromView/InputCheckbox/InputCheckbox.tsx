@@ -6,6 +6,7 @@ import { ExampleList, ExampleTypes } from "@/types/survey";
 import { Field, useField, useFormikContext } from "formik";
 import { requiredCheck } from "@/utils/helper";
 import { Typography } from "@mui/material";
+import { t } from "i18next";
 
 type InputCheckboxProps = {
 	cardId: string,
@@ -57,7 +58,7 @@ const InputCheckbox = ({ cardId, questionIndex }: InputCheckboxProps) => {
 					<S.Label htmlFor={`checkbox-${example.question_no}-${example.example_no}`}>
 						{example.example_type === ExampleTypes.OTHER ? (
 							<S.EtcContainer>
-								<span>기타 : </span>
+								<span>{t('survey.etc')}</span>
 								<S.TextField
 									name={`questions.${questionIndex}.answerEtc`}
 									variant="standard"
