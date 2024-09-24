@@ -527,7 +527,12 @@ const StudyNew = () => {
                                         minHeight: '1.4375em',
                                         borderColor: 'rgba(0, 0, 0, 0.23)',
                                     }}
-                                    value={[dayjs(dateSet.startDt), dayjs(dateSet.endDt)]} // dayjs로 날짜 변환
+                                    // value={[dayjs(dateSet.startDt), dayjs(dateSet.endDt)]} // dayjs로 날짜 변환
+                                    value={
+                                        dateSet.startDt && dateSet.endDt
+                                            ? [dayjs(dateSet.startDt), dayjs(dateSet.endDt)]
+                                            : null
+                                    }
                                     onChange={onChangeDate}
                                 />
                             </FormControl>
