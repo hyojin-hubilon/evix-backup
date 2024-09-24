@@ -1,10 +1,12 @@
 import userApi from "@/apis/user";
 import MainCard from "@/components/MainCard";
+import { useConfirmation } from "@/context/ConfirmDialogContext";
 import { MyProfile } from "@/types/user";
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
 
 import { Formik, useFormik } from 'formik';
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
 
 
@@ -13,6 +15,9 @@ const UserSupport = () => {
 	// const emailAdress = 'hyojinanr@gmail.com';
 	const subject = '[Support]';
 	const [userData, setUserData] = useState<MyProfile | null>(null);
+	const confirm = useConfirmation();
+	const navigate = useNavigate();
+
 	const [ initialValues, setInitialValues] = useState({
 		first_name: '',
 		last_name: '',
@@ -60,6 +65,14 @@ const UserSupport = () => {
 	const handleSubmit = (values) => {
 		let bodyMessage = `mailto:${emailAdress}?subject=${subject}&body=[Form Type] : Support%0D%0A[Firstname] : ${values.first_name}%0D%0A[Lastname] : ${values.last_name}%0D%0A[Email] : ${values.email}%0D%0A[message] : ${values.message}`;
 		window.location.href = bodyMessage;
+		confirm({
+			description: "Thanks for contacting us! We will get in touch with you shortly.",
+			variant: 'info'
+		}).then(
+			() => {
+				navigate('/help');
+			}
+		)
 	}
 
 	return (
