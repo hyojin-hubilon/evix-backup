@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { Field } from "formik";
 import { requiredCheck } from "@/utils/helper";
 import { Typography } from "@mui/material";
+import { t } from "i18next";
 
 type InputRadioProps = {
 	cardId: string,
@@ -49,7 +50,7 @@ const InputRadio = ({ cardId, questionIndex }: InputRadioProps) => {
 							<S.Label htmlFor={`radio-${example.question_no}-${example.example_no}`}>
 								{example.example_type === ExampleTypes.OTHER ? (
 									<S.EtcContainer>
-										<span>기타 : </span>
+										<span>{t('survey.etc')} : </span>
 										<S.TextField
 											name={`questions.${questionIndex}.answerEtc`}
 											variant="standard"
