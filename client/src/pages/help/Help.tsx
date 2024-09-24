@@ -1,4 +1,5 @@
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, Container, Grid, InputAdornment, OutlinedInput, Tab, Tabs, Typography } from "@mui/material";
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, Card, Container, Grid, InputAdornment, OutlinedInput, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from "react";
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
@@ -17,17 +18,17 @@ const Help = () => {
 	const [ helps, setHelps ] = useState<Helps[]>([]);
 	const { t, i18n } = useTranslation();
 
-	const navigate = useNavigate();
+	const [expanded, setExpanded] = useState<string | false>('panel0');
 
-	const handleSearch = (e) => {
-		setSearchTerm(e.target.value);
-	}
+	const navigate = useNavigate();
+	const theme = useTheme();
 
 	const handleMoveToSupport = () => {
 		navigate('/user-support')
 	}
 
 	const handleChangeTab = (_event: React.SyntheticEvent, newValue: number) => {
+		setExpanded(false);
 		setActiveTab(newValue);	
 	};
 
@@ -42,6 +43,10 @@ const Help = () => {
 	useEffect(() => {
 		getHelps();
 	}, [])
+
+	const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      	setExpanded(isExpanded ? panel : false);
+    };
 
 	return (
 		<Container maxWidth="lg">
@@ -67,9 +72,10 @@ const Help = () => {
 									<SearchIcon />
 								</InputAdornment>
 							}
+							disabled
 							value={searchTerm}
-							onChange={(e) => handleSearch(e.target.value)}
-							placeholder={t('help.search_placeholder')} //도움말을 검색해보세요.
+							onChange={(e) => setSearchTerm(e.target.value)}
+							placeholder={t('help.search_placeholder')} //도움말을 검색해보세요. > comming soon
 						/>
 					</Grid>
 					<Grid item xs={1.9}>
@@ -118,13 +124,13 @@ const Help = () => {
 									<Box>
 										{
 											help.helpList.map((helpList, helpListIndex) => 
-												<Accordion defaultExpanded={helpListIndex === 0}>
+												<Accordion key={helpListIndex} expanded={expanded === `panel${helpListIndex}`} onChange={handleChange(`panel${helpListIndex}`)}>
 													<AccordionSummary
-													expandIcon={<ExpandMoreIcon />}
-													aria-controls={`panel${helpListIndex}`}
-													id={`panel${helpListIndex}`}
-													>
-														{ helpList.helpTitle }
+														expandIcon={<ExpandMoreIcon />}
+														aria-controls={`panel${helpListIndex}`}
+														id={`panel${helpListIndex}`}
+														>
+															{ helpList.helpTitle }
 													</AccordionSummary>
 													<AccordionDetails>
 														<div className="help-box">
@@ -166,14 +172,42 @@ const Help = () => {
 																)
 															}
 														</div>
-														{/* <div>
-														도움이 더 필요하신가요?
-														다음 단계를 시도해 보세요.
+														<Box border={`1px solid ${theme.palette.divider}`}
+															sx={{
+																borderRadius: '1rem',
+																m: '1rem',
+																p: '2rem',
+																display: 'flex',
+																alignItems:'center',
+																flexDirection: 'column'
+															}}
+														>
+															<Typography variant='h5'>{t('help.need_more_help')}</Typography>
+															<Typography>{t('help.next_steps')}</Typography>
 
 
-														문의하기
-														자세히 알려주시면 도움을 드리겠습니다.
-														</div> */}
+															<Button sx={{
+																display: 'flex',
+																flexDirection: 'row',
+																alignItems: 'center', 
+																gap: '1rem',
+																mt: '2rem'
+															}}
+																color="primary"
+																variant="contained"
+																onClick={handleMoveToSupport}
+															>
+																<SupportAgentIcon />
+																<Box sx={{
+																	display: 'flex',
+																	flexDirection: 'column',
+																	alignItems: 'flex-start'
+																}}>
+																	<Typography variant='h5'>{t('help.contact_us')}</Typography>
+																	<Typography>{t('help.tell_us_more')}</Typography>
+																</Box>
+															</Button>
+														</Box>
 													</AccordionDetails>
 												</Accordion>
 											)

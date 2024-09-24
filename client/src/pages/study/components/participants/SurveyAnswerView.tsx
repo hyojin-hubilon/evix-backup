@@ -76,7 +76,7 @@ const SurveyAnswerView = ({
 					 {
 					 	surveySets.length === 0 ? 
 					 	
-						<Box minHeight="6rem" justifyContent="center">
+						<Box minHeight="6rem" justifyContent="center" p="2rem">
 							<Typography textAlign="center" pt="2rem">
 								{t('study.no_record_survey')}
 								{/* 이 참여자의 설문참여 기록이 없습니다. */}
@@ -98,7 +98,7 @@ const SurveyAnswerView = ({
 										onClick={() => getSurveyAnswer(surveySet)}
 										>
 											<Typography variant="h5">{surveySet.survey_title}</Typography>
-											<Typography>Answer Turn : {surveySet.answer_turn}</Typography>
+											{/* <Typography>Answer Turn : {surveySet.answer_turn}</Typography> */}
 											<Typography>Created at : {dayjs(surveySet.created_at).format('YYYY-MM-DD')}</Typography>
 										</ListItemButton>
 									</ListItem>

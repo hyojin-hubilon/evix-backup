@@ -9,6 +9,9 @@ import * as Yup from 'yup';
 
 
 const UserSupport = () => {
+	const emailAdress = 'evix-dct@evidnet.co.kr';
+	// const emailAdress = 'hyojinanr@gmail.com';
+	const subject = '[Support]';
 	const [userData, setUserData] = useState<MyProfile | null>(null);
 	const [ initialValues, setInitialValues] = useState({
 		first_name: '',
@@ -53,6 +56,12 @@ const UserSupport = () => {
         }
     };
 
+
+	const handleSubmit = (values) => {
+		let bodyMessage = `mailto:${emailAdress}?subject=${subject}&body=[Form Type] : Support%0D%0A[Firstname] : ${values.first_name}%0D%0A[Lastname] : ${values.last_name}%0D%0A[Email] : ${values.email}%0D%0A[message] : ${values.message}`;
+		window.location.href = bodyMessage;
+	}
+
 	return (
 		<Grid container alignItems="center" justifyContent="center" width={1}>
 			{/* Help > Support Breadcrumb 추가 예정*/}
@@ -77,7 +86,7 @@ const UserSupport = () => {
 							validateOnChange={true}
 							enableReinitialize={true}
 							onSubmit={(values, actions) => {
-								console.log(values)//mail로 문의
+								handleSubmit(values);
 								actions.setSubmitting(false);
 							}}
 		
