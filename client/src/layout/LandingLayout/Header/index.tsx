@@ -85,7 +85,7 @@ const LandingHeader = ({ open, handleDrawerToggle }: Props) => {
         <Container maxWidth="xl">
             <Grid container alignItems="center">
                 <Grid item xs={3}>
-                    <LogoSection sx={{ display: 'flex', justifyContent: 'flex-start' }} />
+                    <LogoSection sx={{ display: 'flex', justifyContent: 'center' }} />
                 </Grid>
                 <Grid
                     item
