@@ -328,7 +328,10 @@
         "managing_accounts": "Managing accounts",
         "service_introduction": "Service Introduction",
         "member_management": "Member Management",
-        "evix-dct_info": "Evix-DCT Information"
+        "evix-dct_info": "Evix-DCT Information",
+		"need_more_help" : "Need more help?",
+		"next_steps" : "Try these next steps..",
+		"tell_us_more" : "Tell us more and we’ll help you get there."
     },
     "auth": {
         "study_invitation_completed": "Your study invitation has been completed.",
