@@ -72,9 +72,10 @@ const Help = () => {
 									<SearchIcon />
 								</InputAdornment>
 							}
+							disabled
 							value={searchTerm}
 							onChange={(e) => setSearchTerm(e.target.value)}
-							placeholder={t('help.search_placeholder')} //도움말을 검색해보세요.
+							placeholder={t('help.search_placeholder')} //도움말을 검색해보세요. > comming soon
 						/>
 					</Grid>
 					<Grid item xs={1.9}>
