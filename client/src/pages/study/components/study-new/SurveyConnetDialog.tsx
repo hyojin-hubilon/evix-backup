@@ -38,6 +38,8 @@ interface SurveyConnectDialogProps {
     initialSurveySetList: any[] | null;
     mode: 'create' | 'edit';
     studyNo?: number;
+    startDate?: string;
+    endDate?: string;
 }
 
 interface StudySurveySet {
@@ -54,6 +56,8 @@ const SurveyConnectDialog = ({
     initialSurveySetList,
     mode,
     studyNo,
+    startDate,
+    endDate,
 }: SurveyConnectDialogProps) => {
     const theme = useTheme();
     const { grey } = theme.palette;
@@ -268,10 +272,10 @@ const SurveyConnectDialog = ({
                         std_no: studyNo,
                         std_start_date: initialSurveySetList
                             ? initialSurveySetList[0].survey_start_date
-                            : undefined,
+                            : startDate,
                         std_end_date: initialSurveySetList
                             ? initialSurveySetList[0].survey_end_date
-                            : undefined,
+                            : endDate,
                         studySurveySetList: newStudySurveySetList,
                     };
                     await studyApi.postSurvey(data);
@@ -318,6 +322,7 @@ const SurveyConnectDialog = ({
                 },
                 []
             );
+
             setStudySurveySetList(newStudySurveySetList);
         }
 

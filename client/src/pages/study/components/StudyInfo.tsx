@@ -13,7 +13,7 @@ import {
     Divider,
     Link,
     IconButton,
-	Dialog
+    Dialog,
 } from '@mui/material';
 import StudyMemberStatus from './study-info/StudyMemberStatus';
 import { STUDY_STATUS, STUDY_STATUS_KEY } from './StudyListItem';
@@ -92,8 +92,7 @@ interface StudyInfoProps {
 const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
     const theme = useTheme();
     const navigate = useNavigate();
-	const { stdStatus } = theme.palette;
-	
+    const { stdStatus } = theme.palette;
 
     const confirm = useConfirmation();
     const { userProfile } = useUserProfile();
@@ -149,8 +148,8 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
     const [basePdfFile, setBasePdfFile] = useState<File | null>(null);
     const [isUploadBasePdfOpen, setIsUploadBasePdfOpen] = useState<boolean>(false);
     const [isCreateEicOpen, setIsCreateEicOpen] = useState<boolean>(false);
-	const [ managerList, setManagerList] = useState<any[]>(studyDetail.managerList);
-	const [ inviteList, setInviteList] = useState<any[]>(studyDetail.inviteList);
+    const [managerList, setManagerList] = useState<any[]>(studyDetail.managerList);
+    const [inviteList, setInviteList] = useState<any[]>(studyDetail.inviteList);
 
     const handlePreviewOpen = () => {
         setIsPreviewEicOpen(true);
@@ -240,18 +239,18 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
         }
     };
 
-	const [ surveyNo, setSurveyNo ] = useState<number|null>(null);
-	const [ isPreview, setIsPreview ] = useState(false);
+    const [surveyNo, setSurveyNo] = useState<number | null>(null);
+    const [isPreview, setIsPreview] = useState(false);
 
-	const handleShowSurvey = (surveyNo) => {
-		setSurveyNo(surveyNo);
-		setIsPreview(true);
-	}
+    const handleShowSurvey = (surveyNo) => {
+        setSurveyNo(surveyNo);
+        setIsPreview(true);
+    };
 
-	const handleClosePreview = () => {
-		setIsPreview(false);
-		setSurveyNo(null);
-	}
+    const handleClosePreview = () => {
+        setIsPreview(false);
+        setSurveyNo(null);
+    };
 
     useEffect(() => {
         handleDownloadEicFile();
@@ -269,19 +268,22 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                         <ListItem>
                             <Typography variant="h5">Study Status</Typography>
                             <Box display="flex" gap={1}>
-                                <Typography variant="h6" sx={{
-									color: stdStatus.new,
-									...(studyDetail?.std_status === 'STD-PROGRESSION' && {
-										color: stdStatus.ongoing,
-									}), //Ongoing
-									...(studyDetail?.std_status === 'STD-DONE' && {
-										color: stdStatus.completed,
-									}), //Completed
-									...(endDate < today &&
-										'STD-Expired' && {
-											color: stdStatus.expired,
-										}), //Expired
-								}}>
+                                <Typography
+                                    variant="h6"
+                                    sx={{
+                                        color: stdStatus.new,
+                                        ...(studyDetail?.std_status === 'STD-PROGRESSION' && {
+                                            color: stdStatus.ongoing,
+                                        }), //Ongoing
+                                        ...(studyDetail?.std_status === 'STD-DONE' && {
+                                            color: stdStatus.completed,
+                                        }), //Completed
+                                        ...(endDate < today &&
+                                            'STD-Expired' && {
+                                                color: stdStatus.expired,
+                                            }), //Expired
+                                    }}
+                                >
                                     {statusLabel}
                                 </Typography>
                                 {studyDetail.updated_at && (
@@ -469,9 +471,11 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                                     sx={{
                                                         display: 'inline-block',
                                                         marginRight: '0.5rem',
-														cursor: 'pointer'
+                                                        cursor: 'pointer',
                                                     }}
-													onClick={() => handleShowSurvey(survey.survey_no)}
+                                                    onClick={() =>
+                                                        handleShowSurvey(survey.survey_no)
+                                                    }
                                                 >
                                                     {survey.title}
                                                 </Link>
@@ -607,10 +611,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                         </Box>
                     </Grid>
                 </Grid>
-                <StudyMemberStatus
-                    managerList={managerList}
-                    inviteList={inviteList}
-                />
+                <StudyMemberStatus managerList={managerList} inviteList={inviteList} />
             </Grid>
             <MemberManagement
                 isOpen={isOpenMember}
@@ -624,6 +625,8 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                 initialSurveySetList={studySurveySetList}
                 mode="edit"
                 studyNo={studyDetail.std_no}
+                startDate={studyDetail.std_start_date}
+                endDate={studyDetail.std_end_date}
             />
             <DeleteModal
                 open={isDelete}
@@ -647,12 +650,15 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                 handleEicFile={handleEicFile}
                 basePdfFile={basePdfFile}
             />
-			{
-			surveyNo && isPreview &&
-				<Dialog open={isPreview} maxWidth="lg" onClose={handleClosePreview} fullWidth>
-					<SurveyPreview surveyNo={surveyNo} handleClose={handleClosePreview} isDialog={true} />
-				</Dialog>
-		}
+            {surveyNo && isPreview && (
+                <Dialog open={isPreview} maxWidth="lg" onClose={handleClosePreview} fullWidth>
+                    <SurveyPreview
+                        surveyNo={surveyNo}
+                        handleClose={handleClosePreview}
+                        isDialog={true}
+                    />
+                </Dialog>
+            )}
         </Grid>
     );
 };
