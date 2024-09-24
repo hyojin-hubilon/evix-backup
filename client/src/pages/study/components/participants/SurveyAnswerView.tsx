@@ -98,7 +98,7 @@ const SurveyAnswerView = ({
 										onClick={() => getSurveyAnswer(surveySet)}
 										>
 											<Typography variant="h5">{surveySet.survey_title}</Typography>
-											<Typography>Answer Turn : {surveySet.answer_turn}</Typography>
+											{/* <Typography>Answer Turn : {surveySet.answer_turn}</Typography> */}
 											<Typography>Created at : {dayjs(surveySet.created_at).format('YYYY-MM-DD')}</Typography>
 										</ListItemButton>
 									</ListItem>
