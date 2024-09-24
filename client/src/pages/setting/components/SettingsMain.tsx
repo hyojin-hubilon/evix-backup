@@ -57,7 +57,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
     };
 
     const validationSchema = Yup.object({
-        mobile: Yup.string().required(t('settings.enter_your_phone_number')), //전화번호를 입력해주세요
+        mobile: Yup.string().matches(/^\d+$/, 'Please enter numbers only.').required(t('settings.enter_your_phone_number')), //전화번호를 입력해주세요
         country: Yup.string().required(t('settings.enter_your_country')),//'국가를 입력해주세요.'
         company_name: Yup.string().required(t('settings.enter_your_company')),//'회사를 입력해주세요.'
         job_title: Yup.string().required(t('settings.enter_your_occupation')), //'직업을 입력해주세요.'
