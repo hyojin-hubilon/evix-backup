@@ -240,13 +240,12 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                     />
                                     <Button
                                         variant="contained"
-                                        sx={{ marginLeft: '1rem' }}
+                                        sx={{ marginLeft: '1.0rem' }}
                                         color="secondary"
                                         onClick={handleChangePasswordModal}
-										size="large"
+										size="medium"
                                     >
 										{t('settings.change')}
-                                        {/* 변경 */}
                                     </Button>
                                 </Box>
                                 <TextField

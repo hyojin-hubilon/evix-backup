@@ -10,7 +10,7 @@ import {
     Typography,
     MenuItem,
     Box,
-	SelectChangeEvent,
+    SelectChangeEvent,
 } from '@mui/material';
 import { useState } from 'react';
 import SimpleModal from '../../../components/ui/SimpleModal';
@@ -49,10 +49,7 @@ const SupportForm = () => {
         job_title: Yup.string().required('Please enter Job Title'),
         email: Yup.string().email('Please input a valid email').required('Please enter email'),
         phone: Yup.string()
-            .matches(
-                /^(\+\d{1,2}\s?)?1?-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
-                'Please input a valid phone number'
-            )
+            .matches(/^[0-9]*$/, 'Please input a valid phone number')
             .required('Please enter phone number'),
         industry: Yup.string().required('Please select Industry Segment'),
         message: Yup.string(),

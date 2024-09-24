@@ -74,11 +74,6 @@
 		"general_hospital" : "General hospital",
 		"10yr" : "10yr +",
 		"time_series_data" : "Time series data",
-        "terms" : {
-            "title" : "이용 약관",
-            "last_revised" : "최근 수정일: 2022년 11월",
-            "description" : "본 약관은 개인 정보 보호 공지와 함께 사용자가 본 웹 사이트(사이트)를 이용하거나 시청하는 것과 사이트 소유자인 로슈 진단(사이트 소유자)과의 관계를 관리합니다. 로슈 진단에 문의할 수 있습니다. 본 사이트를 이용함으로써 본 약관에 구속되는 것에 동의하는 것입니다."
-        },
         "cookie_policy": {
             "what_are_cookies": "쿠키란 무엇입니까?",
             "what_are_cookies_description": "같은 웹사이트를 방문하면 웹사이트는 쿠키라고 알려진 컴퓨터의 작은 파일에 데이터를 저장합니다",
@@ -307,7 +302,10 @@
 		"language_settings" : "언어 설정",
 		"edit_completed" : "수정 완료",
 		"participate_in_the_study" : "초대 수락 후 Study에 참여해보세요.",
-		"received_invitations_displayed": "※ 받은 초대만 조회됩니다."
+		"received_invitations_displayed": "※ 받은 초대만 조회됩니다.",
+		"change_password" : "비밀번호 변경",
+		"please_enter_new_password" : "새로운 비밀번호를 입력해주세요",
+		"change_password_success" : "비밀번호 변경이 완료되었습니다."
 	},
 	"nav": {
 		"welcome" : "님 안녕하세요"
