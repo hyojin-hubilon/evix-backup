@@ -40,6 +40,7 @@ import { useUserProfile } from '@/context/UserProfileContext';
 import { useTranslation } from 'react-i18next';
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import DatePicker from 'antd/lib/date-picker';
 
 const FormTooltip = ({ text }) => {
     return (
@@ -51,6 +52,8 @@ const FormTooltip = ({ text }) => {
     );
 };
 
+const { RangePicker } = DatePicker;
+
 type ActionType = 'delete' | 'pause' | 'stop' | 'restart';
 
 const StudyNew = () => {
@@ -59,6 +62,9 @@ const StudyNew = () => {
     const theme = useTheme();
     const { divider, primary } = theme.palette;
     const [dateRange, setDateRange] = useState({ startDt: dayjs(), endDt: dayjs() });
+    const [dateSet, setDateSet] = useState({ startDt: '', endDt: '' });
+    // const [dateRange, setDateRange] = useState({ startDt: dayjs(), endDt: dayjs() });
+
     const [medicineYOrN, setMedicineYOrN] = useState<'true' | 'false'>('false');
     const [mode, setMode] = useState<'write' | 'edit'>('write');
     const [title, setTitle] = useState('');
@@ -125,7 +131,6 @@ const StudyNew = () => {
         setOpenDeleteConfirm(!openDeleteConfirm);
     };
 
-    // const [actionType, setActionType] = useState<ActionType | null>(null);
     type ActionType = 'delete' | 'pause' | 'done' | 'progression';
     const [actionType, setActionType] = useState<ActionType>('delete');
 
@@ -150,8 +155,8 @@ const StudyNew = () => {
                 std_status: 'STD-CREATED',
                 title: title,
                 std_type: 'E-PRO',
-                std_start_date: dateRange.startDt.format('YYYY-MM-DD'),
-                std_end_date: dateRange.endDt.format('YYYY-MM-DD'),
+                std_start_date: dateSet.startDt,
+                std_end_date: dateSet.endDt,
                 target_number: parseInt(participants),
                 description: description,
                 disease: disease,
@@ -256,19 +261,23 @@ const StudyNew = () => {
     const fetchStudyDetail = async (stdNo) => {
         try {
             const response = await studyApi.getStudyDetail(stdNo);
-            setStudyDetail(response.content as StudyDetail); // `response.content`의 타입이 `StudyDetail`과 일치해야 함
+            setStudyDetail(response.content as StudyDetail); //
 
             setTitle(response.content['title']);
             setParticipants(response.content['target_number']);
             setDescription(response.content['description']);
             setDisease(response.content['disease']);
 
-            setDateRange({
-                ...dateRange,
-                startDt: dayjs(response.content['std_start_date']),
-                endDt: dayjs(response.content['std_end_date']),
-            });
+            // setDateRange({
+            //     ...dateRange,
+            //     startDt: dayjs(response.content['std_start_date']),
+            //     endDt: dayjs(response.content['std_end_date']),
+            // });
 
+            setDateSet({
+                startDt: response.content['std_start_date'],
+                endDt: response.content['std_end_date'],
+            });
             setStudySurveySetList(response.content['studySurveySetList']);
             setInviteList(response.content['inviteList']);
             setManagerList(response.content['managerList']);
@@ -288,6 +297,7 @@ const StudyNew = () => {
     };
 
     console.log('studyDetail:', studyDetail);
+    console.log('dateSet::', dateSet);
 
     const handleUpdate = async () => {
         if (validate()) {
@@ -295,8 +305,8 @@ const StudyNew = () => {
                 std_no: stdNo,
                 title: title,
                 std_type: 'E-PRO',
-                std_start_date: dateRange.startDt.format('YYYY-MM-DD'),
-                std_end_date: dateRange.endDt.format('YYYY-MM-DD'),
+                std_start_date: dateSet.startDt,
+                std_end_date: dateSet.endDt,
                 target_number: parseInt(participants),
                 description: description,
                 disease: disease,
@@ -304,19 +314,6 @@ const StudyNew = () => {
                 drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
                 drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
             };
-
-            // // FormData 객체 생성 및 데이터 추가
-            // const formData = new FormData();
-
-            // formData.append(
-            //     'requestDto',
-            //     new Blob([JSON.stringify(studyData)], { type: 'application/json' })
-            // );
-
-            // // 전자동의서 파일이 있는 경우 FormData에 추가
-            // if (eicFile) {
-            //     formData.append('eic_file', eicFile, `${studyData.title}.json`);
-            // }
 
             try {
                 const response = await studyApi.updateStudy(studyData);
@@ -349,8 +346,8 @@ const StudyNew = () => {
             std_no: stdNo,
             title: title,
             std_type: 'E-PRO',
-            std_start_date: dateRange.startDt.format('YYYY-MM-DD'),
-            std_end_date: dateRange.endDt.format('YYYY-MM-DD'),
+            std_start_date: dateSet.startDt,
+            std_end_date: dateSet.endDt,
             target_number: parseInt(participants),
             description: description,
             disease: disease,
@@ -359,19 +356,6 @@ const StudyNew = () => {
             drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
             std_status: 'STD-PROGRESSION',
         };
-
-        // // FormData 객체 생성 및 데이터 추가
-        // const formData = new FormData();
-
-        // formData.append(
-        //     'requestDto',
-        //     new Blob([JSON.stringify(studyData)], { type: 'application/json' })
-        // );
-
-        // // 전자동의서 파일이 있는 경우 FormData에 추가
-        // if (eicFile) {
-        //     formData.append('eic_file', eicFile, `${studyData.title}.json`);
-        // }
 
         try {
             const response = await studyApi.deployStudy(studyData);
@@ -397,6 +381,30 @@ const StudyNew = () => {
     const handlePreview = () => {
         // 미리보기 화면 출력
         navigate('/study/preview', { state: { mode: 'preview', studyDetail: studyDetail } });
+    };
+
+    // const [dateSet, setDateSet] = useState<{ startDt: string; endDt: string }>({
+    //     startDt: '',
+    //     endDt: '',
+    // });
+
+    // const onChangeDate = (date, dateString: string[]) => {
+    //     console.log(date);
+    //     setDateSet({
+    //         startDt: dateString[0],
+    //         endDt: dateString[1],
+    //     });
+    // };
+
+    const onChangeDate = (date, dateString) => {
+        console.log('Selected Date:', date);
+        console.log('Formatted Date:', dateString);
+        if (date && date.length > 0) {
+            setDateSet({
+                startDt: dateString[0],
+                endDt: dateString[1],
+            });
+        }
     };
 
     return (
@@ -506,10 +514,21 @@ const StudyNew = () => {
                         </Grid>
                         <Grid item xs={9}>
                             <FormControl size="small">
-                                <DateRangePicker
+                                {/* <DateRangePicker
                                     startDt={dateRange.startDt}
                                     endDt={dateRange.endDt}
                                     changeDate={(e) => changeDateRange(e)}
+                                /> */}
+                                <RangePicker
+                                    placement="bottomRight"
+                                    style={{
+                                        padding: '6px 11px',
+                                        borderRadius: '4px',
+                                        minHeight: '1.4375em',
+                                        borderColor: 'rgba(0, 0, 0, 0.23)',
+                                    }}
+                                    value={[dayjs(dateSet.startDt), dayjs(dateSet.endDt)]} // dayjs로 날짜 변환
+                                    onChange={onChangeDate}
                                 />
                             </FormControl>
                         </Grid>
