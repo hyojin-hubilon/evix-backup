@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { PreviewProps, PreviewStateProps } from "@/store/reducers/preview";
 import { useSelector } from "react-redux";
 import { Field } from "formik";
-import { requiredCheck } from "@/utils/helper";
 import { Typography } from "@mui/material";
 import { t } from "i18next";
 
@@ -50,7 +49,7 @@ const InputRadio = ({ cardId, questionIndex }: InputRadioProps) => {
 							<S.Label htmlFor={`radio-${example.question_no}-${example.example_no}`}>
 								{example.example_type === ExampleTypes.OTHER ? (
 									<S.EtcContainer>
-										<span>{t('survey.etc')} : </span>
+										<span>{t('survey.etc')}</span>
 										<S.TextField
 											name={`questions.${questionIndex}.answerEtc`}
 											variant="standard"

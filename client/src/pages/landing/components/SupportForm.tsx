@@ -19,8 +19,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import PrivacyPolicy from '@/components/modal/PrivacyPolicy';
 
-//   const emailAdress = 'evix-dct@evidnet.co.kr';
-const emailAdress = 'bha4388@naver.com';
+const emailAdress = 'evix-dct@evidnet.co.kr';
+// const emailAdress = 'bha4388@naver.com';
 const subject = '[문의하기]';
 
 const modalText = 'Thanks for contacting us! We will get in touch with you shortly.';
