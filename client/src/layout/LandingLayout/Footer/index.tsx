@@ -74,7 +74,7 @@ const LandingFooter = () => {
                 <Container maxWidth="xl">
                     <Grid container>
 						<Grid item container xs={12} lg={6} gap={4}>
-							<Grid item xs={3}>
+							<Grid item xs={4} md={3}>
 								<Link sx={{ maxWidth: '100%' }}>
 									<img
 										src={footerLogo}
@@ -83,7 +83,7 @@ const LandingFooter = () => {
 									/>
 								</Link>
 							</Grid>
-							<Grid item xs={8}>
+							<Grid item xs={12} md={8}>
 								<Box sx={{ width: 1, display: 'flex', gap: 3 }}>
 									<FooterLink href="support">{t('common.support')}</FooterLink>
 									<FooterLink style={cursorPointer} onClick={handlePravacyPolicy}>
@@ -124,7 +124,7 @@ const LandingFooter = () => {
 								pt: 0
                             }}
                         >
-							<Box display="flex" gap={4} justifyContent={matchDownLG ? "flex-start" : "flex-end"}>
+							<Box display="flex" gap={4} justifyContent={matchDownLG ? "flex-start" : "flex-end"} sx={{flexDirection: {xs: 'column', md: 'row'}}}>
 								<Box display="flex" gap={1}>
 									<SocialButton
 										onClick={() =>
@@ -161,7 +161,7 @@ const LandingFooter = () => {
 										/>
 									</SocialButton>
 								</Box>
-								<Box minWidth="150px">
+								<Box minWidth="150px" maxWidth="150px">
 									<LanguageSelector />
 								</Box>
 							</Box>
