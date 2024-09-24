@@ -9,14 +9,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetAll, PreviewStateProps, addPreview } from "@/store/reducers/preview";
 import { Formik, Form } from "formik";
 import { useConfirmation } from '@/context/ConfirmDialogContext';
+import mastersApi from "@/apis/masters";
 
 
 type SurveyViewProps = {
 	preview?: boolean,
 	// mobile?: "Y" | "N" | undefined,
-	surveyNo? : string | number
+	surveyNo? : string | number,
+	isMaster?: boolean
 }
-const SurveyView = ({preview, surveyNo} : SurveyViewProps) => {
+const SurveyView = ({preview, surveyNo, isMaster} : SurveyViewProps) => {
 	const previewCards = useSelector((state: PreviewStateProps) => state.previewCards);
   	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -33,22 +35,43 @@ const SurveyView = ({preview, surveyNo} : SurveyViewProps) => {
 	
 	const getSurveyDeatil = async (surveyNumber) => {
 		try {
-			const response = await surveyApi.getSurvey(surveyNumber);
-            if (response.result && response.code === 200) {
-                const survey = response.content;
-				setSurvey(survey);
-				
-				if(survey.questionList) {
+			if(isMaster) {
+				const response = await mastersApi.getSurveySample(surveyNumber);
+				if (response.result && response.code === 200) {
+					const survey = response.content;
+					setSurvey(survey);
+					
+					if(survey.questionList) {
 
-					const hasRequiredCheck = survey.questionList.some((card) => card.required_answer_yn === 'Y');
-					setHasRequired(hasRequiredCheck);
+						const hasRequiredCheck = survey.questionList.some((card) => card.required_answer_yn === 'Y');
+						setHasRequired(hasRequiredCheck);
 
-					setCards(survey.questionList)
+						setCards(survey.questionList)
 
+					}
+					
+					console.log(survey)
 				}
-				
-				console.log(survey)
-            }
+
+			} else {
+				const response = await surveyApi.getSurvey(surveyNumber);
+				if (response.result && response.code === 200) {
+					const survey = response.content;
+					setSurvey(survey);
+					
+					if(survey.questionList) {
+
+						const hasRequiredCheck = survey.questionList.some((card) => card.required_answer_yn === 'Y');
+						setHasRequired(hasRequiredCheck);
+
+						setCards(survey.questionList)
+
+					}
+					
+					console.log(survey)
+				}
+			}
+			
         } catch (error) {
             console.error('Failed to fetch survey:', error);
 			dispatch(resetAll());
@@ -88,7 +111,6 @@ const SurveyView = ({preview, surveyNo} : SurveyViewProps) => {
 	}
 
 	useEffect(() => {
-		
 		const surveyNumber = survey_no ? survey_no : surveyNo;
 		console.log(surveyNo);
 		if(surveyNumber) getSurveyDeatil(surveyNumber);

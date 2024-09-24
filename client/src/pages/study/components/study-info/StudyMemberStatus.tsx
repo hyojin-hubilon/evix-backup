@@ -39,8 +39,8 @@ interface StudyMemberStatusProps {
 }
 
 const StudyMemberStatus = ({ managerList, inviteList }: StudyMemberStatusProps) => {
-    console.log('inviteList: ', inviteList);
-    console.log('managerList: ', managerList);
+    // console.log('inviteList: ', inviteList);
+    // console.log('managerList: ', managerList);
 
     const theme = useTheme();
     const { divider } = theme.palette;
@@ -98,16 +98,18 @@ const StudyMemberStatus = ({ managerList, inviteList }: StudyMemberStatusProps) 
                             }}
                         >
                             <TableCell></TableCell>
-							{/* 이름 */}
+                            {/* 이름 */}
                             <TableCell>{t('study.name')}</TableCell>
-							{/* 권한 */}
+                            {/* 권한 */}
                             <TableCell align="center">{t('study.function')}</TableCell>
-							{/* 소속 */}
+                            {/* 소속 */}
                             <TableCell align="center">{t('study.affiliation')}</TableCell>
                             <TableCell align="center">email</TableCell>
-							{/* 초대발송일자 */}
-                            <TableCell align="center">{t('study.invitation_sending_date')}</TableCell>
-							{/* 승인상태 */}
+                            {/* 초대발송일자 */}
+                            <TableCell align="center">
+                                {t('study.invitation_sending_date')}
+                            </TableCell>
+                            {/* 승인상태 */}
                             <TableCell align="center">{t('study.approval_status')}</TableCell>
                         </TableRow>
                     </TableHead>

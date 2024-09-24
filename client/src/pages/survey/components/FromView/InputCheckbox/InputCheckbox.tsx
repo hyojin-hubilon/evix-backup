@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import * as S from "./styles";
 import { PreviewProps, PreviewStateProps } from "@/store/reducers/preview";
 import { ExampleList, ExampleTypes } from "@/types/survey";
-import { Field, useField, useFormikContext } from "formik";
-import { requiredCheck } from "@/utils/helper";
+import { Field } from "formik";
 import { Typography } from "@mui/material";
+import { t } from "i18next";
 
 type InputCheckboxProps = {
 	cardId: string,
@@ -57,7 +56,7 @@ const InputCheckbox = ({ cardId, questionIndex }: InputCheckboxProps) => {
 					<S.Label htmlFor={`checkbox-${example.question_no}-${example.example_no}`}>
 						{example.example_type === ExampleTypes.OTHER ? (
 							<S.EtcContainer>
-								<span>기타 : </span>
+								<span>{t('survey.etc')}</span>
 								<S.TextField
 									name={`questions.${questionIndex}.answerEtc`}
 									variant="standard"
@@ -73,7 +72,7 @@ const InputCheckbox = ({ cardId, questionIndex }: InputCheckboxProps) => {
 			{ errors.questions && errors.questions[questionIndex] && errors.questions[questionIndex].answerMultiple
  				?
 				//  { errors.questions[questionIndex].answerMultiple }
-				<Typography paddingTop="0.5rem" sx={{display:'block', color: 'red'}}>필수 항목입니다.</Typography> : ''
+				<Typography paddingTop="0.5rem" sx={{display:'block', color: 'red'}}>{ errors.questions[questionIndex].answer }</Typography> : ''
 			}
 		</S.Container>
 		)}

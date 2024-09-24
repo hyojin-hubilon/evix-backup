@@ -1,4 +1,4 @@
-import { QuestionDivision, QuestionTypes, SurveyDetail } from "./survey";
+import { ExampleList, QuestionDivision, QuestionTypes, SurveyDetail } from "./survey";
 
 export interface SurveyAnswerReqBody {
     set_no: number;
@@ -125,6 +125,18 @@ export interface ParticipantStudyDetail {
 }
 
 
+export interface SurveyQuestionAnswer  {
+	set_no: number,
+	survey_no: number,
+	answer_cycle: string | Date,
+	answer_turn: number,
+	question_no: number,
+	participant_no: number,
+	answer_select: string | number | null,
+	answer_write: string | null,
+	multipleAnswerList: number[] | null
+}
+
 export interface ParticipantSurveyExampleList {
 	level:number;
 	parent: string;
@@ -134,11 +146,11 @@ export interface ParticipantSurveyExampleList {
 	question_type: QuestionTypes;
 	required_answer_yn: 'Y' | 'N';
 	sort:number;
-	surveyQuestionAnswer: string | number | null;
+	surveyQuestionAnswer: SurveyQuestionAnswer;
 	survey_no: number;
 }
 export interface ParticipantSurveyQuestionList  {
-	exampleList : ParticipantSurveyExampleList[];
+	exampleList : ExampleList[];
 	level: number;
 	parent: string;
 	question: string;
@@ -147,7 +159,7 @@ export interface ParticipantSurveyQuestionList  {
 	question_type: QuestionTypes;
 	required_answer_yn: 'Y' | 'N';
 	sort: number;
-	surveyQuestionAnswer: string | number | null;
+	surveyQuestionAnswer: SurveyQuestionAnswer;
 	survey_no: number;
 }
 

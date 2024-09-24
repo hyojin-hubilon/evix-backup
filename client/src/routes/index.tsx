@@ -11,6 +11,7 @@ import SurveyRoutes from './SurveyRoutes';
 import InviteStudyRoutes from './InviteStudy';
 import HelpRoutes from './HelpRoutes';
 import MdppRoutes from './MdppRoutes';
+import MastersRoutes from './MastersRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
@@ -25,6 +26,7 @@ export default function ThemeRoutes() {
         InviteStudyRoutes,
 		HelpRoutes,
 		MdppRoutes,
+		MastersRoutes,
         { path: '*', element: <NotFound /> },
     ]);
 }

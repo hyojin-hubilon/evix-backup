@@ -9,16 +9,23 @@ import { useNavigate } from 'react-router-dom';
 
 const ParticipantStudies = () => {
     const [participantStudy, setParticipantStudy] = useState<ParticipantStudyList[]>([]);
-	const navigate = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         // login(); //TODO: 임시 로그인임,  삭제 처리할 것..
         fetchStudyList();
     }, []);
 
+    // React Native WebView와의 통신을 위한 useEffect 추가
+    useEffect(() => {
+        if (window.ReactNativeWebView) {
+            window.ReactNativeWebView.postMessage(window.location.href);
+        }
+    }, []);
+
     const login = async () => {
         const response = await participantStudyApi.login();
-		console.log(response);
+        console.log(response);
     };
     const fetchStudyList = async () => {
         try {
@@ -33,9 +40,9 @@ const ParticipantStudies = () => {
         }
     };
 
-	const selectStudy = (study : ParticipantStudyList) => {
-		navigate(`/mdpp/study/${study.std_no}/surveys`);
-	}
+    const selectStudy = (study: ParticipantStudyList) => {
+        navigate(`/mdpp/study/${study.std_no}/surveys`);
+    };
 
     return (
         <Box sx={{ bgcolor: 'white', minHeight: '100vh', pt: '22px' }}>
@@ -49,7 +56,11 @@ const ParticipantStudies = () => {
 
             <Box mt="21px" borderTop="1px solid #E0E5E9">
                 {participantStudy.map((study, index) => (
-                    <ParticipantStudyItem study={study} selectStudy={selectStudy} key={study.std_no} />
+                    <ParticipantStudyItem
+                        study={study}
+                        selectStudy={selectStudy}
+                        key={study.std_no}
+                    />
                 ))}
             </Box>
             <Box p="50px 23px">

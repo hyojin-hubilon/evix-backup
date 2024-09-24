@@ -63,10 +63,21 @@ const LandingHeader = ({ open, handleDrawerToggle }: Props) => {
         textDecoration: 'none',
     }));
 
-    const handleScroll = (position: number) => {
+    const handleScrollToElement = (elementId: string) => {
+        navigate('/');
+        
+        setTimeout(() => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 100);
+    };
+
+    const handleScrollToTop = () => {
         navigate('/');
         setTimeout(() => {
-            window.scrollTo({ top: position, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }, 100);
     };
 
@@ -74,7 +85,7 @@ const LandingHeader = ({ open, handleDrawerToggle }: Props) => {
         <Container maxWidth="xl">
             <Grid container alignItems="center">
                 <Grid item xs={3}>
-                    <LogoSection sx={{ display: 'flex', justifyContent: 'flex-start' }} />
+                    <LogoSection sx={{ display: 'flex', justifyContent: 'center' }} />
                 </Grid>
                 <Grid
                     item
@@ -82,16 +93,16 @@ const LandingHeader = ({ open, handleDrawerToggle }: Props) => {
                     {...contentAlignCenter}
                     sx={{ display: 'flex', gap: { xs: '1rem', md: '3rem', lg: '5rem' } }}
                 >
-                    <NavLink to="/" onClick={() => handleScroll(0)}>
+                    <NavLink to="/" onClick={handleScrollToTop}>
                         {t('common.home')}
                     </NavLink>
-                    <NavLink to="/" onClick={() => handleScroll(1040)}>
+                    <NavLink to="/" onClick={() => handleScrollToElement('products')}>
                         {t('common.products')}
                     </NavLink>
-                    <NavLink to="/" onClick={() => handleScroll(4800)}>
+                    <NavLink to="/" onClick={() => handleScrollToElement('case')}>
                         {t('common.case')}
                     </NavLink>
-                    <NavLink to="/" onClick={() => handleScroll(6000)}>
+                    <NavLink to="/" onClick={() => handleScrollToElement('price')}>
                         {t('common.price')}
                     </NavLink>
                     <NavLink to="/support">{t('common.support')}</NavLink>

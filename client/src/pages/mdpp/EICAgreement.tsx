@@ -15,6 +15,7 @@ import EICImage from '@assets/images/eicAgreement.png';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import participantStudyApi from '@/apis/participantStudy';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
+import React from 'react';
 
 const EICAgreement = () => {
     const [participantName, setParticipantName] = useState<string>('');
@@ -25,7 +26,7 @@ const EICAgreement = () => {
     const study = location.state?.study ?? {};
 
     console.log(study);
-  
+
     const uiRef = useRef<HTMLDivElement | null>(null);
     const ui = useRef<Form | Viewer | null>(null);
     const [prevUiRef, setPrevUiRef] = useState<MutableRefObject<
@@ -36,18 +37,14 @@ const EICAgreement = () => {
     const confirm = useConfirmation();
     const mode: Mode = 'form';
 
+    const pdfArea = React.useMemo(
+        () => <div ref={uiRef} style={{ width: '100%', minHeight: '500px' }} />,
+        []
+    );
+
     const buildUi = (mode: Mode) => {
         const template = initTemplate();
         let inputs = getInputFromTemplate(template);
-        try {
-            const inputsString = localStorage.getItem('inputs');
-            if (inputsString) {
-                const inputsJson = JSON.parse(inputsString);
-                inputs = inputsJson;
-            }
-        } catch {
-            localStorage.removeItem('inputs');
-        }
 
         getFontsData().then((font) => {
             if (uiRef.current) {
@@ -112,7 +109,7 @@ const EICAgreement = () => {
         };
 
         handleEic().then((eicFile) => {
-            console.log('eicFile', eicFile); 
+            console.log('eicFile', eicFile);
             const jsonFile = new Blob([JSON.stringify(eicFile)], {
                 type: 'application/json',
             });
@@ -120,9 +117,19 @@ const EICAgreement = () => {
             getFontsData().then(() => {
                 handlePreviewTemplate(jsonFile, ui.current);
             });
-        })
+        });
     }, []);
 
+    useEffect(() => {
+        console.log(uiRef);
+    }, [uiRef]);
+
+    // React Native WebView와의 통신을 위한 useEffect 추가
+    useEffect(() => {
+        if (window.ReactNativeWebView) {
+            window.ReactNativeWebView.postMessage(window.location.href);
+        }
+    }, []);
     return (
         <Box sx={{ bgcolor: 'white', minHeight: '100vh', pt: '22px' }}>
             {!submitted ? (
@@ -130,13 +137,11 @@ const EICAgreement = () => {
                     <MdppHeader title="전자동의서" backBtn></MdppHeader>
                     <Box m="23px">
                         <S.CommonText>
-                            {study.title} 조사에 참여해 주셔서 감사드립니다.
-                            동의서 내용을 확인하시고, 데이터 활용에 동의해 주세요.
+                            {study.title} 조사에 참여해 주셔서 감사드립니다. 동의서 내용을
+                            확인하시고, 데이터 활용에 동의해 주세요.
                         </S.CommonText>
                     </Box>
-                    <Box m="20px">
-                        <div ref={uiRef} style={{ width: '100%', height: `calc(100vh - 300px)` }} />
-                    </Box>
+                    <Box m="20px">{pdfArea}</Box>
                     <Box mt="80px" m="20px">
                         <S.BigButton fullWidth variant="contained" onClick={handleSubmit}>
                             동의서 제출하기
@@ -152,10 +157,11 @@ const EICAgreement = () => {
                         <S.H1>동의서 제출 완료</S.H1>
                         <Box mt="21px">
                             <S.CommonText>
-                                <strong>{participantName}</strong> 님의 <strong>{study.title}</strong> 연구 참여 
-                                동의서를
+                                <strong>{participantName}</strong> 님의{' '}
+                                <strong>{study.title}</strong> 연구 참여 동의서를
                                 <br />
-                                <strong>{study.allotment_agency_name}</strong> 에 안전하게 제출하였습니다.
+                                <strong>{study.allotment_agency_name}</strong> 에 안전하게
+                                제출하였습니다.
                             </S.CommonText>
                         </Box>
                     </Box>

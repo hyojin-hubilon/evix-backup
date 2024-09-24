@@ -21,6 +21,7 @@ import GoogleSocial from './GoogleSocial';
 import * as AuthApiType from '@/types/auth';
 import authApi from '@/apis/auth';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
+import { t } from 'i18next';
 
 const AuthLogin = () => {
     const navigate = useNavigate();
@@ -59,17 +60,23 @@ const AuthLogin = () => {
                     try {
                         const { code, content } = await authApi.login(values);
                         if (code === 400) {
-                            confirm({description : '아이디 또는 패스워드를 확인해주세요.', variant : 'info'});
+                            confirm({description : t('auth.check_id_password'), variant : 'info'}); //아이디 또는 패스워드를 확인해주세요.
                             return;
                         }
                         if (code === 200) {
                             setStatus({ success: true });
-							if(content.last_login) {
-								navigate('/dashboard')
-							} else {
-								navigate('/onboarding') //로그인 기록이 없을 시 onboarding화면으로 이동
-							}
+							
                             
+							if(content.privilege === AuthApiType.PrivilegeTypes.Master) {
+								navigate('/master/samples');
+							} else {
+								if(content.last_login) {
+									navigate('/dashboard')
+								} else {
+									navigate('/onboarding') //로그인 기록이 없을 시 onboarding화면으로 이동
+								}
+								// navigate('/dashboard');
+							}
                         }
                     } catch (e) {
 						confirm({description : 'This surfactant is already in use.', variant : 'info'});
