@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 
 const UserSupport = () => {
 	const emailAdress = 'evix-dct@evidnet.co.kr';
+	// const emailAdress = 'hyojinanr@gmail.com';
 	const subject = '[Support]';
 	const [userData, setUserData] = useState<MyProfile | null>(null);
 	const [ initialValues, setInitialValues] = useState({
@@ -57,7 +58,6 @@ const UserSupport = () => {
 
 
 	const handleSubmit = (values) => {
-		console.log(values);
 		let bodyMessage = `mailto:${emailAdress}?subject=${subject}&body=[Form Type] : Support%0D%0A[Firstname] : ${values.first_name}%0D%0A[Lastname] : ${values.last_name}%0D%0A[Email] : ${values.email}%0D%0A[message] : ${values.message}`;
 		window.location.href = bodyMessage;
 	}

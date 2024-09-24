@@ -116,9 +116,9 @@ const SurveyView = ({preview, surveyNo, isMaster} : SurveyViewProps) => {
 		if(surveyNumber) getSurveyDeatil(surveyNumber);
 	}, []);
 
-	// useEffect(() => {
-	// 	if(surveyNo) getSurveyDeatil(surveyNo);
-	// }, [surveyNo])
+	useEffect(() => {
+		if(surveyNo) getSurveyDeatil(surveyNo);
+	}, [surveyNo])
 
 
 	const handleSumbit = (event) => {
