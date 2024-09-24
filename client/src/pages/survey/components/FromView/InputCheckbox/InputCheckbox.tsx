@@ -1,10 +1,8 @@
-import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import * as S from "./styles";
 import { PreviewProps, PreviewStateProps } from "@/store/reducers/preview";
 import { ExampleList, ExampleTypes } from "@/types/survey";
-import { Field, useField, useFormikContext } from "formik";
-import { requiredCheck } from "@/utils/helper";
+import { Field } from "formik";
 import { Typography } from "@mui/material";
 import { t } from "i18next";
 
@@ -74,7 +72,7 @@ const InputCheckbox = ({ cardId, questionIndex }: InputCheckboxProps) => {
 			{ errors.questions && errors.questions[questionIndex] && errors.questions[questionIndex].answerMultiple
  				?
 				//  { errors.questions[questionIndex].answerMultiple }
-				<Typography paddingTop="0.5rem" sx={{display:'block', color: 'red'}}>필수 항목입니다.</Typography> : ''
+				<Typography paddingTop="0.5rem" sx={{display:'block', color: 'red'}}>{ errors.questions[questionIndex].answer }</Typography> : ''
 			}
 		</S.Container>
 		)}

@@ -18,18 +18,17 @@ const Help = () => {
 	const [ helps, setHelps ] = useState<Helps[]>([]);
 	const { t, i18n } = useTranslation();
 
+	const [expanded, setExpanded] = useState<string | false>('panel0');
+
 	const navigate = useNavigate();
 	const theme = useTheme();
-
-	const handleSearch = (e) => {
-		setSearchTerm(e.target.value);
-	}
 
 	const handleMoveToSupport = () => {
 		navigate('/user-support')
 	}
 
 	const handleChangeTab = (_event: React.SyntheticEvent, newValue: number) => {
+		setExpanded(false);
 		setActiveTab(newValue);	
 	};
 
@@ -44,6 +43,10 @@ const Help = () => {
 	useEffect(() => {
 		getHelps();
 	}, [])
+
+	const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      	setExpanded(isExpanded ? panel : false);
+    };
 
 	return (
 		<Container maxWidth="lg">
@@ -70,7 +73,7 @@ const Help = () => {
 								</InputAdornment>
 							}
 							value={searchTerm}
-							onChange={(e) => handleSearch(e.target.value)}
+							onChange={(e) => setSearchTerm(e.target.value)}
 							placeholder={t('help.search_placeholder')} //도움말을 검색해보세요.
 						/>
 					</Grid>
@@ -120,13 +123,13 @@ const Help = () => {
 									<Box>
 										{
 											help.helpList.map((helpList, helpListIndex) => 
-												<Accordion defaultExpanded={helpListIndex === 0}>
+												<Accordion key={helpListIndex} expanded={expanded === `panel${helpListIndex}`} onChange={handleChange(`panel${helpListIndex}`)}>
 													<AccordionSummary
-													expandIcon={<ExpandMoreIcon />}
-													aria-controls={`panel${helpListIndex}`}
-													id={`panel${helpListIndex}`}
-													>
-														{ helpList.helpTitle }
+														expandIcon={<ExpandMoreIcon />}
+														aria-controls={`panel${helpListIndex}`}
+														id={`panel${helpListIndex}`}
+														>
+															{ helpList.helpTitle }
 													</AccordionSummary>
 													<AccordionDetails>
 														<div className="help-box">
