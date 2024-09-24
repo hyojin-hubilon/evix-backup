@@ -23,6 +23,7 @@ import {
     Chip,
     List,
     FormHelperText,
+    ListItem,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect, useState } from 'react';
@@ -107,6 +108,21 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
         setNewAuthority(''); // 권한 초기화
     };
 
+    const filteredMembers = [...members].filter((member) => {
+        console.log('filtered members::', member);
+
+        if (member.std_privilege === 'OWNER') return false;
+        // if (member.inviteStatus === 'Pending') {
+        //     return activeTab === '0' || activeTab === '3';
+        // }
+        if (activeTab === '0') return true;
+        if (activeTab === '1') return member.std_privilege === 'MAINTAINER';
+        if (activeTab === '2') return member.std_privilege === 'DEVELOPER';
+        return false;
+    });
+
+    filteredMembers;
+
     const handleSendReInvite = (member: MemberTempType) => {
         setSendingEmails([member.user_email]);
         handleOpenSendInvite();
@@ -137,7 +153,8 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                 maxWidth="sm"
             >
                 <DialogTitle id="member-management-title" variant="h4" width={600}>
-                    {t('study.inviting')} <span style={{ color: primary.main }}>({members.length})</span>
+                    {t('study.inviting')}{' '}
+                    <span style={{ color: primary.main }}>({members.length})</span>
                     <IconButton
                         size="small"
                         sx={{ position: 'absolute', top: '10px', right: '10px' }}
@@ -175,7 +192,7 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                         p="1rem"
                     >
                         <Typography variant="h6" fontWeight="600">
-							{t('study.people_invited')}
+                            {t('study.people_invited')}
                             {/* 초대받을 사람 */}
                         </Typography>
                         <Autocomplete
@@ -209,9 +226,9 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                                     displayEmpty
                                 >
                                     <MenuItem value="">
-										{t('study.permission')}
-										{/* 권한 */}
-									</MenuItem>
+                                        {t('study.permission')}
+                                        {/* 권한 */}
+                                    </MenuItem>
                                     <MenuItem value="maintainer">Maintainer</MenuItem>
                                     <MenuItem value="developer">Developer</MenuItem>
                                 </Select>
@@ -222,7 +239,7 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                                 sx={{ ml: 'auto' }}
                                 onClick={handleAddMember}
                             >
-								{t('study.add')}
+                                {t('study.add')}
                                 {/* 추가하기 */}
                             </Button>
                         </Box>
@@ -237,10 +254,10 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                             <Tab label={t('study.all')} value="0" />
                             <Tab label="Maintainer" value="1" />
                             <Tab label="Developer" value="2" />
-                            <Tab label={t('study.waiting')} value="3" />
+                            {/* <Tab label={t('study.waiting')} value="3" /> */}
                         </Tabs>
 
-                        <List>
+                        {/* <List>
                             {members.map((member, index) => (
                                 <MemberListItem
                                     studyNo={0}
@@ -250,6 +267,26 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                                     sendDeleteConfirm={handleMemberDelete}
                                 />
                             ))}
+                        </List> */}
+                        <List>
+                            {filteredMembers.length > 0 ? (
+                                filteredMembers.map((member, index) => (
+                                    <MemberListItem
+                                        studyNo={0}
+                                        member={member}
+                                        key={index}
+                                        sendMailConfirm={handleSendReInvite}
+                                        sendDeleteConfirm={handleMemberDelete}
+                                    />
+                                ))
+                            ) : (
+                                <ListItem>
+                                    <Typography variant="body1">
+                                        {t('study.no_members')}
+                                        {/* 멤버가 없습니다. */}
+                                    </Typography>
+                                </ListItem>
+                            )}
                         </List>
                     </Box>
                 </DialogContent>
