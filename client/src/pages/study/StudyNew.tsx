@@ -17,6 +17,7 @@ import {
     useTheme,
     Button,
     Divider,
+	Chip,
 } from '@mui/material';
 import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -473,8 +474,28 @@ const StudyNew = () => {
                                     sx={{ width: '10rem' }}
                                 >
                                     <MenuItem value="ePRO">ePRO</MenuItem>
-                                    <MenuItem value="eCOA">eCOA</MenuItem>
-                                    <MenuItem value="eCRF">eCRF</MenuItem>
+                                    <MenuItem value="eCOA" disabled>
+										eCOA
+										<Chip
+											color="warning"
+											size="small"
+											label="COMING SOON"
+											sx={{fontSize: '0.6rem',
+												ml: '5px'
+											}}
+										/>
+									</MenuItem>
+                                    <MenuItem value="eCRF" disabled>
+										eCRF
+										<Chip
+											color="warning"
+											size="small"
+											label="COMING SOON"
+											sx={{fontSize: '0.6rem',
+												ml: '5px'
+											}}
+										/>
+									</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
