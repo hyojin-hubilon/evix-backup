@@ -8,6 +8,7 @@ const initialState = {
     openComponent: 'buttons', // 현재 열려 있는 컴포넌트를 나타내는 상태입니다.
     drawerOpen: false, // 사이드바(drawer)가 열려 있는지 여부를 나타내는 상태입니다.
     componentDrawerOpen: true, // 컴포넌트 사이드바가 열려 있는지 여부를 나타내는 상태입니다.
+	onboarding: false
 };
 
 // ==============================|| SLICE - MENU ||============================== //
@@ -37,6 +38,10 @@ const menu = createSlice({
         openComponentDrawer(state, action) {
             state.componentDrawerOpen = action.payload.componentDrawerOpen;
         },
+
+		openOnboarding(state, action) {
+			state.onboarding = action.payload.onboarding;
+		}
     },
 });
 
@@ -44,4 +49,4 @@ const menu = createSlice({
 export default menu.reducer;
 
 // 각각의 리듀서 함수들을 export 합니다.
-export const { activeItem, activeComponent, openDrawer, openComponentDrawer } = menu.actions;
+export const { activeItem, activeComponent, openDrawer, openComponentDrawer, openOnboarding } = menu.actions;

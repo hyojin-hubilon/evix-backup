@@ -16,16 +16,21 @@ import {
     OutlinedInput,
     Stack,
     Typography,
+	useMediaQuery,
+	useTheme,
 } from '@mui/material';
 import GoogleSocial from './GoogleSocial';
 import * as AuthApiType from '@/types/auth';
 import authApi from '@/apis/auth';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { t } from 'i18next';
+import { useDispatch } from 'react-redux';
+import { openOnboarding } from '@store/reducers/menu';
 
 const AuthLogin = () => {
     const navigate = useNavigate();
 	const confirm = useConfirmation();
+	const dispatch = useDispatch();
 	
     const [showPassword, setShowPassword] = useState(false);
     const [formError, setFormError] = useState('');
@@ -37,6 +42,8 @@ const AuthLogin = () => {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
+	const theme = useTheme();
+	const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
 
     return (
         <Container>
@@ -70,12 +77,17 @@ const AuthLogin = () => {
 							if(content.privilege === AuthApiType.PrivilegeTypes.Master) {
 								navigate('/master/samples');
 							} else {
-								// if(content.last_login) {
-								// 	navigate('/dashboard')
-								// } else {
-									navigate('/onboarding') //로그인 기록이 없을 시 onboarding화면으로 이동
-								// }
-								// navigate('/dashboard');
+								if(content.last_login) {
+									navigate('/dashboard')
+									dispatch(openOnboarding({ onboarding: false }));
+								} else {
+									if(!matchDownLG){
+										navigate('/onboarding') //로그인 기록이 없을 시 onboarding화면으로 이동
+										dispatch(openOnboarding({ onboarding: true }));
+									} else {
+										navigate('/dashboard');
+									}	
+								}
 							}
                         }
                     } catch (e) {
