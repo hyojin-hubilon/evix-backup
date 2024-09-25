@@ -102,6 +102,7 @@ const Onboarding = () => {
 						sx={{
 							position: 'fixed',
 							opacity: activeIndex == index ? 1 : 0,
+							display: activeIndex == index ? 'block' : 'none',
 							transition: 'opacity 0.5s',
 							zIndex: 12000
 						}}>

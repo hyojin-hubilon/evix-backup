@@ -17,7 +17,8 @@ const Introduction = ({contents, next, activeIndex, contentsLength, skip} : Intr
 	return (
 		<Box component="section" display="flex" minWidth="100vw" minHeight="100vh" bgcolor="#F9FAFB">
 			<Box width="50%" position="relative">
-				<Box ml="20%" mt="15%" mr="20%">
+				<Box pl="20%" pt="15%" pr="20%" pb="15%" maxHeight="calc(100vh - 75px)"
+					sx={{overflow: 'auto'}}>
 					<Typography variant="h1"
 						sx={{
 							fontSize: '3rem',
