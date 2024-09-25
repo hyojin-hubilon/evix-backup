@@ -1,4 +1,4 @@
-import { Box, Card, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import MdppHeader from './components/MdppHeader';
 import * as S from './styles';
 import ParticipantStudyItem from './components/ParicipantStudyItem';
