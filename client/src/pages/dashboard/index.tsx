@@ -263,8 +263,8 @@ const DashboardDefault = () => {
     const normalise = (value: number[]) => Math.ceil((value[0] / value[1]) * 100);
     
     return (
-        <div style={{ position: 'relative' }}>
-            <Grid item container rowSpacing={2} columnSpacing={1} flexDirection="row">
+        <>
+            <Grid container rowSpacing={2} columnSpacing={1} flexDirection="row">
                 <Grid container item xs={12} justifyContent="space-between" alignItems="center">
                     <Box>
                         <Typography variant="h3">Dashboard</Typography>
@@ -282,7 +282,7 @@ const DashboardDefault = () => {
                         <Typography variant="h5" mb={2}>
                             Number of participants by study
                         </Typography>
-                        <Box width="100%" display="block" overflow="hidden">
+                        <Box>
                             <ParticipantNums participantNumber={participantNumber} />
                         </Box>
                     </MainCard>
@@ -443,7 +443,7 @@ const DashboardDefault = () => {
                     </Box>
                 </Box>
             )}
-        </div>
+        </>
     );
 };
 

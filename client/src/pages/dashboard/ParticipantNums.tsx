@@ -6,6 +6,8 @@ import { NumOfParticipantByStudy } from "@/types/dashboard"
 
 import Carousel from 'react-multi-carousel';
 import { t } from "i18next";
+import { useSelector } from "react-redux";
+import { IRootState } from "@/store/reducers";
 
 
 type ParticipantNumsType = {
@@ -13,6 +15,7 @@ type ParticipantNumsType = {
 }
 
 const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
+	const { drawerOpen  } = useSelector((state: IRootState) => state.menu);
 	const getPartCompleteRate = (studyNum:NumOfParticipantByStudy) => {
 		const targetNumber = studyNum.target_number;
 		
@@ -24,23 +27,28 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 
 	const responsive = {
 		desktop: {
-		  breakpoint: { max: 3000, min: 1024 },
-		  items: 4
+			breakpoint: { max: 3000, min: 1024 },
+			items: 4,
+			partialVisibilityGutter: 40
 		},
 		tablet: {
-		  breakpoint: { max: 1024, min: 464 },
-		  items: 2
+			breakpoint: { max: 1024, min: 464 },
+			items: 2,
+			partialVisibilityGutter: 40
 		},
 		mobile: {
-		  breakpoint: { max: 464, min: 0 },
-		  items: 1
+			breakpoint: { max: 464, min: 0 },
+			items: 1,
+			partialVisibilityGutter: 40
+
 		}
-	  };
+	};
 
 	return (
 		
 		<Box sx={{
 			// 'ul' : { width: 'inherit'}
+			width: drawerOpen ? 'calc(100vw - 360px)' : 'calc(100vw - 85px)',
 			'li': { width: '290px!important'}
 		}}>
 		{

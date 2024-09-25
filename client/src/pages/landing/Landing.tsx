@@ -12,8 +12,19 @@ import landingImg034 from '@assets/images/landing/img-04@2x.png';
 //Section 05
 import landingImg051 from '@assets/images/landing/1@2x.png';
 import landingImg052 from '@assets/images/landing/ci-1@2x.png';
+import landingImg053 from '@assets/images/landing/ci-01.png';
+import landingImg054 from '@assets/images/landing/ci-02.png';
+import landingImg055 from '@assets/images/landing/ci-03.png';
+import landingImg056 from '@assets/images/landing/ci-04.png';
+import landingImg057 from '@assets/images/landing/ci-05.png';
+import landingImg058 from '@assets/images/landing/ci-06.png';
+import landingImg059 from '@assets/images/landing/ci-07.png';//section-06 logo
+import landingImg0510 from '@assets/images/landing/ci-08.png';
+import landingImg0511 from '@assets/images/landing/ci-09.jpg';
+import landingImg0512 from '@assets/images/landing/ci-10.jpg';
 //Section 06
 import landingImg061 from '@assets/images/landing/2@2x.png';
+
 //Section 07
 import landingImg071 from '@assets/images/landing/1-e-pro-1@2x.png';
 import landingImg072 from '@assets/images/landing/e-coa-2@2x.png';
@@ -429,11 +440,74 @@ export default function LandingPage() {
                             </Typography>
                             <Typography>{t('landing.hospital')}</Typography>
                             <Box>
-                                <img
-                                    src={landingImg052}
-                                    alt="Hospital"
-                                    style={{ maxWidth: '80%' }}
-                                />
+								<Box display="flex" gap="20px" alignItems="center" mb="10px">
+									<img
+										src={landingImg053}
+										alt="부산대학교병원"
+										style={{ maxWidth: '20%' }}
+									/>
+
+									<img
+										src={landingImg054}
+										alt="서울아산병원"
+										style={{ maxWidth: '20%' }}
+									/>
+
+									<img
+										src={landingImg055}
+										alt="순천향대학교 구미병원"
+										style={{ maxWidth: '20%' }}
+									/>
+
+									<img
+										src={landingImg056}
+										alt="순천향대학교 부천병원"
+										style={{ maxWidth: '20%' }}
+									/>
+								</Box>
+
+								<Box display="flex" gap="20px" alignItems="center" mb="10px">
+									
+
+									<img
+										src={landingImg057}
+										alt="순천향대학교 서울병원"
+										style={{ maxWidth: '20%' }}
+									/>
+
+									<img
+										src={landingImg058}
+										alt="순천향대학교 천안병원"
+										style={{ maxWidth: '20%' }}
+									/>
+
+<img
+										src={landingImg059}
+										alt="아주대학교병원"
+										style={{ maxWidth: '20%' }}
+									/>
+
+									<img
+										src={landingImg0510}
+										alt="인하대병원"
+										style={{ maxWidth: '20%' }}
+									/>
+								</Box>
+
+								<Box display="flex" gap="20px" alignItems="center" mb="10px">
+									<img
+										src={landingImg0511}
+										alt="전남대학교병원"
+										style={{ maxWidth: '20%' }}
+									/>
+
+									<img
+										src={landingImg0512}
+										alt="원주세브란스기독병원"
+										style={{ maxWidth: '20%' }}
+									/>
+								</Box>
+                                
                             </Box>
                         </Grid>
                     </Grid>
@@ -478,11 +552,13 @@ export default function LandingPage() {
                             </Typography>
                             <Typography>{t('landing.hospital')}</Typography>
                             <Box>
-                                <img
-                                    src={landingImg052}
-                                    alt="Hospital"
-                                    style={{ maxWidth: '80%' }}
-                                />
+								<Box display="flex" gap="20px" alignItems="center" mb="10px">
+									<img
+										src={landingImg059}
+										alt="아주대학교병원"
+										style={{ maxWidth: '25%' }}
+									/>
+								</Box>
                             </Box>
                         </Grid>
                         <Grid item xs={12} md={5}>
