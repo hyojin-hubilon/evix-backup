@@ -70,11 +70,11 @@ const AuthLogin = () => {
 							if(content.privilege === AuthApiType.PrivilegeTypes.Master) {
 								navigate('/master/samples');
 							} else {
-								if(content.last_login) {
-									navigate('/dashboard')
-								} else {
+								// if(content.last_login) {
+								// 	navigate('/dashboard')
+								// } else {
 									navigate('/onboarding') //로그인 기록이 없을 시 onboarding화면으로 이동
-								}
+								// }
 								// navigate('/dashboard');
 							}
                         }

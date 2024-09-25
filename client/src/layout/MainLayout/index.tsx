@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Box, CircularProgress, Toolbar, useMediaQuery } from '@mui/material';
+import { Box, Button, CircularProgress, styled, Toolbar, useMediaQuery } from '@mui/material';
 
 // project import
 import Drawer from './Drawer';
@@ -16,13 +16,65 @@ import Breadcrumbs from '@components/@extended/Breadcrumbs';
 import { openDrawer } from '@store/reducers/menu';
 import { IRootState } from '@store/reducers';
 import { UserProfileContextProvider } from '@/context/UserProfileContext';
+import { t } from 'i18next';
 
 // ==============================|| MAIN LAYOUT ||============================== //
+
+export const BlueBox = styled(Box)(() => ({
+	background: '#22ABF3',
+	padding:'24px',
+	borderRadius: '12px',
+	color: 'white',
+	maxWidth: '416px',
+	boxShadow: '0px 6px 10px 0px #0072AE54',
+	'h5' : {		
+		fontWeight:'00',
+		fontSize: '15px',
+		lineHeight : '1',
+		margin:'0 0 12px'
+	},
+	'p': {
+		fontSize: '14px',
+		fontWeight: '400',
+		lineHeight: '19.6px'
+	},
+	'.btn-box': {
+		display: 'flex',
+		justifyContent: 'flex-end',
+		gap: '14px'
+	},
+	'button': {
+		borderRadius: '50px',
+		fontSize: '14px',
+		fontWeight: '400',
+		height: '32px',
+		width: '90px',
+		textAlign: 'center',
+		opacity: '0.7',
+		transition: 'opacity 0.3s',
+		'&:hover': {
+			opacity: '1',
+			transition: 'opacity 0.3s',
+		}
+	},
+	'.skip' : {
+		color: 'white',
+		border:'1px solid #fff'
+	},
+	'.start' : {
+		color: '#22ABF3',
+		background: '#fff'
+	}
+
+}))
+
 
 const MainLayout = () => {
     const theme = useTheme();
     const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
     const dispatch = useDispatch();
+	const [showOnboarding, setShowOnboarding] = useState(true);
+	const [onboardingStep, setOnboardingStep] = useState<number|null>(0);
 
     const { drawerOpen } = useSelector((state: IRootState) => state.menu);
 
@@ -46,9 +98,24 @@ const MainLayout = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [drawerOpen]);
 
+	useEffect(() => {
+		if(showOnboarding) {
+			document.body.style.overflow="hidden";
+			setOnboardingStep(0);
+		} else {
+			document.body.style.overflow="auto";
+		}
+		
+	}, [showOnboarding])
+
+	const handleSkipOnboarding = () => {
+		setShowOnboarding(false);
+		setOnboardingStep(null);
+	}
+
     return (
 		<UserProfileContextProvider>
-			<Box sx={{ display: 'flex', width: '100%' }}>
+			<Box sx={{ display: 'flex', width: '100%' }} >
 				<Header open={open} handleDrawerToggle={handleDrawerToggle} />
 				<Drawer open={open} handleDrawerToggle={handleDrawerToggle} />
 				
@@ -63,6 +130,59 @@ const MainLayout = () => {
 					<Outlet />
 				</Box>
 			</Box>
+
+			{
+				showOnboarding &&
+
+				<Box sx={{
+					position: 'fixed',
+					left:0,
+					top:0,
+					bottom: 0,
+					right: 0,
+					width: '100vw',
+					height: '100vh',
+					background: 'rgba(0,0,0,0.4)',
+					zIndex: 10000
+				}}>
+					{/* Onboarding 1 */}
+					<BlueBox
+						sx={{
+							position: 'fixed',
+							left: '50%',
+							top:'50%',
+							transform: 'translate(-50%, -50%)',
+							
+						}}
+					>
+						<h5>{t('onboarding.welcome')}</h5>
+						<p>{t('onboarding.welcome_to')}</p>
+						<Box className="btn-box">
+							<Button className="skip" onClick={handleSkipOnboarding}>Skip</Button>
+							<Button className="start" onClick={() => setOnboardingStep(1)}>Start</Button>
+						</Box>
+					</BlueBox>
+
+					{/* Onboarding 2 */}
+
+					<BlueBox
+						sx={{
+							position: 'fixed',
+							left: '50%',
+							top:'50%',
+							transform: 'translate(-50%, -50%)',
+						}}
+					>
+						<h5>{t('onboarding.welcome')}</h5>
+						<p>{t('onboarding.welcome_to')}</p>
+						<Box className="btn-box">
+							<Button className="skip" onClick={handleSkipOnboarding}>Skip</Button>
+							<Button className="start" onClick={() => setOnboardingStep(1)}>Start</Button>
+						</Box>
+					</BlueBox>
+				</Box>
+			}
+			
 		</UserProfileContextProvider>
     );
 };

@@ -344,9 +344,9 @@
 	"onboarding" : {
 		"next" : "Next",
 		"skip" : "Skip",
-		"welcome_to_evix-dct" : "Welcome to evix-DCT",
-		"create_study" : "Create Study",
-		"open_study" : "Open Study",
+		"welcome_to_evix-dct" : "Welcome to Evix-DCT, the Platform for <strong>Smart Clinical Trials.</strong>",
+		"create_study" : "We provide an all-in-one service for smart clinical trials.",
+		"open_study" : "Utilize ePRO, eCOA, eCRF, and CDMS services based on your study design.",
 		"real-time_monitoring" : "Real-time monitoring",
 		"report_results" : "Report results",
 		"create_surveys" : "Create surveys with ease using our <strong>pre-built templates</strong> for each disease!",
@@ -364,6 +364,23 @@
 		"provides_real-time" : "Provides <strong>real-time Analysis & Summary</strong>.",
 		"check_the_status" : "Check the status of clinical trial data collection in real time.",
 		"real-time_statistics" : "Real-time statistics allow you to respond flexibly to your projects.",
-		"start" : "Start"
+		"start" : "Start",
+		"welcome" : "Welcome!",
+		"welcome_to" : "Welcome to the decentralized clinical trial platform, Evix-DCT.  To help you effectively manage your clinical trials, here are a few onboarding tips. If you'd prefer to skip the onboarding, simply click the 'Skip' button to get started right away.",
+		"dashboard" : "Dashboard",
+		"you_can_easily" : "You can easily track enrollment rates and goal achievement, ensuring that every aspect of your clinical trial is managed more efficiently and transparently. This Dashboard feature plays a crucial role in reducing the complexity of trial management and in driving successful trial outcomes.",
+		"recent_notifications" : "Recent Notifications",
+		"check_the_status_ongoing" : "Check the status of your ongoing studies, updates, and notifications from your team members.",
+		"studies":"Studies",
+		"create_a_new_trial" : "❖ Create a New Trial",
+		"to_start_a_new" : "To start a new clinical trial, click on the 'Studies' menu. Follow the prompts to enter the necessary information and begin your study.",
+		"view_and_edit" : "❖ View and Edit Trial Details",
+		"you_can_select_any" : "You can select any clinical trial from the list to access the detailed page. On this page, you can review and edit study information, track progress, and monitor participant data in real-time.",
+		"survey" : "Survey",
+		"the_platform_provides" : "The platform provides a tool for creating surveys that participants can complete on mobile devices, and these surveys can be easily linked to clinical trials. You can also refer to the sample surveys provided by the platform for different diseases to complete your clinical trial surveys.",
+		"billing" : "Billing",
+		"the_evix-dct_platform" : "The Evix-DCT platform will soon offer subscription payment options. The payment feature will be available soon. For any inquiries, please contact us at 1566-8013.",
+		"setting" : "Setting",
+		"you_can_manage_language" : "You can manage language settings, account information, and notifications, as well as review and accept the list of invited studies." 
 	}
 }

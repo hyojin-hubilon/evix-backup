@@ -26,9 +26,7 @@ const Onboarding = () => {
 			title: t('onboarding.welcome_to_evix-dct'),
 			sub: [
 				t('onboarding.create_study'),
-				t('onboarding.open_study'),
-				t('onboarding.real-time_monitoring'),
-				t('onboarding.report_results')
+				t('onboarding.open_study')
 			],
 			imgUrl: onboardingImg01
 		},
