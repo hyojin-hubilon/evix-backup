@@ -55,6 +55,7 @@ export interface ParticipantStudyList {
     eic_origin_name: string;
     number_answer: number;
     participation_organization: string;
+	allotment_agency_name: string;
     signature_eic_extension: string | null;
     signature_eic_name: string;
     std_end_date: string;

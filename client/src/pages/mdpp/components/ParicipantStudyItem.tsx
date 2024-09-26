@@ -72,7 +72,7 @@ const ParticipantStudyItem = ({ study, selectStudy }: ParticipantStudyItemType) 
                     <S.StudyDetail>
                         참여기간: {startDate.format('YYYY.MM.DD')} ~ {endDate.format('YYYY.MM.DD')}
                     </S.StudyDetail>
-                    <S.StudyDetail>참여기관: {study.participation_organization}</S.StudyDetail>
+                    <S.StudyDetail>참여기관: {study.allotment_agency_name}</S.StudyDetail>
                 </Box>
                 <Box display="flex" alignItems="center" gap="5px" mt="15px">
                     <S.StudyTags>
