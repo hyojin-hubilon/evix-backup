@@ -18,8 +18,8 @@ const ApplyFreeTrialForm = () => {
         job_title: Yup.string().required('Please enter Job Title'),
         email: Yup.string().email('Please input a valid email').required('Please enter email'),
         mobile: Yup.string()
-            .matches(/^[0-9]*$/, 'Please input a valid phone number')
-            .required('Please enter phone number'),
+            .matches(/^[0-9]*$/, 'Please enter numbers only.')
+            .required('Please enter mobile number'),
         industry: Yup.string().required('Please select Industry Segment'),
 		country: Yup.string().required('Please select Language'),
         message: Yup.string(),
