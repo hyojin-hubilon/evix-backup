@@ -17,7 +17,7 @@ const ApplyFreeTrialForm = () => {
         company_name: Yup.string().required('Please enter Company'),
         job_title: Yup.string().required('Please enter Job Title'),
         email: Yup.string().email('Please input a valid email').required('Please enter email'),
-        phone: Yup.string()
+        mobile: Yup.string()
             .matches(/^[0-9]*$/, 'Please input a valid phone number')
             .required('Please enter phone number'),
         industry: Yup.string().required('Please select Industry Segment'),
@@ -32,7 +32,7 @@ const ApplyFreeTrialForm = () => {
 			confirm({
 				description : t('auth.free_trial_applied'),
 				variant : 'info'
-			}).then(() => navigate(-1));
+			}).then(() => navigate('/'));
         }
     };
 
@@ -44,7 +44,7 @@ const ApplyFreeTrialForm = () => {
             company_name: '',
             job_title: '',
             email: '',
-            phone: '',
+            mobile: '',
             industry: '',
             message: '',
 			country: '',
@@ -125,16 +125,16 @@ const ApplyFreeTrialForm = () => {
 						</Box>
 						<TextField
 							type="text"
-							name="phone"
-							placeholder="Phone"
-							label="Phone"
+							name="mobile"
+							placeholder="Mobile"
+							label="Mobile"
 							fullWidth
-							value={formik.values.phone}
+							value={formik.values.mobile}
 							onBlur={formik.handleBlur}
 							onChange={formik.handleChange}
 							required
-							error={formik.touched.phone && Boolean(formik.errors.phone)}
-							helperText={formik.touched.phone && formik.errors.phone}
+							error={formik.touched.mobile && Boolean(formik.errors.mobile)}
+							helperText={formik.touched.mobile && formik.errors.mobile}
 						/>
 						<TextField
 							type="text"
