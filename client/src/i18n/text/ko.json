@@ -332,7 +332,8 @@
 		"token_expired" : "토큰이 만료되었습니다.",
 		"error_occurred" : "에러가 발생했습니다.",
 		"password_changed" : "비밀번호 변경 성공",
-		"check_id_password" : "아이디 또는 패스워드를 확인해주세요"
+		"check_id_password" : "아이디 또는 패스워드를 확인해주세요",
+		"free_trial_applied" : "Evix-DCT 무료 버전을 신청하였습니다."
 	},
 	"onboarding" : {
 		"next" : "Next",

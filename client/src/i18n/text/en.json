@@ -339,7 +339,8 @@
         "token_expired": "The token has expired.",
         "error_occurred": "An error occurred.",
         "password_changed": "Your password has been successfully changed.",
-        "check_id_password": "Please check your ID or password"
+        "check_id_password": "Please check your ID or password",
+		"free_trial_applied" : "Your Evix-DCT free trial has been applied."
     },
 	"onboarding" : {
 		"next" : "Next",
