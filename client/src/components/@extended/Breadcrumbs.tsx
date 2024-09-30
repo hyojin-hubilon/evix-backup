@@ -1,129 +1,64 @@
-import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-
-// material-ui
+import Link, { LinkProps } from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
 import MuiBreadcrumbs from '@mui/material/Breadcrumbs';
-import { Grid, Typography } from '@mui/material';
+import {
+  	Link as RouterLink,
+  	useLocation
+} from 'react-router-dom';
 
-// project imports
-import MainCard from '../MainCard';
-import { MenuItems, MenuItem } from '@/types/menu';
 
-// ==============================|| BREADCRUMBS ||============================== //
+interface LinkRouterProps extends LinkProps {
+  	to: string;
+  	replace?: boolean;
+}
 
-type Props = {
-    navigation: MenuItems;
-    title?: boolean;
+function LinkRouter(props: LinkRouterProps) {
+  	return <Link {...props} component={RouterLink as any} />;
+}
+
+const breadcrumbNameMap: { [key: string]: string } = {
+	'study': 'Study',
+	'/survey': 'Survey',
+	'settings' : 'Settings'
 };
 
-const Breadcrumbs = ({ navigation, title, ...others }: Props) => {
-    const location = useLocation();
-    const [main, setMain] = useState<MenuItem>();
-    const [item, setItem] = useState<MenuItem>();
+type BreadCrumbsType = {
+	sub: string;
+}
 
-    // set active item state
-    const getCollapse = (menu: MenuItem) => {
-        if (menu.children) {
-            menu.children.filter((collapse: MenuItem) => {
-                if (collapse.type && collapse.type === 'collapse') {
-                    getCollapse(collapse);
-                } else if (collapse.type && collapse.type === 'item') {
-                    if (location.pathname === collapse.url) {
-                        setMain(menu);
-                        setItem(collapse);
-                    }
-                }
-                return false;
-            });
-        }
-    };
+const Breadcrumbs = ({sub} : BreadCrumbsType) => {
+  	const { pathname } = useLocation();
+  	const pathnames = pathname.split('/').filter((x) => x);
+	
 
-    useEffect(() => {
-        navigation?.items?.map((menu) => {
-            if (menu.type && menu.type === 'group') {
-                getCollapse(menu);
-            }
-            return false;
-        });
-    });
+	// console.log(pathnames);
+	
+	return (
+		<MuiBreadcrumbs aria-label="breadcrumb" sx={{mb: 2}}>
+			
+			<LinkRouter underline="hover" color="inherit" to={`/${pathnames[0]}`}>
+				{breadcrumbNameMap[pathnames[0]]}
+			</LinkRouter>
+			
+			<Typography fontWeight="600" color="common.black" textOverflow="ellipsis" maxWidth="200px" overflow="hidden" whiteSpace="nowrap">
+				{ sub }
+			</Typography>
 
-    // only used for component demo breadcrumbs
-    if (location.pathname === '/breadcrumbs') {
-        location.pathname = '/dashboard/analytics';
-    }
-
-    let mainContent;
-    let itemContent;
-    let breadcrumbContent = <Typography />;
-    let itemTitle = '';
-
-    // collapse item
-    if (main && main.type === 'collapse') {
-        mainContent = (
-            <Typography
-                component={Link}
-                to={document.location.pathname}
-                variant="h6"
-                sx={{ textDecoration: 'none' }}
-                color="textSecondary"
-            >
-                {main.title}
-            </Typography>
-        );
-    }
-
-    // items
-    if (item && item.type === 'item') {
-        itemTitle = item.title;
-        itemContent = (
-            <Typography variant="subtitle1" color="textPrimary">
-                {itemTitle}
-            </Typography>
-        );
-
-        // main
-        if (item.breadcrumbs !== false) {
-            breadcrumbContent = (
-                <MainCard
-                    border={false}
-                    sx={{ mb: 3, bgcolor: 'transparent' }}
-                    {...others}
-                    content={false}
-                >
-                    <Grid
-                        container
-                        direction="column"
-                        justifyContent="flex-start"
-                        alignItems="flex-start"
-                        spacing={1}
-                    >
-                        <Grid item>
-                            <MuiBreadcrumbs aria-label="breadcrumb">
-                                <Typography
-                                    component={Link}
-                                    to="/"
-                                    color="textSecondary"
-                                    variant="h6"
-                                    sx={{ textDecoration: 'none' }}
-                                >
-                                    Home
-                                </Typography>
-                                {mainContent}
-                                {itemContent}
-                            </MuiBreadcrumbs>
-                        </Grid>
-                        {title && (
-                            <Grid item sx={{ mt: 2 }}>
-                                <Typography variant="h5">{item.title}</Typography>
-                            </Grid>
-                        )}
-                    </Grid>
-                </MainCard>
-            );
-        }
-    }
-
-    return breadcrumbContent;
-};
+			{/* {pathnames.map((_value, index) => {
+				const last = index === pathnames.length - 1;
+				const to = `/${pathnames.slice(0, index + 1).join('/')}`;
+				return last ? (
+				<Typography key={to} >
+					{breadcrumbNameMap[to]}
+				</Typography>
+				) : (
+				<LinkRouter underline="hover" color="inherit" to={to} key={to}>
+					{breadcrumbNameMap[to]}
+				</LinkRouter>
+				);
+			})} */}
+    	</MuiBreadcrumbs>
+  );
+}
 
 export default Breadcrumbs;
