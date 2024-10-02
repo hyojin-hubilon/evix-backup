@@ -248,7 +248,11 @@ const SignUp = () => {
                         helperText={formik.touched.country && formik.errors.country}
                     /> */}
 
-					<FormControl>
+					<FormControl
+						fullWidth
+						margin="normal"
+						error={formik.touched.country && Boolean(formik.errors.country)}
+					>
 						<InputLabel id="country">Country *</InputLabel>
 						<Select
 							name="country"
@@ -264,7 +268,9 @@ const SignUp = () => {
 							<MenuItem value="EN_US">United States</MenuItem>
 							<MenuItem value="KO_KR">Korea</MenuItem>
 						</Select>
-
+						{formik.errors.country &&  (
+							<FormHelperText sx={{ color: 'error.main' }}>{formik.errors.country}</FormHelperText>
+						)}
 					</FormControl>
 					
 					
