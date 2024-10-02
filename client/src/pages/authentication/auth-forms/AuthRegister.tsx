@@ -235,7 +235,7 @@ const SignUp = () => {
                         error={formik.touched.mobile && Boolean(formik.errors.mobile)}
                         helperText={formik.touched.mobile && formik.errors.mobile}
                     />
-                    <TextField
+                    {/* <TextField
                         label="Country"
                         name="country"
                         value={formik.values.country}
@@ -246,7 +246,27 @@ const SignUp = () => {
                         required
                         error={formik.touched.country && Boolean(formik.errors.country)}
                         helperText={formik.touched.country && formik.errors.country}
-                    />
+                    /> */}
+
+					<FormControl>
+						<InputLabel id="country">Country *</InputLabel>
+						<Select
+							name="country"
+							defaultValue="Country"
+							fullWidth
+							value={formik.values.country}
+							onBlur={formik.handleBlur}
+							onChange={formik.handleChange}
+							required
+							error={formik.touched.country && Boolean(formik.errors.country)}
+						>
+							<MenuItem value="">Country</MenuItem>
+							<MenuItem value="EN_US">United States</MenuItem>
+							<MenuItem value="KO_KR">Korea</MenuItem>
+						</Select>
+
+					</FormControl>
+					
 					
 					<FormControl
 						fullWidth
