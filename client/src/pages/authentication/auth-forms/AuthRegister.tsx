@@ -264,7 +264,6 @@ const SignUp = () => {
 							required
 							error={formik.touched.country && Boolean(formik.errors.country)}
 						>
-							<MenuItem value="">Country</MenuItem>
 							<MenuItem value="EN_US">United States</MenuItem>
 							<MenuItem value="KO_KR">Korea</MenuItem>
 						</Select>
@@ -279,7 +278,7 @@ const SignUp = () => {
 						margin="normal"
 						error={formik.touched.language && Boolean(formik.errors.language)}
 						>
-						<InputLabel id="language">Language</InputLabel>
+						<InputLabel id="language">Language *</InputLabel>
 						<Select
 							label="Language"
 							value={formik.values.language}
@@ -326,7 +325,7 @@ const SignUp = () => {
 						margin="normal"
 						error={formik.touched.industry && Boolean(formik.errors.industry)}
 						>
-						<InputLabel id="industry">Industry</InputLabel>
+						<InputLabel id="industry">Industry *</InputLabel>
 						<Select
 							label="Industry"
 							value={formik.values.industry}
