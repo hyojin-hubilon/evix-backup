@@ -14,6 +14,9 @@ import {
     Radio,
     RadioGroup,
     FormControl,
+	InputLabel,
+	Select,
+	MenuItem,
 } from '@mui/material';
 import { MyProfile, UpdateUserData } from '@/types/user';
 import { ResCommonError } from '@/apis/axios-common';
@@ -258,7 +261,7 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                     helperText={formik.touched.mobile && formik.errors.mobile}
                                     fullWidth
                                 />
-                                <TextField
+                                {/* <TextField
                                     label="Country"
                                     name="country"
                                     value={formik.values.country}
@@ -267,7 +270,27 @@ const SettingsMain: React.FC<{ myProfile: MyProfile }> = ({ myProfile }) => {
                                     error={formik.touched.country && Boolean(formik.errors.country)}
                                     helperText={formik.touched.country && formik.errors.country}
                                     fullWidth
-                                />
+                                /> */}
+
+								<FormControl>
+									<InputLabel id="country">Country *</InputLabel>
+									<Select
+										name="country"
+										defaultValue="Country"
+										fullWidth
+										value={formik.values.country}
+										onBlur={formik.handleBlur}
+										onChange={formik.handleChange}
+										required
+										error={formik.touched.country && Boolean(formik.errors.country)}
+									>
+										<MenuItem value="">Country</MenuItem>
+										<MenuItem value="EN_US">United States</MenuItem>
+										<MenuItem value="KO_KR">Korea</MenuItem>
+									</Select>
+
+								</FormControl>
+						
                                 <TextField
                                     label="Company"
                                     name="company_name"

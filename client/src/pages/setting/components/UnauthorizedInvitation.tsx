@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import { NavLink } from 'react-router-dom';
 import authApi from '@/apis/auth';
 import { invitedStudy } from '@/types/study';
-import Breadcrumbs2 from '@/components/@extended/Breadcrumbs2';
+import Breadcrumbs from '@/components/@extended/Breadcrumbs';
 import { t } from 'i18next';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -59,7 +59,7 @@ const UnauthorizedInvitation = () => {
     return (
 		<Container maxWidth="lg">
         <Box sx={{ p: 2 }}>
-			<Breadcrumbs2 sub={`${t('settings.study_invitation_received')} (${invitedStudyNumber})`}/>
+			<Breadcrumbs sub={`${t('settings.study_invitation_received')} (${invitedStudyNumber})`}/>
 
             <Typography variant="body1" sx={{ mt: 1, mb: 2 }}>
 				{t('settings.participate_in_the_study')}
