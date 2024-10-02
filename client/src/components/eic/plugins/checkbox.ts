@@ -5,7 +5,7 @@ export interface Checkbox extends Schema {}
 
 export const checkbox: Plugin<Checkbox> = {
     ui: async (arg) => {
-        const { schema, value, onChange, rootElement, mode } = arg;
+        const { value, onChange, rootElement, mode } = arg;
 
         const div = document.createElement('div');
         document.body.appendChild(div);
