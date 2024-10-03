@@ -79,7 +79,7 @@ export interface ApplyFreeTrialReq {
     company_name: string;
     job_title: string;
     industry: string;
-    coutnry: string;
+    country: string;
     message: string;
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Box, Divider, Link } from '@mui/material';
+import { Container, Typography, Box, Divider } from '@mui/material';
 
 const KoreanPrivacyPolicy: React.FC = () => {
     return (
@@ -27,36 +27,36 @@ const KoreanPrivacyPolicy: React.FC = () => {
                 <Typography variant="h5" component="h2" gutterBottom>
                     제 1조 수집하는 개인(민감)정보의 항목 및 수집방법
                 </Typography>
-                <Typography paragraph>
+                <Typography variant='body1'>
                     ① 회사는 회원가입, 본인확인 및 원활한 고객상담, 심사 서류 검증, 각종 서비스의
                     제공 등을 위해 아래와 같은 최소한의 개인정보를 필수항목으로 수집하고 있습니다.{' '}
-                    <br />
-                    <br />
-                    <div style={{ color: '#566893' }}>
-                        1) 회원 : [일반 개인정보] 성명, 이메일, 비밀번호, 휴대폰번호, 소속, 직함{' '}
-                        <br />
-                        2) 유료회원 : [일반 개인정보] 성명, 이메일, 비밀번호, 휴대폰번호, 소속,
-                        직함, 유료 회원은 결제정보(카드소유자 이름, 카드번호, 유효기간, 카드비밀번호
-                        앞 2자리, CVC, 서명, 결제금액, 계좌정보), 사업자 등록증
-                    </div>
-                </Typography>
-                <Typography paragraph>
+				</Typography>
+				<p style={{ color: '#566893', padding: '5px', marginTop:0 }}>
+					1) 회원 : [일반 개인정보] 성명, 이메일, 비밀번호, 휴대폰번호, 소속, 직함{' '}
+					<br />
+					2) 유료회원 : [일반 개인정보] 성명, 이메일, 비밀번호, 휴대폰번호, 소속,
+					직함, 유료 회원은 결제정보(카드소유자 이름, 카드번호, 유효기간, 카드비밀번호
+					앞 2자리, CVC, 서명, 결제금액, 계좌정보), 사업자 등록증
+				</p>
+                
+                <Typography variant='body1'>
                     ② 서비스 이용과정에서 서비스 제공 및 업무처리 과정에서 아래와 같은 정보들이
-                    자동으로 생성되어 추가로 수집될 수 있습니다. <br />
-                    <div style={{ color: '#566893' }}>
-                        1) 서비스 이용 기록, 접속 로그, 쿠키, 접속IP 주소, 기기고유번호(디바이스
-                        아이디 또는 IMEI), 불량 이용 기록, 광고식별자
-                    </div>
-                </Typography>
-                <Typography paragraph>
+                    자동으로 생성되어 추가로 수집될 수 있습니다.
+				</Typography>
+				<p style={{ color: '#566893', padding: '5px',  marginTop:0 }}>
+					1) 서비스 이용 기록, 접속 로그, 쿠키, 접속IP 주소, 기기고유번호(디바이스
+					아이디 또는 IMEI), 불량 이용 기록, 광고식별자
+				</p>
+                
+                <Typography variant='body1'>
                     ③ 개인정보 수집방법 <br />
                     회사는 아래와 같은 방법으로 개인정보를 수집합니다. <br />
-                    <div style={{ color: '#566893' }}>
-                        1) 홈페이지, 서비스 내 화면, 서면양식, 팩스, 전화, 게시판, 문의하기 <br />{' '}
-                        2) 생성정보 수집 툴을 통한 수집 <br /> 3)회원 동의에 따른 제휴병원으로부터의
-                        정보 수집
-                    </div>
-                </Typography>
+				</Typography>
+				<p style={{ color: '#566893', padding: '5px', marginTop:0 }}>
+					1) 홈페이지, 서비스 내 화면, 서면양식, 팩스, 전화, 게시판, 문의하기 <br />{' '}
+					2) 생성정보 수집 툴을 통한 수집 <br /> 3)회원 동의에 따른 제휴병원으로부터의
+					정보 수집
+				</p>
 
                 {/* Divider */}
                 <Divider sx={{ my: 2 }} />
@@ -85,6 +85,8 @@ const KoreanPrivacyPolicy: React.FC = () => {
                     게재, 서비스의 유효성 확인, 이벤트 정보 및 참여기회 제공, 광고성 정보 제공,
                     접속빈도 파악, 회원의 서비스이용에 대한 통계
                 </Typography>
+				{/* Divider */}
+                <Divider sx={{ my: 2 }} />
                 {/* Section 3 */}
                 <Typography variant="h5" component="h2" gutterBottom>
                     제3조 개인(민감)정보 제공 및 위탁
@@ -102,42 +104,45 @@ const KoreanPrivacyPolicy: React.FC = () => {
                     원칙적으로 이용자의 개인정보를 외부에 공개하지 않습니다. 다만 다음의 경우에는
                     이용자의 개인정보를 제3자에게 제공(공유를 포함) 할 수 있습니다.
                 </Typography>
-                <Typography paragraph>
+                <Typography>
                     1) 회원이 유료결제 서비스를 이용하는 것에 한해 다음 항목을 서비스 내 결제기관에
                     제공합니다.
                 </Typography>
-                <Typography paragraph color={'#566893'}>
-                    [일반 개인정보] <br />
-                    1) 결제정보(카드소유자 이름, 카드번호, 유효기간, 카드비밀번호 앞 2자리, CVC,
-                    서명, 결제금액, 계좌정보), 사업자 등록증
-                </Typography>
-                <Typography paragraph color={'#566893'}>
-                    [민감정보] <br />
-                    1) 법률규정이 있거나 법령상 의무준수를 위해 불가피한 경우 <br />
-                    2) 수사기관이 수사목적을 위해 관계법령이 정한 절차를 거쳐 요구하는 경우 <br />
-                    3) 통계작성 및 연구 등의 목적을 위해 필요한 경우로서 특정 개인을 알아볼 수 없는
-                    형태로 개인정보를 제공하는 경우
-                </Typography>
-                <Typography paragraph>
+				<Box p="5px">
+					<Typography paragraph color={'#566893'} m={0}>
+						[일반 개인정보] <br />
+						1) 결제정보(카드소유자 이름, 카드번호, 유효기간, 카드비밀번호 앞 2자리, CVC,
+						서명, 결제금액, 계좌정보), 사업자 등록증
+					</Typography>
+					<Typography paragraph color={'#566893'}>
+						[민감정보] <br />
+						1) 법률규정이 있거나 법령상 의무준수를 위해 불가피한 경우 <br />
+						2) 수사기관이 수사목적을 위해 관계법령이 정한 절차를 거쳐 요구하는 경우 <br />
+						3) 통계작성 및 연구 등의 목적을 위해 필요한 경우로서 특정 개인을 알아볼 수 없는
+						형태로 개인정보를 제공하는 경우
+					</Typography>
+				</Box>
+
+                <Typography>
                     ② 개인정보 처리 위탁 <br />
                     1) 회사는 향상된 서비스를 제공하기 위해 개인정보 처리를 위탁하여 처리할 수
                     있습니다. 위탁업무를 하는 경우에는 다음의 내용을 이용자에게 알리고 동의를
                     받으며, 어느 하나의 사항이 변경된 경우에도 동일합니다. 보다 나은 서비스 제공을
                     위해 위탁한 개인정보 수탁업체는 다음과 같습니다
                 </Typography>
-                <Typography paragraph color={'#566893'}>
+                <Typography paragraph p="5px" color={'#566893'} mt="0">
                     (주)페이플 <br />
                     신용카드 등 결재 처리 및 대행 <br />
                     회원 탈퇴 시 혹은 위탁 계약 종료 시까지
                 </Typography>
-                <Typography paragraph>
+                <Typography>
                     2) 회사는 서비스 제공의 안정성과 최신 기술을 이용자에게 제공하기 위해 개인정보를
                     위탁하고 있으며, 이용자로부터 취득 또는 생성한 개인정보를 OCI(Oracle Cloud
                     Infrastructure)가 보유하고 있는 데이터베이스 서버(물리적 저장 장소: 한국)에
                     저장합니다. OCI는 해당 서버의 물리적인 관리만을 행하고, 이용자의 개인정보에
                     접근할 수 없습니다.
                 </Typography>
-                <Typography paragraph color={'#566893'}>
+                <Typography paragraph p="5px" color={'#566893'} mt="0">
                     1) 항목: 서비스 이용 기록 또는 수집된 개인정보 <br />
                     2) 방법: 네트워크를 통산 전송 <br /> 3) 보유 기간: 클라우드 서비스 이용
                     변경시까지
@@ -149,6 +154,8 @@ const KoreanPrivacyPolicy: React.FC = () => {
                     있습니다. 위탁업무의 내용이나 수탁자가 변경될 경우에는 지체 없이 본 개인정보
                     처리방침을 통하여 공개합니다.
                 </Typography>
+				{/* Divider */}
+                <Divider sx={{ my: 2 }} />
                 {/* Section 4 */}
                 <Typography variant="h5" component="h2" gutterBottom>
                     제4조 개인(민감)정보의 보유 및 이용기간
@@ -158,37 +165,41 @@ const KoreanPrivacyPolicy: React.FC = () => {
                     개인정보의 수집 및 이용목적이 달성되면 지체없이 파기됩니다. 단, 아래의 정보에
                     대해서는 아래의 이유로 명시한 기간동안 보존합니다.
                 </Typography>
-                <Typography paragraph>
-                    ① 회사 내부 방침에 의한 정보보유 사유 <br />
-                    <div style={{ color: '#566893' }}>
-                        1) 부정 이용 기록: 부정 이용 방지 (1년) <br />
-                        2) 문의/제휴 내용(이용자에게 별도의 동의를 구한 경우): 회원 상담 처리 (1년){' '}
-                        <br />
-                        3) 회원 탈퇴 기록: 민원처리 등 (탈퇴일로부터 30일)
-                    </div>
-                </Typography>
-                <Typography paragraph>
-                    ② 관련 법령에 의한 정보보유 사유 <br />
-                    <div style={{ color: '#566893' }}>
-                        1) 계약 또는 청약 철회 등에 관한 기록: 전자상거래 등에서의 소비자보호에 관한
-                        법률 (5년) <br />
-                        2) 대금결제 및 재화 등의 공급에 관한 기록: 전자상거래 등에서의 소비자보호에
-                        관한 법률 (5년) <br />
-                        3) 소비자의 불만 또는 분쟁처리에 관한 기록: 전자상거래 등에서의 소비자보호에
-                        관한 법률 (3년) <br />
-                        4) 표시/광고에 관한 기록: 전자상거래 등에서의 소비자보호에 관한 법률 (6개월){' '}
-                        <br />
-                        5) 세법이 규정하는 모든 거래에 관한 장부 및 증빙서류: 국세기본법, 법인세법
-                        (5년) <br />
-                        6) 전자금융 거래에 관한 기록: 전자금융거래법 (5년) <br />
-                        7) 웹사이트 방문에 관한 기록: 통신비밀보호법 (3개월)
-                    </div>
-                </Typography>
+                <Typography>
+                    ① 회사 내부 방침에 의한 정보보유 사유
+				</Typography>
+				<p style={{ color: '#566893', marginTop:0, padding: '5px' }}>
+					1) 부정 이용 기록: 부정 이용 방지 (1년) <br />
+					2) 문의/제휴 내용(이용자에게 별도의 동의를 구한 경우): 회원 상담 처리 (1년){' '}
+					<br />
+					3) 회원 탈퇴 기록: 민원처리 등 (탈퇴일로부터 30일)
+				</p>
+			
+                <Typography>
+                    ② 관련 법령에 의한 정보보유 사유
+				</Typography>
+				<p style={{ color: '#566893', marginTop:0, padding:'5px' }}>
+					1) 계약 또는 청약 철회 등에 관한 기록: 전자상거래 등에서의 소비자보호에 관한
+					법률 (5년) <br />
+					2) 대금결제 및 재화 등의 공급에 관한 기록: 전자상거래 등에서의 소비자보호에
+					관한 법률 (5년) <br />
+					3) 소비자의 불만 또는 분쟁처리에 관한 기록: 전자상거래 등에서의 소비자보호에
+					관한 법률 (3년) <br />
+					4) 표시/광고에 관한 기록: 전자상거래 등에서의 소비자보호에 관한 법률 (6개월){' '}
+					<br />
+					5) 세법이 규정하는 모든 거래에 관한 장부 및 증빙서류: 국세기본법, 법인세법
+					(5년) <br />
+					6) 전자금융 거래에 관한 기록: 전자금융거래법 (5년) <br />
+					7) 웹사이트 방문에 관한 기록: 통신비밀보호법 (3개월)
+				</p>
+                
                 <Typography paragraph>
                     ③ 2항에 따라 비대면진료 서비스 중 결재까지 완료된 경우에 한해, 관련한 환자명부와
                     진료기록은 5년동안 보존되고, 진료했던 의료기관의 종사자들은 해당 기간에 한해
                     관련 정보를 조회할 수 있습니다.
                 </Typography>
+				{/* Divider */}
+                <Divider sx={{ my: 2 }} />
                 {/* Section 5 */}
                 <Typography variant="h5" component="h2" gutterBottom>
                     제5조 (개인정보 파기절차 및 방법)
@@ -217,6 +228,8 @@ const KoreanPrivacyPolicy: React.FC = () => {
                     개인정보를 법률에 의한 경우가 아니고서는 보유하는 이외의 다른 목적으로 이용하지
                     않습니다.
                 </Typography>
+				{/* Divider */}
+                <Divider sx={{ my: 2 }} />
                 {/* Section 6 */}
                 <Typography variant="h5" component="h2" gutterBottom>
                     제6조 (이용자 및 법정대리인의 권리와 그 행사방법)
@@ -227,6 +240,8 @@ const KoreanPrivacyPolicy: React.FC = () => {
                     요청에 의해 해지 또는 삭제된 개인정보는 제4조에 명시된 바에 따라 처리하고 그
                     외의 용도로 열람 또는 이용할 수 없도록 처리하고 있습니다.
                 </Typography>
+				{/* Divider */}
+                <Divider sx={{ my: 2 }} />
                 {/* Section 7 */}
                 <Typography variant="h5" component="h2" gutterBottom>
                     제7조 (개인정보 자동수집 장치의 설치/운영 및 거부에 관한 사항)
@@ -243,19 +258,21 @@ const KoreanPrivacyPolicy: React.FC = () => {
                     보안접속 여부, 이용자 규모 등을 파악하여 이용자에게 최적화된 정보 제공을 위하여
                     사용합니다.
                 </Typography>
-                <Typography paragraph>
-                    ② 쿠키의 설치/운영 및 거부: <br />
-                    <div style={{ color: '#566893' }}>
-                        1) 이용자는 쿠키 설치에 대한 선택권을 가지고 있습니다. 따라서, 이용자는
-                        웹브라우저에서 옵션을 설정함으로써 모든 쿠키를 허용하거나, 쿠키가 저장될
-                        때마다 확인을 거치거나, 아니면 모든 쿠키의 저장을 거부할 수도 있습니다. 단,
-                        쿠키의 저장을 거부할 경우에는 로그인이 필요한 일부 서비스는 이용에 어려움이
-                        있을 수 있습니다. <br /> <br />
-                        2) 쿠키 설정을 거부하는 방법으로는 이용자가 사용하는 웹 브라우저의 옵션을
-                        선택함으로써 모든 쿠키를 허용하거나 쿠키를 저장할 때마다 확인을 거치거나,
-                        모든 쿠키의 저장을 거부할 수 있습니다.
-                    </div>
-                </Typography>
+                <Typography>
+                    ② 쿠키의 설치/운영 및 거부:
+				</Typography>
+				<p style={{ color: '#566893', marginTop:0, padding:'5px' }}>
+					1) 이용자는 쿠키 설치에 대한 선택권을 가지고 있습니다. 따라서, 이용자는
+					웹브라우저에서 옵션을 설정함으로써 모든 쿠키를 허용하거나, 쿠키가 저장될
+					때마다 확인을 거치거나, 아니면 모든 쿠키의 저장을 거부할 수도 있습니다. 단,
+					쿠키의 저장을 거부할 경우에는 로그인이 필요한 일부 서비스는 이용에 어려움이
+					있을 수 있습니다. <br />
+					2) 쿠키 설정을 거부하는 방법으로는 이용자가 사용하는 웹 브라우저의 옵션을
+					선택함으로써 모든 쿠키를 허용하거나 쿠키를 저장할 때마다 확인을 거치거나,
+					모든 쿠키의 저장을 거부할 수 있습니다.
+				</p>
+				{/* Divider */}
+                <Divider sx={{ my: 2 }} />
                 {/* Section 8 */}
                 <Typography variant="h5" component="h2" gutterBottom>
                     제8조 (개인정보의 기술적/관리적 보호 대책)
@@ -289,6 +306,8 @@ const KoreanPrivacyPolicy: React.FC = () => {
                     회원 본인의 부주의나 회사가 관리하지 않는 영역에서의 사고 등 회사의 귀책에
                     기인하지 않은 손해에 대해서는 회사가 책임지지 않습니다.
                 </Typography>
+				{/* Divider */}
+                <Divider sx={{ my: 2 }} />
                 {/* Section 9 */}
                 <Typography variant="h5" component="h2" gutterBottom>
                     제9조 (기타사항)
@@ -301,6 +320,8 @@ const KoreanPrivacyPolicy: React.FC = () => {
                     ② 개인정보 정정 요청 시 정확한 개인정보의 이용 및 제공을 위해 수정이 완료될
                     때까지 이용자의 개인정보는 이용되거나 제공되지 않습니다.
                 </Typography>
+				{/* Divider */}
+                <Divider sx={{ my: 2 }} />
                 {/* Section 10 */}
                 <Typography variant="h5" component="h2" gutterBottom>
                     제10조 (개인정보 처리방침의 변경)
@@ -310,7 +331,8 @@ const KoreanPrivacyPolicy: React.FC = () => {
                     변경된 사항의 시행시기와 변경된 내용을 언제든지 쉽게 알 수 있도록 지속적으로
                     ‘서비스’를 통하여 공개합니다.
                 </Typography>
-
+				{/* Divider */}
+                <Divider sx={{ my: 2 }} />
                 {/* Section 11 */}
                 <Typography variant="h5" component="h2" gutterBottom>
                     제11조 (개인정보보호 책임자 및 연락처)
@@ -324,26 +346,25 @@ const KoreanPrivacyPolicy: React.FC = () => {
                 <Typography variant="h5" component="h2" gutterBottom>
                     개인정보보호 책임자
                 </Typography>
-                <Typography paragraph>
-                    <div style={{ color: '#566893' }}>
-                        1) 이름: 송해선 <br />
-                        2) 소속: 에비드넷
-                        <br />
-                        3) 연락처: 1566-8013
-                        <br />
-                        4) 이메일: hssong@evidnet.co.kr
-                    </div>
-                    <br />
-                    기타 개인정보침해에 대한 신고나 상담이 필요하신 경우에는 아래 기관에 문의하시기
-                    바랍니다.
-                    <br />
-                    1) 개인정보침해신고센터 (https://privacy.kisa.or.kr / 국번없이 118)
-                    <br />
-                    2) 대검찰청 사이버수사과 (https://www.spo.go.kr / 국번없이 1301)
-                    <br />
-                    3) 경찰청 사이버안전국 (https://cyberbureau.police.go.kr / 국번없이 182)
-                    <br />
-                </Typography>
+                
+				<p style={{ color: '#566893', marginTop:0 }}>
+					1) 이름: 송해선 <br />
+					2) 소속: 에비드넷
+					<br />
+					3) 연락처: 1566-8013
+					<br />
+					4) 이메일: hssong@evidnet.co.kr
+				</p>
+				기타 개인정보침해에 대한 신고나 상담이 필요하신 경우에는 아래 기관에 문의하시기
+				바랍니다.
+				<br />
+				1) 개인정보침해신고센터 (https://privacy.kisa.or.kr / 국번없이 118)
+				<br />
+				2) 대검찰청 사이버수사과 (https://www.spo.go.kr / 국번없이 1301)
+				<br />
+				3) 경찰청 사이버안전국 (https://cyberbureau.police.go.kr / 국번없이 182)
+				<br />
+			
                 <Typography paragraph>
                     공고일자 2024-09-25 <br />
                     시행일자 2024-09-25

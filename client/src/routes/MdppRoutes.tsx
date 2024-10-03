@@ -1,8 +1,12 @@
+import Loadable from "@/components/Loadable";
+import { lazy } from "react";
+
 import MinimalLayout from "@/layout/MinimalLayout";
-import EICAgreement from "@/pages/mdpp/EICAgreement";
-import MdppSurvey from "@/pages/mdpp/MdppSurvey";
-import ParticipantStudies from "@/pages/mdpp/ParticipantStudies";
-import ParticipantSurveys from "@/pages/mdpp/ParticipantSurveys";
+
+const EICAgreement = Loadable(lazy(() => import('@pages/mdpp/EICAgreement')));
+const MdppSurvey = Loadable(lazy(() => import('@pages/mdpp/MdppSurvey')));
+const ParticipantStudies = Loadable(lazy(() => import('@pages/mdpp/ParticipantStudies')));
+const ParticipantSurveys =  Loadable(lazy(() => import('@pages/mdpp/ParticipantSurveys')));
 
 const MdppRoutes = {
     path: '/mdpp',

@@ -19,6 +19,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import PrivacyPolicy from '@/components/modal/PrivacyPolicy';
 
+
 const emailAdress = 'evix-dct@evidnet.co.kr';
 // const emailAdress = 'bha4388@naver.com';
 const subject = '[문의하기]';
@@ -49,7 +50,7 @@ const SupportForm = () => {
         job_title: Yup.string().required('Please enter Job Title'),
         email: Yup.string().email('Please input a valid email').required('Please enter email'),
         phone: Yup.string()
-            .matches(/^[0-9]*$/, 'Please input a valid phone number')
+            .matches(/^[0-9]*$/, 'Please enter numbers only.')
             .required('Please enter phone number'),
         industry: Yup.string().required('Please select Industry Segment'),
         message: Yup.string(),

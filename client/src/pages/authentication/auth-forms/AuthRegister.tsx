@@ -235,7 +235,7 @@ const SignUp = () => {
                         error={formik.touched.mobile && Boolean(formik.errors.mobile)}
                         helperText={formik.touched.mobile && formik.errors.mobile}
                     />
-                    <TextField
+                    {/* <TextField
                         label="Country"
                         name="country"
                         value={formik.values.country}
@@ -246,14 +246,39 @@ const SignUp = () => {
                         required
                         error={formik.touched.country && Boolean(formik.errors.country)}
                         helperText={formik.touched.country && formik.errors.country}
-                    />
+                    /> */}
+
+					<FormControl
+						fullWidth
+						margin="normal"
+						error={formik.touched.country && Boolean(formik.errors.country)}
+					>
+						<InputLabel id="country">Country *</InputLabel>
+						<Select
+							name="country"
+							defaultValue="Country"
+							fullWidth
+							value={formik.values.country}
+							onBlur={formik.handleBlur}
+							onChange={formik.handleChange}
+							required
+							error={formik.touched.country && Boolean(formik.errors.country)}
+						>
+							<MenuItem value="EN_US">United States</MenuItem>
+							<MenuItem value="KO_KR">Korea</MenuItem>
+						</Select>
+						{formik.errors.country &&  (
+							<FormHelperText sx={{ color: 'error.main' }}>{formik.errors.country}</FormHelperText>
+						)}
+					</FormControl>
+					
 					
 					<FormControl
 						fullWidth
 						margin="normal"
 						error={formik.touched.language && Boolean(formik.errors.language)}
 						>
-						<InputLabel id="language">Language</InputLabel>
+						<InputLabel id="language">Language *</InputLabel>
 						<Select
 							label="Language"
 							value={formik.values.language}
@@ -300,7 +325,7 @@ const SignUp = () => {
 						margin="normal"
 						error={formik.touched.industry && Boolean(formik.errors.industry)}
 						>
-						<InputLabel id="industry">Industry</InputLabel>
+						<InputLabel id="industry">Industry *</InputLabel>
 						<Select
 							label="Industry"
 							value={formik.values.industry}

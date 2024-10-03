@@ -1,4 +1,4 @@
-import Breadcrumbs2 from '@/components/@extended/Breadcrumbs2';
+import Breadcrumbs from '@/components/@extended/Breadcrumbs';
 import { EditOutlined } from '@ant-design/icons';
 import { Avatar, Box, Button, Chip, Grid, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -200,7 +200,7 @@ const StudyDetail = () => {
 
     return (
         <>
-            <Breadcrumbs2 sub={studyDetail?.title} />
+            <Breadcrumbs sub={studyDetail?.title} />
             <Grid container rowSpacing={3} columnSpacing={1}>
                 <Grid container item xs={12}>
                     <Box display="flex" alignItems="center" gap={1}>

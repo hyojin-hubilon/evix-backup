@@ -188,7 +188,7 @@ const SampleList = () => {
 			surveyNo && isPreview &&
 				<Dialog open={isPreview} maxWidth="lg" onClose={handleClosePreview} fullWidth>
 					<SurveyPreview surveyNo={surveyNo} handleClose={handleClosePreview} isDialog={true} />
-					<Fab variant="extended" sx={{position: 'sticky', bottom: '5%', left: '80%', width: '200px', padding: '0.7rem'}} color="primary" onClick={() => handleSelectSample()}>
+					<Fab variant="extended" sx={{position: 'sticky', bottom: '5%', left: '80%', minWidth: '200px', maxWidth: '230px', padding: '0.7rem', lineHeight: '1.2'}} color="primary" onClick={() => handleSelectSample()}>
 						<CreateIcon sx={{ mr: 1 }} />{t('survey.write_with_this_sample')}
 					</Fab>
 				</Dialog>

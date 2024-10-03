@@ -135,8 +135,13 @@ const MdppSurvey = () => {
 
     useEffect(() => {
         getSurveyDeatil();
+		// React Native WebView와의 통신을 위한 useEffect 추가
+		if (window.ReactNativeWebView) {
+            window.ReactNativeWebView.postMessage(window.location.href);
+        }
     }, []);
 
+	 
     const postSurvey = async (surveyAnswers) => {
         const response = await participantSurveyApi.postSurveyAnswer(surveyAnswers);
         if (response.result && response.code === 200) {
@@ -144,12 +149,12 @@ const MdppSurvey = () => {
                 description: '설문에 참여해주셔서 감사합니다.',
                 variant: 'info',
             }).then(() => {
-                const webView = (window as any).ReactNativeWebView;
-                if (webView) {
-                    webView.postMessage('exit');
-                } else {
+                // const webView = (window as any).ReactNativeWebView;
+                // if (webView) {
+                //     webView.postMessage('exit');
+                // } else {
                     navigate('/mdpp/studies');
-                }
+                // }
             });
         }
     };
@@ -202,17 +207,8 @@ const MdppSurvey = () => {
             answers.push(answer);
         });
 
-        console.log(answers);
-
         postSurvey(answers);
     };
-
-    // React Native WebView와의 통신을 위한 useEffect 추가
-    useEffect(() => {
-        if (window.ReactNativeWebView) {
-            window.ReactNativeWebView.postMessage(window.location.href);
-        }
-    }, []);
 
     return (
         <Box sx={{ bgcolor: 'white', minHeight: '100vh', pt: '22px' }}>
