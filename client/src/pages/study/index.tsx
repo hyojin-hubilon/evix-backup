@@ -5,8 +5,6 @@ import {
     Typography,
     Chip,
     Container,
-    Tabs,
-    Tab,
     Button,
     IconButton,
     OutlinedInput,
@@ -20,16 +18,16 @@ import StudyListItem, { STUDY_STATUS, STUDY_STATUS_KEY } from './components/Stud
 import studyApi from '@/apis/study';
 import { MyStudyList, StudyApiResponse } from '@/types/study';
 
-import StudyInvitedItem from './components/StudyInvitedItem';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
-import EastIcon from '@mui/icons-material/East';
 import dayjs, { Dayjs } from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 dayjs.extend(isSameOrBefore);
 import DatePicker, { DatePickerProps } from "antd/lib/date-picker";
 import { paginator } from '@/utils/helper';
 import { t } from 'i18next';
+import { OrangeBox, OrangeTriangle } from '@/layout/MainLayout/styles';
+import { useUserProfile } from '../../context/UserProfileContext';
 const { RangePicker } = DatePicker;
 
 const StudyList = () => {
@@ -37,7 +35,6 @@ const StudyList = () => {
     const [activeTab, setActiveTab] = useState<string>('0'); // 활성 탭 상태
     const [studies, setStudies] = useState<MyStudyList[]>([]); // 내 Study 목록 상태
 	const [ searched, setSearched ] = useState<MyStudyList[]>([]);
-    const [invitedStudies, setInvitedStudies] = useState<any[]>([]); // 초대 받은 스터디 목록 상태
     const [fullName, setFullName] = useState<string>(''); // 사용자 전체 이름 상태
 	const [ searchTerm, setSearchTerm] = useState('');
 	const [activeDateSetting, setActiveDateSetting] = useState('full');
@@ -45,6 +42,8 @@ const StudyList = () => {
 	const [ pageCount, setPageCount ] = useState(0);
 	const [ page, setPage] = useState(1);
 	const [ itemPerPage, setItemPerPage ] = useState(10);
+	const [showStudyOnboarding, setShowStudyOnboarding] = useState<null|number>(null);
+	const { userProfile } = useUserProfile();
     const navigate = useNavigate();
 
     // Study 데이터 불러오기
@@ -52,12 +51,19 @@ const StudyList = () => {
         try {
             const response: StudyApiResponse = await studyApi.fullMyStudyList(); // TODO: 창덕님께 수정 요청(페이징 필요 없음) -> 페이징 10 으로 수정 -> 더보기 없음 > 페이징 뺌
             if (response.result && response.code === 200) {
+				
                 const studyList = response.content?.studyMyList ?? [];
+
+				// if(studyList.length === 0 && !userProfile?.last_login) {
+				// 	setShowStudyOnboarding(1);
+				// } 스터디 온 보딩 - 내용 추가 후 더 진행예정
+
                 setStudies(studyList);
 				setSearched(studyList);
                 setStudyCount(studyList.length);
 				setPageCount(Math.ceil(studyList.length/itemPerPage));
             }
+			
         } catch (error) {
             console.error('Failed to fetch study list:', error);
         }
@@ -132,6 +138,10 @@ const StudyList = () => {
 		setPage(paginator(searched, value, itemPerPage).page);
 	}
 
+	const handleNextStudyOnboardig = (num) => {
+		setShowStudyOnboarding(num)
+	}
+
 
 	useEffect(() => {
 		let newSearchedList = studies.filter(study => {
@@ -178,89 +188,89 @@ const StudyList = () => {
                    
                 </Grid>
 
+				<Grid
+					container
+					item
+					xs={12}
+					sx={{ borderBottom: 1, borderColor: 'divider' }}
+					alignItems="center"
+					pb={1}
+					mt={2}
+					columnGap={1}
+				>
+					{/* <Grid item xs={8}>
+						<Tabs
+							value={activeTab}
+							onChange={handleChange}
+							aria-label="Study Status Tab"
+						>
+							<Tab label="전체" value="0" />
+							<Tab label="My Study" value="1" />
+							<Tab label="Maintainer" value="2" />
+							<Tab label="Developer" value="3" />
+						</Tabs>
+					</Grid> */}
+					<Grid item xs={activeDateSetting == 'full' ? 5.9 : 4.5}>
+						<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
+							startAdornment={
+								<InputAdornment position="start">
+									<SearchIcon />
+								</InputAdornment>
+							}
+							value={searchTerm}
+							onChange={(e) => handleSearchStudy(e.target.value)}
+							placeholder={t('study.search_by')}
+						/>
+					</Grid>
+					<Grid item xs={activeDateSetting == 'full' ? 2 : 1.6}>
+						<Select
+							size='small'
+							onChange={(e) => handleChange(e.target.value)}
+							value={activeTab} fullWidth
+							sx={{bgcolor: 'white'}}
+							>
+							<MenuItem value="0">{t('study.all_studies')}</MenuItem>
+							<MenuItem value="1">{t('study.my_studies')}</MenuItem>
+							<MenuItem value="2">{t('study.included_studies')}</MenuItem>
+						</Select>
+						{/* My Studies : Owner, Included Studies : MAINTAINER, DEVELOPER */}
+					</Grid>
+					<Grid item xs={activeDateSetting == 'full' ? 2 : 1.5}>
+						<Select
+							size='small'
+							onChange={(e) => handleChangeDateSetting(e.target.value)}
+							value={activeDateSetting} fullWidth
+							sx={{bgcolor: 'white'}}
+							>
+							<MenuItem value="full">{t('study.full_period')}</MenuItem>
+							<MenuItem value="dates">{t('study.date_setting')}</MenuItem>
+						</Select>
+					</Grid>
+					{
+						activeDateSetting == 'dates' &&
+						<Grid item xs={2.5}>
+							<RangePicker
+								placement="bottomRight"
+								style={{
+									padding: '6px 11px',
+									borderRadius: '4px',
+									minHeight: '1.4375em',
+									borderColor: 'rgba(0, 0, 0, 0.23)'
+								}}
+								onChange={onChangeDate}
+							/>
+						</Grid>
+					}
+					<Grid item xs={activeDateSetting == 'full' ? 1.7 : 1.5}>
+						<Button variant="contained" onClick={handleCreateStudy} sx={{ ml: 'auto' }} fullWidth>
+							<PlusOutlined />
+							<Typography sx={{ ml: 1 }}>{t('study.new_study')}</Typography>
+						</Button>
+					</Grid>
+				</Grid>
+
                 {studyCount !== 0 ? (
                     <>
-                        <Grid
-                            container
-                            item
-                            xs={12}
-                            sx={{ borderBottom: 1, borderColor: 'divider' }}
-                            alignItems="center"
-							pb={1}
-							mt={2}
-							columnGap={1}
-                        >
-                            {/* <Grid item xs={8}>
-                                <Tabs
-                                    value={activeTab}
-                                    onChange={handleChange}
-                                    aria-label="Study Status Tab"
-                                >
-                                    <Tab label="전체" value="0" />
-                                    <Tab label="My Study" value="1" />
-                                    <Tab label="Maintainer" value="2" />
-                                    <Tab label="Developer" value="3" />
-                                </Tabs>
-                            </Grid> */}
-                            <Grid item xs={activeDateSetting == 'full' ? 5.9 : 4.5}>
-								<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
-									startAdornment={
-										<InputAdornment position="start">
-											<SearchIcon />
-										</InputAdornment>
-									}
-									value={searchTerm}
-									onChange={(e) => handleSearchStudy(e.target.value)}
-									placeholder={t('study.search_by')}
-								/>
-                            </Grid>
-							<Grid item xs={activeDateSetting == 'full' ? 2 : 1.6}>
-								<Select
-									size='small'
-									onChange={(e) => handleChange(e.target.value)}
-									value={activeTab} fullWidth
-									sx={{bgcolor: 'white'}}
-									>
-									<MenuItem value="0">{t('study.all_studies')}</MenuItem>
-									<MenuItem value="1">{t('study.my_studies')}</MenuItem>
-									<MenuItem value="2">{t('study.included_studies')}</MenuItem>
-								</Select>
-								{/* My Studies : Owner, Included Studies : MAINTAINER, DEVELOPER */}
-							</Grid>
-							<Grid item xs={activeDateSetting == 'full' ? 2 : 1.5}>
-								<Select
-									size='small'
-									onChange={(e) => handleChangeDateSetting(e.target.value)}
-									value={activeDateSetting} fullWidth
-									sx={{bgcolor: 'white'}}
-									>
-									<MenuItem value="full">{t('study.full_period')}</MenuItem>
-									<MenuItem value="dates">{t('study.date_setting')}</MenuItem>
-								</Select>
-							</Grid>
-							{
-								activeDateSetting == 'dates' &&
-								<Grid item xs={2.5}>
-									<RangePicker
-										placement="bottomRight"
-										style={{
-											padding: '6px 11px',
-											borderRadius: '4px',
-											minHeight: '1.4375em',
-											borderColor: 'rgba(0, 0, 0, 0.23)'
-										}}
-										onChange={onChangeDate}
-									/>
-								</Grid>
-							}
-							<Grid item xs={activeDateSetting == 'full' ? 1.7 : 1.5}>
-								<Button variant="contained" onClick={handleCreateStudy} sx={{ ml: 'auto' }} fullWidth>
-									<PlusOutlined />
-									<Typography sx={{ ml: 1 }}>{t('study.new_study')}</Typography>
-								</Button>
-							</Grid>
-                        </Grid>
-
 						{paginator(searched, page, itemPerPage).data.map((study, index) => {
 							return (
 								<Grid item xs={12} key={study.std_no}>
@@ -291,23 +301,59 @@ const StudyList = () => {
                             justifyContent="center"
                             sx={{ pb: 4, borderBottom: 1, borderColor: 'divider' }}
                         >
-                            <Box display="flex" flexDirection="column" alignItems="center">
-                                <IconButton color="primary" onClick={handleCreateStudy}>
+                            <Box onClick={handleCreateStudy}
+								sx={{
+									display:'flex',
+									flexDirection: 'column',
+									alignItems:'center',
+									cursor: 'pointer',
+									marginTop: '7%',
+									marginBottom: '10%',
+									'&:hover' : {
+										'.MuiButtonBase-root' : {
+											backgroundColor: 'rgba(22, 119, 255, 0.04)'
+										}
+									}
+								}}>
+                                <IconButton color="primary">
                                     <PlusOutlined />
                                 </IconButton>
-                                <Typography
-                                    sx={{
-                                        mt: 1,
-                                        cursor: 'pointer',
-                                        '&:hover': { textDecoration: 'underline' },
-                                    }}
-                                    color="primary"
-                                    variant="h5"
-                                    onClick={handleCreateStudy}
-                                >
-									{t('study.new_study')}
-                                </Typography>
+								<Typography sx={{ ml: 1 }} variant='h3' fontWeight="normal" color="primary" mt="1rem">
+									{t('study.no_studies_created')}
+								</Typography>
+								<Typography variant='h3' fontWeight="normal" color="primary">
+									{t('study.start_your_project')}
+								</Typography>
                             </Box>
+
+						
+
+						{
+
+							/* Study onboarding */
+							showStudyOnboarding === 1 &&
+
+							<OrangeBox
+								sx={{
+									position: 'fixed',
+									left: 'calc(50% + 270px)',
+									top: '160px',
+								}}
+								>
+									<Box minHeight="90px">
+									<h5>{t('onboarding.create_new_trial')}</h5>
+									<p>{t('onboarding.this_page_is_currently_empty')}</p>
+									</Box>
+									<Box className="btn-box">
+										<Button className="skip" onClick={() => setShowStudyOnboarding(null)}>Skip</Button>
+										<Button className="start" onClick={() => handleNextStudyOnboardig(2)}>Next</Button>
+									</Box>
+									<OrangeTriangle sx={{
+										left: '-8px',
+										top:'140px'
+									}}/>
+							</OrangeBox>
+						}
                         </Grid>
                     </>
                 )}

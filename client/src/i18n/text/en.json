@@ -241,7 +241,9 @@
         "completion_rate": "Completion Rate",
         "incomplete_rate": "Incomplete Rate",
         "completion": "Completion",
-        "incomplete": "Incomplete"
+        "incomplete": "Incomplete",
+		"no_studies_created" : "There are no studies created.",
+		"start_your_project" : "Start your project by creating a new Study."
     },
     "eic": {
         "has_been_saved": "Your electronic consent form has been saved.",
@@ -382,6 +384,8 @@
 		"billing" : "Billing",
 		"the_evix-dct_platform" : "The Evix-DCT platform will soon offer subscription payment options. The payment feature will be available soon. For any inquiries, please contact us at 1566-8013.",
 		"setting" : "Setting",
-		"you_can_manage_language" : "You can manage language settings, account information, and notifications, as well as review and accept the list of invited studies." 
+		"you_can_manage_language" : "You can manage language settings, account information, and notifications, as well as review and accept the list of invited studies.",
+		"create_new_trial" : "Create New Trial",
+		"this_page_is_currently_empty" : "This page is currently empty as there are no items created yet. Click the ‘Add’ button to create a new clinical trial and get started."
 	}
 }

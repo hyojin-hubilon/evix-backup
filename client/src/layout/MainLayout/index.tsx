@@ -4,13 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Box, Button, CircularProgress, styled, Toolbar, useMediaQuery } from '@mui/material';
+import { Box, Button, CircularProgress, Toolbar, useMediaQuery } from '@mui/material';
 
 // project import
 import Drawer from './Drawer';
 import Header from './Header';
-import navigation from '@/menu-items';
-import Breadcrumbs from '@components/@extended/Breadcrumbs';
 
 // types
 import { openDrawer, openOnboarding } from '@store/reducers/menu';
@@ -18,78 +16,11 @@ import { IRootState } from '@store/reducers';
 import { UserProfileContextProvider } from '@/context/UserProfileContext';
 import { t } from 'i18next';
 
+//styled components
+import * as S from './styles';
+
 // ==============================|| MAIN LAYOUT ||============================== //
 
-export const Triangle = styled(Box)(() => ({
-	width: '0px',
-	height: '0px',
-	borderStyle: 'solid',
-	borderWidth: '8px 8px 8px 0',
-	borderColor: 'transparent #22ABF3 transparent transparent',
-	position: 'absolute',
-}))
-
-export const BlueBox = styled(Box)(() => ({
-	background: '#22ABF3',
-	padding:'24px 24px 22px 24px',
-	borderRadius: '12px',
-	color: 'white',
-	maxWidth: '416px',
-	boxShadow: '0px 6px 10px 0px #0072AE54',
-	'h5' : {		
-		fontWeight:'700',
-		fontSize: '15px',
-		lineHeight : '1',
-		margin:'0 0 12px'
-	},
-	'h6' : {		
-		fontWeight:'700',
-		fontSize: '14px',
-		lineHeight : '1',
-		margin:'0 0 5px'
-	},
-	'p': {
-		fontSize: '14px',
-		fontWeight: '400',
-		lineHeight: '19.6px',
-		margin: 0
-	},
-	'.btn-box': {
-		marginTop:'12px',
-		display: 'flex',
-		justifyContent: 'flex-end',
-		gap: '14px'
-	},
-	'button': {
-		borderRadius: '50px',
-		fontSize: '14px',
-		fontWeight: '400',
-		height: '32px',
-		width: '90px',
-		textAlign: 'center',
-		opacity: '0.7',
-		transition: 'opacity 0.3s'
-	},
-	'.skip' : {
-		color: 'white',
-		border:'1px solid #fff',
-		'&:hover': {
-			opacity: '1',
-			transition: 'opacity 0.3s',
-		}
-	},
-	'.start' : {
-		color: '#22ABF3',
-		background: '#fff',
-		'&:hover': {
-			color: '#22ABF3',
-			background: '#fff',
-			opacity: '1',
-			transition: 'opacity 0.3s',
-		}
-	}
-
-}))
 
 
 const MainLayout = () => {
@@ -185,7 +116,7 @@ const MainLayout = () => {
 					{
 						onboardingStep === 0 &&
 
-						<BlueBox
+						<S.BlueBox
 						sx={{
 							position: 'fixed',
 							left: '50%',
@@ -200,7 +131,7 @@ const MainLayout = () => {
 							<Button className="skip" onClick={handleSkipOnboarding}>Skip</Button>
 							<Button className="start" onClick={() => setOnboardingStep(1)}>Start</Button>
 						</Box>
-					</BlueBox>
+					</S.BlueBox>
 
 					}
 					
@@ -209,7 +140,7 @@ const MainLayout = () => {
 
 					{
 						onboardingStep === 1 &&
-						<BlueBox
+						<S.BlueBox
 						sx={{
 							position: 'fixed',
 							left: '270px',
@@ -222,11 +153,11 @@ const MainLayout = () => {
 							<Button className="skip" onClick={handleSkipOnboarding}>Skip</Button>
 							<Button className="start" onClick={() => setOnboardingStep(2)}>Next</Button>
 						</Box>
-						<Triangle sx={{
+						<S.Triangle sx={{
 							left: '-8px',
 							top:'20px'
 						}}/>
-					</BlueBox>
+					</S.BlueBox>
 
 					}
 					
@@ -235,7 +166,7 @@ const MainLayout = () => {
 
 					{
 						onboardingStep === 2 && 
-						<BlueBox
+						<S.BlueBox
 						sx={{
 							position: 'fixed',
 							right: '20px',
@@ -248,12 +179,12 @@ const MainLayout = () => {
 							<Button className="skip" onClick={handleSkipOnboarding}>Skip</Button>
 							<Button className="start" onClick={() => setOnboardingStep(3)}>Next</Button>
 						</Box>
-						<Triangle sx={{
+						<S.Triangle sx={{
 							right: '20px',
 							top:'-12px',
 							transform: 'rotate(90deg)'
 						}}/>
-					</BlueBox>
+					</S.BlueBox>
 					}
 					
 
@@ -261,7 +192,7 @@ const MainLayout = () => {
 
 					{
 						onboardingStep === 3 &&
-						<BlueBox
+						<S.BlueBox
 						sx={{
 							position: 'fixed',
 							left: '270px',
@@ -281,11 +212,11 @@ const MainLayout = () => {
 							<Button className="skip" onClick={handleSkipOnboarding}>Skip</Button>
 							<Button className="start" onClick={() => setOnboardingStep(4)}>Next</Button>
 						</Box>
-						<Triangle sx={{
+						<S.Triangle sx={{
 							left: '-8px',
 							top:'20px'
 						}}/>
-					</BlueBox>
+					</S.BlueBox>
 					}
 
 					
@@ -294,7 +225,8 @@ const MainLayout = () => {
 					{/* Onboarding 5 */}
 
 					{
-						onboardingStep === 4 && <BlueBox
+						onboardingStep === 4 && 
+						<S.BlueBox
 						sx={{
 							position: 'fixed',
 							left: '270px',
@@ -308,11 +240,11 @@ const MainLayout = () => {
 							<Button className="skip" onClick={handleSkipOnboarding}>Skip</Button>
 							<Button className="start" onClick={() => setOnboardingStep(5)}>Next</Button>
 						</Box>
-						<Triangle sx={{
+						<S.Triangle sx={{
 							left: '-8px',
 							top:'20px'
 						}}/>
-					</BlueBox>
+					</S.BlueBox>
 					}
 					
 
@@ -320,7 +252,7 @@ const MainLayout = () => {
 					{/* Onboarding 6 */}
 
 					{
-						onboardingStep === 5 && <BlueBox
+						onboardingStep === 5 && <S.BlueBox
 						sx={{
 							position: 'fixed',
 							left: '270px',
@@ -334,11 +266,11 @@ const MainLayout = () => {
 							<Button className="skip" onClick={handleSkipOnboarding}>Skip</Button>
 							<Button className="start" onClick={() => setOnboardingStep(6)}>Next</Button>
 						</Box>
-						<Triangle sx={{
+						<S.Triangle sx={{
 							left: '-8px',
 							top:'20px'
 						}}/>
-					</BlueBox>
+					</S.BlueBox>
 					}
 					
 
@@ -348,25 +280,25 @@ const MainLayout = () => {
 					{
 						onboardingStep === 6 &&
 
-						<BlueBox
-						sx={{
-							position: 'fixed',
-							left: '270px',
-							top:'380px',
-						}}
-					>
-						<h5>{t('onboarding.setting')}</h5>
-						<p>{t('onboarding.you_can_manage_language')}</p>
+						<S.BlueBox
+							sx={{
+								position: 'fixed',
+								left: '270px',
+								top:'380px',
+							}}
+						>
+							<h5>{t('onboarding.setting')}</h5>
+							<p>{t('onboarding.you_can_manage_language')}</p>
 
-						<Box className="btn-box">
-							<Button className="skip" onClick={handleSkipOnboarding}>Skip</Button>
-							<Button className="start" onClick={() => handleSkipOnboarding()}>End</Button>
-						</Box>
-						<Triangle sx={{
-							left: '-8px',
-							top:'20px'
-						}}/>
-					</BlueBox>	
+							<Box className="btn-box">
+								<Button className="skip" onClick={handleSkipOnboarding}>Skip</Button>
+								<Button className="start" onClick={handleSkipOnboarding}>End</Button>
+							</Box>
+							<S.Triangle sx={{
+								left: '-8px',
+								top:'20px'
+							}}/>
+						</S.BlueBox>	
 					}
 									
 				</Box>

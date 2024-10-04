@@ -131,70 +131,69 @@ const SurveyList = () => {
                     </Box>
                 </Grid>
 
+				<Grid
+					container
+					item
+					xs={12}
+					sx={{ borderBottom: 1, borderColor: 'divider' }}
+					alignItems="center"
+					justifyContent="space-between"
+					pb={1}
+					mt={2}
+				>
+					<Grid container item xs={9} justifyContent="space-between">
+						<Grid item xs={activeDateSetting == 'full' ? 8 : 5.7}>
+							<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
+								startAdornment={
+									<InputAdornment position="start">
+										<SearchIcon />
+									</InputAdornment>
+								}
+								value={searchTerm}
+								onChange={(e) => handleSearch(e.target.value)}
+								placeholder={t('survey.search_placeholder')}
+							/>
+						</Grid>
+						<Grid item xs={activeDateSetting == 'full' ? 3.9 : 2}>
+							<Select
+								size='small'
+								onChange={(e) => handleChangeDateSetting(e.target.value)}
+								value={activeDateSetting} fullWidth
+								sx={{bgcolor: 'white'}}
+								>
+								<MenuItem value="full">Full Period</MenuItem>
+								<MenuItem value="dates">Date Setting</MenuItem>
+							</Select>
+						</Grid>
+						{
+							activeDateSetting == 'dates' &&
+							<Grid item xs={4}>
+								<RangePicker
+									placement="bottomRight"
+									style={{
+										padding: '6px 11px',
+										borderRadius: '4px',
+										minHeight: '1.4375em',
+										borderColor: 'rgba(0, 0, 0, 0.23)'
+									}}
+									onChange={onChangeDate}
+								/>
+							</Grid>
+						}
+					</Grid>
+					<Grid item xs={1.9}>
+						<Box display="flex" justifyContent="flex-end" width={1}>
+							<Button variant="contained" onClick={handleCreateSurvey} fullWidth>
+								<PlusOutlined />
+								{/* Survey 생성 */}
+								<Typography sx={{ ml: 1 }}>{t('survey.new_survey')}</Typography>
+							</Button>
+						</Box>
+					</Grid>
+				</Grid>
+
                 {surveyList.length > 0 ? (
                     <>
-                        <Grid
-                            container
-                            item
-                            xs={12}
-                            sx={{ borderBottom: 1, borderColor: 'divider' }}
-                            alignItems="center"
-							
-							justifyContent="space-between"
-							pb={1}
-							mt={2}
-                        >
-                            <Grid container item xs={9} justifyContent="space-between">
-								<Grid item xs={activeDateSetting == 'full' ? 8 : 5.7}>
-									<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
-										startAdornment={
-											<InputAdornment position="start">
-												<SearchIcon />
-											</InputAdornment>
-										}
-										value={searchTerm}
-										onChange={(e) => handleSearch(e.target.value)}
-										placeholder={t('survey.search_placeholder')}
-									/>
-								</Grid>
-								<Grid item xs={activeDateSetting == 'full' ? 3.9 : 2}>
-									<Select
-										size='small'
-										onChange={(e) => handleChangeDateSetting(e.target.value)}
-										value={activeDateSetting} fullWidth
-										sx={{bgcolor: 'white'}}
-										>
-										<MenuItem value="full">Full Period</MenuItem>
-										<MenuItem value="dates">Date Setting</MenuItem>
-									</Select>
-								</Grid>
-								{
-									activeDateSetting == 'dates' &&
-									<Grid item xs={4}>
-										<RangePicker
-											placement="bottomRight"
-											style={{
-												padding: '6px 11px',
-												borderRadius: '4px',
-												minHeight: '1.4375em',
-												borderColor: 'rgba(0, 0, 0, 0.23)'
-											}}
-											onChange={onChangeDate}
-										/>
-									</Grid>
-								}
-							</Grid>
-							<Grid item xs={1.9}>
-								<Box display="flex" justifyContent="flex-end" width={1}>
-									<Button variant="contained" onClick={handleCreateSurvey} fullWidth>
-										<PlusOutlined />
-										{/* Survey 생성 */}
-										<Typography sx={{ ml: 1 }}>{t('survey.new_survey')}</Typography>
-									</Button>
-								</Box>
-							</Grid>
-                        </Grid>
-
 						{paginator(searched, page, itemPerPage).data.map((survery, index) => {
 							return (
 								<Grid item xs={12} key={index}>
@@ -213,7 +212,6 @@ const SurveyList = () => {
 								/>
 							</Grid>
 						}
-					
                     </>
                 ) : (
                     <>
@@ -225,28 +223,31 @@ const SurveyList = () => {
                             justifyContent="center"
                             sx={{ pb: 4, borderBottom: 1, borderColor: 'divider' }}
                         >
-                            <Box display="flex" flexDirection="column" alignItems="center">
-                                <IconButton color="primary" onClick={handleCreateSurvey}>
+
+							<Box onClick={handleCreateSurvey}
+								sx={{
+									display:'flex',
+									flexDirection: 'column',
+									alignItems:'center',
+									cursor: 'pointer',
+									marginTop: '7%',
+									marginBottom: '10%',
+									'&:hover' : {
+										'.MuiButtonBase-root' : {
+											backgroundColor: 'rgba(22, 119, 255, 0.04)'
+										}
+									}
+								}}>
+                                <IconButton color="primary">
                                     <PlusOutlined />
                                 </IconButton>
-                                <Typography
-                                    sx={{
-                                        mt: 1,
-                                        cursor: 'pointer',
-                                        '&:hover': { textDecoration: 'underline' },
-                                    }}
-                                    color="primary"
-                                    variant="h5"
-                                    onClick={handleCreateSurvey}
-                                >
-                                    {t('survey.new_survey')}
-                                </Typography>
-                            </Box>
+								<Typography sx={{ ml: 1 }} variant='h3' fontWeight="normal" color="primary" mt="1rem">
+									{t('survey.new_survey')}
+								</Typography>
+                            </Box>                            
                         </Grid>
                     </>
-                )}
-
-                
+                )}                
             </Grid>
         </Container>
     );
