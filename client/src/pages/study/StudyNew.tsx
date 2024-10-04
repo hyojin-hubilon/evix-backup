@@ -361,10 +361,16 @@ const StudyNew = () => {
         try {
             const response = await studyApi.deployStudy(studyData);
             if (response.code === 200) {
-                confirm({
-                    description: t('study.study_has_been_deployed'), // Study가 배포되었습니다.
-                    variant: 'info',
-                }).then(() => navigate('/study'));
+                const inviteCodeRes = await studyApi.createParticipantInviteCode({
+                    std_no: stdNo,
+                });
+
+                if (inviteCodeRes.code === 200) {
+                    confirm({
+                        description: t('study.study_has_been_deployed'), // Study가 배포되었습니다.
+                        variant: 'info',
+                    }).then(() => navigate('/study'));
+                }
             }
         } catch (error) {
             console.error('Failed to deploy study: ', error);

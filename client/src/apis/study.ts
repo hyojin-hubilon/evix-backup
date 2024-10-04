@@ -425,7 +425,10 @@ const studyApi = {
      */
     participantList: async (stdNo: Number) => {
         try {
-            const responseData = await api<ParticipantsList[]>(`${BASE_API_URL}/${stdNo}/list-participant`, 'get');
+            const responseData = await api<ParticipantsList[]>(
+                `${BASE_API_URL}/${stdNo}/list-participant`,
+                'get'
+            );
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
@@ -463,6 +466,24 @@ const studyApi = {
                 'get'
             );
             return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+    /**
+     * Study 참여자 초대 코드 생성
+     * @param stdNo
+     * @returns
+     */
+    createParticipantInviteCode: async (std_no) => {
+        try {
+            const response = await api<{}>(
+                `${BASE_API_URL}/create-participant-invite-code`,
+                'post',
+                std_no
+            );
+            return response;
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
