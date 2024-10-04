@@ -15,6 +15,7 @@ import {
     TableHead,
     TableRow,
     LinearProgress,
+	Tooltip,
 } from '@mui/material';
 import MainCard from '@/components/MainCard';
 import dashboardApi from '@/apis/dashboard';
@@ -376,14 +377,18 @@ const DashboardDefault = () => {
                                             <TableCell>{row.dateOfBirth}</TableCell>
                                             <TableCell>{row.enrollmentDate}</TableCell>
                                             <TableCell width="20%">
-                                                <Box maxWidth="80%">
-                                                    <Typography color="primary" variant="body2">
-                                                        {normalise(row.roundInfo) + '%'}{' '}
-                                                    </Typography>
-                                                    <LinearProgress
-                                                        variant="determinate"
-                                                        value={normalise(row.roundInfo)}
-                                                    />
+												<Box maxWidth="80%">
+													<Tooltip title={row.roundInfo[0] + '/' + row.roundInfo[1]} arrow placement="top">
+														<Box>
+															<Typography color="primary" variant="body2">
+																{normalise(row.roundInfo) + '%'}{' '}
+															</Typography>
+															<LinearProgress
+																variant="determinate"
+																value={normalise(row.roundInfo)}
+															/>											
+														</Box>
+													</Tooltip>
                                                 </Box>
                                             </TableCell>
                                             <TableCell>{row.status}</TableCell>
