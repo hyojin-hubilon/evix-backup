@@ -29,6 +29,7 @@ import { useNavigate } from 'react-router-dom';
 import notificationApi from '@/apis/notification';
 import { ResCommonSuccess } from '@/apis/axios-common';
 import { NotificationResponse } from '@/types/notification';
+import SanitizeHTML from '@/components/@extended/SanitizeHtml';
 
 // sx styles
 const listSx = {
@@ -220,7 +221,7 @@ const Notification = () => {
                                                     <ListItemText
                                                         primary={
                                                             <Typography variant="h6">
-                                                                {notification.notification_content}
+																<SanitizeHTML html={notification.notification_content} options={null}/>
                                                             </Typography>
                                                         }
                                                         secondary={new Date(

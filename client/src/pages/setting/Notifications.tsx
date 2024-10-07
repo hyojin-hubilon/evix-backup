@@ -15,6 +15,7 @@ import {
 import notificationApi from '@/apis/notification';
 import { NotificationResponse } from '@/types/notification';
 import { ResCommonSuccess } from '@/apis/axios-common';
+import SanitizeHTML from '@/components/@extended/SanitizeHtml';
 
 const avatarSX = {
     width: 36,
@@ -81,7 +82,7 @@ const Notifications = () => {
                                 <ListItemText
                                     primary={
                                         <Typography variant="h6">
-                                            {notification.notification_content}
+											<SanitizeHTML html={notification.notification_content} options={null}/>
                                         </Typography>
                                     }
                                     secondary={new Date(notification.created_at).toLocaleString()}
