@@ -542,8 +542,10 @@ const StudyNew = () => {
                                             : null
                                     }
 									disabled={rangePickerDisable}
+									allowEmpty
 									minDate={dateSet.startDt ? dayjs(dateSet.startDt) : dayjs()}
                                     onChange={onChangeDate}
+									allowClear={false}
                                 />
                             </FormControl>
                         </Grid>
