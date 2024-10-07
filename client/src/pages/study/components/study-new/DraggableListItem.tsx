@@ -3,6 +3,7 @@ import { Grid, Button, ListItem, ListItemText, MenuItem, Select, useTheme } from
 import { RegistrableSurvey } from '@/types/survey';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import { useState } from 'react';
+import { t } from 'i18next';
 
 export type DraggableItemListProps = {
     item: RegistrableSurvey;
@@ -76,7 +77,8 @@ const DraggableListItem = ({
                             <MenuItem value="weekly">주</MenuItem>
                             <MenuItem value="daily">일</MenuItem>
                         </Select>
-                        마다
+                        {/* 마다 */}
+                        {t('study.repeat')}
                         <Select
                             size="small"
                             value={survey.times}
@@ -88,9 +90,11 @@ const DraggableListItem = ({
                             <MenuItem value={2}>2</MenuItem>
                             <MenuItem value={3}>3</MenuItem>
                         </Select>
-                        회 반복
+                        {/* 회 반복 */}
+                        {t('study.time_per')}
                         <Button color="error" onClick={() => handleDeleteSurvey()}>
-                            삭제
+                            {/* 삭제 */}
+                            {t('common.delete')}
                         </Button>
                     </Grid>
                 </ListItem>

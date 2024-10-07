@@ -17,7 +17,7 @@ import {
     useTheme,
     Button,
     Divider,
-	Chip,
+    Chip,
 } from '@mui/material';
 import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -33,12 +33,10 @@ import { InviteMemberTempType, StudyDetail, StudySurveySetList } from '@/types/s
 import MemberInvitement from './components/study-new/MemberInvitement';
 import MemberManagement from './components/study-new/MemberManagement';
 import StudyDeleteConfirmDialog from './components/study-new/StudyDeleteConfirmDialog';
-import { MyProfile } from '@/types/user';
 import EicParent from './components/eic/EicParent';
 import { t } from 'i18next';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { useUserProfile } from '@/context/UserProfileContext';
-import { useTranslation } from 'react-i18next';
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import DatePicker from 'antd/lib/date-picker';
@@ -154,13 +152,13 @@ const StudyNew = () => {
                 std_payment_status: 'WAIT',
                 deploy_method: 'IMMEDIATE',
                 std_status: 'STD-CREATED',
-                title: title,
+                title,
                 std_type: 'E-PRO',
                 std_start_date: dateSet.startDt,
                 std_end_date: dateSet.endDt,
                 target_number: parseInt(participants),
-                description: description,
-                disease: disease,
+                description,
+                disease,
                 location: country,
                 drug_code: drug?.itemCode ?? null,
                 drug_brand_name: drug?.companyName ?? null,
@@ -268,13 +266,6 @@ const StudyNew = () => {
             setParticipants(response.content['target_number']);
             setDescription(response.content['description']);
             setDisease(response.content['disease']);
-
-            // setDateRange({
-            //     ...dateRange,
-            //     startDt: dayjs(response.content['std_start_date']),
-            //     endDt: dayjs(response.content['std_end_date']),
-            // });
-
             setDateSet({
                 startDt: response.content['std_start_date'],
                 endDt: response.content['std_end_date'],
@@ -304,13 +295,13 @@ const StudyNew = () => {
         if (validate()) {
             const studyData = {
                 std_no: stdNo,
-                title: title,
+                title,
                 std_type: 'E-PRO',
                 std_start_date: dateSet.startDt,
                 std_end_date: dateSet.endDt,
                 target_number: parseInt(participants),
-                description: description,
-                disease: disease,
+                description,
+                disease,
                 drug_code: medicineYOrN === 'true' ? drug?.itemCode ?? null : null,
                 drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
                 drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
@@ -343,30 +334,43 @@ const StudyNew = () => {
     };
 
     const handleDeploy = async () => {
+        const { studySurveySetList, eic_name } = studyDetail || {};
+
+        if (!studySurveySetList || !eic_name) {
+            return confirm({
+                description: t('study.deployFailure'), // Survey와 EIC를 연결해주세요.
+                variant: 'info',
+            });
+        }
+
         const studyData = {
             std_no: stdNo,
-            title: title,
+            title,
             std_type: 'E-PRO',
             std_start_date: dateSet.startDt,
             std_end_date: dateSet.endDt,
             target_number: parseInt(participants),
-            description: description,
-            disease: disease,
-            drug_code: medicineYOrN === 'true' ? drug?.itemCode ?? null : null,
-            drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
-            drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
+            description,
+            disease,
+            drug_code: medicineYOrN === 'true' ? drug?.itemCode : null,
+            drug_brand_name: medicineYOrN === 'true' ? drug?.companyName : null,
+            drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName : null,
             std_status: 'STD-PROGRESSION',
         };
 
         try {
             const response = await studyApi.deployStudy(studyData);
             if (response.code === 200) {
-                confirm({
-                    description: t('study.study_has_been_deployed'), //Study가 배포되었습니다.
-                    variant: 'info',
-                }).then(() => {
-                    navigate('/study');
+                const inviteCodeRes = await studyApi.createParticipantInviteCode({
+                    std_no: stdNo,
                 });
+
+                if (inviteCodeRes.code === 200) {
+                    confirm({
+                        description: t('study.study_has_been_deployed'), // Study가 배포되었습니다.
+                        variant: 'info',
+                    }).then(() => navigate('/study'));
+                }
             }
         } catch (error) {
             console.error('Failed to deploy study: ', error);
@@ -384,22 +388,7 @@ const StudyNew = () => {
         navigate('/study/preview', { state: { mode: 'preview', studyDetail: studyDetail } });
     };
 
-    // const [dateSet, setDateSet] = useState<{ startDt: string; endDt: string }>({
-    //     startDt: '',
-    //     endDt: '',
-    // });
-
-    // const onChangeDate = (date, dateString: string[]) => {
-    //     console.log(date);
-    //     setDateSet({
-    //         startDt: dateString[0],
-    //         endDt: dateString[1],
-    //     });
-    // };
-
     const onChangeDate = (date, dateString) => {
-        console.log('Selected Date:', date);
-        console.log('Formatted Date:', dateString);
         if (date && date.length > 0) {
             setDateSet({
                 startDt: dateString[0],
@@ -475,27 +464,23 @@ const StudyNew = () => {
                                 >
                                     <MenuItem value="ePRO">ePRO</MenuItem>
                                     <MenuItem value="eCOA" disabled>
-										eCOA
-										<Chip
-											color="warning"
-											size="small"
-											label="COMING SOON"
-											sx={{fontSize: '0.6rem',
-												ml: '5px'
-											}}
-										/>
-									</MenuItem>
+                                        eCOA
+                                        <Chip
+                                            color="warning"
+                                            size="small"
+                                            label="COMING SOON"
+                                            sx={{ fontSize: '0.6rem', ml: '5px' }}
+                                        />
+                                    </MenuItem>
                                     <MenuItem value="eCRF" disabled>
-										eCRF
-										<Chip
-											color="warning"
-											size="small"
-											label="COMING SOON"
-											sx={{fontSize: '0.6rem',
-												ml: '5px'
-											}}
-										/>
-									</MenuItem>
+                                        eCRF
+                                        <Chip
+                                            color="warning"
+                                            size="small"
+                                            label="COMING SOON"
+                                            sx={{ fontSize: '0.6rem', ml: '5px' }}
+                                        />
+                                    </MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>

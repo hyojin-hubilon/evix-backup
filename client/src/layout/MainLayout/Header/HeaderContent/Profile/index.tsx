@@ -58,24 +58,7 @@ TabPanel.propTypes = {
 const Profile = () => {
     const { t, i18n } = useTranslation();
 
-    // const [userData, setUserData] = useState<MyProfile | null>(null);
-	const { userProfile, setUserProfile } = useUserProfile();
-
-    // useEffect(() => {
-    //     getMyProfile();
-    // }, []);
-
-    // const getMyProfile = async () => {
-    //     try {
-    //         const response = await userApi.getMyProfile();
-    //         if (response.code === 200) {
-    //             setUserData(response.content);
-	// 			setUser(response.content);
-    //         }
-    //     } catch (error) {
-    //         console.error('Failed to fetch profile:', error);
-    //     }
-    // };
+    const { userProfile, setUserProfile } = useUserProfile();
 
     const theme = useTheme();
     const navigate = useNavigate();
@@ -104,11 +87,6 @@ const Profile = () => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
         }
-        setOpen(false);
-    };
-
-    const handleSettings = () => {
-        navigate('/settings');
         setOpen(false);
     };
 
@@ -141,7 +119,8 @@ const Profile = () => {
                             }}
                         >
                             {userProfile?.first_name} {userProfile?.last_name}
-                        </Typography>{t('nav.welcome')}
+                        </Typography>
+                        {t('nav.welcome')}
                     </Typography>
                 </Stack>
                 <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
@@ -153,7 +132,7 @@ const Profile = () => {
                 </Stack>
             </ButtonBase>
             <Popper
-			placement="bottom-end"
+                placement="bottom-end"
                 className="popper-root"
                 open={open}
                 anchorEl={anchorRef.current}
@@ -228,10 +207,8 @@ const Profile = () => {
                                                         borderBottom: 1,
                                                         borderColor: 'divider',
                                                     }}
-                                                >
-                                                        
-                                                </Box>
-												<ProfileTab onLogout={handleLogout} />
+                                                ></Box>
+                                                <ProfileTab onLogout={handleLogout} />
                                             </>
                                         )}
                                     </MainCard>
