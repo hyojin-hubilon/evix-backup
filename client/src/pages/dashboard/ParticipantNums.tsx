@@ -119,7 +119,7 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 			>
 			{
 				participantNumber.map((study, index) => 
-					<div style={{width: '290px', height: '180px'}} key={index}>
+					<div style={{width: '280px', height: '180px'}} key={index}>
 						<GreyBox>
 							<H5LengthSixteen variant="h5">{study.title}</H5LengthSixteen>
 							<Box display="flex" justifyContent="center">
