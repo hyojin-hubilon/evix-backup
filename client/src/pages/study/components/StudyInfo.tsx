@@ -559,7 +559,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                             )}
                             {userId === ownerId &&
                                 !studyDetail.eic_origin_name &&
-                                studyDetail.std_status === 'STD-CREATED' && (
+                                (studyDetail.std_status === 'STD-CREATED' || studyDetail.std_status === 'STD-PROGRESSION' || studyDetail.std_status === 'STD-PAUSE') && (
                                     <Box
                                         sx={{
                                             display: 'flex',

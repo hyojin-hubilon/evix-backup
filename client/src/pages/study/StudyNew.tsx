@@ -92,6 +92,7 @@ const StudyNew = () => {
     const state = location.state as { mode: 'write' | 'edit'; stdNo?: number };
     const stdNo = location.state?.stdNo;
     const [stdStatus, setStdStatus] = useState<String>('');
+	const [rangePickerDisable, setRangePickerDisable] = useState<[boolean, boolean]>([false, false]);
 
     // 유효성 검사
     const [errors, setErrors] = useState({
@@ -229,6 +230,7 @@ const StudyNew = () => {
         if (state?.mode === 'edit') {
             setMode('edit');
             fetchStudyDetail(state.stdNo); // 스터디 상세 정보 가져오기
+			setRangePickerDisable([true, false]);
         }
     }, []);
 
@@ -539,6 +541,8 @@ const StudyNew = () => {
                                             ? [dayjs(dateSet.startDt), dayjs(dateSet.endDt)]
                                             : null
                                     }
+									disabled={rangePickerDisable}
+									minDate={dateSet.startDt ? dayjs(dateSet.startDt) : dayjs()}
                                     onChange={onChangeDate}
                                 />
                             </FormControl>
