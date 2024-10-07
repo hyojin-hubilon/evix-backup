@@ -1,4 +1,5 @@
-import { Box, Grid, Typography } from "@mui/material"
+import AddIcon from '@mui/icons-material/Add';
+import { Box, Button, Typography, useMediaQuery, useTheme } from "@mui/material"
 import CircleChart from "../study/components/overview/CircleChart"
 import { GreyBox, H5LengthSixteen } from "./styles"
 import { NumOfParticipantByStudy } from "@/types/dashboard"
@@ -8,6 +9,7 @@ import Carousel from 'react-multi-carousel';
 import { t } from "i18next";
 import { useSelector } from "react-redux";
 import { IRootState } from "@/store/reducers";
+import { useNavigate } from 'react-router-dom';
 
 
 type ParticipantNumsType = {
@@ -24,6 +26,10 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 			series: [studyNum.number_participant, (targetNumber - studyNum.number_participant)],
 		};
 	}
+
+	const theme = useTheme();
+	const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
+	const navigate = useNavigate();
 
 	const responsive = {
 		desktop: {
@@ -44,15 +50,53 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 		}
 	};
 
+	const handleNewStudy = () => {
+		navigate('/study/new');
+	}
+
 	return (
+		<>
 		
-		<Box sx={{
-			// 'ul' : { width: 'inherit'}
-			width: drawerOpen ? 'calc(100vw - 360px)' : 'calc(100vw - 85px)',
-			'li': { width: '290px!important'}
-		}}>
+		
 		{
-			participantNumber && 
+			participantNumber.length < 3  && matchUpMd ? 
+			<Box sx={{
+				display:'flex',
+				gap: 1
+			}}>
+				{
+					participantNumber.map((study, index) => 
+						<div style={{width: '290px', height: '180px'}} key={index}>
+							<GreyBox>
+								<H5LengthSixteen variant="h5">{study.title}</H5LengthSixteen>
+								<Box display="flex" justifyContent="center">
+									<Box display="flex" alignItems="center">
+										<Typography variant="h3" color="primary">{ study.number_participant }</Typography>
+										<Typography variant="h5" sx={{ml:'0.5rem'}}> / { study.target_number} </Typography>
+									</Box>
+									<CircleChart series={getPartCompleteRate(study)} />
+								</Box>
+							</GreyBox>
+						</div>
+					)
+				}
+
+				<Box alignSelf="stretch" display="flex" flex={1} alignItems="center" justifyContent="center"
+					sx={{
+						backgroundColor: theme.palette.grey[50],
+						borderRadius: '1rem',
+					}}>
+						<Button onClick={handleNewStudy}>
+							<AddIcon sx={{display: 'block'}} />
+							<Typography variant="h5">Add a study</Typography>
+						</Button>
+				</Box>
+			</Box>
+			:
+			<Box sx={{
+				width: drawerOpen ? 'calc(100vw - 360px)' : 'calc(100vw - 85px)',
+				'li': { width: '290px!important'}
+			}}>
 			<Carousel
 				responsive={responsive}
 				additionalTransfrom={0}
@@ -71,10 +115,11 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 				pauseOnHover
 				renderArrowsWhenDisabled={false}
 				renderButtonGroupOutside={false}
-				renderDotsOutside={false}>
+				renderDotsOutside={false}
+			>
 			{
 				participantNumber.map((study, index) => 
-					<div style={{width: '280px', height: '180px'}} key={index}>
+					<div style={{width: '290px', height: '180px'}} key={index}>
 						<GreyBox>
 							<H5LengthSixteen variant="h5">{study.title}</H5LengthSixteen>
 							<Box display="flex" justifyContent="center">
@@ -89,10 +134,9 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 				)
 			}
 			</Carousel>
-			
+			</Box>
 		}
-		</Box>
-		
+		</>
 	)
 }
 
