@@ -5,17 +5,25 @@ import {
     Avatar,
     Container,
     Divider,
+    Grid,
     List,
+    ListItem,
     ListItemAvatar,
     ListItemButton,
     ListItemSecondaryAction,
     ListItemText,
+    Pagination,
     Typography,
 } from '@mui/material';
 import notificationApi from '@/apis/notification';
 import { NotificationResponse } from '@/types/notification';
 import { ResCommonSuccess } from '@/apis/axios-common';
 import SanitizeHTML from '@/components/@extended/SanitizeHtml';
+import { paginator } from '@/utils/helper';
+import { t } from 'i18next';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 const avatarSX = {
     width: 36,
@@ -34,6 +42,11 @@ const actionSX = {
 
 const Notifications = () => {
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
+	const [ searched, setSearched ] = useState<NotificationResponse[]>([]);
+	const [ pageCount, setPageCount ] = useState(0);
+	const [ page, setPage] = useState(1);
+	const itemPerPage = 10;
+	
 
     useEffect(() => {
         fetchAllNotifications();
@@ -46,11 +59,17 @@ const Notifications = () => {
 
             if (response.code === 200 && response.content) {
                 setNotifications(response.content);
+				setSearched(response.content);
+				setPageCount(Math.ceil(response.content.length/itemPerPage));
             }
         } catch (error) {
             console.error('Failed to fetch notifications:', error);
         }
     };
+
+	const handleChangePage = (_e, value) => {
+		setPage(paginator(searched, value, itemPerPage).page);
+	}
 
     return (
         <Container maxWidth="md">
@@ -69,35 +88,55 @@ const Notifications = () => {
                         },
                     }}
                 >
-                    {notifications.map((notification) => (
-                        <div key={notification.notification_no}>
-                            <ListItemButton>
-                                <ListItemAvatar>
-                                    <Avatar
-                                        sx={{ color: 'success.main', bgcolor: 'success.lighter' }}
-                                    >
-                                        <NotificationOutlined />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary={
-                                        <Typography variant="h6">
-											<SanitizeHTML html={notification.notification_content} options={null}/>
-                                        </Typography>
-                                    }
-                                    secondary={new Date(notification.created_at).toLocaleString()}
-                                />
-                                <ListItemSecondaryAction>
-                                    <Typography variant="caption" noWrap>
-                                        {new Date(notification.created_at).toLocaleTimeString()}
-                                    </Typography>
-                                </ListItemSecondaryAction>
-                            </ListItemButton>
-                            <Divider />
-                        </div>
-                    ))}
+					{
+						searched.length === 0 ?
+						<ListItem sx={{textAlign: 'center', display: 'block', p: '1rem'}}>{t('settings.no_notifications_yet')}</ListItem>
+						:
+						paginator(searched, page, itemPerPage).data.map((notification, index) => {
+							return (
+								<div key={notification.notification_no}>
+									<ListItemButton>
+										<ListItemAvatar>
+											<Avatar
+												sx={{ color: 'success.main', bgcolor: 'success.lighter' }}
+											>
+												<NotificationOutlined />
+											</Avatar>
+										</ListItemAvatar>
+										<ListItemText
+											primary={
+												<Typography variant="h6">
+													<SanitizeHTML html={notification.notification_content} options={null}/>
+												</Typography>
+											}
+											secondary={dayjs.utc(notification.created_at).local().format('YYYY-MM-DD')}
+										/>
+										<ListItemSecondaryAction>
+											<Typography variant="caption" noWrap>
+												{dayjs.utc(notification.created_at).local().format('A HH:mm:ss')}
+											</Typography>
+										</ListItemSecondaryAction>
+									</ListItemButton>
+									<Divider />
+								</div>
+							)
+						})
+					}
+				
                 </List>
             </MainCard>
+
+			{
+				pageCount > 0 &&  
+				<Grid item container xs={12} justifyContent="center" mt="2rem">
+					<Pagination
+						count={pageCount}
+						page={page}
+						onChange={handleChangePage}
+						color="primary"
+					/>
+				</Grid>
+			}
         </Container>
     );
 };

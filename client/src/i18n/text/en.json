@@ -315,7 +315,8 @@
         "language_settings": "Language settings",
         "edit_completed": "Edit completed",
         "participate_in_the_study": "After accepting the invitation, please participate in the Study.",
-        "received_invitations_displayed": "※ Only received invitations are displayed."
+        "received_invitations_displayed": "※ Only received invitations are displayed.",
+		"no_notifications_yet" : "There are no notifications yet."
     },
     "nav": {
         "welcome": ", Welcome"

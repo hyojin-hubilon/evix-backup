@@ -308,7 +308,8 @@
         "received_invitations_displayed": "※ 받은 초대만 조회됩니다.",
         "change_password": "비밀번호 변경",
         "please_enter_new_password": "새로운 비밀번호를 입력해주세요",
-        "change_password_success": "비밀번호 변경이 완료되었습니다."
+        "change_password_success": "비밀번호 변경이 완료되었습니다.",
+		"no_notifications_yet" : "알림이 없습니다."
     },
     "nav": {
         "welcome": "님 안녕하세요"
