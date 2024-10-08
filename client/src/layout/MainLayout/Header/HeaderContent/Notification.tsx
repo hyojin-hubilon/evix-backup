@@ -30,6 +30,10 @@ import notificationApi from '@/apis/notification';
 import { ResCommonSuccess } from '@/apis/axios-common';
 import { NotificationResponse } from '@/types/notification';
 import SanitizeHTML from '@/components/@extended/SanitizeHtml';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
+
 
 // sx styles
 const listSx = {
@@ -224,9 +228,7 @@ const Notification = () => {
 																<SanitizeHTML html={notification.notification_content} options={null}/>
                                                             </Typography>
                                                         }
-                                                        secondary={new Date(
-                                                            notification.created_at
-                                                        ).toLocaleString()}
+                                                        secondary={dayjs.utc(notification.created_at).local().format('YYYY.MM.DD A HH:mm:ss')}
                                                     />
                                                 </ListItemButton>
                                                 <Divider />
