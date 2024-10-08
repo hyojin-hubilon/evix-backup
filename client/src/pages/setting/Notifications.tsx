@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import MainCard from '@/components/MainCard';
-import { NotificationOutlined } from '@ant-design/icons';
+import { NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import {
     Avatar,
     Container,
@@ -92,16 +92,26 @@ const Notifications = () => {
 						searched.length === 0 ?
 						<ListItem sx={{textAlign: 'center', display: 'block', p: '1rem'}}>{t('settings.no_notifications_yet')}</ListItem>
 						:
-						paginator(searched, page, itemPerPage).data.map((notification, index) => {
+						paginator(searched, page, itemPerPage).data.map((notification : NotificationResponse, index) => {
 							return (
 								<div key={notification.notification_no}>
 									<ListItemButton>
 										<ListItemAvatar>
-											<Avatar
+											{
+												notification.notification_type.includes('INVITATION') ?
+												<Avatar
+												sx={{ color: 'primary.main', bgcolor: 'primary.lighter' }}
+											>
+												<UserOutlined />
+											</Avatar>
+												:
+												<Avatar
 												sx={{ color: 'success.main', bgcolor: 'success.lighter' }}
 											>
 												<NotificationOutlined />
 											</Avatar>
+											}
+											
 										</ListItemAvatar>
 										<ListItemText
 											primary={

@@ -24,7 +24,7 @@ import MainCard from '@components/MainCard';
 import Transitions from '@components/@extended/Transitions';
 
 // assets
-import { BellOutlined, CloseOutlined, NotificationOutlined } from '@ant-design/icons';
+import { BellOutlined, CloseOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import notificationApi from '@/apis/notification';
 import { ResCommonSuccess } from '@/apis/axios-common';
@@ -213,14 +213,20 @@ const Notification = () => {
                                             <div key={notification.notification_no}>
                                                 <ListItemButton>
                                                     <ListItemAvatar>
-                                                        <Avatar
-                                                            sx={{
-                                                                color: 'success.main',
-                                                                bgcolor: 'success.lighter',
-                                                            }}
-                                                        >
-                                                            <NotificationOutlined />
-                                                        </Avatar>
+													{
+														notification.notification_type.includes('INVITATION') ?
+														<Avatar
+														sx={{ color: 'primary.main', bgcolor: 'primary.lighter' }}
+													>
+														<UserOutlined />
+													</Avatar>
+														:
+														<Avatar
+														sx={{ color: 'success.main', bgcolor: 'success.lighter' }}
+													>
+														<NotificationOutlined />
+													</Avatar>
+													}
                                                     </ListItemAvatar>
                                                     <ListItemText
                                                         primary={
