@@ -34,12 +34,19 @@ const StudyOverView = ({
         <>
             <Grid container item columnSpacing={1.5}>
                 <Grid item xs={2}>
-                    <MainCard sx={{ height: '190px' }} overflow="visible">
+                    <MainCard sx={{ height: '190px', position: 'relative' }} overflow="visible">
                         <Typography variant="h6" color="textSecondary">
                             {t('study.participation_completion_rate')}
                             {/* 참여완료율 */}
                         </Typography>
+						<Box sx={{
+							position: 'absolute',
+							top:'20px',
+							left: '50%',
+							transform: 'translateX(-50%)'
+						}}>
                         <CircleChart series={partCompleteRate} />
+						</Box>
                     </MainCard>
                 </Grid>
                 <Grid item xs={2}>

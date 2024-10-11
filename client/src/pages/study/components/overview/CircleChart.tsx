@@ -17,7 +17,7 @@ const CircleChart = (props: CircleChartProps) => {
 	const theme = useTheme();
 	
 	const [ chartData, setChartData ] = useState<number[]>([]);
-	const [ chartOptions, setChartOptions ] = useState<ApexOptions>({chart: {type:'donut'}});
+	const [ chartOptions, setChartOptions ] = useState<ApexOptions>({chart: {type:'radialBar'}});
 	
 	useEffect(() => {
 		setChartOptions((prevState) => ({
@@ -27,10 +27,16 @@ const CircleChart = (props: CircleChartProps) => {
 				show: false
 			},
 			plotOptions: {
-				pie: {
-					startAngle: -360,
-					endAngle: 0,
-				}
+				radialBar: {
+					hollow: {
+						size: '50%',
+				  	},
+					dataLabels: {
+						name: {
+							fontSize: '12px'
+						}
+					}
+				},
 			},
 			labels: series.labels.map(data => data)
 		}));
@@ -41,8 +47,8 @@ const CircleChart = (props: CircleChartProps) => {
 	}, [series])
 
 	return (
-		<Box minHeight={100} display="flex" justifyContent="center">
-			<ReactApexChart options={chartOptions} series={chartData} type="donut" width="150" height="150" />
+		<Box minHeight={100}>
+			<ReactApexChart options={chartOptions} series={chartData} type="radialBar" width="200" height="200" />
 		</Box>
 	)
 

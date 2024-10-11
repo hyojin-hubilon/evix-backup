@@ -183,10 +183,10 @@ const StudyDetail = () => {
     };
 
     const partCompleteRate: ApexDonutChartSeriesType = {
-        labels: [t('study.completion_rate'), t('study.incomplete_rate')], //"참여완료율","미완료율"
+        labels: [t('study.completion_rate')], //"참여완료율"
         series: totalParticipants
-            ? [totalParticipants.participation_late, 100 - totalParticipants.participation_late]
-            : [0, 100],
+            ? [totalParticipants.participation_late]
+            : [0],
     };
 
     const statusLabel = STUDY_STATUS[studyDetail?.std_status as STUDY_STATUS_KEY];

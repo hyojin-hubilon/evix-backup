@@ -19,11 +19,11 @@ type ParticipantNumsType = {
 const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 	const { drawerOpen  } = useSelector((state: IRootState) => state.menu);
 	const getPartCompleteRate = (studyNum:NumOfParticipantByStudy) => {
-		const targetNumber = studyNum.target_number;
+		console.log(studyNum)
 		
 		return {
-			labels: [t('study.completion'), t('study.incomplete')], //참여자, 미참여자
-			series: [studyNum.number_participant, (targetNumber - studyNum.number_participant)],
+			labels: [t('study.completion')], //참여자
+			series: [studyNum.participation_late],
 		};
 	}
 
@@ -33,7 +33,7 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 
 	const responsive = {
 		desktop: {
-			breakpoint: { max: 3000, min: 1024 },
+			breakpoint: { max: 3000, min: drawerOpen ? 1300 : 1024 },
 			items: 4,
 			partialVisibilityGutter: 40
 		},
@@ -69,12 +69,24 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 						<div style={{width: '290px', height: '180px'}} key={index}>
 							<GreyBox>
 								<H5LengthSixteen variant="h5">{study.title}</H5LengthSixteen>
-								<Box display="flex" justifyContent="center">
-									<Box display="flex" alignItems="center">
+								<Box position="relative">
+									<Box sx={{
+										position: 'absolute',
+										left:'10px',
+										top:'50px',
+										display: 'flex',
+										alignItems: 'flex-end'
+									}}>
 										<Typography variant="h3" color="primary">{ study.number_participant }</Typography>
 										<Typography variant="h5" sx={{ml:'0.5rem'}}> / { study.target_number} </Typography>
 									</Box>
-									<CircleChart series={getPartCompleteRate(study)} />
+									<Box sx={{
+										position: 'absolute',
+										right: '-30px',
+										top: '-20px'
+									}}>
+										<CircleChart series={getPartCompleteRate(study)} />
+									</Box>
 								</Box>
 							</GreyBox>
 						</div>
@@ -122,12 +134,24 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 					<div style={{width: '280px', height: '180px'}} key={index}>
 						<GreyBox>
 							<H5LengthSixteen variant="h5">{study.title}</H5LengthSixteen>
-							<Box display="flex" justifyContent="center">
-								<Box display="flex" alignItems="center">
+							<Box position="relative">
+									<Box sx={{
+										position: 'absolute',
+										left:'10px',
+										top:'50px',
+										display: 'flex',
+										alignItems: 'flex-end'
+									}}>
 									<Typography variant="h3" color="primary">{ study.number_participant }</Typography>
 									<Typography variant="h5" sx={{ml:'0.5rem'}}> / { study.target_number} </Typography>
 								</Box>
-								<CircleChart series={getPartCompleteRate(study)} />
+								<Box sx={{
+										position: 'absolute',
+										right: '-30px',
+										top: '-20px'
+									}}>
+									<CircleChart series={getPartCompleteRate(study)} />
+								</Box>
 							</Box>
 						</GreyBox>
 					</div>
