@@ -55,19 +55,18 @@ const StudyOverView = ({
                             {t('study.number_of_participants')}
                             {/* 참여자수 */}
                         </Typography>
-                        <Box>
+                        <Box display="flex" alignItems="flex-end" justifyContent="center" pt="2.5rem">
                             <Typography
                                 variant="h2"
                                 color="primary"
-                                sx={{ display: 'block', textAlign: 'center', mt: '2rem' }}
                             >
                                 {totalParticipants.number_participant}
                             </Typography>
+							<Typography variant='h5' sx={{ml: '0.5rem', mr: '0.5rem'}}> / </Typography>
                             <Typography
                                 variant="h5"
-                                sx={{ display: 'block', textAlign: 'center', ml: '2rem' }}
                             >
-                                /{totalParticipants.target_number}
+								{totalParticipants.target_number}
                             </Typography>
                         </Box>
                     </MainCard>
