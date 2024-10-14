@@ -4,12 +4,13 @@ import { Box, Container, Grid, MenuItem, Typography, Select, useTheme, Chip, Dia
 import { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import SpeakerNotesOutlinedIcon from '@mui/icons-material/SpeakerNotesOutlined';
-import CreateIcon from '@mui/icons-material/Create';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import { useNavigate } from "react-router-dom";
 import SurveyPreview from "./SurveyPreview";
 import { t } from "i18next";
 import mastersApi from "@/apis/masters";
+import { useConfirmation } from "@/context/ConfirmDialogContext";
 
 
 const MasterSampleList = () => {
@@ -17,6 +18,7 @@ const MasterSampleList = () => {
 	const { primary, grey } = theme.palette;
 
 	const navigate = useNavigate();
+	const confirm = useConfirmation();
 
 	const [samples, setSamples] = useState<SampleSurveyList[]>([]);
 	const [ searched, setSearched ] = useState<SampleSurveyList[]>([]);	
@@ -80,6 +82,26 @@ const MasterSampleList = () => {
 
 	const handleSelectSample = () => {
 		navigate(`/master/survey/new/${surveyNo}`, {state: 'new'})
+	}
+
+	const deleteSurveySample = async (survey_no:number) => {
+		try {
+			const response = await mastersApi.deleteSurveySample(survey_no);
+			if (response.result && response.code === 200) {
+				getSampleList();
+			}
+		} catch (error) {
+			console.error('Failed to post survey:', error);
+		}
+	}
+
+	const handleDeleteSample = (survey_no:number) => {
+		confirm({
+			description: t('survey.delete_the_sample'),
+			variant: 'danger',
+		}).then(() => {
+			deleteSurveySample(survey_no);
+		})
 	}
 
 	return (
@@ -165,7 +187,7 @@ const MasterSampleList = () => {
 								}}
 								>
 									<Box>
-										<Typography variant="h5"># {sample.survey_no}</Typography>
+										{/* <Typography variant="h5"># {sample.survey_no}</Typography> */}
 										<Typography variant="h5" sx={{color: primary.main}}>{sample.disease}</Typography>
 										<Typography variant="h6" mb={'1rem'}>{sample.title}</Typography>
 										<Box
@@ -177,9 +199,17 @@ const MasterSampleList = () => {
 											<SpeakerNotesOutlinedIcon sx={{fontSize:'1rem', marginLeft:'2px'}} />
 											{sample.question_number}</Box>
 										</Box>
-										<Box mt="1rem" gap={1} display="flex">
-											<Button variant="contained" onClick={() => handleShowPreview(sample.survey_no)}>{t('common.preview')}</Button>
-											<Button variant="outlined" onClick={() => navigate(`/master/samples/edit/${sample.survey_no}`)}>{t('common.edit')}</Button>
+										<Box mt="1rem" gap={1} display="flex" justifyContent="space-between">
+											
+											<Box gap={1} display="flex">
+												<Button variant="contained" onClick={() => handleShowPreview(sample.survey_no)}>{t('common.preview')}</Button>
+												<Button variant="outlined" onClick={() => navigate(`/master/samples/edit/${sample.survey_no}`)}>{t('common.edit')}</Button>
+											</Box>
+
+											<Box>
+												<Button variant="outlined" onClick={() => handleDeleteSample(sample.survey_no)}>{t('common.delete')}</Button>
+											</Box>
+											
 										</Box>
 								</Box>
 							</Grid>

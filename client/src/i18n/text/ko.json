@@ -282,7 +282,8 @@
         "end_preview": "미리보기 종료",
         "add_a_question": "질문 추가",
         "new_survey_sample": "Survey 샘플 생성",
-        "add_new_sample": "새 샘플 추가"
+        "add_new_sample": "새 샘플 추가",
+		"delete_the_sample" : "샘플을 삭제하시겠습니까?"
     },
     "user": {},
     "settings": {
