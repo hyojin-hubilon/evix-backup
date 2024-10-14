@@ -10,6 +10,7 @@ import { t } from "i18next";
 import { useSelector } from "react-redux";
 import { IRootState } from "@/store/reducers";
 import { useNavigate } from 'react-router-dom';
+import { SlickNextArrow, SlickPrevArrow } from '@/components/@extended/SlickArrows';
 
 
 type ParticipantNumsType = {
@@ -38,6 +39,8 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 		adaptiveHeight: false,
 		variableWidth: true,
 		arrows:true,
+		nextArrow: <SlickNextArrow />,
+		prevArrow: <SlickPrevArrow />,
 		responsive: [
 		  {
 			breakpoint: 1400,
