@@ -32,6 +32,8 @@ import { ApexOptions } from 'apexcharts';
 import divider from 'antd/es/divider';
 import { useNavigate } from 'react-router-dom';
 import { t } from 'i18next';
+import { useSelector } from 'react-redux';
+import { IRootState } from '@/store/reducers';
 
 interface Logs {
     study: string;
@@ -47,6 +49,8 @@ const DashboardDefault = () => {
     const { primary } = theme.palette;
     const [participantNumber, setParticipantNumber] = useState<NumOfParticipantByStudy[]>([]);
     const [loadedTime, setLoadedTime] = useState(new Date());
+
+	const { drawerOpen } = useSelector((state: IRootState) => state.menu);
 
     // Study Goal 예시데이터
     const [studyGoal, setStudyGoal] = useState<NumOfParticipantByStudy | null>(null);
@@ -405,10 +409,10 @@ const DashboardDefault = () => {
                 <Box
                     sx={{
                         position: 'absolute',
-                        left: '-24px',
-                        top: '-24px',
-                        right: '-24px',
-                        bottom: '-24px',
+						right:0,
+						top:0,
+						bottom:0,
+						width: drawerOpen ? 'calc(100vw - 255px)' : '100vw',
                         background: 'rgba(255,255,255,0.8)',
                     }}
                 >
@@ -416,7 +420,7 @@ const DashboardDefault = () => {
                         sx={{
                             position: 'absolute',
                             left: '50%',
-                            top: '30%',
+                            top: '50%',
                             transform: 'translate(-50%, -50%)',
                             width: '100%',
                         }}
