@@ -114,7 +114,7 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 			:
 			<Box sx={{
 				width: drawerOpen ? 'calc(100vw - 360px)' : 'calc(100vw - 100px)',
-				height: '190px'
+				height: '180px'
 			}}>
 			<Slider {...settings}>
 			{
