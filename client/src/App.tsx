@@ -9,7 +9,8 @@ import { CookiesProvider } from 'react-cookie';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
-import 'react-multi-carousel/lib/styles.css';
+import "slick-carousel/slick/slick.css";
+
 import { ConfirmationServiceProvider } from './context/ConfirmDialogContext';
 import AlertSnackBar from './components/ui/AlertSnackBar';
 

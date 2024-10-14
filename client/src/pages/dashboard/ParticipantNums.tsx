@@ -4,8 +4,8 @@ import CircleChart from "../study/components/overview/CircleChart"
 import { GreyBox, H5LengthSixteen } from "./styles"
 import { NumOfParticipantByStudy } from "@/types/dashboard"
 
+import Slider from "react-slick";
 
-import Carousel from 'react-multi-carousel';
 import { t } from "i18next";
 import { useSelector } from "react-redux";
 import { IRootState } from "@/store/reducers";
@@ -19,8 +19,6 @@ type ParticipantNumsType = {
 const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 	const { drawerOpen  } = useSelector((state: IRootState) => state.menu);
 	const getPartCompleteRate = (studyNum:NumOfParticipantByStudy) => {
-		console.log(studyNum)
-		
 		return {
 			labels: [t('study.completion')], //참여자
 			series: [studyNum.participation_late],
@@ -31,24 +29,30 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 	const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
 	const navigate = useNavigate();
 
-	const responsive = {
-		desktop: {
-			breakpoint: { max: 3000, min: drawerOpen ? 1300 : 1024 },
-			items: 4,
-			partialVisibilityGutter: 40
-		},
-		tablet: {
-			breakpoint: { max: 1024, min: 464 },
-			items: 2,
-			partialVisibilityGutter: 40
-		},
-		mobile: {
-			breakpoint: { max: 464, min: 0 },
-			items: 1,
-			partialVisibilityGutter: 40
-
-		}
-	};
+	var settings = {
+		dots: false,
+		infinite: false,
+		speed: 500,
+		slidesToScroll: 3,
+		initialSlide: 0,
+		adaptiveHeight: false,
+		variableWidth: true,
+		arrows:true,
+		responsive: [
+		  {
+			breakpoint: 1400,
+			settings: {
+			  slidesToScroll: 2
+			}
+		  },
+		  {
+			breakpoint: 600,
+			settings: {
+			  slidesToScroll: 1
+			}
+		  }
+		]
+	  };
 
 	const handleNewStudy = () => {
 		navigate('/study/new');
@@ -106,33 +110,14 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 			</Box>
 			:
 			<Box sx={{
-				width: drawerOpen ? 'calc(100vw - 360px)' : 'calc(100vw - 85px)',
-				'li': { width: '290px!important'}
+				width: drawerOpen ? 'calc(100vw - 360px)' : 'calc(100vw - 100px)',
+				height: '190px'
 			}}>
-			<Carousel
-				responsive={responsive}
-				additionalTransfrom={0}
-				arrows
-				autoPlaySpeed={3000}
-				centerMode={false}
-				className=""
-				containerClass="container"
-				dotListClass=""
-				draggable
-				focusOnSelect={false}
-				infinite={false}
-				itemClass=""
-				keyBoardControl
-				minimumTouchDrag={80}
-				pauseOnHover
-				renderArrowsWhenDisabled={false}
-				renderButtonGroupOutside={false}
-				renderDotsOutside={false}
-			>
+			<Slider {...settings}>
 			{
 				participantNumber.map((study, index) => 
-					<div style={{width: '280px', height: '180px'}} key={index}>
-						<GreyBox>
+					<div style={{width: '290px', height: '180px', paddingRight:'1rem'}} key={index}>
+						<GreyBox sx={{width: '280px', height: '180px'}}>
 							<H5LengthSixteen variant="h5">{study.title}</H5LengthSixteen>
 							<Box position="relative">
 									<Box sx={{
@@ -157,7 +142,7 @@ const ParticipantNums = ({participantNumber} : ParticipantNumsType) => {
 					</div>
 				)
 			}
-			</Carousel>
+			</Slider>
 			</Box>
 		}
 		</>

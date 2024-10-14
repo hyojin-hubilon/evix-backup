@@ -1,1 +1,54 @@
 @import './study.scss';
+
+//Slick Arrow Styles
+
+.slick-arrow {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 10;
+	width: 30px;
+	height: 30px;
+	overflow: hidden;
+	border: 0;
+	background: rgba(0,0,0,0.1);
+	transition: background 0.2s;
+	border-radius: 50%;
+	cursor: pointer;
+
+	&::before {
+		display: block;
+		position: relative;
+		width:30px;
+		height: 30px;
+		left: 50%;
+		top:50%;
+		text-align: center;
+		line-height: 30px;
+		transform: translate(-50%, -50%);
+		color: #fff
+	}
+
+	&:hover {
+		background: rgba(0,0,0,0.3);
+		transition: background 0.2s;
+	}
+	
+	&.slick-prev {
+		left:-10px;
+
+		&::before {
+			content: '←';
+		}
+		
+		
+	}
+
+	&.slick-next {
+		right:-10px;
+
+		&::before {
+			content: '→';
+		}
+	}
+} 
