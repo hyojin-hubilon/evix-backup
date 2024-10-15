@@ -320,7 +320,7 @@ const SurveySampleNew = () => {
 								</AppBar>	
 
 								<Card sx={{ width: '89%', mt:'20px', mb: '10px', p: '0.5rem'}}>
-									<OutlinedInput placeholder="질병(분류용)" size="small" onChange={(e) => setDisease(e.target.value)} fullWidth value={surveyDetail?.disease} />
+									<OutlinedInput placeholder="질병(분류용)" size="small" onChange={(e) => setDisease(e.target.value)} fullWidth value={disease} />
 								</Card>
 								{
 									cards && <FormBuilder />

@@ -293,7 +293,8 @@
         "add_a_question": "Add a question",
         "new_survey_sample": "New Survey Sample",
         "add_new_sample": "Add New Sample",
-		"delete_the_sample" : "Are you sure you want to delete the sample?"
+		"delete_the_sample" : "Are you sure you want to delete the sample?",
+		"no_disease_name" : "No disease name"
     },
     "user": {},
     "settings": {

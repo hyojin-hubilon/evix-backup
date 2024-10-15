@@ -38,10 +38,11 @@ const MasterSampleList = () => {
 				
 				const diseasesList = new Set();
 				sampleList.forEach(sample => {
-					diseasesList.add(sample.disease);
+					if(sample.disease) diseasesList.add(sample.disease);
 				})
 
 				const diseasesSelection = Array.from(diseasesList) as string[];
+				console.log(diseasesSelection);
 				setDiseases(diseasesSelection);
 				setSamples(sampleList);
 				setSearched(sampleList);
@@ -59,6 +60,9 @@ const MasterSampleList = () => {
 	useEffect(() => {
 		if(selectedDisease === '') {
 			setSearched(samples)
+		} else if(selectedDisease === 'no-disease') { 
+			const searched = samples.filter(sample => !sample.disease);
+			setSearched(searched);
 		} else {
 			const searched = samples.filter(sample => selectedDisease == sample.disease);
 			setSearched(searched);
@@ -121,6 +125,7 @@ const MasterSampleList = () => {
 							displayEmpty
 						>
 							<MenuItem value="">{t('survey.view_samples_by_disease')}</MenuItem>
+							<MenuItem value="no-disease">{t('survey.no_disease_name')}</MenuItem>
 							{
 								diseases.map((disease, index) => <MenuItem value={disease} key={index}>{ disease }</MenuItem>)
 							}
