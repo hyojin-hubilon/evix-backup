@@ -83,13 +83,13 @@ const MemberListItem = ({
             <Box display="flex" width="300px" gap={0.5} justifyContent="flex-end">
                 <FormControl
                     size="small"
-                    sx={{ width: member.inviteStatus !== 'Approved' ? '100px' : '148px' }}
+                    sx={{ minWidth: member.inviteStatus !== 'Approved' ? '100px' : '148px' }}
                 >
                     <Select
                         value={memberAuth}
                         // onChange={(e) => setMemberAuth(e.target.value)}
                         onChange={handleChangePrivilege}
-                        sx={{ width: 1, backgroundColor: 'white' }}
+                        sx={{ width:1, backgroundColor: 'white' }}
                         displayEmpty
                         disabled={member.inviteStatus !== 'Approved' ? true : false}
                     >

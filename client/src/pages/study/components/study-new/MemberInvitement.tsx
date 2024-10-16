@@ -87,6 +87,7 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
     };
 
     const onInputChange = (e, newValue) => {
+		if(newValue) setEmailError('');
         setEmailInput(newValue);
     };
 
@@ -143,6 +144,10 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
         setOpenDeleteConfirm(!openDeleteConfirm);
     };
 
+	useEffect(() => {
+		if(isOpen) setEmailError('')
+	}, [isOpen])
+
     return (
         <>
             <Dialog
@@ -150,7 +155,8 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                 onClose={handleClose}
                 aria-labelledby="member-management-title"
                 aria-describedby="member-management-description"
-                maxWidth="sm"
+				
+                maxWidth="md"
             >
                 <DialogTitle id="member-management-title" variant="h4" width={600}>
                     {t('study.inviting')}{' '}
@@ -163,7 +169,7 @@ const MemberInvitement = ({ isOpen, handleClose, title, mode, members, setMember
                         <CloseIcon />
                     </IconButton>
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent sx={{minWidth: '700px'}}>
                     <Grid container mb={1}>
                         <Grid item container xs={8} alignItems="center">
                             <Typography id="member-management-description" variant="h5">
