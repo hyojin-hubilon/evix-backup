@@ -263,7 +263,7 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                                                         component={Link}
                                                         to={`/study/detail/${study.std_no}`}
                                                     >
-                                                        {t('study.veiw_results')}
+                                                        {t('study.view_results')}
                                                         {/* Veiw Results */}
                                                     </MenuItem>
                                                 )}

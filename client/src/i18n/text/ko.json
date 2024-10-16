@@ -163,7 +163,7 @@
         "korea_pharmaceutical": "한국 약품통합정보시스템",
         "us_fda": "미국 FDA Drug Search",
         "invite_members": "멤버 초대",
-        "veiw_results": "결과 보기",
+        "view_results": "결과 보기",
         "settings": "세팅",
         "survey_successfully_deleted": "설문이 성공적으로 삭제되었습니다.",
         "failed_delete_survey": "설문 삭제에 실패했습니다.",
@@ -234,7 +234,9 @@
         "incomplete": "미참여자",
         "deployFailure": "Survey와 EIC를 연결해주세요.",
 		"no_studies_created" : "There are no studies created.",
-		"start_your_project" : "Start your project by creating a new Study."
+		"start_your_project" : "Start your project by creating a new Study.",
+		"no_surveys_connect" : "연결 가능한 설문이 없습니다.",
+		"create_a_survey" : "설문 생성하기"
     },
     "eic": {
         "has_been_saved": "전자동의서가 저장되었습니다.",

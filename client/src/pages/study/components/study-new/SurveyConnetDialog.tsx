@@ -30,6 +30,7 @@ import studyApi from '@/apis/study';
 import SurveyDeleteDialog from './SurveyDeleteDialog';
 import { t } from 'i18next';
 import { ResCommonSuccess } from '@/apis/axios-common';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface SurveyConnectDialogProps {
     isOpen: boolean;
@@ -152,8 +153,14 @@ const SurveyConnectDialog = ({
             );
             setSelectedSurvey(flattenedSurveys);
         }
-        fetchSurvey();
-    }, [initialSurveySetList]);
+
+		if(isOpen) {
+			fetchSurvey();
+			setSearchText('');
+		}
+    }, [initialSurveySetList, isOpen]);
+
+	
 
     // Survey 새로 추가되었는지 여부 판별하기 위함
     const [addedSurveys, setAddedSurveys] = useState(new Set<number>());
@@ -451,14 +458,29 @@ const SurveyConnectDialog = ({
                             )}
 
                             <Box mt={1}>
-                                <SurveyListTable
-                                    surveyList={searchedResult}
-                                    selectedSurvey={selectedSurvey}
-                                    handleSelected={(e) => handleSelectedSurvey(e)}
-                                    handleSelectPreview={(surveyNo) =>
-                                        handleSelectPreview(surveyNo)
-                                    }
-                                />
+								{
+									searchedResult.length > 0 ?
+									<SurveyListTable
+										surveyList={searchedResult}
+										selectedSurvey={selectedSurvey}
+										handleSelected={(e) => handleSelectedSurvey(e)}
+										handleSelectPreview={(surveyNo) =>
+											handleSelectPreview(surveyNo)
+										}
+									/>
+									:
+									<Box p="1rem " textAlign="center">
+										<Typography gutterBottom>
+											{/* 연결 가능한 설문이 없습니다. */}
+											{t('study.no_surveys_connect')}
+										</Typography>
+										<Link to="/survey/samples" target="_blank" rel="noopener noreferrer" onClick={() => handleClose()}>
+											{/* 설문 생성하기 */}
+											{t('study.create_a_survey')}
+										</Link>
+									</Box>
+								}
+                                
                             </Box>
                         </DialogContent>
                     </Grid>

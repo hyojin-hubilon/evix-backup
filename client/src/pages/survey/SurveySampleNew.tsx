@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Card, Container, Dialog, FormControl, Grid, OutlinedInput, Typography } from "@mui/material";
+import { AppBar, Box, Button, Card, Container, Dialog, Grid, OutlinedInput, Typography } from "@mui/material";
 import FormBuilder from "./components/FormBuilder";
 import useSticky from "@/utils/useSticky";
 import { useEffect, useState } from "react";
@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addExistCard, CardProps, ItemTypeProps, resetAll, resetCards, StateProps } from "@/store/reducers/survey";
 import { ExampleTypes, QuestionDivision, QuestionTypes, SurveyDetail, SurveyPostReqBody, SurveyPutReqBody, SurveyQuestion } from "@/types/survey";
 
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
 import SurveyPreview from "./SurveyPreview";
@@ -242,7 +242,7 @@ const SurveySampleNew = () => {
 	}
 
 
-	const getSampleSurveyDeatil = async (surveyNo) => {
+	const getSampleSurveyDetail = async (surveyNo) => {
 		try {
 			const response = await mastersApi.getSurveySample(surveyNo);
 			if (response.result && response.code === 200) {				
@@ -273,7 +273,7 @@ const SurveySampleNew = () => {
 	useEffect(() => {
 		if(parmas.survey_no) {
 			setSurveyNo(Number(parmas.survey_no));
-			getSampleSurveyDeatil(parmas.survey_no);
+			getSampleSurveyDetail(parmas.survey_no);
 		}
 	}, [])
 
