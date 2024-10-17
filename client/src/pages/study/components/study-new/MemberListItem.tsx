@@ -16,6 +16,7 @@ import {
 import { useState } from 'react';
 import { MemberTempType } from '@/types/study';
 import studyApi from '@/apis/study';
+import { t } from 'i18next';
 
 type MemberListItemProps = {
     studyNo: number;
@@ -93,7 +94,7 @@ const MemberListItem = ({
                         displayEmpty
                         disabled={member.inviteStatus !== 'Approved' ? true : false}
                     >
-                        <MenuItem value="">권한</MenuItem>
+                        <MenuItem value="">{t('study.permission')}</MenuItem>
                         <MenuItem value="maintainer">Maintainer</MenuItem>
                         <MenuItem value="developer">Developer</MenuItem>
                     </Select>

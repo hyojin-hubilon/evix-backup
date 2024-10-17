@@ -141,7 +141,7 @@ const SurveyList = () => {
 					pb={1}
 					mt={2}
 				>
-					<Grid container item xs={9} justifyContent="space-between">
+					<Grid container item xs={10} alignItems="center" justifyContent="space-between">
 						<Grid item xs={activeDateSetting == 'full' ? 8 : 5.7}>
 							<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
 								startAdornment={
@@ -154,7 +154,7 @@ const SurveyList = () => {
 								placeholder={t('survey.search_placeholder')}
 							/>
 						</Grid>
-						<Grid item xs={activeDateSetting == 'full' ? 3.9 : 2}>
+						<Grid item xs={activeDateSetting == 'full' ? 3.9 : 2.1}>
 							<Select
 								size='small'
 								onChange={(e) => handleChangeDateSetting(e.target.value)}
