@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import CircleChart, { ApexDonutChartSeriesType } from './overview/CircleChart';
 import MainCard from '@/components/MainCard';
 import GenderAgeChart from './overview/GenderAgeChart';
@@ -7,6 +7,8 @@ import PartByHospitalsChart from './overview/PartByHospitalsChart';
 import RecentParticipant from './overview/RecentParticipant';
 import { ParticipantsList, ParticipationRateByAge } from '@/types/study';
 import { t } from 'i18next';
+import { downloadPNG } from '@/utils/helper';
+import { useRef } from 'react';
 
 type StudyOverviewProps = {
     partCompleteRate: ApexDonutChartSeriesType;
@@ -30,6 +32,8 @@ const StudyOverView = ({
     onPeriodChange,
     onMoreClick,
 }: StudyOverviewProps) => {
+
+	
     return (
         <>
             <Grid container item columnSpacing={1.5}>
@@ -45,7 +49,8 @@ const StudyOverView = ({
 							left: '50%',
 							transform: 'translateX(-50%)'
 						}}>
-                        <CircleChart series={partCompleteRate} />
+							
+                        <CircleChart series={partCompleteRate} id={"participant_rate"}  />
 						</Box>
                     </MainCard>
                 </Grid>

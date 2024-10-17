@@ -30,16 +30,16 @@ export const paginator = (items:any, current_page:number, per_page_items:number)
 	};
 }
 
-export const requiredCheck = (value, ieReqired, changeIsRequired) => {//survey submit validate
-	let error;
-	if (!value && ieReqired == 'Y') {
-		changeIsRequired(true)
-		error = '필수항목 입니다.';
-	} else {
-		changeIsRequired(false)
-		return false;
+export const downloadPNG = (chartId) => {
+    const chartInstance = ApexCharts.getChartByID(chartId);
 
-	}
-	console.log(error)
-	return error;
+	
+
+	console.log(chartId, chartInstance);
+
+    if (!chartInstance) {
+        return;
+    }
+
+    chartInstance.exports.exportToPng();
 }
