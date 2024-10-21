@@ -12,6 +12,7 @@ import InviteStudyRoutes from './InviteStudy';
 import HelpRoutes from './HelpRoutes';
 import MdppRoutes from './MdppRoutes';
 import MastersRoutes from './MastersRoutes';
+import ECrfRoutes from './ECrfRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
@@ -27,6 +28,7 @@ export default function ThemeRoutes() {
 		HelpRoutes,
 		MdppRoutes,
 		MastersRoutes,
+		ECrfRoutes,
         { path: '*', element: <NotFound /> },
     ]);
 }
