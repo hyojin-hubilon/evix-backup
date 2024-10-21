@@ -4,7 +4,7 @@ const ECrfBuilder = () => {
 	return (
 		<Container>
 			<Typography variant="h1">
-				eCRF builders
+				eCRF builders lint testing
 			</Typography>
 		</Container>
 	)
