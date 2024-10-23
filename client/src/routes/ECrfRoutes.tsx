@@ -5,7 +5,7 @@ import Loadable from '@components/Loadable';
 import MainLayout from '@layout/MainLayout';
 
 // render - eCRF
-const ECrfBuilder = Loadable(lazy(() => import('@/pages/ecrf-builder/ECrfBuilder')));
+const ECrf = Loadable(lazy(() => import('@/pages/ecrf-builder/ECrf')));
 
 // ==============================|| eCRF ROUTING ||============================== //
 
@@ -15,7 +15,7 @@ const ECrfRoutes = {
     children: [
         {
             path: '',
-            element: <ECrfBuilder />,
+            element: <ECrf />,
         },
     ],
 };

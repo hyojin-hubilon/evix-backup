@@ -27,6 +27,9 @@ module.exports = {
 		'warn',
 		{ allowConstantExport: true },
 		],
-		"@typescript-eslint/no-explicit-any": ["off"]//any 선언시 eslint 오휴 off
+		"@typescript-eslint/no-explicit-any": ["warn"],//any 선언시 eslint 오류 off
+		"@typescript-eslint/no-unsafe-assignment" : ["warn"],
+		"@typescript-eslint/no-unused-vars" : ["off"]
+
 	}
 }
