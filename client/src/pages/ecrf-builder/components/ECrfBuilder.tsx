@@ -1,14 +1,18 @@
-import { DragDropContext, Draggable, Droppable, DropResult, OnDragEndResponder } from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult, OnDragEndResponder } from "@hello-pangea/dnd";
 import { Fragment, useState } from "react";
 import { Grid, styled } from "@mui/material";
 import { v4 as uuidv4 } from 'uuid';
 
-type DSource = {
-	index: number;
-	id: string;
-	droppableId: number;
+type ItemType = {
+	id:string;
 	content: string;
 }
+
+type DSource = ItemType & { 
+	droppableId: string;
+	index: number; 
+}
+
 // a little function to help us with reordering the result
 const reorder = (list:DSource[], startIndex:number, endIndex:number) => {
     const result = Array.from(list);
@@ -20,15 +24,16 @@ const reorder = (list:DSource[], startIndex:number, endIndex:number) => {
 /**
  * Moves an item from one list to another list.
  */
-const copy = (source:DSource[], destination:DSource[], droppableSource: DSource, droppableDestination: DSource) => {
+const copy = (source:DSource[], destination:DSource[], droppableSource: DraggableLocation, droppableDestination: DraggableLocation) => {
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
-    const item = sourceClone[droppableSource.index];
+	const item = sourceClone[droppableSource.index];
 	destClone.splice(droppableDestination.index, 0, { ...item, id: uuidv4() });
-    return destClone;
+	return destClone;
+    
 };
 
-const move = (source :DSource[], destination:DSource[], droppableSource:DSource, droppableDestination:DSource) => {
+const move = (source :DSource[], destination:DSource[], droppableSource:DraggableLocation, droppableDestination:DraggableLocation) => {
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
     const [removed] = sourceClone.splice(droppableSource.index, 1);
@@ -111,8 +116,8 @@ const Kiosk = styled("div", {
 })<{ isDraggingOver?: boolean}>(
 	({ theme, isDraggingOver }) => ({
 		border: isDraggingOver ? '1px dashed #000' : '1px solid #ddd',
-		// background: 'fff',
-		// padding: '0.5rem 0.5rem 0',
+		background: 'fff',
+		padding: '0.5rem 0.5rem 0',
 		// borderRadius: '3px'
 }))
 
@@ -157,26 +162,36 @@ const ButtonText = styled('div')`
   	margin: 0 1rem;
 `;
 
-const ITEMS = [
+const ITEMS: DSource[] = [
     {
         id: uuidv4(),
-        content: 'Headline'
+		index: 0,
+        content: 'Headline',
+		droppableId: uuidv4()
     },
     {
         id: uuidv4(),
-        content: 'Copy'
+		index: 1,
+        content: 'Copy',
+		droppableId: uuidv4()
     },
     {
         id: uuidv4(),
-        content: 'Image'
+		index: 2,
+        content: 'Image',
+		droppableId: uuidv4()
     },
     {
         id: uuidv4(),
-        content: 'Slideshow'
+		index: 3,
+        content: 'Slideshow',
+		droppableId: uuidv4()
     },
     {
         id: uuidv4(),
-        content: 'Quote'
+		index: 4,
+        content: 'Quote',
+		droppableId: uuidv4()
     }
 ];
 
@@ -187,11 +202,8 @@ const getListStyle = (isDraggingOver) => ({
 });
 
 const ECrfBuilder = () => {
-	const [ids, setIds] = useState({[uuidv4()] : []});
-	console.log(ids);
-	const items = Object.keys(ids).map(item => item);
-	console.log(items);
-
+	const [ids, setIds] = useState<{[x: string]: DSource[]}>({[uuidv4()] : []});
+	
     const onDragEnd = (result:DropResult) => {
         const { source, destination } = result;
 
@@ -200,37 +212,37 @@ const ECrfBuilder = () => {
             return;
         }
 
-        // switch (source.droppableId) {
-        //     case destination.droppableId:
-        //         setIds({
-		// 			[destination.droppableId]: reorder(
-        //                 ids[source.droppableId],
-        //                 source.index,
-        //                 destination.index
-        //             )}
-        //         );
-        //         break;
-        //     case 'ITEMS':
-        //         setIds({
-        //             [destination.droppableId]: copy(
-        //                 ITEMS,
-        //                 ids[destination.droppableId],
-        //                 source,
-        //                 destination
-        //             )
-        //         });
-        //         break;
-        //     default:
-        //         setIds(
-        //             move(
-        //                 ids[source.droppableId],
-        //                 ids[destination.droppableId],
-        //                 source,
-        //                 destination
-        //             )
-        //         );
-        //         break;
-        // }
+        switch (source.droppableId) {
+            case destination.droppableId:
+                setIds({
+					[destination.droppableId]: reorder(
+                        ids[source.droppableId],
+                        source.index,
+                        destination.index
+                    )}
+                );
+                break;
+            case 'ITEMS':
+                setIds({
+                    [destination.droppableId]: copy(
+                        ITEMS,
+                        ids[destination.droppableId],
+                        source,
+                        destination
+                    )
+                });
+                break;
+            default:
+                setIds(
+                    move(
+                        ids[source.droppableId],
+                        ids[destination.droppableId],
+                        source,
+                        destination
+                    )
+                );
+                break;
+        }
     };
 
     const addList = () => {
@@ -292,10 +304,10 @@ const ECrfBuilder = () => {
 											isDraggingOver={snapshot.isDraggingOver}>
 											{ids[id].length > 0
 												? ids[id].map(
-													(item: DSource, index) => (	
+													(droppedItem: DSource, index) => (	
 														<Draggable
-															key={item.id}
-															draggableId={item.id}
+															key={droppedItem.id}
+															draggableId={droppedItem.id}
 															index={index}>
 															{(provided, snapshot) => (
 																<Item
@@ -323,7 +335,7 @@ const ECrfBuilder = () => {
 																			/>
 																		</svg>
 																	</Handle>
-																	{item.content}
+																	{droppedItem.content}
 																</Item>
 															)}
 														</Draggable>
