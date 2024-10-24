@@ -8,13 +8,8 @@ type ItemType = {
 	content: string;
 }
 
-type DSource = ItemType & { 
-	droppableId: string;
-	index: number; 
-}
-
 // a little function to help us with reordering the result
-const reorder = (list:DSource[], startIndex:number, endIndex:number) => {
+const reorder = (list:ItemType[], startIndex:number, endIndex:number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -24,25 +19,28 @@ const reorder = (list:DSource[], startIndex:number, endIndex:number) => {
 /**
  * Moves an item from one list to another list.
  */
-const copy = (source:DSource[], destination:DSource[], droppableSource: DraggableLocation, droppableDestination: DraggableLocation) => {
+const copy = (source:ItemType[], destination:ItemType[], droppableSource: DraggableLocation, droppableDestination: DraggableLocation) => {
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
-	const item = sourceClone[droppableSource.index];
-	destClone.splice(droppableDestination.index, 0, { ...item, id: uuidv4() });
-	return destClone;
+    const item = sourceClone[droppableSource.index];
+
+    destClone.splice(droppableDestination.index, 0, { ...item, id: uuidv4() });
+    return destClone;
     
 };
 
-const move = (source :DSource[], destination:DSource[], droppableSource:DraggableLocation, droppableDestination:DraggableLocation) => {
-    const sourceClone = Array.from(source);
+const move = (source :ItemType[], destination:ItemType[], droppableSource:DraggableLocation, droppableDestination:DraggableLocation, ids: Idstype) => {
+	const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
     const [removed] = sourceClone.splice(droppableSource.index, 1);
 
     destClone.splice(droppableDestination.index, 0, removed);
 
-    const result = {};
+    const result = ids;
     result[droppableSource.droppableId] = sourceClone;
     result[droppableDestination.droppableId] = destClone;
+
+	console.log(result)
 
     return result;
 };
@@ -118,7 +116,7 @@ const Kiosk = styled("div", {
 		border: isDraggingOver ? '1px dashed #000' : '1px solid #ddd',
 		background: 'fff',
 		padding: '0.5rem 0.5rem 0',
-		// borderRadius: '3px'
+		borderRadius: '3px'
 }))
 
 
@@ -127,7 +125,6 @@ const DropBox = styled(List)`
 	background: white;
   	margin: 0 0 0.5rem 0;
 	padding: 1rem;
-	display:flex;
 	
 	min-height: 20px;
 `;
@@ -162,36 +159,26 @@ const ButtonText = styled('div')`
   	margin: 0 1rem;
 `;
 
-const ITEMS: DSource[] = [
+const ITEMS: ItemType[] = [
     {
         id: uuidv4(),
-		index: 0,
-        content: 'Headline',
-		droppableId: uuidv4()
+        content: 'Headline'
     },
     {
         id: uuidv4(),
-		index: 1,
-        content: 'Copy',
-		droppableId: uuidv4()
+        content: 'Copy'
     },
     {
         id: uuidv4(),
-		index: 2,
-        content: 'Image',
-		droppableId: uuidv4()
+        content: 'Image'
     },
     {
         id: uuidv4(),
-		index: 3,
-        content: 'Slideshow',
-		droppableId: uuidv4()
+        content: 'Slideshow'
     },
     {
         id: uuidv4(),
-		index: 4,
-        content: 'Quote',
-		droppableId: uuidv4()
+        content: 'Quote'
     }
 ];
 
@@ -201,12 +188,17 @@ const getListStyle = (isDraggingOver) => ({
 	width: 250
 });
 
+type Idstype = {
+	[x: string]: ItemType[]
+}
+
 const ECrfBuilder = () => {
-	const [ids, setIds] = useState<{[x: string]: DSource[]}>({[uuidv4()] : []});
+	const [ids, setIds] = useState<Idstype>({[uuidv4()] : []});
 	
     const onDragEnd = (result:DropResult) => {
         const { source, destination } = result;
 
+		console.log(source.droppableId, destination?.droppableId)
         // dropped outside the list
         if (!destination) {
             return;
@@ -214,7 +206,8 @@ const ECrfBuilder = () => {
 
         switch (source.droppableId) {
             case destination.droppableId:
-                setIds({
+				//폼 리스트 하나 안에서 이동
+                setIds({...ids, 
 					[destination.droppableId]: reorder(
                         ids[source.droppableId],
                         source.index,
@@ -223,7 +216,8 @@ const ECrfBuilder = () => {
                 );
                 break;
             case 'ITEMS':
-                setIds({
+				//아이템 리스트에서 폼 리스트로 이동
+                setIds({ ...ids, 
                     [destination.droppableId]: copy(
                         ITEMS,
                         ids[destination.droppableId],
@@ -233,14 +227,14 @@ const ECrfBuilder = () => {
                 });
                 break;
             default:
-                setIds(
-                    move(
-                        ids[source.droppableId],
-                        ids[destination.droppableId],
-                        source,
-                        destination
-                    )
-                );
+				//다른 폼 리스트로 이동
+                setIds(move(
+					ids[source.droppableId],
+					ids[destination.droppableId],
+					source,
+					destination,
+					ids
+				));
                 break;
         }
     };
@@ -271,12 +265,9 @@ const ECrfBuilder = () => {
 														{...provided.draggableProps}
 														{...provided.dragHandleProps}
 														isDragging={snapshot.isDragging}
-														style={
-															provided.draggableProps
-																.style
-														}>
+														style={provided.draggableProps.style}
+														>
 														{item.content} 
-
 													</Item>
 													{snapshot.isDragging && (
 														<Clone isDragging={snapshot.isDragging}>{item.content}</Clone>
@@ -295,7 +286,6 @@ const ECrfBuilder = () => {
 					</Grid>
 					<Grid item xs={7}>
 						<Content>
-							
 							{Object.keys(ids).map((id, i) => (
 								<Droppable key={id} droppableId={id}>
 									{(provided, snapshot) => (
@@ -304,25 +294,18 @@ const ECrfBuilder = () => {
 											isDraggingOver={snapshot.isDraggingOver}>
 											{ids[id].length > 0
 												? ids[id].map(
-													(droppedItem: DSource, index) => (	
+													(droppedItem: ItemType, index) => (	
 														<Draggable
 															key={droppedItem.id}
 															draggableId={droppedItem.id}
 															index={index}>
 															{(provided, snapshot) => (
 																<Item
-																	ref={
-																		provided.innerRef
-																	}
+																	ref={provided.innerRef}
 																	{...provided.draggableProps}
-																	isDragging={
-																		snapshot.isDragging
-																	}
-																	style={
-																		provided
-																			.draggableProps
-																			.style
-																	}>
+																	isDragging={snapshot.isDragging}
+																	style={provided.draggableProps.style}
+																	>
 																	<Handle
 																		{...provided.dragHandleProps}>
 																		<svg
@@ -341,9 +324,9 @@ const ECrfBuilder = () => {
 														</Draggable>
 													)
 												)
-												: !provided.placeholder && (
+												: 
 													<Notice>Drop items here</Notice>
-												)}
+												}
 											{provided.placeholder}
 										</DropBox>
 									)}
