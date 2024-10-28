@@ -1,11 +1,27 @@
 import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult, OnDragEndResponder } from "@hello-pangea/dnd";
 import { Fragment, useState } from "react";
-import { Grid, styled } from "@mui/material";
 import { v4 as uuidv4 } from 'uuid';
+import { Grid, Box, styled, Button,Typography, Input } from "@mui/material";
+import DehazeIcon from '@mui/icons-material/Dehaze';
+import AddIcon from '@mui/icons-material/Add';
+import { AddedItem, Clone, DropBox, Handle, Item, ItemContent, Kiosk, Notice } from "./styles";
+
+type ItemContents = {
+	title: string;
+	label?:string;
+	options?: Array<string>;
+	placeholder?: string;
+	description?:string;
+}
 
 type ItemType = {
 	id:string;
-	content: string;
+	itemType: string;
+	content: ItemContents | null;
+}
+
+type Idstype = {
+	[x: string]: ItemType[]
 }
 
 // a little function to help us with reordering the result
@@ -45,155 +61,86 @@ const move = (source :ItemType[], destination:ItemType[], droppableSource:Dragga
     return result;
 };
 
-const grid = 8;
 
-const Content = styled('div')`
-  	margin-right: 200px;
-`;
-
-const Item = styled('div', {
-	shouldForwardProp: (prop) => prop !== "isDragging"
-})<{isDragging : boolean}>(({isDragging}) => ({
-	display: 'flex',
-	userSelect: 'none',
-	padding: '0.5rem',
-	margin: '0 0  0.5rem 0',
-	alignItems: 'flex-start',
-	alignContent: 'flex-start',
-	lineHeight: '1.5',
-	borderRadius: '3px',
-	background: '#fff',
-	border: isDragging ? '1px dashed #000' : '1px solid #ddd'
-}))
-
-const Clone = styled(Item)`
-	+ div {
-		transform: none!important;
-		margin: 0 0 0.5rem!important;
-		~ div {
-		transform: none!important;
-		margin: 0 0 0.5rem!important;
-
-			&:last-child {
-				display:none!important;
-			}
-		}		
-  	}
-`;
-
-
-
-const Handle = styled('div')`
-	display: flex;
-	align-items: center;
-	align-content: center;
-	user-select: none;
-	margin: -0.5rem 0.5rem -0.5rem -0.5rem;
-	padding: 0.5rem;
-	line-height: 1.5;
-	border-radius: 3px 0 0 3px;
-	background: #fff;
-	border-right: 1px solid #ddd;
-	color: #000;
-`;
-
-const List = styled("div", {
-		shouldForwardProp: (prop) => prop !== "isDraggingOver"
-	})<{ isDraggingOver?: boolean}>(
-		({ theme, isDraggingOver }) => ({
-			border: isDraggingOver ? '1px dashed #000' : '1px solid #ddd',
-			background: 'fff',
-			padding: '0.5rem 0.5rem 0',
-			borderRadius: '3px'
-	}))
-		
-// flex: 0 0 150px;
-
-const Kiosk = styled("div", {
-	shouldForwardProp: (prop) => prop !== "isDraggingOver"
-})<{ isDraggingOver?: boolean}>(
-	({ theme, isDraggingOver }) => ({
-		border: isDraggingOver ? '1px dashed #000' : '1px solid #ddd',
-		background: 'fff',
-		padding: '0.5rem 0.5rem 0',
-		borderRadius: '3px'
-}))
-
-
-
-const DropBox = styled(List)`
-	background: white;
-  	margin: 0 0 0.5rem 0;
-	padding: 1rem;
-	
-	min-height: 20px;
-`;
-
-const Notice = styled('div')`
-	display: flex;
-	align-items: center;
-	align-content: center;
-	justify-content: center;
-	padding: 0.5rem;
-	margin: 0 0.5rem 0.5rem;
-	border: 1px solid transparent;
-	line-height: 1.5;
-	color: #aaa;
-`;
-
-const Button = styled('button')`
-	display: flex;
-	align-items: center;
-	align-content: center;
-	justify-content: center;
-	padding: 0.5rem;
-	color: #000;
-	border: 1px solid #ddd;
-	background: #fff;
-	border-radius: 3px;
-	font-size: 1rem;
-	cursor: pointer;
-`;
-
-const ButtonText = styled('div')`
-  	margin: 0 1rem;
-`;
 
 const ITEMS: ItemType[] = [
     {
         id: uuidv4(),
-        content: 'Headline'
+        itemType: 'Headline',
+		content: {
+			title: 'Headline'
+		},
+    },
+	{
+        id: uuidv4(),
+        itemType: 'Paragraph',
+		content: {
+			title: 'Paragraph'
+		}
     },
     {
         id: uuidv4(),
-        content: 'Copy'
+        itemType: 'Radio',
+		content: {
+			title: "Title",
+			options: ['option 1', 'options 2']
+		}
     },
     {
         id: uuidv4(),
-        content: 'Image'
+        itemType: 'Checkbox',
+		content: {
+			title: 'Title',
+			options: ['option 1', 'option 2']
+		}
+    },
+	{
+        id: uuidv4(),
+        itemType: 'Text Input',
+		content: {
+			title: 'Title',
+			placeholder: 'Placeholder'
+		}
+    },
+	{
+        id: uuidv4(),
+        itemType: 'Text Area',
+		content: {
+			title: 'Title',
+			placeholder: 'Placeholder'
+		}
+    },
+	{
+        id: uuidv4(),
+        itemType: 'File Input',
+		content: {
+			title: 'Title',
+			label: 'Label'
+		}
+    },
+	{
+        id: uuidv4(),
+        itemType: 'Image File Input',
+		content: {
+			title: 'Title',
+			label: 'Label'
+		}
     },
     {
         id: uuidv4(),
-        content: 'Slideshow'
+        itemType: 'Table',
+		content : {
+			title: 'Title'
+		}
     },
-    {
-        id: uuidv4(),
-        content: 'Quote'
-    }
+    
 ];
 
-const getListStyle = (isDraggingOver) => ({
-	background: isDraggingOver ? 'lightblue' : 'lightgrey',
-	padding: grid,
-	width: 250
-});
 
-type Idstype = {
-	[x: string]: ItemType[]
-}
 
 const ECrfBuilder = () => {
 	const [ids, setIds] = useState<Idstype>({[uuidv4()] : []});
+	const [selectedItem, setSelectedItem]  = useState<ItemType | null>(null);
 	
     const onDragEnd = (result:DropResult) => {
         const { source, destination } = result;
@@ -243,11 +190,16 @@ const ECrfBuilder = () => {
         setIds({ ...ids, [uuidv4()]: [] });
     };
 
+	const editThisItem = (item:ItemType) => {
+		setSelectedItem(item);
+		console.log(item);
+	}
+
 	return (
 		<>
 			<DragDropContext onDragEnd={onDragEnd}>
 				<Grid container spacing={1}>
-					<Grid item xs={3}>
+					<Grid item xs={2}>
 						<Droppable droppableId="ITEMS" isDropDisabled={true}>
 							{(provided, snapshot) => (
 								<Kiosk
@@ -267,10 +219,10 @@ const ECrfBuilder = () => {
 														isDragging={snapshot.isDragging}
 														style={provided.draggableProps.style}
 														>
-														{item.content} 
+														{item.itemType} 
 													</Item>
 													{snapshot.isDragging && (
-														<Clone isDragging={snapshot.isDragging}>{item.content}</Clone>
+														<Clone isDragging={snapshot.isDragging}>{item.itemType}</Clone>
 													)}
 												</Fragment>
 											)}
@@ -284,8 +236,8 @@ const ECrfBuilder = () => {
 							
 						</Droppable>
 					</Grid>
-					<Grid item xs={7}>
-						<Content>
+					<Grid item xs={6}>
+						<Box>
 							{Object.keys(ids).map((id, i) => (
 								<Droppable key={id} droppableId={id}>
 									{(provided, snapshot) => (
@@ -300,7 +252,7 @@ const ECrfBuilder = () => {
 															draggableId={droppedItem.id}
 															index={index}>
 															{(provided, snapshot) => (
-																<Item
+																<AddedItem
 																	ref={provided.innerRef}
 																	{...provided.draggableProps}
 																	isDragging={snapshot.isDragging}
@@ -308,18 +260,13 @@ const ECrfBuilder = () => {
 																	>
 																	<Handle
 																		{...provided.dragHandleProps}>
-																		<svg
-																			width="24"
-																			height="24"
-																			viewBox="0 0 24 24">
-																			<path
-																				fill="currentColor"
-																				d="M3,15H21V13H3V15M3,19H21V17H3V19M3,11H21V9H3V11M3,5V7H21V5H3Z"
-																			/>
-																		</svg>
+																		<DehazeIcon />
 																	</Handle>
-																	{droppedItem.content}
-																</Item>
+																	<ItemContent onClick={() => editThisItem(droppedItem)}>
+																		<Typography variant="h6" sx={{fontSize: '0.7rem'}}>{droppedItem.itemType}</Typography>
+																		<Typography>{droppedItem.content?.title}</Typography>
+																	</ItemContent>
+																</AddedItem>
 															)}
 														</Draggable>
 													)
@@ -334,15 +281,22 @@ const ECrfBuilder = () => {
 							))}
 
 							<Button onClick={addList}>
-								<svg width="24" height="24" viewBox="0 0 24 24">
-									<path
-										fill="currentColor"
-										d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
-									/>
-								</svg>
-								<ButtonText>Add List</ButtonText>
+								<AddIcon />Add List
 							</Button>
-						</Content>
+						</Box>
+					</Grid>
+					<Grid item xs={4}>
+						<Box sx={{background: 'white', p: '0.5rem', border: '1px solid #ddd'}}>
+							
+							{
+								selectedItem &&
+								<Box>
+									<Typography variant="h5">Edit {selectedItem.itemType }</Typography>
+									<Input value={selectedItem.content?.title}/>
+									
+								</Box>
+							}
+						</Box>
 					</Grid>
 				</Grid>
             </DragDropContext>
