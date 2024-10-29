@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Grid, Box, styled, Button,Typography, Input, OutlinedInput, TextField, Stack, Select, MenuItem } from "@mui/material";
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import AddIcon from '@mui/icons-material/Add';
-import { AddedItem, Clone, DropBox, Handle, Item, ItemContent, Kiosk, Notice } from "./styles";
+import { AddedItem, Clone, DropBox, EditBox, Handle, Item, ItemContent, Kiosk, Notice } from "./styles";
 
 type ItemContents = {
 	title: string;
@@ -203,6 +203,9 @@ const ECrfBuilder = () => {
 		console.log(item);
 	}
 
+	const handleChangeIds = (value, item: ItemType, name:string) => {
+	}
+
 	return (
 		<>
 			<DragDropContext onDragEnd={onDragEnd}>
@@ -284,6 +287,7 @@ const ECrfBuilder = () => {
 																				<TextField
 																					size="small"
 																					placeholder={droppedItem.content?.placeholder}
+																					disabled
 																				/>
 																		}
 																		{
@@ -323,27 +327,32 @@ const ECrfBuilder = () => {
 						</Box>
 					</Grid>
 					<Grid item xs={4}>
-						<Box sx={{background: 'white', p: '0.5rem', border: '1px solid #ddd'}}>
+						<EditBox>
 							
 							{
 								selectedItem &&
 								<Box>
 									<Typography variant="h5">Edit {selectedItem.itemType }</Typography>
-									<Stack spacing={2} m="1rem 0 0">
+									<Stack spacing={1} m="1rem 0 0">
 										<TextField
 											label="Title"
 											size="small"
 											placeholder={selectedItem.content?.title}
+											
 											/>
 										<TextField
 											label="Description"
 											size="small"
 											placeholder={selectedItem.content?.description}
+											// onChange={(e) => handleChangeIds(e.target.value, selectedItem, 'description')}
+											
 											/>
+
+											{/* handleChangeIdsContents */}
 									</Stack>
 								</Box>
 							}
-						</Box>
+						</EditBox>
 					</Grid>
 				</Grid>
             </DragDropContext>

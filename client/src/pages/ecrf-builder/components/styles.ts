@@ -11,9 +11,10 @@ export const Item = styled('div', {
 	alignItems: 'flex-start',
 	alignContent: 'flex-start',
 	lineHeight: '1.5',
-	borderRadius: '3px',
+	borderRadius: '4px',
 	background: '#fff',
 	border: isDragging ? '1px dashed #000' : '1px solid #ddd',
+	boxShadow: '1px 1px 3px rgba(0, 0, 0, 0.2)'
 	
 }))
 
@@ -98,9 +99,9 @@ export const Kiosk = styled("div", {
 })<{ isDraggingOver?: boolean}>(
 	({ theme, isDraggingOver }) => ({
 		border: isDraggingOver ? '1px dashed #000' : '1px solid #ddd',
-		background: 'fff',
-		padding: '0.5rem 0.5rem 0',
-		borderRadius: '3px'
+		background: '#fff',
+		borderRadius: '5px',
+		padding: '1rem 1rem 0.5rem'
 }))
 
 
@@ -110,6 +111,7 @@ export const DropBox = styled(List)`
   	margin: 0 0 0.5rem 0;
 	padding: 1rem;
 	min-height: 20px;
+	border-radius: 5px;
 `;
 
 export const Notice = styled('div')`
@@ -117,9 +119,16 @@ export const Notice = styled('div')`
 	align-items: center;
 	align-content: center;
 	justify-content: center;
-	padding: 0.5rem;
+	padding: 1rem;
 	margin: 0 0.5rem 0.5rem;
 	border: 1px solid transparent;
 	line-height: 1.5;
 	color: #aaa;
 `;
+
+export const EditBox = styled('div')`
+	background: white;
+	padding: 1rem;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+`
