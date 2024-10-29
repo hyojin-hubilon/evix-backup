@@ -1,7 +1,7 @@
 import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult, OnDragEndResponder } from "@hello-pangea/dnd";
 import { Fragment, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { Grid, Box, styled, Button,Typography, Input } from "@mui/material";
+import { Grid, Box, styled, Button,Typography, Input, OutlinedInput, TextField, Stack, Select, MenuItem } from "@mui/material";
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import AddIcon from '@mui/icons-material/Add';
 import { AddedItem, Clone, DropBox, Handle, Item, ItemContent, Kiosk, Notice } from "./styles";
@@ -82,7 +82,7 @@ const ITEMS: ItemType[] = [
         id: uuidv4(),
         itemType: 'Radio',
 		content: {
-			title: "Title",
+			title: "Radio Title",
 			options: ['option 1', 'options 2']
 		}
     },
@@ -90,7 +90,15 @@ const ITEMS: ItemType[] = [
         id: uuidv4(),
         itemType: 'Checkbox',
 		content: {
-			title: 'Title',
+			title: 'Checkbox Title',
+			options: ['option 1', 'option 2']
+		}
+    },
+	{
+        id: uuidv4(),
+        itemType: 'Select Box',
+		content: {
+			title: 'Select Box Title',
 			options: ['option 1', 'option 2']
 		}
     },
@@ -98,7 +106,7 @@ const ITEMS: ItemType[] = [
         id: uuidv4(),
         itemType: 'Text Input',
 		content: {
-			title: 'Title',
+			title: 'Text Input Title',
 			placeholder: 'Placeholder'
 		}
     },
@@ -106,7 +114,7 @@ const ITEMS: ItemType[] = [
         id: uuidv4(),
         itemType: 'Text Area',
 		content: {
-			title: 'Title',
+			title: 'Text Area Title',
 			placeholder: 'Placeholder'
 		}
     },
@@ -114,7 +122,7 @@ const ITEMS: ItemType[] = [
         id: uuidv4(),
         itemType: 'File Input',
 		content: {
-			title: 'Title',
+			title: 'File Input Title',
 			label: 'Label'
 		}
     },
@@ -122,7 +130,7 @@ const ITEMS: ItemType[] = [
         id: uuidv4(),
         itemType: 'Image File Input',
 		content: {
-			title: 'Title',
+			title: 'Image File Input Title',
 			label: 'Label'
 		}
     },
@@ -130,7 +138,7 @@ const ITEMS: ItemType[] = [
         id: uuidv4(),
         itemType: 'Table',
 		content : {
-			title: 'Title'
+			title: 'Table Title'
 		}
     },
     
@@ -265,6 +273,35 @@ const ECrfBuilder = () => {
 																	<ItemContent onClick={() => editThisItem(droppedItem)}>
 																		<Typography variant="h6" sx={{fontSize: '0.7rem'}}>{droppedItem.itemType}</Typography>
 																		<Typography>{droppedItem.content?.title}</Typography>
+																		{
+																			droppedItem.content?.description && <Typography>{ droppedItem.content?.description }</Typography>
+																		}
+																		{
+																			droppedItem.content?.label && <Typography variant="h6">{ droppedItem.content?.label }</Typography>
+																		}
+																		{
+																			droppedItem.content?.placeholder && 
+																				<TextField
+																					size="small"
+																					placeholder={droppedItem.content?.placeholder}
+																				/>
+																		}
+																		{
+																			(droppedItem.content?.options && droppedItem.itemType === 'Select Box') &&
+																				<Select size="small" value="Select">
+																					<MenuItem value="Select" disabled>
+																						<em>Select</em>
+																					</MenuItem>
+																					{
+																						droppedItem.content?.options.map((option, index) => {
+																							return <MenuItem value={option} key={index}>
+																								{option}
+																							</MenuItem>
+																						})
+																						
+																					}
+																				</Select> 
+																		}
 																	</ItemContent>
 																</AddedItem>
 															)}
@@ -292,8 +329,18 @@ const ECrfBuilder = () => {
 								selectedItem &&
 								<Box>
 									<Typography variant="h5">Edit {selectedItem.itemType }</Typography>
-									<Input value={selectedItem.content?.title}/>
-									
+									<Stack spacing={2} m="1rem 0 0">
+										<TextField
+											label="Title"
+											size="small"
+											placeholder={selectedItem.content?.title}
+											/>
+										<TextField
+											label="Description"
+											size="small"
+											placeholder={selectedItem.content?.description}
+											/>
+									</Stack>
 								</Box>
 							}
 						</Box>
