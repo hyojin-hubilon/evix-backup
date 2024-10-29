@@ -5,8 +5,9 @@ import { Grid, Box, styled, Button,Typography, Input, OutlinedInput, TextField, 
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import AddIcon from '@mui/icons-material/Add';
 import { AddedItem, Clone, DropBox, EditBox, Handle, Item, ItemContent, Kiosk, Notice } from "./styles";
+import SelectedItemEdit from "./SelectedItemEdit";
 
-type ItemContents = {
+export type ItemContents = {
 	title: string;
 	label?:string;
 	options?: Array<string>;
@@ -14,10 +15,10 @@ type ItemContents = {
 	description?:string;
 }
 
-type ItemType = {
+export type ItemType = {
 	id:string;
 	itemType: string;
-	content: ItemContents | null;
+	content: ItemContents;
 }
 
 type Idstype = {
@@ -148,7 +149,7 @@ const ITEMS: ItemType[] = [
 
 const ECrfBuilder = () => {
 	const [ids, setIds] = useState<Idstype>({[uuidv4()] : []});
-	const [selectedItem, setSelectedItem]  = useState<ItemType | null>(null);
+	const [selectedItem, setSelectedItem]  = useState<ItemType>({} as ItemType);
 	
     const onDragEnd = (result:DropResult) => {
         const { source, destination } = result;
@@ -200,11 +201,9 @@ const ECrfBuilder = () => {
 
 	const editThisItem = (item:ItemType) => {
 		setSelectedItem(item);
-		console.log(item);
 	}
 
-	const handleChangeIds = (value, item: ItemType, name:string) => {
-	}
+	
 
 	return (
 		<>
@@ -367,50 +366,10 @@ const ECrfBuilder = () => {
 						</Box>
 					</Grid>
 					<Grid item xs={4}>
-						<EditBox>
-							
-							{
-								selectedItem ?
-								<Box>
-									<Typography variant="h5">Edit {selectedItem.itemType }</Typography>
-									<Stack spacing={1} m="1rem 0 0">
-										<TextField
-											label="Title"
-											size="small"
-											placeholder={selectedItem.content?.title}
-											/>
-										<TextField
-											label="Description"
-											size="small"
-											placeholder={selectedItem.content?.description}
-											// onChange={(e) => handleChangeIds(e.target.value, selectedItem, 'description')}
-											
-											/>
-
-											{/* handleChangeIdsContents */}
-									</Stack>
-								</Box>
-								:
-								<Typography variant="h5">Edit Item</Typography>
-							}
-						</EditBox>
+						<SelectedItemEdit selectedItem={selectedItem} />
 					</Grid>
 				</Grid>
             </DragDropContext>
-			{/* <Grid item xs={2}>
-				<Typography variant="h4">Add Components</Typography>
-				<List>
-					<ListItem>
-						Container
-					</ListItem>
-				</List>
-			</Grid>
-			<Grid item xs={7}>
-				<MainCard />
-			</Grid>
-			<Grid item xs={3}>
-				<MainCard />
-			</Grid> */}
 		</>
 	);
 }
