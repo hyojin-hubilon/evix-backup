@@ -1,7 +1,7 @@
 import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult, OnDragEndResponder } from "@hello-pangea/dnd";
 import { Fragment, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { Grid, Box, styled, Button,Typography, Input, OutlinedInput, TextField, Stack, Select, MenuItem } from "@mui/material";
+import { Grid, Box, styled, Button,Typography, Input, OutlinedInput, TextField, Stack, Select, MenuItem, RadioGroup, Radio, FormControlLabel, Checkbox, FormGroup } from "@mui/material";
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import AddIcon from '@mui/icons-material/Add';
 import { AddedItem, Clone, DropBox, EditBox, Handle, Item, ItemContent, Kiosk, Notice } from "./styles";
@@ -80,7 +80,7 @@ const ITEMS: ItemType[] = [
     },
     {
         id: uuidv4(),
-        itemType: 'Radio',
+        itemType: 'Radio Buttons',
 		content: {
 			title: "Radio Title",
 			options: ['option 1', 'options 2']
@@ -274,6 +274,7 @@ const ECrfBuilder = () => {
 																		<DehazeIcon />
 																	</Handle>
 																	<ItemContent onClick={() => editThisItem(droppedItem)}>
+																		<Stack spacing={1}>
 																		<Typography variant="h6" sx={{fontSize: '0.7rem'}}>{droppedItem.itemType}</Typography>
 																		<Typography>{droppedItem.content?.title}</Typography>
 																		{
@@ -283,11 +284,22 @@ const ECrfBuilder = () => {
 																			droppedItem.content?.label && <Typography variant="h6">{ droppedItem.content?.label }</Typography>
 																		}
 																		{
-																			droppedItem.content?.placeholder && 
+																			(droppedItem.content?.placeholder && droppedItem.itemType === 'Text Input') && 
 																				<TextField
 																					size="small"
 																					placeholder={droppedItem.content?.placeholder}
 																					disabled
+																				/>
+																		}
+																		{
+																			(droppedItem.content?.placeholder && droppedItem.itemType === 'Text Area') && 
+																				<TextField
+																					size="small"
+																					placeholder={droppedItem.content?.placeholder}
+																					multiline
+																					rows={3}
+																					disabled
+																					
 																				/>
 																		}
 																		{
@@ -306,6 +318,34 @@ const ECrfBuilder = () => {
 																					}
 																				</Select> 
 																		}
+																		{
+																			(droppedItem.content?.options && droppedItem.itemType === 'Radio') &&
+																				<RadioGroup>
+																					{
+																						droppedItem.content?.options.map((option, index) => {
+																							return <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
+																						})
+																						
+																					}
+																				</RadioGroup> 
+																		}
+																		{
+																			(droppedItem.content?.options && droppedItem.itemType === 'Checkbox') &&
+																				<FormGroup>
+																					{
+																						droppedItem.content?.options.map((option, index) => {
+																							return <FormControlLabel key={index}
+																									control={
+																										<Checkbox name={option} />
+																									}
+																									label={option}
+																								/>
+																						})
+																						
+																					}
+																				</FormGroup> 
+																		}
+																		</Stack>
 																	</ItemContent>
 																</AddedItem>
 															)}
@@ -330,7 +370,7 @@ const ECrfBuilder = () => {
 						<EditBox>
 							
 							{
-								selectedItem &&
+								selectedItem ?
 								<Box>
 									<Typography variant="h5">Edit {selectedItem.itemType }</Typography>
 									<Stack spacing={1} m="1rem 0 0">
@@ -338,7 +378,6 @@ const ECrfBuilder = () => {
 											label="Title"
 											size="small"
 											placeholder={selectedItem.content?.title}
-											
 											/>
 										<TextField
 											label="Description"
@@ -351,6 +390,8 @@ const ECrfBuilder = () => {
 											{/* handleChangeIdsContents */}
 									</Stack>
 								</Box>
+								:
+								<Typography variant="h5">Edit Item</Typography>
 							}
 						</EditBox>
 					</Grid>

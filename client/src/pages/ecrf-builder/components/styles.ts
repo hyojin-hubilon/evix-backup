@@ -62,7 +62,6 @@ export const Handle = styled('div')`
 	align-items: flex-start;
 	align-content: center;
 	user-select: none;
-	margin-right: 0.5rem;
 	padding: 0.5rem;
 	line-height: 1.5;
 	border-radius: 3px 0 0 3px;
@@ -79,7 +78,8 @@ export const ItemContent = styled("div", {
 		borderRadius: '3px',
 		padding: '0.5rem',
 		cursor: 'pointer',
-		alignSelf: 'stretch'
+		alignSelf: 'stretch',
+		flex: 1
 }))
 
 export const List = styled("div", {
