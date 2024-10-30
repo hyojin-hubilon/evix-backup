@@ -13,16 +13,17 @@ export type ItemContents = {
 	options?: Array<string>;
 	placeholder?: string;
 	description?:string;
+	required?:boolean // default = false?;
 }
 
 export type ItemType = {
-	id:string;
+	id:string; //draggableid, key로 사용, json 저장시에는 삭제해도 될듯
 	itemType: string;
 	content: ItemContents;
 }
 
 type Idstype = {
-	[x: string]: ItemType[]
+	[x: string]: ItemType[] //json 저장시에는 순서대로 key를 1,2,3...으로 변경
 }
 
 // a little function to help us with reordering the result
@@ -129,9 +130,9 @@ const ITEMS: ItemType[] = [
     },
 	{
         id: uuidv4(),
-        itemType: 'Image File Input',
+        itemType: 'Datepicker',
 		content: {
-			title: 'Image File Input Title',
+			title: 'Datepicker',
 			label: 'Label'
 		}
     },
@@ -193,6 +194,8 @@ const ECrfBuilder = () => {
 				));
                 break;
         }
+
+		console.log(ids);
     };
 
     const addList = () => {
@@ -203,10 +206,22 @@ const ECrfBuilder = () => {
 		setSelectedItem(item);
 	}
 
+	const handleSaveECrf = () => {
+		const newCrf = {};
+
+		Object.keys(ids).map((id, i) => {
+			const newIds: Idstype = {[i] : ids[id]}
+			Object.assign(newCrf, newIds)
+		});
+
+		console.log(newCrf);
+	}
+
 	
 
 	return (
-		<>
+		<>	
+			
 			<DragDropContext onDragEnd={onDragEnd}>
 				<Grid container spacing={1}>
 					<Grid item xs={2}>
@@ -369,7 +384,15 @@ const ECrfBuilder = () => {
 						<SelectedItemEdit selectedItem={selectedItem} />
 					</Grid>
 				</Grid>
-            </DragDropContext>
+			</DragDropContext>
+			
+            <Grid container>
+				<Grid item xs={12}>
+					<Box sx={{borderTop:'1px solid #eee', pt: '0.5rem', mt: '0.5rem'}} display="flex" justifyContent="flex-end">
+						<Button variant="contained" onClick={() => handleSaveECrf()}>Save</Button>
+					</Box>
+				</Grid>
+			</Grid>
 		</>
 	);
 }

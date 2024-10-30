@@ -8,7 +8,7 @@ const ECrf = () => {
 					eCRF Builder
 				</Typography> */}
 			</Box>
-			<Grid container item xs={12} justifyContent="space-between" alignItems="center" spacing={1}>
+			<Grid container justifyContent="space-between" alignItems="center">
 				<ECrfBuilder />
 			</Grid>
 		</>	
