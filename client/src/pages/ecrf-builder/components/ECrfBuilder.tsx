@@ -17,7 +17,7 @@ export type ItemContents = {
 }
 
 export type ItemType = {
-	id:string; //draggableid, key로 사용, json 저장시에는 삭제해도 될듯
+	id?:string; //draggableid, key로 사용, json 저장시에는 삭제해도 될듯
 	itemType: string;
 	content: ItemContents;
 }
@@ -209,9 +209,19 @@ const ECrfBuilder = () => {
 	const handleSaveECrf = () => {
 		const newCrf = {};
 
+		console.log(ids);
+
 		Object.keys(ids).map((id, i) => {
-			const newIds: Idstype = {[i] : ids[id]}
-			Object.assign(newCrf, newIds)
+			if(ids[id].length > 0) {
+
+				const items = ids[id].map(item => {
+					delete item["id"];
+					return item;
+				})
+				const newIds = {[i] : items} //uuid를 number로 변경
+				Object.assign(newCrf, newIds);
+			}
+			
 		});
 
 		console.log(newCrf);
@@ -233,7 +243,7 @@ const ECrfBuilder = () => {
 									{ITEMS.map((item, index) => (
 										<Draggable
 											key={item.id}
-											draggableId={item.id}
+											draggableId={item.id ? item.id : item.itemType + index}
 											index={index}>
 											{(provided, snapshot) => (
 												<Fragment>
@@ -271,10 +281,10 @@ const ECrfBuilder = () => {
 											isDraggingOver={snapshot.isDraggingOver}>
 											{ids[id].length > 0
 												? ids[id].map(
-													(droppedItem: ItemType, index) => (	
+													(droppedItem: ItemType, index) => (
 														<Draggable
 															key={droppedItem.id}
-															draggableId={droppedItem.id}
+															draggableId={droppedItem.id ? droppedItem.id : droppedItem.itemType + index}
 															index={index}>
 															{(provided, snapshot) => (
 																<AddedItem
