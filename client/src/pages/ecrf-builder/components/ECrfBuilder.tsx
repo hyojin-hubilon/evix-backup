@@ -398,7 +398,7 @@ const ECrfBuilder = () => {
 			
             <Grid container>
 				<Grid item xs={12}>
-					<Box sx={{borderTop:'1px solid #eee', pt: '0.5rem', mt: '0.5rem'}} display="flex" justifyContent="flex-end">
+					<Box sx={{borderTop:'1px solid #eee', pt: '0.5rem', mt: '0.5rem'}} display="flex">
 						<Button variant="contained" onClick={() => handleSaveECrf()}>Save</Button>
 					</Box>
 				</Grid>
