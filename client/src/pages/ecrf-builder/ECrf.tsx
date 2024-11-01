@@ -1,10 +1,38 @@
 import { Box, Container, Grid, OutlinedInput, Typography } from '@mui/material';
 import ECrfBuilder from './components/ECrfBuilder';
 import { useState } from 'react';
+import ecrfApi from '@/apis/ecrf';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 const ECrf = () => {
 	const [title, setTitle] = useState<string>('');
 	const [desc, setDesc] = useState<string>('');
+
+	const confirm = useConfirmation();
+
+	const handlePostCrf = async (crf) => {
+
+		const crfToJson = JSON.stringify(crf)
+
+		const resp = await ecrfApi.postNewCRF({
+			crf_title: title,
+			crf_description: desc,
+			crf_form_json : crfToJson
+		});
+		if(resp.code == 200) {
+			void confirm({
+				description: 'CRF가 저장되었습니다.'
+			});
+
+			return;
+			
+		}
+	}
+
+	const handleSaveCrf = (crf) => {
+		void handlePostCrf(crf);
+	}
+
 	return (	
 		<>
 			<Grid container mb={1} spacing={1}>
@@ -24,7 +52,7 @@ const ECrf = () => {
 				</Grid>
 			</Grid>
 			
-			<ECrfBuilder />
+			<ECrfBuilder saveCRF={(crf)=>handleSaveCrf(crf)} />
 			
 		</>	
 		

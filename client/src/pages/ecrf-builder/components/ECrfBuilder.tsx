@@ -146,9 +146,11 @@ const ITEMS: ItemType[] = [
     
 ];
 
+type ECrfBuilderType = {
+	saveCRF: (crf) => void
+}
 
-
-const ECrfBuilder = () => {
+const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 	const [ids, setIds] = useState<Idstype>({[uuidv4()] : []});
 	const [selectedItem, setSelectedItem]  = useState<ItemType>({} as ItemType);
 	
@@ -206,7 +208,7 @@ const ECrfBuilder = () => {
 		setSelectedItem(item);
 	}
 
-	const handleSaveECrf = () => {
+	const handleSetCrf = () => {
 		const newCrf = {};
 
 		console.log(ids);
@@ -224,7 +226,7 @@ const ECrfBuilder = () => {
 			
 		});
 
-		console.log(newCrf);
+		saveCRF(newCrf);
 	}
 
 	
@@ -399,7 +401,7 @@ const ECrfBuilder = () => {
             <Grid container>
 				<Grid item xs={12}>
 					<Box sx={{borderTop:'1px solid #eee', pt: '0.5rem', mt: '0.5rem'}} display="flex">
-						<Button variant="contained" onClick={() => handleSaveECrf()}>Save</Button>
+						<Button variant="contained" onClick={() => handleSetCrf()}>Save</Button>
 					</Box>
 				</Grid>
 			</Grid>
