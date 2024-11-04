@@ -79,7 +79,8 @@ export const ItemContent = styled("div", {
 		padding: '0.5rem',
 		cursor: 'pointer',
 		alignSelf: 'stretch',
-		flex: 1
+		flex: 1,
+		position:'relative'
 }))
 
 export const List = styled("div", {
@@ -132,3 +133,15 @@ export const EditBox = styled('div')`
 	border: 1px solid #ddd;
 	border-radius: 5px;
 `
+
+export const VisuallyHiddenInput = styled('input')({
+	clip: 'rect(0 0 0 0)',
+	clipPath: 'inset(50%)',
+	height: 1,
+	overflow: 'hidden',
+	position: 'absolute',
+	bottom: 0,
+	left: 0,
+	whiteSpace: 'nowrap',
+	width: 1,
+});

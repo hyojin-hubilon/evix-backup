@@ -1,11 +1,17 @@
 import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult, OnDragEndResponder } from "@hello-pangea/dnd";
 import { Fragment, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { Grid, Box, styled, Button,Typography, Input, OutlinedInput, TextField, Stack, Select, MenuItem, RadioGroup, Radio, FormControlLabel, Checkbox, FormGroup } from "@mui/material";
+import { Grid, Box, Button,Typography, Input, OutlinedInput, TextField, Stack, Select, MenuItem, RadioGroup, Radio, FormControlLabel, Checkbox, FormGroup } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers"
+
+import { AddedItem, Clone, DropBox, EditBox, Handle, Item, ItemContent, Kiosk, Notice, VisuallyHiddenInput } from "./styles";
+import SelectedItemEdit from "./SelectedItemEdit";
+
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import AddIcon from '@mui/icons-material/Add';
-import { AddedItem, Clone, DropBox, EditBox, Handle, Item, ItemContent, Kiosk, Notice } from "./styles";
-import SelectedItemEdit from "./SelectedItemEdit";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 export type ItemContents = {
 	title: string;
@@ -366,12 +372,59 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 																									}
 																									label={option}
 																								/>
-																						})
-																						
+																						})	
 																					}
 																				</FormGroup> 
 																		}
+																		{
+																			(droppedItem.itemType === 'File Input') &&
+																				<Button
+																					component="label"
+																					role={undefined}
+																					variant="contained"
+																					tabIndex={-1}
+																					startIcon={<CloudUploadIcon />}
+																					disabled={true}
+																				>
+																					Upload files
+																					<VisuallyHiddenInput
+																						type="file"
+																						onChange={(event) => console.log(event.target.files)}
+																						multiple
+																					/>
+																				</Button>
+																		}
+																		{
+																			(droppedItem.itemType === 'Datepicker') &&
+																				<Box alignItems="center" display="flex" gap={1}
+																					sx={{
+																						".MuiInputBase-input" : {
+																							height: "1.375em",
+																							padding: "8px 14px",
+																							width: 1
+																						},
+																						".MuiButtonBase-root" :{
+																							fontSize: "1.2em",
+
+																							".MuiSvgIcon-root": {
+																								fontSize: "1em"
+																							}
+																						}
+																					}}>
+																					<DatePicker  disabled  />
+																				</Box>
+																		}
 																		</Stack>
+																		<Box sx={{position:'absolute', right: '5px', top:'5px'}}>
+																			{/* 삭제, 수정버튼 */}
+																			<Button size="small" sx={{minWidth: '30px'}} color="secondary">
+																				<DeleteIcon sx={{fontSize: '1.2rem'}}/>
+																			</Button>
+
+																			<Button size="small"  sx={{minWidth: '30px'}} color="secondary">
+																				<EditIcon sx={{fontSize: '1.2rem'}}/>
+																			</Button>
+																		</Box>
 																	</ItemContent>
 																</AddedItem>
 															)}
