@@ -23,7 +23,7 @@ export type ItemContents = {
 }
 
 export type ItemType = {
-	id?:string; //draggableid, key로 사용, json 저장시에는 삭제해도 될듯
+	id?:string; //draggableid, key로 사용, json 저장시에는 삭제
 	itemType: string;
 	content: ItemContents;
 }
@@ -68,6 +68,13 @@ const move = (source :ItemType[], destination:ItemType[], droppableSource:Dragga
 
     return result;
 };
+
+const deleteItem = (list:Idstype, droppableId:string, index:number) => {
+	const result = Array.from(list[droppableId]);
+	result.splice(index, 1);
+
+	return result;
+}
 
 
 
@@ -214,6 +221,10 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 		setSelectedItem(item);
 	}
 
+	const deleteThisItem = (index:number, droppableId:string) => {
+		setIds({...ids, [droppableId] : deleteItem(ids, droppableId, index)});
+	}
+
 	const handleSetCrf = () => {
 		const newCrf = {};
 
@@ -305,7 +316,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 																		{...provided.dragHandleProps}>
 																		<DehazeIcon />
 																	</Handle>
-																	<ItemContent onClick={() => editThisItem(droppedItem)}>
+																	<ItemContent>
 																		<Stack spacing={1}>
 																		<Typography variant="h6" sx={{fontSize: '0.7rem'}}>{droppedItem.itemType}</Typography>
 																		<Typography>{droppedItem.content?.title}</Typography>
@@ -411,17 +422,17 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 																							}
 																						}
 																					}}>
-																					<DatePicker  disabled  />
+																					<DatePicker disabled  />
 																				</Box>
 																		}
 																		</Stack>
 																		<Box sx={{position:'absolute', right: '5px', top:'5px'}}>
 																			{/* 삭제, 수정버튼 */}
-																			<Button size="small" sx={{minWidth: '30px'}} color="secondary">
+																			<Button size="small" sx={{minWidth: '30px'}} color="secondary" onClick={() => deleteThisItem(index, id)}>
 																				<DeleteIcon sx={{fontSize: '1.2rem'}}/>
 																			</Button>
 
-																			<Button size="small"  sx={{minWidth: '30px'}} color="secondary">
+																			<Button size="small"  sx={{minWidth: '30px'}} color="secondary" onClick={() => editThisItem(droppedItem)}>
 																				<EditIcon sx={{fontSize: '1.2rem'}}/>
 																			</Button>
 																		</Box>
