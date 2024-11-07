@@ -3,14 +3,17 @@ import { Fragment, useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { Grid, Box, Button } from "@mui/material";
 
-import { Clone, DropBox, Item, Kiosk, Notice } from "./styles";
+import { Clone, DropBox, Handle, Item, Kiosk, Notice } from "./styles";
 import SelectedItemEdit from "./SelectedItemEdit";
 
 
 import AddIcon from '@mui/icons-material/Add';
 import TableEditor from "./TableEditor";
 import { DeletedItem, Idstype, ItemType } from "@/types/ecrf";
+
+import DehazeIcon from '@mui/icons-material/Dehaze';
 import DroppedItem from "./DroppedItem";
+import MainCard from "@/components/MainCard";
 
 // a little function to help us with reordering the result
 const reorder = (list:ItemType[], startIndex:number, endIndex:number) => {
@@ -41,8 +44,8 @@ const move = (source :ItemType[], destination:ItemType[], droppableSource:Dragga
     destClone.splice(droppableDestination.index, 0, removed);
 
     const result = ids;
-    result[droppableSource.droppableId] = sourceClone;
-    result[droppableDestination.droppableId] = destClone;
+    // result[droppableSource.droppableId] = sourceClone;
+    // result[droppableDestination.droppableId] = destClone;
 
 	console.log(result)
 
@@ -50,10 +53,10 @@ const move = (source :ItemType[], destination:ItemType[], droppableSource:Dragga
 };
 
 const deleteItem = (list:Idstype, droppableId:string, index:number) => {
-	const result = Array.from(list[droppableId]);
-	result.splice(index, 1);
+	// const result = Array.from(list[droppableId]);
+	// result.splice(index, 1);
 
-	return result;
+	// return result;
 }
 
 
@@ -154,7 +157,7 @@ type ECrfBuilderType = {
 }
 
 const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
-	const [ids, setIds] = useState<Idstype>({[uuidv4()] : []});
+	const [ids, setIds] = useState<Idstype>({[uuidv4()] : { [uuidv4()] : [] }});
 	const [selectedItem, setSelectedItem]  = useState<ItemType>({} as ItemType);
 	const [openTableEditor, setOpenTableEditor] = useState(false);
 	
@@ -167,43 +170,44 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
             return;
         }
 
-        switch (source.droppableId) {
-            case destination.droppableId:
-				//폼 리스트 하나 안에서 이동
-                setIds({...ids, 
-					[destination.droppableId]: reorder(
-                        ids[source.droppableId],
-                        source.index,
-                        destination.index
-                    )}
-                );
-                break;
-            case 'ITEMS':
-				//아이템 리스트에서 폼 리스트로 이동
-                setIds({ ...ids, 
-                    [destination.droppableId]: copy(
-                        ITEMS,
-                        ids[destination.droppableId],
-                        source,
-                        destination
-                    )
-                });
-                break;
-            default:
-				//다른 폼 리스트로 이동
-                setIds(move(
-					ids[source.droppableId],
-					ids[destination.droppableId],
-					source,
-					destination,
-					ids
-				));
-                break;
-        }
+		
+        // switch (source.droppableId) {
+            // case destination.droppableId:
+			// 	//폼 리스트 하나 안에서 이동
+            //     setIds({...ids, 
+			// 		[destination.droppableId]: reorder(
+            //             ids[source.droppableId],
+            //             source.index,
+            //             destination.index
+            //         )}
+            //     );
+            //     break;
+            // case 'ITEMS':
+			// 	//아이템 리스트에서 폼 리스트로 이동
+            //     setIds({ ...ids, 
+            //         [destination.droppableId]: copy(
+            //             ITEMS,
+            //             ids[destination.droppableId],
+            //             source,
+            //             destination
+            //         )
+            //     });
+            //     break;
+            // default:
+			// 	//다른 폼 리스트로 이동
+            //     setIds(move(
+			// 		ids[source.droppableId],
+			// 		ids[destination.droppableId],
+			// 		source,
+			// 		destination,
+			// 		ids
+			// 	));
+            //     break;
+        // }
     };
 
     const addList = () => {
-        setIds({ ...ids, [uuidv4()]: [] });
+        setIds({ ...ids, [uuidv4()] : { [uuidv4()] : [] } });
     };
 
 	const editThisItem = (item:ItemType) => {
@@ -211,7 +215,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 	}
 
 	const deleteThisItem = (deletedItem : DeletedItem) => {
-		setIds({...ids, [deletedItem.id] : deleteItem(ids, deletedItem.id, deletedItem.index)});
+		// setIds({...ids, [deletedItem.id] : deleteItem(ids, deletedItem.id, deletedItem.index)});
 	}
 
 	const handleSetCrf = () => {
@@ -220,15 +224,15 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 		console.log(ids);
 
 		Object.keys(ids).map((id, i) => {
-			if(ids[id].length > 0) {
+			// if(ids[id].length > 0) {
 
-				const items = ids[id].map(item => {
-					delete item["id"];
-					return item;
-				})
-				const newIds = {[i] : items} //uuid를 number로 변경
-				Object.assign(newCrf, newIds);
-			}
+			// 	const items = ids[id].map(item => {
+			// 		delete item["id"];
+			// 		return item;
+			// 	})
+			// 	const newIds = {[i] : items} //uuid를 number로 변경
+			// 	Object.assign(newCrf, newIds);
+			// }
 			
 		});
 
@@ -289,27 +293,65 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 					</Grid>
 					<Grid item xs={6}>
 						<Box>
-							{Object.keys(ids).map((id, i) => (
-								<Droppable key={id} droppableId={id}>
-									{(provided, snapshot) => (
-										<DropBox
-											ref={provided.innerRef}
-											isDraggingOver={snapshot.isDraggingOver}>
-											{ids[id].length > 0
-												? ids[id].map(
-													(droppedItem: ItemType, index) => (
-														<DroppedItem key={index} droppedItem={droppedItem} index={index} id={id} deleteThisItem={deleteThisItem} editThisItem={editThisItem} />
-													)
-												)
-												: 
-													<Notice>Drop items here</Notice>
-												}
-											{provided.placeholder}
-										</DropBox>
-									)}
-								</Droppable>
-							))}
+							<Droppable droppableId="MAIN" isDropDisabled={true}>
+								{(provided, snapshot) => (
+									<div ref={provided.innerRef} style={{border:'1px solid #ddd'}}>
+										
+										{Object.keys(ids).map((id1, i) => (
+											<Draggable key={i} draggableId={id1} index={i}>
+												{(provided, snapshot) => (
+													<DropBox
+														ref={provided.innerRef}
+														{...provided.draggableProps}
+														style={provided.draggableProps.style}
+														>
+														<Handle
+															{...provided.dragHandleProps}
+														>
+															<DehazeIcon />
+														</Handle>
+														{ id1 }
+														{Object.keys(ids[id1]).map((id2, j) => { 
+															console.log(ids[id1], id2);
+															return (
+																<Droppable key={j} droppableId={id2}>
+																{(provided, snapshot) => (
+																	<DropBox
+																		ref={provided.innerRef}
+																		isDraggingOver={snapshot.isDraggingOver}>
+																		{/* {ids[id].length > 0
+																			? ids[id].map(
+																				(droppedItem: ItemType, index) => (
+																					<DroppedItem key={index} droppedItem={droppedItem} index={index} id={id} deleteThisItem={deleteThisItem} editThisItem={editThisItem} />
+																				)
+																			)
+																			: 
+																				<Notice>Drop items here</Notice>
+																			} */}
+																		{provided.placeholder}
+																	</DropBox>
+																)}
+															</Droppable>
+														)})}				
+															
+														
+														
 
+
+
+
+
+
+													</DropBox>
+												)}		
+											</Draggable>
+										))}
+
+										{provided.placeholder}
+									</div>
+								)}
+								
+							</Droppable>
 							<Button onClick={addList}>
 								<AddIcon />Add List
 							</Button>
