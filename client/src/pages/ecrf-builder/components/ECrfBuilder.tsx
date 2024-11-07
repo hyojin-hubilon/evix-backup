@@ -1,36 +1,16 @@
-import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult, OnDragEndResponder } from "@hello-pangea/dnd";
-import { Fragment, useState } from "react";
+import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult } from "@hello-pangea/dnd";
+import { Fragment, useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { Grid, Box, Button,Typography, Input, OutlinedInput, TextField, Stack, Select, MenuItem, RadioGroup, Radio, FormControlLabel, Checkbox, FormGroup } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers"
+import { Grid, Box, Button } from "@mui/material";
 
-import { AddedItem, Clone, DropBox, EditBox, Handle, Item, ItemContent, Kiosk, Notice, VisuallyHiddenInput } from "./styles";
+import { Clone, DropBox, Item, Kiosk, Notice } from "./styles";
 import SelectedItemEdit from "./SelectedItemEdit";
 
-import DehazeIcon from '@mui/icons-material/Dehaze';
+
 import AddIcon from '@mui/icons-material/Add';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-
-export type ItemContents = {
-	title: string;
-	label?:string;
-	options?: Array<string>;
-	placeholder?: string;
-	description?:string;
-	required?:boolean // default = false?;
-}
-
-export type ItemType = {
-	id?:string; //draggableid, key로 사용, json 저장시에는 삭제
-	itemType: string;
-	content: ItemContents;
-}
-
-type Idstype = {
-	[x: string]: ItemType[] //json 저장시에는 순서대로 key를 1,2,3...으로 변경
-}
+import TableEditor from "./TableEditor";
+import { DeletedItem, Idstype, ItemType } from "@/types/ecrf";
+import DroppedItem from "./DroppedItem";
 
 // a little function to help us with reordering the result
 const reorder = (list:ItemType[], startIndex:number, endIndex:number) => {
@@ -93,6 +73,16 @@ const ITEMS: ItemType[] = [
 			title: 'Paragraph'
 		}
     },
+	{
+		id: uuidv4(),
+		itemType: 'Two Column',
+		columnFirst: {
+			[uuidv4()] : []
+		},
+		columnSecond: {
+			[uuidv4()] : []
+		}
+	},
     {
         id: uuidv4(),
         itemType: 'Radio Buttons',
@@ -166,6 +156,7 @@ type ECrfBuilderType = {
 const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 	const [ids, setIds] = useState<Idstype>({[uuidv4()] : []});
 	const [selectedItem, setSelectedItem]  = useState<ItemType>({} as ItemType);
+	const [openTableEditor, setOpenTableEditor] = useState(false);
 	
     const onDragEnd = (result:DropResult) => {
         const { source, destination } = result;
@@ -209,8 +200,6 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 				));
                 break;
         }
-
-		console.log(ids);
     };
 
     const addList = () => {
@@ -221,8 +210,8 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 		setSelectedItem(item);
 	}
 
-	const deleteThisItem = (index:number, droppableId:string) => {
-		setIds({...ids, [droppableId] : deleteItem(ids, droppableId, index)});
+	const deleteThisItem = (deletedItem : DeletedItem) => {
+		setIds({...ids, [deletedItem.id] : deleteItem(ids, deletedItem.id, deletedItem.index)});
 	}
 
 	const handleSetCrf = () => {
@@ -245,6 +234,14 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 
 		saveCRF(newCrf);
 	}
+
+	const handleCloseTableEditor = () => {
+		setOpenTableEditor(false);
+	}
+
+	useEffect(() => {
+		console.log(ids);
+	}, [ids])
 
 	
 
@@ -301,145 +298,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 											{ids[id].length > 0
 												? ids[id].map(
 													(droppedItem: ItemType, index) => (
-														<Draggable
-															key={droppedItem.id}
-															draggableId={droppedItem.id ? droppedItem.id : droppedItem.itemType + index}
-															index={index}>
-															{(provided, snapshot) => (
-																<AddedItem
-																	ref={provided.innerRef}
-																	{...provided.draggableProps}
-																	isDragging={snapshot.isDragging}
-																	style={provided.draggableProps.style}
-																	>
-																	<Handle
-																		{...provided.dragHandleProps}>
-																		<DehazeIcon />
-																	</Handle>
-																	<ItemContent>
-																		<Stack spacing={1}>
-																		<Typography variant="h6" sx={{fontSize: '0.7rem'}}>{droppedItem.itemType}</Typography>
-																		<Typography>{droppedItem.content?.title}</Typography>
-																		{
-																			droppedItem.content?.description && <Typography>{ droppedItem.content?.description }</Typography>
-																		}
-																		{
-																			droppedItem.content?.label && <Typography variant="h6">{ droppedItem.content?.label }</Typography>
-																		}
-																		{
-																			(droppedItem.content?.placeholder && droppedItem.itemType === 'Text Input') && 
-																				<TextField
-																					size="small"
-																					placeholder={droppedItem.content?.placeholder}
-																					disabled
-																				/>
-																		}
-																		{
-																			(droppedItem.content?.placeholder && droppedItem.itemType === 'Text Area') && 
-																				<TextField
-																					size="small"
-																					placeholder={droppedItem.content?.placeholder}
-																					multiline
-																					rows={3}
-																					disabled
-																					
-																				/>
-																		}
-																		{
-																			(droppedItem.content?.options && droppedItem.itemType === 'Select Box') &&
-																				<Select size="small" value="Select">
-																					<MenuItem value="Select" disabled>
-																						<em>Select</em>
-																					</MenuItem>
-																					{
-																						droppedItem.content?.options.map((option, index) => {
-																							return <MenuItem value={option} key={index}>
-																								{option}
-																							</MenuItem>
-																						})
-																						
-																					}
-																				</Select> 
-																		}
-																		{
-																			(droppedItem.content?.options && droppedItem.itemType === 'Radio') &&
-																				<RadioGroup>
-																					{
-																						droppedItem.content?.options.map((option, index) => {
-																							return <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
-																						})
-																						
-																					}
-																				</RadioGroup> 
-																		}
-																		{
-																			(droppedItem.content?.options && droppedItem.itemType === 'Checkbox') &&
-																				<FormGroup>
-																					{
-																						droppedItem.content?.options.map((option, index) => {
-																							return <FormControlLabel key={index}
-																									control={
-																										<Checkbox name={option} />
-																									}
-																									label={option}
-																								/>
-																						})	
-																					}
-																				</FormGroup> 
-																		}
-																		{
-																			(droppedItem.itemType === 'File Input') &&
-																				<Button
-																					component="label"
-																					role={undefined}
-																					variant="contained"
-																					tabIndex={-1}
-																					startIcon={<CloudUploadIcon />}
-																					disabled={true}
-																				>
-																					Upload files
-																					<VisuallyHiddenInput
-																						type="file"
-																						onChange={(event) => console.log(event.target.files)}
-																						multiple
-																					/>
-																				</Button>
-																		}
-																		{
-																			(droppedItem.itemType === 'Datepicker') &&
-																				<Box alignItems="center" display="flex" gap={1}
-																					sx={{
-																						".MuiInputBase-input" : {
-																							height: "1.375em",
-																							padding: "8px 14px",
-																							width: 1
-																						},
-																						".MuiButtonBase-root" :{
-																							fontSize: "1.2em",
-
-																							".MuiSvgIcon-root": {
-																								fontSize: "1em"
-																							}
-																						}
-																					}}>
-																					<DatePicker disabled  />
-																				</Box>
-																		}
-																		</Stack>
-																		<Box sx={{position:'absolute', right: '5px', top:'5px'}}>
-																			{/* 삭제, 수정버튼 */}
-																			<Button size="small" sx={{minWidth: '30px'}} color="secondary" onClick={() => deleteThisItem(index, id)}>
-																				<DeleteIcon sx={{fontSize: '1.2rem'}}/>
-																			</Button>
-
-																			<Button size="small"  sx={{minWidth: '30px'}} color="secondary" onClick={() => editThisItem(droppedItem)}>
-																				<EditIcon sx={{fontSize: '1.2rem'}}/>
-																			</Button>
-																		</Box>
-																	</ItemContent>
-																</AddedItem>
-															)}
-														</Draggable>
+														<DroppedItem key={index} droppedItem={droppedItem} index={index} id={id} deleteThisItem={deleteThisItem} editThisItem={editThisItem} />
 													)
 												)
 												: 
@@ -469,6 +328,8 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 					</Box>
 				</Grid>
 			</Grid>
+
+			<TableEditor isOpen={openTableEditor} handleClose={handleCloseTableEditor}/>
 		</>
 	);
 }
