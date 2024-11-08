@@ -9,7 +9,7 @@ import SelectedItemEdit from "./SelectedItemEdit";
 
 import AddIcon from '@mui/icons-material/Add';
 import TableEditor from "./TableEditor";
-import { DeletedItem, Idstype, ItemType } from "@/types/ecrf";
+import { DeletedItem, Idstype, InsideIds, ItemType } from "@/types/ecrf";
 
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import DroppedItem from "./DroppedItem";
@@ -33,7 +33,24 @@ const copy = (source:ItemType[], destination:ItemType[], droppableSource: Dragga
 
     destClone.splice(droppableDestination.index, 0, { ...item, id: uuidv4() });
     return destClone;
-    
+};
+
+const getParentIdByChildId = (object: Idstype, childId: string) => {
+	return Object.keys(object).find((key) => Object.keys(object[key]).some((key2) => key2 === childId)) as string;
+}
+
+const copy2 = (list: Idstype, source:ItemType[], destinationId:string, droppableSource: DraggableLocation, droppableDestination: DraggableLocation) => {
+	const parentKey = getParentIdByChildId(list, destinationId);
+	
+    const sourceClone = Array.from(source);
+    const destClone = Array.from(list[parentKey][destinationId]);
+    const item = sourceClone[droppableSource.index];
+
+    destClone.splice(droppableDestination.index, 0, { ...item, id: uuidv4() });
+	const result = list;
+	result[parentKey][destinationId] = destClone;
+	
+    return result;
 };
 
 const move = (source :ItemType[], destination:ItemType[], droppableSource:DraggableLocation, droppableDestination:DraggableLocation, ids: Idstype) => {
@@ -164,46 +181,52 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
     const onDragEnd = (result:DropResult) => {
         const { source, destination } = result;
 
-		console.log(source.droppableId, destination?.droppableId)
+		console.log(result, source, destination)
         // dropped outside the list
         if (!destination) {
             return;
         }
 
 		
-        // switch (source.droppableId) {
+        switch (source.droppableId) {
             // case destination.droppableId:
-			// 	//폼 리스트 하나 안에서 이동
-            //     setIds({...ids, 
-			// 		[destination.droppableId]: reorder(
-            //             ids[source.droppableId],
-            //             source.index,
-            //             destination.index
-            //         )}
-            //     );
-            //     break;
-            // case 'ITEMS':
-			// 	//아이템 리스트에서 폼 리스트로 이동
-            //     setIds({ ...ids, 
-            //         [destination.droppableId]: copy(
-            //             ITEMS,
-            //             ids[destination.droppableId],
-            //             source,
-            //             destination
-            //         )
-            //     });
-            //     break;
-            // default:
-			// 	//다른 폼 리스트로 이동
-            //     setIds(move(
-			// 		ids[source.droppableId],
-			// 		ids[destination.droppableId],
-			// 		source,
-			// 		destination,
-			// 		ids
-			// 	));
-            //     break;
-        // }
+				//폼 리스트 하나 안에서 이동
+                // setIds(
+				// 	[destination.droppableId]: reorder(
+                //         ids[source.droppableId],
+                //         source.index,
+                //         destination.index
+                //     )
+                // );
+                // break;
+            case 'ITEMS':
+				//아이템 리스트에서 폼 리스트로 이동
+				
+				setIds(copy2(ids, 
+							ITEMS,
+							destination.droppableId,
+							source,
+							destination));
+                // setIds({ ...ids, 
+                //     [destination.droppableId]: copy(
+                //         ITEMS,
+                //         ids[destination.droppableId],
+                //         source,
+                //         destination
+                //     )
+                // });
+                break;
+            default:
+				//다른 폼 리스트로 이동
+                // setIds(move(
+				// 	ids[source.droppableId],
+				// 	ids[destination.droppableId],
+				// 	source,
+				// 	destination,
+				// 	ids
+				// ));
+                break;
+        }
     };
 
     const addList = () => {
@@ -319,15 +342,15 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 																	<DropBox
 																		ref={provided.innerRef}
 																		isDraggingOver={snapshot.isDraggingOver}>
-																		{/* {ids[id].length > 0
-																			? ids[id].map(
+																		{ids[id1][id2].length > 0
+																			? ids[id1][id2].map(
 																				(droppedItem: ItemType, index) => (
-																					<DroppedItem key={index} droppedItem={droppedItem} index={index} id={id} deleteThisItem={deleteThisItem} editThisItem={editThisItem} />
+																					<DroppedItem key={index} droppedItem={droppedItem} index={index} id={id2} deleteThisItem={deleteThisItem} editThisItem={editThisItem} />
 																				)
 																			)
 																			: 
 																				<Notice>Drop items here</Notice>
-																			} */}
+																			}
 																		{provided.placeholder}
 																	</DropBox>
 																)}
