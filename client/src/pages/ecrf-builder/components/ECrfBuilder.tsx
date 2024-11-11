@@ -1,19 +1,20 @@
 import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult } from "@hello-pangea/dnd";
 import { Fragment, useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { Grid, Box, Button } from "@mui/material";
+import { Grid, Box, Button, Select, MenuItem } from "@mui/material";
 
-import { Clone, DropBox, Handle, Item, Kiosk, Notice } from "./styles";
+import { Clone, DropBox, Handle, Handle2, Item, Kiosk, MainBox, Notice } from "./styles";
 import SelectedItemEdit from "./SelectedItemEdit";
 
 
 import AddIcon from '@mui/icons-material/Add';
 import TableEditor from "./TableEditor";
-import { DeletedItem, Idstype, ItemType } from "@/types/ecrf";
+import { DeletedItem, Idstype, ItemType, SelectedItem } from "@/types/ecrf";
 
-import DehazeIcon from '@mui/icons-material/Dehaze';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import DroppedItem from "./DroppedItem";
-import MainCard from "@/components/MainCard";
+import useSticky from "@/utils/useSticky";
 
 
 const getParentIndexByChildId = (list: Idstype[], childId: string) => {
@@ -24,12 +25,9 @@ const reorder = (destinationId:string, startIndex:number, endIndex:number, ids: 
     const result = Array.from(ids);
 	const parentIndex = getParentIndexByChildId(ids, destinationId);
 
-
 	const itemsResult = Array.from(ids[parentIndex][destinationId]);
 	const [removed] = itemsResult.splice(startIndex, 1);
     itemsResult.splice(endIndex, 0, removed);
-
-
 
 	result[parentIndex][destinationId] = itemsResult;
 
@@ -80,11 +78,17 @@ const reorderParentBox = (sourceIndex:number, destIndex:number, ids: Idstype[]) 
 	return result;	
 }
 
-const deleteItem = (list:Idstype, droppableId:string, index:number) => {
-	// const result = Array.from(list[droppableId]);
-	// result.splice(index, 1);
+const deleteItem = (list:Idstype[], droppableId:string, index:number) => {
+	const result = Array.from(list);
+	const parentIndex = getParentIndexByChildId(list, droppableId);
 
-	// return result;
+	const itemsResult = Array.from(list[parentIndex][droppableId]);
+	
+    itemsResult.splice(index, 1);
+
+	result[parentIndex][droppableId] = itemsResult;
+
+    return result;	
 }
 
 
@@ -104,16 +108,6 @@ const ITEMS: ItemType[] = [
 			title: 'Paragraph'
 		}
     },
-	{
-		id: uuidv4(),
-		itemType: 'Two Column',
-		columnFirst: {
-			[uuidv4()] : []
-		},
-		columnSecond: {
-			[uuidv4()] : []
-		}
-	},
     {
         id: uuidv4(),
         itemType: 'Radio Buttons',
@@ -185,8 +179,9 @@ type ECrfBuilderType = {
 }
 
 const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
+	const { ref } = useSticky();
 	const [ids, setIds] = useState<Idstype[]>([ {[uuidv4()] : []} ]);
-	const [selectedItem, setSelectedItem]  = useState<ItemType>({} as ItemType);
+	const [selectedItem, setSelectedItem] = useState<SelectedItem>({} as SelectedItem);
 	const [openTableEditor, setOpenTableEditor] = useState(false);
 	
     const onDragEnd = (result:DropResult) => {
@@ -200,9 +195,16 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 
 		
         switch (source.droppableId) {
+			case 'MAIN': 
+				//상위박스의 REORDER
+				setIds(reorderParentBox(
+					source.index,
+					destination.index,
+					ids));
+				break;
             case destination.droppableId:
                 setIds(
-					//박스내 아이템의 REORDER
+					//1개 박스내 아이템의 REORDER
 					reorder(
 						destination.droppableId,
                         source.index,
@@ -211,22 +213,15 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
                     )
                 );
                 break;
-			case 'MAIN': 
-				//상위박스의 REORDER
-				setIds(reorderParentBox(
-					source.index,
-					destination.index,
-					ids));
-				break;
             case 'ITEMS':
-				//아이템 리스트에서 폼 리스트로 이동
+				//아이템 리스트에서 폼 리스트로 복사하여 추가
 				setIds(copy(ids, 
 							ITEMS,
 							source,
 							destination));
                 break;
             default:
-				//아이템을 다른 폼 리스트로 이동
+				//아이템을 다른 폼으로 이동
                 setIds(move(
 					source,
 					destination,
@@ -240,12 +235,26 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
         setIds([ ...ids, {[uuidv4()] : []}]);
     };
 
-	const editThisItem = (item:ItemType) => {
-		setSelectedItem(item);
+	const editThisItem = (item:ItemType, columnId:string, index:number) => {
+		if(item.itemType === 'Table') {
+			setOpenTableEditor(true);
+		} 
+		
+		const selected:SelectedItem = {...item, columnId: columnId, index:index};
+		setSelectedItem(selected);
 	}
 
 	const deleteThisItem = (deletedItem : DeletedItem) => {
-		// setIds({...ids, [deletedItem.id] : deleteItem(ids, deletedItem.id, deletedItem.index)});
+		setIds(deleteItem(ids, deletedItem.id, deletedItem.index));
+	}
+
+	const addColumnList = (value:string) => {
+		const times = Number(value);
+		let newColumns = {};
+		for(let i = 0; i<times; i++) {
+			newColumns = {...newColumns, ...{[uuidv4()] : []}}
+		}
+		setIds([...ids, newColumns]);
 	}
 
 	const handleSetCrf = () => {
@@ -273,11 +282,20 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 		setOpenTableEditor(false);
 	}
 
-	useEffect(() => {
-		console.log(ids);
-	}, [ids])
+	const handleSaveChanges = (item:SelectedItem) => {
+		console.log(item);
 
-	
+		const columnId = item.columnId;
+		const itemIndex = item.index;
+
+		const parentId = getParentIndexByChildId(ids, columnId);
+		
+		const result = Array.from(ids);
+		result[parentId][columnId][itemIndex] = item;
+		
+		setIds(result);
+	}
+
 
 	return (
 		<>	
@@ -285,6 +303,10 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 			<DragDropContext onDragEnd={onDragEnd}>
 				<Grid container spacing={1}>
 					<Grid item xs={2}>
+						<Box position="sticky"
+							sx={{top: '70px'}}
+							ref={ref}
+						>
 						<Droppable droppableId="ITEMS" isDropDisabled={true}>
 							{(provided, snapshot) => (
 								<Kiosk
@@ -305,6 +327,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 														isDragging={snapshot.isDragging}
 														style={provided.draggableProps.style}
 														>
+														<DragIndicatorIcon color="secondary" fontSize="small" />
 														{item.itemType} 
 													</Item>
 													{snapshot.isDragging && (
@@ -321,13 +344,14 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 							)}
 							
 						</Droppable>
+						</Box>
 					</Grid>
-					<Grid item xs={6}>
+					<Grid item xs={7}>
 						<Box>
 							{/* 메인 박스 */}
 							<Droppable droppableId="MAIN"  type="content">
 								{(provided, snapshot) => (
-									<div ref={provided.innerRef} style={{border:'1px solid #ddd'}}>
+									<MainBox ref={provided.innerRef}>
 										
 										{ids.map((id1, i) => (
 											<Draggable key={i} draggableId={"main"+i} index={i}>
@@ -337,59 +361,80 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 														{...provided.draggableProps}
 														style={provided.draggableProps.style}
 														>
-														<Handle
+														<Handle2
 															{...provided.dragHandleProps}
 														>
-															<DehazeIcon />
-														</Handle>
-														{ i }
+															<DragHandleIcon fontSize="small" color="secondary" />
+														</Handle2>
+														<Box display="flex" gap={1}>
 														{Object.keys(ids[i]).map((id2, j) => { 
-															// console.log(ids[id1], id2);
 															return (
 																<Droppable key={j} droppableId={id2}>{/* 아이템 추가 영역 */}
 																{(provided, snapshot) => (
 																	<DropBox
 																		ref={provided.innerRef}
-																		isDraggingOver={snapshot.isDraggingOver}>
-																		{id1[id2].length > 0
+																		isDraggingOver={snapshot.isDraggingOver}
+																		style={{flex:1}}
+																		>
+																			<Box display="flex" flexDirection="column" gap={0.5}>
+																			{id1[id2].length > 0
 																			? id1[id2].map(
 																				(droppedItem: ItemType, index) => (
-																					<DroppedItem key={index} droppedItem={droppedItem} index={index} id={id2} deleteThisItem={deleteThisItem} editThisItem={editThisItem} />
+																					<DroppedItem key={index} droppedItem={droppedItem} index={index} columnId={id2} deleteThisItem={deleteThisItem} editThisItem={editThisItem} />
 																				)
 																			)
 																			: 
 																				<Notice>Drop items here</Notice>
 																			}
 																		{provided.placeholder}
+																		</Box>
 																	</DropBox>
 																)}
 															</Droppable>
-														)})}				
+														)})}
+														</Box>				
 													</DropBox>
 												)}		
 											</Draggable>
 										))}
 
 										{provided.placeholder}
-									</div>
+									</MainBox>
 								)}
 								
 							</Droppable>
-							<Button onClick={addList}>
-								<AddIcon />Add List
-							</Button>
+							<Box mt="0.5rem" mb="1rem" display="flex" gap={1}>
+								<Button onClick={addList} variant="contained" color="secondary">
+									<AddIcon />Add List
+								</Button>
+
+								<Select value="Select" onChange={(e) => addColumnList(e.target.value)} sx={{background:'white'}} size="small">
+									<MenuItem value="Select" disabled>
+										<Box display="flex" alignItems="center" justifyContent="center"><AddIcon /> Add Column List</Box>
+									</MenuItem>
+									<MenuItem value="2">
+										Two Column
+									</MenuItem>
+									<MenuItem value="3">
+										Three Column
+									</MenuItem>
+									<MenuItem value="4">
+										Four Column
+									</MenuItem>
+								</Select> 
+							</Box>
 						</Box>
 					</Grid>
-					<Grid item xs={4}>
-						<SelectedItemEdit selectedItem={selectedItem} />
+					<Grid item xs={3}>
+						<SelectedItemEdit selectedItem={selectedItem} saveChanges={handleSaveChanges} />
 					</Grid>
 				</Grid>
 			</DragDropContext>
 			
             <Grid container>
 				<Grid item xs={12}>
-					<Box sx={{borderTop:'1px solid #eee', pt: '0.5rem', mt: '0.5rem'}} display="flex">
-						<Button variant="contained" onClick={() => handleSetCrf()}>Save</Button>
+					<Box sx={{borderTop:'1px solid #eee', pt: '1rem', mt:'1rem'}} display="flex" justifyContent="flex-end">
+						<Button variant="contained" size="large" onClick={() => handleSetCrf()}>Save</Button>
 					</Box>
 				</Grid>
 			</Grid>

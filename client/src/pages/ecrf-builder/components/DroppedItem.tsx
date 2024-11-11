@@ -2,7 +2,7 @@ import { DeletedItem, ItemType } from "@/types/ecrf"
 import { Draggable } from "@hello-pangea/dnd"
 import { AddedItem, Handle, ItemContent, VisuallyHiddenInput } from "./styles"
 
-import DehazeIcon from '@mui/icons-material/Dehaze';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -13,16 +13,16 @@ import { DatePicker } from "@mui/x-date-pickers"
 type DroppedItemType = {
 	droppedItem : ItemType
 	index: number
-	id:string
+	columnId:string
 	deleteThisItem: (deleteItem : DeletedItem) => void
-	editThisItem: (droppedItem) => void
+	editThisItem: (droppedItem, columnId, index) => void
 }
-const DroppedItem = ({droppedItem, index, id, deleteThisItem, editThisItem}: DroppedItemType) => {
+const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem}: DroppedItemType) => {
 
 	const deleteThis = (index: number) => {
 		const deleteItem = {
 			index: index,
-			id: id
+			id: columnId
 		}
 
 		deleteThisItem(deleteItem)
@@ -42,11 +42,12 @@ const DroppedItem = ({droppedItem, index, id, deleteThisItem, editThisItem}: Dro
 					>
 					<Handle
 						{...provided.dragHandleProps}>
-						<DehazeIcon />
+						<DragHandleIcon fontSize="small" color="secondary" />
 					</Handle>
 					<ItemContent>
 						<Stack spacing={1}>
 						<Typography variant="h6" sx={{fontSize: '0.7rem'}}>{droppedItem.itemType}</Typography>
+						{ droppedItem.content?.required &&  <Typography sx={{fontSize: '0.7rem', color:'red'}}>* Required</Typography>}
 						<Typography>{droppedItem.content?.title}</Typography>
 						{
 							droppedItem.content?.description && <Typography>{ droppedItem.content?.description }</Typography>
@@ -90,7 +91,7 @@ const DroppedItem = ({droppedItem, index, id, deleteThisItem, editThisItem}: Dro
 								</Select> 
 						}
 						{
-							(droppedItem.content?.options && droppedItem.itemType === 'Radio') &&
+							(droppedItem.content?.options && droppedItem.itemType === 'Radio Buttons') &&
 								<RadioGroup>
 									{
 										droppedItem.content?.options.map((option, index) => {
@@ -160,7 +161,7 @@ const DroppedItem = ({droppedItem, index, id, deleteThisItem, editThisItem}: Dro
 								<DeleteIcon sx={{fontSize: '1.2rem'}}/>
 							</Button>
 
-							<Button size="small"  sx={{minWidth: '30px'}} color="secondary" onClick={() => editThisItem(droppedItem)}>
+							<Button size="small"  sx={{minWidth: '30px'}} color="secondary" onClick={() => editThisItem(droppedItem, columnId, index)}>
 								<EditIcon sx={{fontSize: '1.2rem'}}/>
 							</Button>
 						</Box>

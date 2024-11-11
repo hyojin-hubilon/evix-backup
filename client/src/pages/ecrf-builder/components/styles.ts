@@ -44,7 +44,7 @@ export const AddedItem = styled('div', {
 })<{isDragging : boolean}>(({isDragging}) => ({
 	display: 'flex',
 	userSelect: 'none',
-	margin: '0 0  0.5rem 0',
+	margin: '0',
 	alignItems: 'flex-start',
 	alignContent: 'flex-start',
 	lineHeight: '1.7',
@@ -71,6 +71,19 @@ export const Handle = styled('div')`
 	align-self: stretch;
 `;
 
+export const Handle2 = styled('div')`
+	display: flex;
+	align-items: flex-start;
+	align-content: center;
+	user-select: none;
+	padding: 0 0 0.5rem 0;
+	line-height: 1.5;
+	border-radius: 3px 0 0 3px;
+	background: #fff;
+	color: #000;
+	align-self: stretch;
+`;
+
 export const ItemContent = styled("div", {
 	shouldForwardProp: (prop) => prop !== "isDraggingOver"
 })<{ isDraggingOver?: boolean}>(
@@ -88,12 +101,10 @@ export const List = styled("div", {
 	})<{ isDraggingOver?: boolean}>(
 		({ theme, isDraggingOver }) => ({
 			border: isDraggingOver ? '1px dashed #000' : '1px solid #ddd',
-			background: 'fff',
 			padding: '0.5rem 0.5rem 0',
 			borderRadius: '3px'
 	}))
 		
-// flex: 0 0 150px;
 
 export const Kiosk = styled("div", {
 	shouldForwardProp: (prop) => prop !== "isDraggingOver"
@@ -109,10 +120,21 @@ export const Kiosk = styled("div", {
 
 export const DropBox = styled(List)`
 	background: white;
-  	margin: 0 0 0.5rem 0;
+  	margin: 0;
 	padding: 1rem;
 	min-height: 20px;
 	border-radius: 5px;
+`;
+
+export const MainBox = styled(List)`
+	background: #f2f2f2;
+	border:0;
+	padding: 0.5rem;
+	min-height: 20px;
+	border-radius: 5px;
+	display:flex;
+	flex-direction:column;
+	gap:0.5rem;
 `;
 
 export const Notice = styled('div')`
@@ -121,7 +143,6 @@ export const Notice = styled('div')`
 	align-content: center;
 	justify-content: center;
 	padding: 1rem;
-	margin: 0 0.5rem 0.5rem;
 	border: 1px solid transparent;
 	line-height: 1.5;
 	color: #aaa;

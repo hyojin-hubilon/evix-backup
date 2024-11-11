@@ -36,12 +36,12 @@ const ECrf = () => {
 	return (	
 		<>
 			<Grid container mb={1} spacing={1}>
-				<Grid item xs={2}>
+				{/* <Grid item xs={2}>
 					<Typography variant="h3" gutterBottom>
 						eCRF Builder
 					</Typography>
-				</Grid>
-				<Grid item xs={6}>
+				</Grid> */}
+				<Grid item xs={5}>
 					<Box sx={{p: '1rem', background:'#fff', border: '1px solid #ddd', borderRadius:'5px'}}>
 						<OutlinedInput size='small' placeholder='CRF Title' fullWidth sx={{mb: '0.5rem'}} value={title} onChange={(e) => setTitle(e.target.value)}/>
 						<OutlinedInput size='small' placeholder='CRF Description' fullWidth value={desc} onChange={(e) => setDesc(e.target.value)}/>

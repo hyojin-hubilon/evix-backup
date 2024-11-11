@@ -8,22 +8,15 @@ export type ItemContents = {
 }
 
 export type ItemType = {
-	id?:string; //draggableid, key로 사용, json 저장시에는 삭제
+	id:string; //draggableid, key로 사용, json 저장시에는 삭제
 	itemType: string;
-	content?: ItemContents;
-	columnFirst?: {
-		[x: string]: ItemType[]
-	},
-	columnSecond?: {
-		[x: string]: ItemType[]
-	},
-	columnThird?: {
-		[x: string]: ItemType[]
-	},
-	columnFourth?: {
-		[x: string]: ItemType[]
-	}
+	content: ItemContents;
 }
+
+export type SelectedItem = {
+	columnId:string;
+	index: number;
+} & ItemType;
 
 export type Idstype = {
 	[x: string]: ItemType[] //json 저장시에는 순서대로 key를 1,2,3...으로 변경
@@ -34,7 +27,7 @@ export type DeletedItem = {
 	index: number;
 }
 export interface CRFPostReqBody {
-	crf_title: string;1
+	crf_title: string;
 	crf_description: string;
 	crf_form_json: string; //1,2,3,4... layouts, schema, views..?
 }

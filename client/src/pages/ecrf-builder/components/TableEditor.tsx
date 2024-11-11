@@ -49,7 +49,7 @@ const TableEditor = ({isOpen, handleClose} : TableEditorType) => {
 			/>
 			</DialogContent>
 			<DialogActions>
-				<Button>Cancel</Button>
+				<Button onClick={handleClose}>Cancel</Button>
 				<Button>Save</Button>
 				
 			</DialogActions>
