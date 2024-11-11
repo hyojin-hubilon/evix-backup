@@ -16,21 +16,29 @@ import DroppedItem from "./DroppedItem";
 import MainCard from "@/components/MainCard";
 
 
-const getParentIdByChildId = (list: Idstype[], childId: string) => {
+const getParentIndexByChildId = (list: Idstype[], childId: string) => {
 	return list.findIndex((e, i) => Object.keys(list[i]).some((key2) => key2 === childId));
 }
 
-const reorder = (list:ItemType[], startIndex:number, endIndex:number) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
+const reorder = (destinationId:string, startIndex:number, endIndex:number, ids: Idstype[]) => {
+    const result = Array.from(ids);
+	const parentIndex = getParentIndexByChildId(ids, destinationId);
+
+
+	const itemsResult = Array.from(ids[parentIndex][destinationId]);
+	const [removed] = itemsResult.splice(startIndex, 1);
+    itemsResult.splice(endIndex, 0, removed);
+
+
+
+	result[parentIndex][destinationId] = itemsResult;
 
     return result;
 };
 
 const copy = (list: Idstype[], source:ItemType[], droppableSource: DraggableLocation, droppableDestination: DraggableLocation) => {
 	const destinationId = droppableDestination.droppableId;
-	const parentIndex = getParentIdByChildId(list, destinationId);
+	const parentIndex = getParentIndexByChildId(list, destinationId);
 	
     const sourceClone = Array.from(source);
     const destClone = Array.from(list[parentIndex][destinationId]);
@@ -43,29 +51,28 @@ const copy = (list: Idstype[], source:ItemType[], droppableSource: DraggableLoca
     return result;
 };
 
-// const move = (droppableSource:DraggableLocation, droppableDestination:DraggableLocation, ids: Idstype) => {
-// 	const sourceId = droppableSource.droppableId;
-// 	const destinationId = droppableDestination.droppableId;
+const move = (droppableSource:DraggableLocation, droppableDestination:DraggableLocation, ids: Idstype[]) => {
+	const sourceId = droppableSource.droppableId;
+	const destinationId = droppableDestination.droppableId;
 
-// 	const sourceParentKey = getParentIdByChildId(ids, sourceId);
-// 	const destinationParentKey = getParentIdByChildId(ids, destinationId);
+	const sourceParentIndex = getParentIndexByChildId(ids, sourceId);
+	const destinationParentIndex = getParentIndexByChildId(ids, destinationId);
 	
-// 	const sourceClone = Array.from(ids[sourceParentKey][sourceId]);
-// 	const destClone = Array.from(ids[destinationParentKey][destinationId]);
-// 	const [removed] = sourceClone.splice(droppableSource.index, 1);
+	const sourceClone = Array.from(ids[sourceParentIndex][sourceId]);
+	const destClone = Array.from(ids[destinationParentIndex][destinationId]);
+	const [removed] = sourceClone.splice(droppableSource.index, 1);
 
-// 	destClone.splice(droppableDestination.index, 0, removed);
+	destClone.splice(droppableDestination.index, 0, removed);
 
-// 	const result = ids;
-// 	result[sourceParentKey][sourceId] = sourceClone;
-// 	result[destinationParentKey][destinationId]= destClone;
+	const result = ids;
+	result[sourceParentIndex][sourceId] = sourceClone;
+	result[destinationParentIndex][destinationId]= destClone;
 
-// 	return result;
-// };
+	return result;
+};
 
 
 const reorderParentBox = (sourceIndex:number, destIndex:number, ids: Idstype[]) => {
-	console.log("reorderParentBox?")
 	const result = Array.from(ids);
 	const [removed] = result.splice(sourceIndex, 1);
 	result.splice(destIndex, 0, removed);
@@ -193,16 +200,19 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 
 		
         switch (source.droppableId) {
-            // case destination.droppableId:
-            //     setIds(
-			// 		reorder(
-            //             ids[source.droppableId],
-            //             source.index,
-            //             destination.index
-            //         )
-            //     );
-            //     break;
+            case destination.droppableId:
+                setIds(
+					//박스내 아이템의 REORDER
+					reorder(
+						destination.droppableId,
+                        source.index,
+                        destination.index,
+						ids
+                    )
+                );
+                break;
 			case 'MAIN': 
+				//상위박스의 REORDER
 				setIds(reorderParentBox(
 					source.index,
 					destination.index,
@@ -216,12 +226,12 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 							destination));
                 break;
             default:
-				//다른 폼 리스트로 이동
-                // setIds(move(
-				// 	source,
-				// 	destination,
-				// 	ids
-				// ));
+				//아이템을 다른 폼 리스트로 이동
+                setIds(move(
+					source,
+					destination,
+					ids
+				));
 			break;
         }
     };
