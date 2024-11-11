@@ -9,13 +9,17 @@ import SelectedItemEdit from "./SelectedItemEdit";
 
 import AddIcon from '@mui/icons-material/Add';
 import TableEditor from "./TableEditor";
-import { DeletedItem, Idstype, InsideIds, ItemType } from "@/types/ecrf";
+import { DeletedItem, Idstype, ItemType } from "@/types/ecrf";
 
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import DroppedItem from "./DroppedItem";
 import MainCard from "@/components/MainCard";
 
-// a little function to help us with reordering the result
+
+const getParentIdByChildId = (list: Idstype[], childId: string) => {
+	return list.findIndex((e, i) => Object.keys(list[i]).some((key2) => key2 === childId));
+}
+
 const reorder = (list:ItemType[], startIndex:number, endIndex:number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -23,51 +27,51 @@ const reorder = (list:ItemType[], startIndex:number, endIndex:number) => {
 
     return result;
 };
-/**
- * Moves an item from one list to another list.
- */
-const copy = (source:ItemType[], destination:ItemType[], droppableSource: DraggableLocation, droppableDestination: DraggableLocation) => {
-    const sourceClone = Array.from(source);
-    const destClone = Array.from(destination);
-    const item = sourceClone[droppableSource.index];
 
-    destClone.splice(droppableDestination.index, 0, { ...item, id: uuidv4() });
-    return destClone;
-};
-
-const getParentIdByChildId = (object: Idstype, childId: string) => {
-	return Object.keys(object).find((key) => Object.keys(object[key]).some((key2) => key2 === childId)) as string;
-}
-
-const copy2 = (list: Idstype, source:ItemType[], destinationId:string, droppableSource: DraggableLocation, droppableDestination: DraggableLocation) => {
-	const parentKey = getParentIdByChildId(list, destinationId);
+const copy = (list: Idstype[], source:ItemType[], droppableSource: DraggableLocation, droppableDestination: DraggableLocation) => {
+	const destinationId = droppableDestination.droppableId;
+	const parentIndex = getParentIdByChildId(list, destinationId);
 	
     const sourceClone = Array.from(source);
-    const destClone = Array.from(list[parentKey][destinationId]);
+    const destClone = Array.from(list[parentIndex][destinationId]);
     const item = sourceClone[droppableSource.index];
 
     destClone.splice(droppableDestination.index, 0, { ...item, id: uuidv4() });
 	const result = list;
-	result[parentKey][destinationId] = destClone;
+	result[parentIndex][destinationId] = destClone;
 	
     return result;
 };
 
-const move = (source :ItemType[], destination:ItemType[], droppableSource:DraggableLocation, droppableDestination:DraggableLocation, ids: Idstype) => {
-	const sourceClone = Array.from(source);
-    const destClone = Array.from(destination);
-    const [removed] = sourceClone.splice(droppableSource.index, 1);
+// const move = (droppableSource:DraggableLocation, droppableDestination:DraggableLocation, ids: Idstype) => {
+// 	const sourceId = droppableSource.droppableId;
+// 	const destinationId = droppableDestination.droppableId;
 
-    destClone.splice(droppableDestination.index, 0, removed);
+// 	const sourceParentKey = getParentIdByChildId(ids, sourceId);
+// 	const destinationParentKey = getParentIdByChildId(ids, destinationId);
+	
+// 	const sourceClone = Array.from(ids[sourceParentKey][sourceId]);
+// 	const destClone = Array.from(ids[destinationParentKey][destinationId]);
+// 	const [removed] = sourceClone.splice(droppableSource.index, 1);
 
-    const result = ids;
-    // result[droppableSource.droppableId] = sourceClone;
-    // result[droppableDestination.droppableId] = destClone;
+// 	destClone.splice(droppableDestination.index, 0, removed);
 
-	console.log(result)
+// 	const result = ids;
+// 	result[sourceParentKey][sourceId] = sourceClone;
+// 	result[destinationParentKey][destinationId]= destClone;
 
-    return result;
-};
+// 	return result;
+// };
+
+
+const reorderParentBox = (sourceIndex:number, destIndex:number, ids: Idstype[]) => {
+	console.log("reorderParentBox?")
+	const result = Array.from(ids);
+	const [removed] = result.splice(sourceIndex, 1);
+	result.splice(destIndex, 0, removed);
+
+	return result;	
+}
 
 const deleteItem = (list:Idstype, droppableId:string, index:number) => {
 	// const result = Array.from(list[droppableId]);
@@ -84,7 +88,7 @@ const ITEMS: ItemType[] = [
         itemType: 'Headline',
 		content: {
 			title: 'Headline'
-		},
+		}
     },
 	{
         id: uuidv4(),
@@ -174,7 +178,7 @@ type ECrfBuilderType = {
 }
 
 const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
-	const [ids, setIds] = useState<Idstype>({[uuidv4()] : { [uuidv4()] : [] }});
+	const [ids, setIds] = useState<Idstype[]>([ {[uuidv4()] : []} ]);
 	const [selectedItem, setSelectedItem]  = useState<ItemType>({} as ItemType);
 	const [openTableEditor, setOpenTableEditor] = useState(false);
 	
@@ -190,47 +194,40 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 		
         switch (source.droppableId) {
             // case destination.droppableId:
-				//폼 리스트 하나 안에서 이동
-                // setIds(
-				// 	[destination.droppableId]: reorder(
-                //         ids[source.droppableId],
-                //         source.index,
-                //         destination.index
-                //     )
-                // );
-                // break;
+            //     setIds(
+			// 		reorder(
+            //             ids[source.droppableId],
+            //             source.index,
+            //             destination.index
+            //         )
+            //     );
+            //     break;
+			case 'MAIN': 
+				setIds(reorderParentBox(
+					source.index,
+					destination.index,
+					ids));
+				break;
             case 'ITEMS':
 				//아이템 리스트에서 폼 리스트로 이동
-				
-				setIds(copy2(ids, 
+				setIds(copy(ids, 
 							ITEMS,
-							destination.droppableId,
 							source,
 							destination));
-                // setIds({ ...ids, 
-                //     [destination.droppableId]: copy(
-                //         ITEMS,
-                //         ids[destination.droppableId],
-                //         source,
-                //         destination
-                //     )
-                // });
                 break;
             default:
 				//다른 폼 리스트로 이동
                 // setIds(move(
-				// 	ids[source.droppableId],
-				// 	ids[destination.droppableId],
 				// 	source,
 				// 	destination,
 				// 	ids
 				// ));
-                break;
+			break;
         }
     };
 
     const addList = () => {
-        setIds({ ...ids, [uuidv4()] : { [uuidv4()] : [] } });
+        setIds([ ...ids, {[uuidv4()] : []}]);
     };
 
 	const editThisItem = (item:ItemType) => {
@@ -287,7 +284,8 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 										<Draggable
 											key={item.id}
 											draggableId={item.id ? item.id : item.itemType + index}
-											index={index}>
+											index={index}
+											>
 											{(provided, snapshot) => (
 												<Fragment>
 													<Item
@@ -316,12 +314,13 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 					</Grid>
 					<Grid item xs={6}>
 						<Box>
-							<Droppable droppableId="MAIN" isDropDisabled={true}>
+							{/* 메인 박스 */}
+							<Droppable droppableId="MAIN"  type="content">
 								{(provided, snapshot) => (
 									<div ref={provided.innerRef} style={{border:'1px solid #ddd'}}>
 										
-										{Object.keys(ids).map((id1, i) => (
-											<Draggable key={i} draggableId={id1} index={i}>
+										{ids.map((id1, i) => (
+											<Draggable key={i} draggableId={"main"+i} index={i}>
 												{(provided, snapshot) => (
 													<DropBox
 														ref={provided.innerRef}
@@ -333,17 +332,17 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 														>
 															<DehazeIcon />
 														</Handle>
-														{ id1 }
-														{Object.keys(ids[id1]).map((id2, j) => { 
-															console.log(ids[id1], id2);
+														{ i }
+														{Object.keys(ids[i]).map((id2, j) => { 
+															// console.log(ids[id1], id2);
 															return (
-																<Droppable key={j} droppableId={id2}>
+																<Droppable key={j} droppableId={id2}>{/* 아이템 추가 영역 */}
 																{(provided, snapshot) => (
 																	<DropBox
 																		ref={provided.innerRef}
 																		isDraggingOver={snapshot.isDraggingOver}>
-																		{ids[id1][id2].length > 0
-																			? ids[id1][id2].map(
+																		{id1[id2].length > 0
+																			? id1[id2].map(
 																				(droppedItem: ItemType, index) => (
 																					<DroppedItem key={index} droppedItem={droppedItem} index={index} id={id2} deleteThisItem={deleteThisItem} editThisItem={editThisItem} />
 																				)
@@ -356,15 +355,6 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 																)}
 															</Droppable>
 														)})}				
-															
-														
-														
-
-
-
-
-
-
 													</DropBox>
 												)}		
 											</Draggable>

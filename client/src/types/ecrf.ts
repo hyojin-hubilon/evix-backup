@@ -26,11 +26,7 @@ export type ItemType = {
 }
 
 export type Idstype = {
-	[x: string]: {[x: string] : ItemType[] } //json 저장시에는 순서대로 key를 1,2,3...으로 변경
-}
-
-export type InsideIds = {
-	[x:string] : []
+	[x: string]: ItemType[] //json 저장시에는 순서대로 key를 1,2,3...으로 변경
 }
 
 export type DeletedItem = {
