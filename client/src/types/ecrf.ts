@@ -41,3 +41,14 @@ export interface CRFPutReqBody extends CRFPostReqBody {
 export interface CRFPostResponse {
 
 }
+
+export interface MyCRFList {
+	created_at: string | Date;
+	created_user_no:number;
+	crf_no:number;
+	crf_title:string;
+	std_no:string | null;
+	std_status:string | null;
+	std_title:string | null;
+	std_type:string | null;
+}

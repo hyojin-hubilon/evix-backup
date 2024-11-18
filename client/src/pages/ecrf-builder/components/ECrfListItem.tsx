@@ -1,21 +1,22 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { EditOutlined, LinkOutlined } from '@ant-design/icons';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box, Button, Card, ClickAwayListener, Dialog, Grid, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Typography, useTheme } from '@mui/material';
+import { Button, Card, ClickAwayListener, Grid, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Typography, useTheme } from '@mui/material';
 
-import { MySurveyList } from '@/types/survey';
+
 import dayjs from 'dayjs';
-import { useRef, useState } from 'react';
-import surveyApi from '@/apis/survey';
+import { useState } from 'react';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { t } from 'i18next';
+import ecrfApi from '@/apis/ecrf';
+import { MyCRFList } from '@/types/ecrf';
 
-type SurveyListItemProps = {
-	survey: MySurveyList,
+type ECrfListItemProps = {
+	crf: MyCRFList,
 	refresh: () => void
 }
 
-const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
+const ECrfListItem = ({ crf, refresh }: ECrfListItemProps) => {
     const theme = useTheme();
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	
@@ -31,11 +32,11 @@ const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
 	};
 
 	const handlePreview = () => {
-		navigate(`/survey/preview/${survey.survey_no}`)
+		navigate(`/e-crf/preview/${crf.crf_no}`)
 	}
 
-	const deleteThisSurvey = async () => {
-		const response = await surveyApi.deleteSurvey(survey.survey_no);
+	const deleteThisCrf = async () => {
+		const response = await ecrfApi.deleteCrf(crf.crf_no);
 		if (response.result && response.code === 200) {
 			refresh();
 		}
@@ -43,27 +44,27 @@ const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
 
 	const handleCopy = () => {
 		void confirm({
-			title: t('survey.duplicate_the_survey'), //"설문 복제"
-			description: t('survey.would_duplicate_survey')//"이 설문을 복제하시겠습니까?"
+			title: t('ecrf.duplicate_the_ecrf'), //"ecrf 복제"
+			description: t('ecrf.would_duplicate')//"복제하시겠습니까?"
 		})
 		.then(() => { 
-			navigate(`/survey/copy/${survey.survey_no}`, {state: 'copy'});
+			navigate(`/e-crf/copy/${crf.crf_no}`, {state: 'copy'});
 		})
 	}
 
 	const handleDelete = () => {
 		void confirm({
-			title: t('survey.delete_survey'),//"설문 삭제",
-			description: t('survey.sure_delete_survey')//"이 설문을 삭제하시겠습니까?"
+			title: t('ecrf.delete_ecrf'),//"삭제",
+			description: t('ecrf.sure_delete')//"삭제하시겠습니까?"
 		})
 		.then(() => { 
-			void deleteThisSurvey()
+			void deleteThisCrf()
 		})
 		
 	}
 
 	const handleEdit = () => {
-		navigate(`/survey/edit/${survey.survey_no}`, {state: 'edit'});
+		navigate(`/e-crf/edit/${crf.crf_no}`, {state: 'edit'});
 	}
 	
 
@@ -72,7 +73,7 @@ const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
             <Card
                 sx={{
                     bgcolor:
-                        survey.std_no
+						crf.crf_no
                             ? theme.palette.primary.lighter
                             : theme.palette.secondary.lighter,
                     p: '1rem',
@@ -81,25 +82,22 @@ const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
                 <Grid container>
                     <Grid item xs={8}>
                         
-						{ survey.study_title ? 
+						{ crf.std_title ? 
 							<Typography variant="h6" color="primary.main">
 								<LinkOutlined />
-								<span style={{fontSize:"0.9rem", marginLeft: "0.3rem", marginRight: "0.5rem"}}>{ survey.study_title }</span>
-								<Link to={`/study/detail/${survey.std_no}`} style={{color: theme.palette.secondary.dark}}>
-								{t('survey.go_to_study')}
+								<span style={{fontSize:"0.9rem", marginLeft: "0.3rem", marginRight: "0.5rem"}}>{ crf.std_title }</span>
+								<Link to={`/study/detail/${crf.std_no}`} style={{color: theme.palette.secondary.dark}}>
+								{t('ecrf.go_to_study')}
 								{/* Study 바로가기 */}
 								</Link>
 							</Typography>
 							:
-							<Typography variant="h6" color="secondary.main">{t('survey.under_construction')}</Typography> 
+							<Typography variant="h6" color="secondary.main">{t('ecrf.under_construction')}</Typography> 
 						} 
 					
-                        <Typography variant="h4" mt="0.3rem" mb="0.3rem">{survey.title}</Typography>
-						<Typography>
-							<span style={{fontWeight:600}}>{ survey.created_user_first_name } { survey.created_user_last_name }</span> | <span>{survey.question_number}{t('survey.questions')}</span>
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: theme.palette.grey[500] }} mb="0">
-                            {t('survey.created_date')} { dayjs(survey.created_at).format('YYYY.MM.DD') }
+                        <Typography variant="h4" mt="0.3rem" mb="0.3rem">{crf.crf_title}</Typography>
+						<Typography variant="caption" sx={{ color: theme.palette.grey[500] }} mb="0">
+                            {t('ecrf.created_date')} { dayjs(crf.created_at).format('YYYY.MM.DD') }
                         </Typography>
                       
                     </Grid>
@@ -114,7 +112,7 @@ const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
                        
 
                         {/* 수정 - 설문 참가자가 1명이상일 경우 불가능 - Study 연결후엔 불가능으로 임시 설정 */}
-						{ survey.study_title === null && 
+						{ crf.std_title === null && 
 							<Button size="large" variant="outlined" onClick={handleEdit}>
 								<EditOutlined style={{ fontSize: '1.5rem' }} />
 							</Button>
@@ -154,12 +152,12 @@ const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
 								<ClickAwayListener onClickAway={handleClose}>
 									<MenuList id="split-button-menu" autoFocusItem>
 										<MenuItem onClick={handlePreview}>
-											{t('survey.preview')}
+											{t('ecrf.preview')}
 											{/* 미리보기 */}
 										</MenuItem>
 										<MenuItem onClick={handleCopy}>
-											{t('survey.duplicate_the_survey')}
-											{/* 설문복사 */}
+											{t('ecrf.duplicate_the_ecrf')}
+											{/* 복사 */}
 										</MenuItem>
 										<MenuItem onClick={handleDelete}>
 											{t('common.delete')}
@@ -181,4 +179,4 @@ const SurveyListItem = ({ survey, refresh }: SurveyListItemProps) => {
     );
 };
 
-export default SurveyListItem;
+export default ECrfListItem;

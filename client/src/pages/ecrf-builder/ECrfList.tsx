@@ -14,9 +14,8 @@ import {
 	MenuItem,
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import SurveyListItem from './components/SurveyListItem';
-import surveyApi from '@/apis/survey';
-import { MySurveyList, SurveyApiResponse } from '@/types/survey';
+import ECrfListItem from './components/ECrfListItem';
+import ecrfApi from '@/apis/ecrf';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import { paginator } from '@/utils/helper';
@@ -24,14 +23,15 @@ import DatePicker from "antd/lib/date-picker";
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { t } from 'i18next';
+import { MyCRFList } from '@/types/ecrf';
 dayjs.extend(isBetween);
 const { RangePicker } = DatePicker;
 
 
-const SurveyList = () => {
-    const [surveyCount, setSurveyCount] = useState<number>(0); // Survey 개수 상태
-    const [ surveyList, setSurveyList ] = useState<MySurveyList[]>([]); // 내 Survey 목록 상태
-	const [ searched, setSearched ] = useState<MySurveyList[]>([]);
+const ECrfList = () => {
+    const [ count, setCount] = useState<number>(0);
+    const [ crfList, setCrfList ] = useState<MyCRFList[]>([]); // 내 Survey 목록 상태
+	const [ searched, setSearched ] = useState<MyCRFList[]>([]);
     const navigate = useNavigate();
 	const [ searchTerm, setSearchTerm ] = useState('');
 	const [ pageCount, setPageCount ] = useState(0);
@@ -41,15 +41,17 @@ const SurveyList = () => {
 	const [ dateSet, setDateSet ] = useState<{startDt: string, endDt: string}>({startDt : '', endDt: ''});
     
     // Surrvey 데이터 불러오기
-    const fetchSurvey = async () => {
+    const fetchCrf = async () => {
         try {
-            const response = await surveyApi.mySurveyList();
+            const response = await ecrfApi.getCRFList();
             if (response.result && response.code === 200) {
-				const newSurveyList = response.content.surveyMyList ?? [];
-				setSurveyList(newSurveyList);
-				setSearched(newSurveyList);
-                setSurveyCount(newSurveyList.length);
-				setPageCount(Math.ceil(newSurveyList.length/itemPerPage));
+				const newCrfList = response.content ?? [];
+				console.log(newCrfList);
+				
+				setCrfList(newCrfList);
+				setSearched(newCrfList);
+                setCount(newCrfList.length);
+				setPageCount(Math.ceil(newCrfList.length/itemPerPage));
             }
         } catch (error) {
             console.error('Failed to fetch study list:', error);
@@ -58,12 +60,12 @@ const SurveyList = () => {
 
     
     useEffect(() => {
-		void fetchSurvey();	
+		void fetchCrf();	
     }, []);
 
 	
-    const handleCreateSurvey = () => {
-        navigate('/survey/samples');
+    const handleCreateCrf = () => {
+        navigate('/e-crf/builder');
     };
 
 	const handleSearch = (text:string) => {
@@ -97,9 +99,9 @@ const SurveyList = () => {
 
 
 	useEffect(() => {
-		let newSearchedList = surveyList.filter(survey => {
+		let newSearchedList = crfList.filter(crf => {
 			if(dateSet.startDt && dateSet.endDt) {
-				if( dayjs(survey.created_at).isSame(dayjs(dateSet.startDt), 'day') || dayjs(survey.created_at).isSame(dayjs(dateSet.endDt), 'day') || dayjs(survey.created_at).isBetween(dayjs(dateSet.startDt), dayjs(dateSet.endDt), 'day') ) return true;
+				if( dayjs(crf.created_at).isSame(dayjs(dateSet.startDt), 'day') || dayjs(crf.created_at).isSame(dayjs(dateSet.endDt), 'day') || dayjs(crf.created_at).isBetween(dayjs(dateSet.startDt), dayjs(dateSet.endDt), 'day') ) return true;
 				else return false;
 			} else {
 				return true;
@@ -108,8 +110,8 @@ const SurveyList = () => {
 
 
 		if(searchTerm) {
-			newSearchedList = newSearchedList.filter(survey => {
-				if(survey.title.toLowerCase().includes(searchTerm.toLowerCase())) return true;
+			newSearchedList = newSearchedList.filter(crf => {
+				if(crf.crf_title.toLowerCase().includes(searchTerm.toLowerCase())) return true;
 				else return false;
 			});
 		}
@@ -125,9 +127,8 @@ const SurveyList = () => {
             <Grid container flexDirection="row" rowSpacing={2}>
                 <Grid item xs={12}>
                     <Box display="flex" alignItems="center" gap={1}>
-                        <Typography variant="h3">{t('survey.survey_list')}</Typography>
-						{/* Survey 목록 */}
-                        <Chip label={surveyCount} color="primary" size="small" />
+                        <Typography variant="h3">{t('ecrf.ecrf')}</Typography>
+                        <Chip label={count} color="primary" size="small" />
                     </Box>
                 </Grid>
 
@@ -183,22 +184,22 @@ const SurveyList = () => {
 					</Grid>
 					<Grid item xs={1.9}>
 						<Box display="flex" justifyContent="flex-end" width={1}>
-							<Button variant="contained" onClick={handleCreateSurvey} fullWidth>
+							<Button variant="contained" onClick={handleCreateCrf} fullWidth>
 								<PlusOutlined />
-								{/* Survey 생성 */}
-								<Typography sx={{ ml: 1 }}>{t('survey.new_survey')}</Typography>
+								{/* E-CRF 생성 */}
+								<Typography sx={{ ml: 1 }}>{t('ecrf.add_new')}</Typography>
 							</Button>
 						</Box>
 					</Grid>
 				</Grid>
 
-                {surveyList.length > 0 ? (
+                {crfList.length > 0 ? (
                     <>
-						{paginator(searched, page, itemPerPage).data.map((survery, index) => {
+						{paginator(searched, page, itemPerPage).data.map((crf, index) => {
 							
 							return (
 								<Grid item xs={12} key={index}>
-									<SurveyListItem survey={survery} refresh={fetchSurvey} />
+									<ECrfListItem crf={crf} refresh={fetchCrf} />
 								</Grid>
 							)
 						})}
@@ -225,7 +226,7 @@ const SurveyList = () => {
                             sx={{ pb: 4, borderBottom: 1, borderColor: 'divider' }}
                         >
 
-							<Box onClick={handleCreateSurvey}
+							<Box onClick={handleCreateCrf}
 								sx={{
 									display:'flex',
 									flexDirection: 'column',
@@ -243,7 +244,7 @@ const SurveyList = () => {
                                     <PlusOutlined />
                                 </IconButton>
 								<Typography sx={{ ml: 1 }} variant='h3' fontWeight="normal" color="primary" mt="1rem">
-									{t('survey.new_survey')}
+									{t('ecrf.add_new')}
 								</Typography>
                             </Box>                            
                         </Grid>
@@ -254,4 +255,4 @@ const SurveyList = () => {
     );
 };
 
-export default SurveyList;
+export default ECrfList;

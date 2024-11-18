@@ -2,7 +2,7 @@ import {
     ResCommonError,
     api
 } from '@/apis/axios-common';
-import { CRFPostReqBody, CRFPostResponse, CRFPutReqBody } from '@/types/ecrf';
+import { CRFPostReqBody, CRFPostResponse, CRFPutReqBody, MyCRFList } from '@/types/ecrf';
 
 const BASE_API_URL = '/researcher/case-report-form';
 
@@ -41,7 +41,33 @@ const ecrfApi = {
 			const e = error as ResCommonError;
 			throw e;
 		}
-	},  
+	},
+	getCRFList : async() => {
+		try {
+			const responeData = await api<MyCRFList[]>(
+				`${BASE_API_URL}/full-my-list`,
+				'get'
+			)
+			return responeData;
+		} catch(error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
+	deleteCrf : async (crfNo: number) => {
+		try {
+			const responseData = await api<object>(
+				`${BASE_API_URL}`,
+				'delete',
+				{crf_no: crfNo}
+			);
+
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
 }
 
 export default ecrfApi;

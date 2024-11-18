@@ -2,7 +2,7 @@ export const reorder = <T>(
 	list: T[],
 	startIndex: number,
 	endIndex: number
-  	): T[] => {
+	): T[] => {
 	const result = Array.from(list);
 	const [removed] = result.splice(startIndex, 1);
 	result.splice(endIndex, 0, removed);
@@ -12,7 +12,7 @@ export const reorder = <T>(
 
 
 
-export const paginator = (items:any, current_page:number, per_page_items:number) => {
+export const paginator = (items:unknown[], current_page:number, per_page_items:number) => {
 	const page = current_page || 1,
 		per_page = per_page_items,
 		offset = (page - 1) * per_page,
@@ -30,7 +30,7 @@ export const paginator = (items:any, current_page:number, per_page_items:number)
 	};
 }
 
-export const downloadPNG = (chartId) => {
+export const downloadPNG = (chartId:string) => {
     const chartInstance = ApexCharts.getChartByID(chartId);
 
 	

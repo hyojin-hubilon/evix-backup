@@ -393,5 +393,17 @@
 		"you_can_manage_language" : "You can manage language settings, account information, and notifications, as well as review and accept the list of invited studies.",
 		"create_new_trial" : "Create New Trial",
 		"this_page_is_currently_empty" : "This page is currently empty as there are no items created yet. Click the ‘Add’ button to create a new clinical trial and get started."
+	},
+	"ecrf" : {
+		"ecrf" : "E-CRF",
+		"add_new" : "New E-CRF",
+		"duplicate_the_ecrf" : "Duplicate the E-CRF",
+		"would_duplicate" : "Do you want to duplicate it?",
+		"delete_ecrf" : "Delete E-CRF",
+		"sure_delete" : "Are you sure you want to delete it?",
+		"go_to_study": "Go to Study",
+		"under_construction" : "Under construction",
+		"created_date": "Created date",
+        "preview": "Preview"
 	}
 }
