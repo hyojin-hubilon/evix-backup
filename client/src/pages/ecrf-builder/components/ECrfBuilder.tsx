@@ -257,12 +257,21 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 		setIds([...ids, newColumns]);
 	}
 
-	const handleSetCrf = () => {
-		const newCrf = {};
+	const handleSetCrf = () => {		
+		const newItems = ids.map((idsItem, i) => {
+			const newCrf = {}
+			Object.keys(idsItem).map((id, j) => {				
+				if(idsItem[id].length > 0) {
+					const items = idsItem[id];
+					const newIds = {[j] : items} //uuid를 number로 변경
+					Object.assign(newCrf, newIds);
+				}				
+			});
 
-		console.log(ids);
-
-		Object.keys(ids).map((id, i) => {
+			return newCrf;
+		})
+	
+		// Object.keys(ids).map((id, i) => {
 			// if(ids[id].length > 0) {
 
 			// 	const items = ids[id].map(item => {
@@ -273,9 +282,9 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 			// 	Object.assign(newCrf, newIds);
 			// }
 			
-		});
+		// });
 
-		saveCRF(newCrf);
+		saveCRF(newItems);
 	}
 
 	const handleCloseTableEditor = () => {
