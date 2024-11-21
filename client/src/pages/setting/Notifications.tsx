@@ -92,7 +92,7 @@ const Notifications = () => {
 						searched.length === 0 ?
 						<ListItem sx={{textAlign: 'center', display: 'block', p: '1rem'}}>{t('settings.no_notifications_yet')}</ListItem>
 						:
-						paginator(searched, page, itemPerPage).data.map((notification : NotificationResponse, index) => {
+						paginator(searched, page, itemPerPage).data.map((notification, index) => {
 							return (
 								<div key={notification.notification_no}>
 									<ListItemButton>

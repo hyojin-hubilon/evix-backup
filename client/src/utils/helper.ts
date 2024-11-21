@@ -12,7 +12,7 @@ export const reorder = <T>(
 
 
 
-export const paginator = (items:unknown[], current_page:number, per_page_items:number) => {
+export const paginator = <T>(items:T[], current_page:number, per_page_items:number) => {
 	const page = current_page || 1,
 		per_page = per_page_items,
 		offset = (page - 1) * per_page,
