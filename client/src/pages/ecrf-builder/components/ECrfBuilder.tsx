@@ -9,7 +9,7 @@ import SelectedItemEdit from "./SelectedItemEdit";
 
 import AddIcon from '@mui/icons-material/Add';
 import TableEditor from "./TableEditor";
-import { DeletedItem, Idstype, ItemType, SelectedItem } from "@/types/ecrf";
+import { CRFFormJson, DeletedItem, Idstype, ItemType, SelectedItem } from "@/types/ecrf";
 
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
@@ -175,7 +175,7 @@ const ITEMS: ItemType[] = [
 ];
 
 type ECrfBuilderType = {
-	saveCRF: (crf) => void
+	saveCRF: (crf : CRFFormJson[]) => void
 }
 
 const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
@@ -258,7 +258,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 	}
 
 	const handleSetCrf = () => {		
-		const newItems = ids.map((idsItem, i) => {
+		const newItems : CRFFormJson[] = ids.map((idsItem, i) => {
 			const newCrf = {}
 			Object.keys(idsItem).map((id, j) => {				
 				if(idsItem[id].length > 0) {
@@ -283,6 +283,8 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 			// }
 			
 		// });
+
+		console.log(newItems);
 
 		saveCRF(newItems);
 	}

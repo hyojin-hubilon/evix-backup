@@ -3,6 +3,7 @@ import ECrfBuilder from './components/ECrfBuilder';
 import { useState } from 'react';
 import ecrfApi from '@/apis/ecrf';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
+import { CRFFormJson } from '@/types/ecrf';
 
 const ECrf = () => {
 	const [title, setTitle] = useState<string>('');
@@ -10,7 +11,7 @@ const ECrf = () => {
 
 	const confirm = useConfirmation();
 
-	const handlePostCrf = async (crf) => {
+	const handlePostCrf = async (crf: CRFFormJson[]) => {
 
 		const crfToJson = crf
 
@@ -29,7 +30,7 @@ const ECrf = () => {
 		}
 	}
 
-	const handleSaveCrf = (crf) => {
+	const handleSaveCrf = (crf: CRFFormJson[]) => {
 		void handlePostCrf(crf);
 	}
 
