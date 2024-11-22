@@ -1,4 +1,4 @@
-import { Box, Container, Grid, OutlinedInput, Typography } from '@mui/material';
+import { Box, Grid, OutlinedInput } from '@mui/material';
 import ECrfBuilder from './components/ECrfBuilder';
 import { useState } from 'react';
 import ecrfApi from '@/apis/ecrf';
@@ -12,7 +12,7 @@ const ECrf = () => {
 
 	const handlePostCrf = async (crf) => {
 
-		const crfToJson = JSON.stringify(crf)
+		const crfToJson = crf
 
 		const resp = await ecrfApi.postNewCRF({
 			crf_title: title,

@@ -86,7 +86,7 @@ const StudyList = () => {
     // };
 
     useEffect(() => {
-        fetchStudies();
+        void fetchStudies();
         // fetchInvitedStudies();
     }, []);
 
@@ -109,11 +109,11 @@ const StudyList = () => {
     //     }
     // };
 
-	const handleSearchStudy = (text) => {
+	const handleSearchStudy = (text:string) => {
 		setSearchTerm(text);
 	}
 
-	const handleChangeDateSetting = (newValue) => {
+	const handleChangeDateSetting = (newValue:string) => {
         setActiveDateSetting(newValue);
 		if(newValue == 'full') {
 			setDateSet({
@@ -134,11 +134,11 @@ const StudyList = () => {
 		});
 	};
 
-	const handleChangePage = (_e, value) => {
+	const handleChangePage = (_e, value:number) => {
 		setPage(paginator(searched, value, itemPerPage).page);
 	}
 
-	const handleNextStudyOnboardig = (num) => {
+	const handleNextStudyOnboardig = (num:number) => {
 		setShowStudyOnboarding(num)
 	}
 
