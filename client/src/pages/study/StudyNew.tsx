@@ -27,9 +27,8 @@ import MedicineInfo from './components/study-new/MedicineInfo';
 import studyApi from '@/apis/study';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Drug } from '@/apis/test/drug/drugsAPI_TEST';
-import userApi from '@/apis/user';
 import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
-import { InviteMemberTempType, StudyDetail, StudySurveySetList } from '@/types/study';
+import { InviteMemberTempType, StdType, StudyDetail, StudySurveyList, StudySurveySetList } from '@/types/study';
 import MemberInvitement from './components/study-new/MemberInvitement';
 import MemberManagement from './components/study-new/MemberManagement';
 import StudyDeleteConfirmDialog from './components/study-new/StudyDeleteConfirmDialog';
@@ -41,7 +40,7 @@ import AddLinkIcon from '@mui/icons-material/AddLink';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import DatePicker from 'antd/lib/date-picker';
 
-const FormTooltip = ({ text }) => {
+const FormTooltip = ({text}: {text: React.ReactNode}) => {
     return (
         <Tooltip title={text} placement="right">
             <IconButton size="small" sx={{ fontSize: '1em' }}>
@@ -64,6 +63,7 @@ const StudyNew = () => {
     const [dateSet, setDateSet] = useState({ startDt: '', endDt: '' });
     // const [dateRange, setDateRange] = useState({ startDt: dayjs(), endDt: dayjs() });
 
+	const [stdType, setStdType] = useState<StdType>('ePRO');
     const [medicineYOrN, setMedicineYOrN] = useState<'true' | 'false'>('false');
     const [mode, setMode] = useState<'write' | 'edit'>('write');
     const [title, setTitle] = useState('');
@@ -76,6 +76,12 @@ const StudyNew = () => {
     const [inviteList, setInviteList] = useState<InviteMemberTempType[]>([]);
     const [managerList, setManagerList] = useState<any[]>([]);
     const [studySurveySetList, setStudySurveySetList] = useState<StudySurveySetList[]>([]);
+	const [surveyTitles, setSurveyTitles] = useState<string[]>();
+	const [eCrfSetList, setECrfSetList] = useState<any[]>([]);
+	const [eCRFTitles, setECRFTitles] = useState<string[]>();
+	const [eicYorN, setEicYorN] = useState<'Y' | 'N'>('N');
+
+
 
     const [members, setMembers] = useState<InviteMemberTempType[]>([]);
 
@@ -90,10 +96,11 @@ const StudyNew = () => {
     const confirm = useConfirmation();
 
     const state = location.state as { mode: 'write' | 'edit'; stdNo?: number };
-    const stdNo = location.state?.stdNo;
-    const [stdStatus, setStdStatus] = useState<String>('');
+    const stdNo = location.state?.stdNo as number;
+    const [stdStatus, setStdStatus] = useState<string>('');
 	const [rangePickerDisable, setRangePickerDisable] = useState<[boolean, boolean]>([false, false]);
-
+	
+	
     // 유효성 검사
     const [errors, setErrors] = useState({
         title: '',
@@ -102,7 +109,7 @@ const StudyNew = () => {
     });
 
     const validate = () => {
-        let tempErrors = { ...errors };
+        const tempErrors = { ...errors };
 
         tempErrors.title = title ? '' : t('study.please_enter_title'); //제목을 입력해 주세요
         tempErrors.participants = participants ? '' : t('study.please_enter_target'); //대상인원을 입력해 주세요
@@ -113,12 +120,21 @@ const StudyNew = () => {
         return Object.values(tempErrors).every((x) => x === '');
     };
 
+	const handleChangeStdType = (e:StdType) => {
+		setStdType(e);
+	}
+
     const changeDateRange = (e: DateRage) => {
         setDateRange(e);
     };
 
-    const handleChangeMedicine = (e) => {
+    const handleChangeMedicine = (e:"true" | "false") => {
         setMedicineYOrN(e);
+    };
+
+	
+	const handleChangeEicYorN = (e:"Y" | "N") => {
+        setEicYorN(e);
     };
 
     const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
@@ -134,7 +150,7 @@ const StudyNew = () => {
     type ActionType = 'delete' | 'pause' | 'done' | 'progression';
     const [actionType, setActionType] = useState<ActionType>('delete');
 
-    const handleOpenDialog = (action) => {
+    const handleOpenDialog = (action:ActionType) => {
         setActionType(action);
         setOpenDeleteConfirm(true);
     };
@@ -143,9 +159,7 @@ const StudyNew = () => {
         setOpenDeleteConfirm(false);
     };
 
-    const titles = studySurveySetList?.map((cycle: any) => {
-        return cycle.surveyList.map((survey: any) => survey.title).join(', ');
-    });
+    
 
     const handleSubmit = async () => {
         if (validate()) {
@@ -154,7 +168,7 @@ const StudyNew = () => {
                 deploy_method: 'IMMEDIATE',
                 std_status: 'STD-CREATED',
                 title,
-                std_type: 'E-PRO',
+                std_type: stdType === 'ePRO' ? 'E-PRO' : (stdType === 'eCOA' ? 'E-COA' : 'E-CRF'),
                 std_start_date: dateSet.startDt,
                 std_end_date: dateSet.endDt,
                 target_number: parseInt(participants),
@@ -166,6 +180,7 @@ const StudyNew = () => {
                 drug_manufacturer_name: drug?.productName ?? null,
                 studySurveySetList: studySurveySetList ?? [],
                 inviteList: members ?? [],
+				use_your_own_consent_form: stdType === 'eCRF' ?  eicYorN : null//Study Type이 eCRF일 경우 EIC를 DCT에 파일 업로드 없이 기관에서 받을 경우 필요한 컬럼
             };
 
             // FormData 객체 생성 및 데이터 추가
@@ -182,7 +197,7 @@ const StudyNew = () => {
             }
 
             try {
-                const response = await studyApi.createStudy(formData);
+                const response = await studyApi.createStudy(formData, stdType);
                 if (response.code === 200) {
                     navigate(-1);
                 }
@@ -229,7 +244,7 @@ const StudyNew = () => {
     useEffect(() => {
         if (state?.mode === 'edit') {
             setMode('edit');
-            fetchStudyDetail(state.stdNo); // 스터디 상세 정보 가져오기
+            void fetchStudyDetail(state.stdNo as number); // 스터디 상세 정보 가져오기
 			setRangePickerDisable([true, false]);
         }
     }, []);
@@ -259,32 +274,44 @@ const StudyNew = () => {
 
     const [studyDetail, setStudyDetail] = useState<StudyDetail>();
 
-    const fetchStudyDetail = async (stdNo) => {
+    const fetchStudyDetail = async (stdNo:number) => {
         try {
             const response = await studyApi.getStudyDetail(stdNo);
-            setStudyDetail(response.content as StudyDetail); //
 
-            setTitle(response.content['title']);
-            setParticipants(response.content['target_number']);
-            setDescription(response.content['description']);
-            setDisease(response.content['disease']);
+			const studyContents = response.content;
+            setStudyDetail(studyContents);
+			const std_type = studyContents.std_type === 'E-PRO' ? 'ePRO' : (studyContents.std_type === 'E-COA' ? 'eCOA' : 'eCRF');
+			setStdType(std_type);
+            setTitle(studyContents['title']);
+            setParticipants(studyContents['target_number']);
+            setDescription(studyContents['description']);
+            setDisease(studyContents['disease']);
             setDateSet({
-                startDt: response.content['std_start_date'],
-                endDt: response.content['std_end_date'],
+                startDt: studyContents['std_start_date'],
+                endDt: studyContents['std_end_date'],
             });
-            setStudySurveySetList(response.content['studySurveySetList']);
-            setInviteList(response.content['inviteList']);
-            setManagerList(response.content['managerList']);
+            setStudySurveySetList(studyContents['studySurveySetList']);
 
-            if (response.content['drug_code']) {
+			const titles = studyContents['studySurveySetList']?.map((cycle: StudySurveySetList) => {
+				return cycle.surveyList.map((survey: StudySurveyList) => survey.title).join(', ');
+			});
+
+			setSurveyTitles(titles);
+
+			setECrfSetList(studyContents['eCrfSetList']);
+
+            setInviteList(studyContents['inviteList']);
+            setManagerList(studyContents['managerList']);
+
+            if (studyContents['drug_code']) {
                 setDrug({
-                    itemCode: response.content['drug_code'],
-                    companyName: response.content['drug_brand_name'],
-                    productName: response.content['drug_manufacturer_name'],
+                    itemCode: studyContents['drug_code'],
+                    companyName: studyContents['drug_brand_name'],
+                    productName: studyContents['drug_manufacturer_name'],
                 });
                 setMedicineYOrN('true');
             }
-            setStdStatus(response.content['std_status']);
+            setStdStatus(studyContents['std_status']);
         } catch (error) {
             console.error('Failed to fetch study detail:', error);
         }
@@ -298,7 +325,7 @@ const StudyNew = () => {
             const studyData = {
                 std_no: stdNo,
                 title,
-                std_type: 'E-PRO',
+                std_type: stdType === 'ePRO' ? 'E-PRO' : (stdType === 'eCOA' ? 'E-COA' : 'E-CRF'),
                 std_start_date: dateSet.startDt,
                 std_end_date: dateSet.endDt,
                 target_number: parseInt(participants),
@@ -307,10 +334,11 @@ const StudyNew = () => {
                 drug_code: medicineYOrN === 'true' ? drug?.itemCode ?? null : null,
                 drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
                 drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
+				use_your_own_consent_form: stdType === 'eCRF' ?  eicYorN : null//Study Type이 eCRF일 경우 EIC를 DCT에 파일 업로드 없이 기관에서 받을 경우 필요한 컬럼
             };
 
             try {
-                const response = await studyApi.updateStudy(studyData);
+                const response = await studyApi.updateStudy(studyData, stdType);
                 if (response.code === 200) {
                     // Survey OR EIC 미연결
                     if (!studyDetail?.studySurveySetList || !studyDetail?.eic_name) {
@@ -348,7 +376,7 @@ const StudyNew = () => {
         const studyData = {
             std_no: stdNo,
             title,
-            std_type: 'E-PRO',
+			std_type: stdType === 'ePRO' ? 'E-PRO' : (stdType === 'eCOA' ? 'E-COA' : 'E-CRF'),
             std_start_date: dateSet.startDt,
             std_end_date: dateSet.endDt,
             target_number: parseInt(participants),
@@ -358,17 +386,18 @@ const StudyNew = () => {
             drug_brand_name: medicineYOrN === 'true' ? drug?.companyName : null,
             drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName : null,
             std_status: 'STD-PROGRESSION',
+			use_your_own_consent_form: stdType === 'eCRF' ?  eicYorN : null
         };
 
         try {
-            const response = await studyApi.deployStudy(studyData);
+            const response = await studyApi.deployStudy(studyData, stdType);
             if (response.code === 200) {
                 const inviteCodeRes = await studyApi.createParticipantInviteCode({
                     std_no: stdNo,
                 });
 
                 if (inviteCodeRes.code === 200) {
-                    confirm({
+                    void confirm({
                         description: t('study.study_has_been_deployed'), // Study가 배포되었습니다.
                         variant: 'info',
                     }).then(() => navigate('/study'));
@@ -460,9 +489,10 @@ const StudyNew = () => {
                         <Grid item xs={9}>
                             <FormControl size="small">
                                 <Select
-                                    value="ePRO"
+                                    value={stdType}
                                     disabled={mode === 'edit'} // 수정 모드에서는 비활성화
                                     sx={{ width: '10rem' }}
+									onChange={(e) => handleChangeStdType(e.target.value as StdType)}
                                 >
                                     <MenuItem value="ePRO">ePRO</MenuItem>
                                     <MenuItem value="eCOA" disabled>
@@ -474,14 +504,14 @@ const StudyNew = () => {
                                             sx={{ fontSize: '0.6rem', ml: '5px' }}
                                         />
                                     </MenuItem>
-                                    <MenuItem value="eCRF" disabled>
+                                    <MenuItem value="eCRF">
                                         eCRF
-                                        <Chip
+                                        {/* <Chip
                                             color="warning"
                                             size="small"
                                             label="COMING SOON"
                                             sx={{ fontSize: '0.6rem', ml: '5px' }}
-                                        />
+                                        /> */}
                                     </MenuItem>
                                 </Select>
                             </FormControl>
@@ -640,7 +670,7 @@ const StudyNew = () => {
                                     aria-labelledby="medicine-group"
                                     name="medicine-group"
                                     value={medicineYOrN}
-                                    onChange={(e) => handleChangeMedicine(e.target.value)}
+                                    onChange={(e) => handleChangeMedicine(e.target.value as 'true' | 'false')}
                                     sx={{
                                         display: 'flex',
                                         flexDirection: 'row',
@@ -672,50 +702,99 @@ const StudyNew = () => {
                         <>
                             <Divider flexItem />
 
-                            {/* Survey */}
-                            <Grid container alignItems="flex-start">
-                                <Grid item xs={3}>
-                                    <Box
-                                        display="flex"
-                                        alignItems="center"
-                                        sx={{ pt: '0.2rem' }}
-                                        gap={0.5}
-                                    >
-                                        <Typography variant="h5">Survey</Typography>
-                                        <FormTooltip text={t('study.connect_the_survey')} />
-                                        {/* Connect the Survey before Study deployment. */}
-                                    </Box>
-                                </Grid>
-                                <Grid item xs={9}>
-                                    <Button
-                                        variant="contained"
-                                        onClick={() => {
-                                            setIsOpenSurvey(true);
-                                        }}
-                                        sx={{ minWidth: '166px' }}
-                                    >
-                                        <AddLinkIcon sx={{ mr: '5px', fontSize: '1.2rem' }} />
-                                        {t('study.connect_survey')}
-                                        {/* Survey 연결 */}
-                                    </Button>
-                                    {'  '}
-                                    {titles && titles.length > 0 ? (
-                                        <span
-                                            style={{
-                                                fontWeight: 'bold',
-                                                color: primary.main,
-                                            }}
-                                        >
-                                            {titles}
-                                        </span>
-                                    ) : (
-                                        <span style={{ color: 'red' }}>
-                                            {t('study.make_sure_connect')}
-                                            {/* * Study 배포전에 반드시 연결해주세요. */}
-                                        </span>
-                                    )}
-                                </Grid>
-                            </Grid>
+                            {/* eCRF or Survey */}
+							{
+								stdType === 'eCRF' ?
+								
+								<Grid container alignItems="flex-start">
+									<Grid item xs={3}>
+										<Box
+											display="flex"
+											alignItems="center"
+											sx={{ pt: '0.2rem' }}
+											gap={0.5}
+										>
+											<Typography variant="h5">eCRF Sheet</Typography>
+											<FormTooltip text={t('study.connect_the_eCRF')} />
+											{/* Connect the Survey before Study deployment. */}
+										</Box>
+									</Grid>
+									<Grid item xs={9}>
+										<Button
+											variant="contained"
+											onClick={() => {
+												setIsOpenSurvey(true);
+											}}
+											sx={{ minWidth: '166px' }}
+										>
+											<AddLinkIcon sx={{ mr: '5px', fontSize: '1.2rem' }} />
+											{t('study.connect_eCRF')}
+											{/* eCRF 연결 */}
+										</Button>
+										{'  '}
+										{surveyTitles && surveyTitles.length > 0 ? (
+											<span
+												style={{
+													fontWeight: 'bold',
+													color: primary.main,
+												}}
+											>
+												{surveyTitles}
+											</span>
+										) : (
+											<span style={{ color: 'red' }}>
+												{t('study.make_sure_connect')}
+												{/* * Study 배포전에 반드시 연결해주세요. */}
+											</span>
+										)}
+									</Grid>
+								</Grid>
+								:
+								<Grid container alignItems="flex-start">
+									<Grid item xs={3}>
+										<Box
+											display="flex"
+											alignItems="center"
+											sx={{ pt: '0.2rem' }}
+											gap={0.5}
+										>
+											<Typography variant="h5">Survey</Typography>
+											<FormTooltip text={t('study.connect_the_survey')} />
+											{/* Connect the Survey before Study deployment. */}
+										</Box>
+									</Grid>
+									<Grid item xs={9}>
+										<Button
+											variant="contained"
+											onClick={() => {
+												setIsOpenSurvey(true);
+											}}
+											sx={{ minWidth: '166px' }}
+										>
+											<AddLinkIcon sx={{ mr: '5px', fontSize: '1.2rem' }} />
+											{t('study.connect_survey')}
+											{/* Survey 연결 */}
+										</Button>
+										{'  '}
+										{surveyTitles && surveyTitles.length > 0 ? (
+											<span
+												style={{
+													fontWeight: 'bold',
+													color: primary.main,
+												}}
+											>
+												{surveyTitles}
+											</span>
+										) : (
+											<span style={{ color: 'red' }}>
+												{t('study.make_sure_connect')}
+												{/* * Study 배포전에 반드시 연결해주세요. */}
+											</span>
+										)}
+									</Grid>
+								</Grid>
+							}
+                            
 
                             {/* EIC(전자동의서) */}
                             <Grid container alignItems="center">
@@ -737,12 +816,74 @@ const StudyNew = () => {
                                                     </React.Fragment>
                                                 ))}
                                         </Typography>
-                                        <FormTooltip text={t('study.connect_the_eic')} />
-                                        {/* Connect the EIC before Study deployment. */}
+										{
+											eicYorN !== 'Y' &&
+											<FormTooltip text={ t('study.connect_the_eic') } />
+										}
+                                        
                                     </Box>
                                 </Grid>
                                 <Grid item xs={9}>
-                                    <Button
+									{
+										stdType === 'eCRF' ?
+										<Box>
+										<FormControl size="small">
+											<RadioGroup
+												aria-labelledby="medicine-group"
+												name="medicine-group"
+												value={eicYorN}
+												onChange={(e) => handleChangeEicYorN(e.target.value as 'Y' | 'N')}
+												sx={{
+													display: 'flex',
+													flexDirection: 'row',
+												}}
+											>
+												<FormControlLabel
+													value="Y"
+													control={<Radio size="small" />}
+													label={t('study.yes')} //있음
+												/>
+												<FormControlLabel
+													value="N"
+													control={<Radio size="small" />}
+													label={t('study.no')} //없음
+												/>
+											</RadioGroup>
+										</FormControl>
+										<>
+										{
+											eicYorN === 'N' && <>
+											<Button
+												variant="contained"
+												onClick={handleOpenUploadBasePdf}
+												sx={{ minWidth: '166px' }}
+												>
+													<AddLinkIcon sx={{ mr: '5px', fontSize: '1.2rem' }} />
+													{t('study.connect_eic')}
+													{/* EIC 연결 */}
+											</Button>{' '}
+											{basePdfFile?.name ? (
+												<span
+													style={{
+														fontWeight: 'bold',
+														color: primary.main,
+													}}
+												>
+													{basePdfFile?.name}
+												</span>
+											) : (
+												<span style={{ color: 'red' }}>
+													{t('study.make_sure_connect')}
+													{/* * Study 배포전에 반드시 연결해주세요. */}
+												</span>
+											)}
+										</>
+										}
+										</>
+										</Box>
+										:
+										<>
+										<Button
                                         variant="contained"
                                         onClick={handleOpenUploadBasePdf}
                                         sx={{ minWidth: '166px' }}
@@ -766,6 +907,10 @@ const StudyNew = () => {
                                             {/* * Study 배포전에 반드시 연결해주세요. */}
                                         </span>
                                     )}
+									</>
+
+									}
+                                    
                                 </Grid>
                             </Grid>
 

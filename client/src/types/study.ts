@@ -146,6 +146,14 @@ interface Invite {
     accepted_at: string | null;
 }
 
+export interface StudySurveyList {
+	set_no: number;
+	survey_no: number;
+	survey_cnt: number;
+	title: string;
+	sort: number;
+}
+
 export interface StudySurveySetList {
     set_no: number;
     std_no: number;
@@ -154,13 +162,7 @@ export interface StudySurveySetList {
     survey_cycle: 'DAILY' | 'WEEKLY' | 'MONTHLY';
     number_in_cycle: number;
     sort: number;
-    surveyList: {
-        set_no: number;
-        survey_no: number;
-        survey_cnt: number;
-        title: string;
-        sort: number;
-    }[];
+    surveyList: StudySurveyList[]
 }
 
 export interface StudyDetail {
@@ -193,6 +195,7 @@ export interface StudyDetail {
     deployed_at: string | null;
     std_privilege: string;
     studySurveySetList: StudySurveySetList[];
+	eCrfSetList : [];
     managerList: {
         std_no: number;
         user_no: number;
@@ -292,3 +295,5 @@ export interface ParticipantsList {
     total_number_survey: number;
     participation_status: 'PROGRESS' | 'COMPLETE';
 }
+
+export type StdType = 'ePRO' | 'eCOA' | 'eCRF';

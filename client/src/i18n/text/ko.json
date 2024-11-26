@@ -141,6 +141,8 @@
         "ecrf_ecrf": "- eCRF: eCRF (electronic Case Report Form) is a system used to collect and manage clinical data of patients electronically in clinical research.",
         "connect_the_survey": "Study 배포전에 Survey를 연결해주세요.",
         "connect_survey": "Survey 연결",
+		"connect_the_eCRF" : "Study 배포전에 eCRF Sheet를 연결해주세요.",
+		"connect_eCRF": "eCRF Sheet 연결",
         "make_sure_connect": " * Study 배포전에 반드시 연결해주세요.",
         "eic": "EIC(전자동의서)",
         "connect_the_eic": "Study 배포전에 EIC(전자동의서)를 연결해주세요.",

@@ -29,7 +29,10 @@ module.exports = {
 		],
 		"@typescript-eslint/no-explicit-any": ["warn"],//any 선언시 eslint 오류 off
 		"@typescript-eslint/no-unsafe-assignment" : ["warn"],
-		"@typescript-eslint/no-unused-vars" : ["off"]
+		"@typescript-eslint/no-unused-vars" : ["off"],
+		"@typescript-eslint/no-unsafe-member-access" : ["warn"],
+		"@typescript-eslint/no-misused-promises" : ["off"],
+		"@typescript-eslint/no-floating-promises" : ["off"]
 
 	}
 }

@@ -147,6 +147,8 @@
         "you_can_search_drug_information": "You can search drug information using KFDA open API, FDA open API.",
         "connect_the_survey": "Connect the Survey before Study deployment.",
         "connect_survey": "Link to Survey",
+		"connect_the_eCRF" : "Connect the eCRF sheet before Study deployment.",
+		"connect_eCRF": "Link to eCRF Sheet",
         "make_sure_connect": " * Please make sure to connect before distributing the study.",
         "eic": "EIC \n (Electronic Informed Consent)",
         "connect_the_eic": "Connect the EIC before Study deployment.",

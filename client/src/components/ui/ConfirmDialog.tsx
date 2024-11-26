@@ -15,7 +15,7 @@ export interface ConfirmationOptions {
 	catchOnCancel?: boolean;
 	variant?: "danger" | "info" | undefined;
 	title?: string | undefined;
-	description?: any;
+	description?: string;
 }
 
 interface ConfirmationDialogProps extends ConfirmationOptions {
@@ -31,7 +31,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 	onSubmit,
 	onClose
 }) => {
-  	return (
+	return (
 		<Dialog open={open ? open : false} maxWidth="sm" aria-hidden="false" aria-modal="true">
 			{
 				title && 
@@ -76,5 +76,5 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 				}
 			</DialogActions>
 		</Dialog>
-  	);
+	);
 };

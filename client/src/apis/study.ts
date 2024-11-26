@@ -8,7 +8,7 @@ import {
     file_api,
 } from '@/apis/axios-common';
 import * as StudyApiType from '@/types/study';
-import { ParticipantsList } from '@/types/study';
+import { ParticipantsList, StdType } from '@/types/study';
 
 const BASE_API_URL = '/researcher/study';
 
@@ -18,13 +18,22 @@ const studyApi = {
      * @param data
      * @returns
      */
-    createStudy: async (data: any) => {
+    createStudy: async (data: any, stdType:StdType) => {
         try {
-            const responseData = await file_api<{}>(`${BASE_API_URL}`, 'post', data);
+			if(stdType === 'eCRF') {
+				const responseData = await file_api<object>(`${BASE_API_URL}/e-crf`, 'post', data);
 
-            console.log(responseData);
+				console.log(responseData);
 
-            return responseData;
+				return responseData;
+			} else {
+				const responseData = await file_api<object>(`${BASE_API_URL}/e-pro`, 'post', data);
+
+				console.log(responseData);
+
+				return responseData;
+			}
+            
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -36,12 +45,20 @@ const studyApi = {
      * @param data
      * @returns
      */
-    updateStudy: async (data: any) => {
+    updateStudy: async (data: any, stdType:StdType) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/basic-info`, 'put', data);
-            console.log('responseData', responseData);
-            console.log('data', data);
-            return responseData;
+			if(stdType === 'eCRF') {
+				const responseData = await api<object>(`${BASE_API_URL}/e-crf`, 'put', data);
+				console.log('responseData', responseData);
+				console.log('data', data);
+				return responseData;
+			} else {
+				const responseData = await api<object>(`${BASE_API_URL}/e-pro`, 'put', data);
+				console.log('responseData', responseData);
+				console.log('data', data);
+				return responseData;
+			}
+            
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -56,7 +73,7 @@ const studyApi = {
     deleteStudy: async (deleteData: { std_no: number }) => {
         try {
             console.log(deleteData);
-            const responseData = await api<{}>(`${BASE_API_URL}`, 'delete', deleteData);
+            const responseData = await api<object>(`${BASE_API_URL}`, 'delete', deleteData);
 
             return responseData;
         } catch (error) {
@@ -90,7 +107,7 @@ const studyApi = {
      */
     getStudyManager: async (stdNo: number) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/manager`, 'get');
+            const responseData = await api<object>(`${BASE_API_URL}/${stdNo}/manager`, 'get');
 
             return responseData;
         } catch (error) {
@@ -106,7 +123,7 @@ const studyApi = {
      */
     getInvitedStudyManager: async (stdNo: number) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/manager-invite`, 'get');
+            const responseData = await api<object>(`${BASE_API_URL}/${stdNo}/manager-invite`, 'get');
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
@@ -121,7 +138,7 @@ const studyApi = {
      */
     getStudyOverview: async (stdNo: number) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/overview`, 'get');
+            const responseData = await api<object>(`${BASE_API_URL}/${stdNo}/overview`, 'get');
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
@@ -136,7 +153,7 @@ const studyApi = {
      */
     getStudySurvey: async (stdNo: number) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/${stdNo}/survey`, 'get');
+            const responseData = await api<object>(`${BASE_API_URL}/${stdNo}/survey`, 'get');
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
@@ -152,7 +169,7 @@ const studyApi = {
      */
     myStudyList: async (pageNum: number, elementSize: number) => {
         try {
-            const responseData = await api<{}>(
+            const responseData = await api<object>(
                 `${BASE_API_URL}/my-list/${pageNum}/${elementSize}`,
                 'get'
             );
@@ -169,7 +186,7 @@ const studyApi = {
      */
     fullMyStudyList: async () => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/full-my-list`, 'get');
+            const responseData = await api<object>(`${BASE_API_URL}/full-my-list`, 'get');
 
             return responseData;
         } catch (error) {
@@ -185,7 +202,7 @@ const studyApi = {
      */
     updateStudyStatus: async (data: any) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/study-status`, 'put', data);
+            const responseData = await api<object>(`${BASE_API_URL}/study-status`, 'put', data);
 
             return responseData;
         } catch (error) {
@@ -202,7 +219,7 @@ const studyApi = {
      */
     deleteStudyMember: async (std_no: number, user_no: number) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/study-user`, 'delete', {
+            const responseData = await api<object>(`${BASE_API_URL}/study-user`, 'delete', {
                 std_no,
                 user_no,
             });
@@ -220,7 +237,7 @@ const studyApi = {
      */
     inviteStudyMember: async (invites: any) => {
         try {
-            const responseData = await api<{}>(
+            const responseData = await api<object>(
                 `${BASE_API_URL}/study-user-invite`,
                 'post',
                 invites
@@ -240,7 +257,7 @@ const studyApi = {
      */
     updateMemberPrivilege: async (updateData: StudyApiType.UpdateMemberPrivilegeRequest) => {
         try {
-            const responseData = await api<{}>(
+            const responseData = await api<object>(
                 `${BASE_API_URL}/study-user-privilege`,
                 'put',
                 updateData
@@ -258,7 +275,7 @@ const studyApi = {
      */
     unauthorizedInvitation: async () => {
         try {
-            const responseData = await api<{}>(
+            const responseData = await api<object>(
                 `${BASE_API_URL}/my-list-unauthorized-invitation`,
                 'get'
             );
@@ -273,11 +290,18 @@ const studyApi = {
      * Study 배포
      * @param deployData
      */
-    deployStudy: async (deployData) => {
+    deployStudy: async (deployData, stdType:StdType) => {
         try {
-            // const response = await file_api<{}>(`${BASE_API_URL}/deploy`, 'put', deployData);
-            const response = await api<{}>(`${BASE_API_URL}/deploy`, 'put', deployData);
-            return response;
+			if(stdType === 'eCRF') {
+				// const response = await file_api<object>(`${BASE_API_URL}/deploy`, 'put', deployData);
+				const response = await api<object>(`${BASE_API_URL}/deploy/e-crf`, 'put', deployData);
+				return response;
+			} else {
+				// const response = await file_api<object>(`${BASE_API_URL}/deploy`, 'put', deployData);
+				const response = await api<object>(`${BASE_API_URL}/deploy/e-pro`, 'put', deployData);
+				return response;
+			}
+            
         } catch (error) {
             const e = error as ResCommonError;
             throw e;
@@ -310,7 +334,7 @@ const studyApi = {
      */
     disconnectSurvey: async (data) => {
         try {
-            const responseData = await api<{}>(
+            const responseData = await api<object>(
                 `${BASE_API_URL}/study-survey/disconnect`,
                 'delete',
                 data
@@ -328,7 +352,7 @@ const studyApi = {
      */
     postSurvey: async (data) => {
         try {
-            const responseData = await api<{}>(`${BASE_API_URL}/study-survey-set`, 'post', data);
+            const responseData = await api<object>(`${BASE_API_URL}/study-survey-set`, 'post', data);
             return responseData;
         } catch (error) {
             const e = error as ResCommonError;
@@ -341,9 +365,9 @@ const studyApi = {
      * @param stdNo
      * @returns
      */
-    getTotalParticipants: async (stdNo: Number) => {
+    getTotalParticipants: async (stdNo: number) => {
         try {
-            const responseData = await api<{}>(
+            const responseData = await api<object>(
                 `${BASE_API_URL}/${stdNo}/overview/number-of-participant-study`,
                 'get'
             );
@@ -359,9 +383,9 @@ const studyApi = {
      * @param stdNo
      * @returns
      */
-    getParticipationRateByAge: async (stdNo: Number) => {
+    getParticipationRateByAge: async (stdNo: number) => {
         try {
-            const responseData = await api<{}>(
+            const responseData = await api<object>(
                 `${BASE_API_URL}/${stdNo}/overview/number-of-participant-study-by-age`,
                 'get'
             );
@@ -375,9 +399,9 @@ const studyApi = {
     /**
      * Study에 연결된 임상시험 원본 EIC 다운로드
      */
-    downloadEicFile: async (stdNo: Number, fileName: string) => {
+    downloadEicFile: async (stdNo: number, fileName: string) => {
         try {
-            const responseData = await api<{}>(
+            const responseData = await api<object>(
                 `${BASE_API_URL}/original-eic-download/${stdNo}/${fileName}`,
                 'get'
             );
@@ -391,7 +415,7 @@ const studyApi = {
     /**
      * Study에 연결된 임상시험 원본 EIC 삭제
      */
-    deleteEicFile: async (stdNo: Number) => {
+    deleteEicFile: async (stdNo: number) => {
         try {
             const responseData = await api<number>(`${BASE_API_URL}/delete-eic`, 'delete', {
                 std_no: stdNo,
@@ -423,7 +447,7 @@ const studyApi = {
      * 임상시험 참여자 목록
      * @param stdNo
      */
-    participantList: async (stdNo: Number) => {
+    participantList: async (stdNo: number) => {
         try {
             const responseData = await api<ParticipantsList[]>(
                 `${BASE_API_URL}/${stdNo}/list-participant`,
@@ -440,9 +464,9 @@ const studyApi = {
      * @param stdNo
      * @returns
      */
-    recentParticipantLogs: async (stdNo: Number) => {
+    recentParticipantLogs: async (stdNo: number) => {
         try {
-            const responseData = await api<{}>(
+            const responseData = await api<object>(
                 `${BASE_API_URL}/${stdNo}/overview/recent-participant-logs`,
                 'get'
             );
@@ -459,9 +483,9 @@ const studyApi = {
      * @param periodType (연간-YEAR, 월간-MONTH, 주간-WEEK)
      * @returns
      */
-    participantCountByPeriod: async (stdNo: Number, periodType: 'YEAR' | 'MONTH' | 'WEEK') => {
+    participantCountByPeriod: async (stdNo: number, periodType: 'YEAR' | 'MONTH' | 'WEEK') => {
         try {
-            const responseData = await api<{}>(
+            const responseData = await api<object>(
                 `${BASE_API_URL}/${stdNo}/overview/number-of-gender-participant-by-study/${periodType}`,
                 'get'
             );
@@ -478,7 +502,7 @@ const studyApi = {
      */
     createParticipantInviteCode: async (std_no) => {
         try {
-            const response = await api<{}>(
+            const response = await api<object>(
                 `${BASE_API_URL}/create-participant-invite-code`,
                 'post',
                 std_no
