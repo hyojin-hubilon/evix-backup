@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SurveyListTable, { SurveyAdd } from './SurveyListTable';
-import { useEffect, useState } from 'react';
+import { FormEvent, FormEventHandler, useEffect, useState } from 'react';
 import { RegistrableSurvey, SurveyDetail } from '@/types/survey';
 import DraggableList from './DraggableList';
 import { DropResult } from '@hello-pangea/dnd';
@@ -336,7 +336,7 @@ const SurveyConnectDialog = ({
         handleClose();
     };
 
-    const handleSearchSurvey = (e) => {
+    const handleSearchSurvey = (e:FormEvent) => {
         e.preventDefault();
         const searched = surveyList.filter((survey) =>
             survey.title.toLowerCase().includes(searchText.toLowerCase())
@@ -349,7 +349,7 @@ const SurveyConnectDialog = ({
         setSearchedResult(surveyList);
     };
 
-    const handleSelectPreview = (surveyNo) => {
+    const handleSelectPreview = (surveyNo:number) => {
         console.log(surveyNo);
         setPreviewSurveyNo(surveyNo);
     };
@@ -361,6 +361,7 @@ const SurveyConnectDialog = ({
                 onClose={handleClose}
                 aria-labelledby="survey-connect-title"
                 aria-describedby="survey-connect-description"
+				aria-hidden="false"
                 maxWidth="lg"
                 scroll="body"
             >

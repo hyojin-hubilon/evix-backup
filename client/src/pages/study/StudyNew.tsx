@@ -39,6 +39,8 @@ import { useUserProfile } from '@/context/UserProfileContext';
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import DatePicker from 'antd/lib/date-picker';
+import ECrfConnectDialog from './components/study-new/ECrfConnectDialog';
+import { MyCRFList } from '@/types/ecrf';
 
 const FormTooltip = ({text}: {text: React.ReactNode}) => {
     return (
@@ -73,9 +75,11 @@ const StudyNew = () => {
     const [eicFile, setEicFile] = useState<File | null>(null);
     const [isOpenMember, setIsOpenMember] = useState(false);
     const [isOpenSurvey, setIsOpenSurvey] = useState(false);
+	const [isOpenCrf, setIsOpenCrf] = useState(false);
     const [inviteList, setInviteList] = useState<InviteMemberTempType[]>([]);
     const [managerList, setManagerList] = useState<any[]>([]);
     const [studySurveySetList, setStudySurveySetList] = useState<StudySurveySetList[]>([]);
+	const [studyCrfSetList, setStudyCrfSetList] = useState<MyCRFList[]>([]);
 	const [surveyTitles, setSurveyTitles] = useState<string[]>();
 	const [eCrfSetList, setECrfSetList] = useState<any[]>([]);
 	const [eCRFTitles, setECRFTitles] = useState<string[]>();
@@ -214,6 +218,10 @@ const StudyNew = () => {
     const handleCloseSurvey = () => {
         setIsOpenSurvey(!isOpenSurvey);
     };
+
+	const handleCloseCrf = () => {
+		setIsOpenCrf(!isOpenCrf);
+	}
 
     const handleOpenUploadBasePdf = () => {
         setIsUploadBasePdfOpen(true);
@@ -723,7 +731,7 @@ const StudyNew = () => {
 										<Button
 											variant="contained"
 											onClick={() => {
-												setIsOpenSurvey(true);
+												setIsOpenCrf(true);
 											}}
 											sx={{ minWidth: '166px' }}
 										>
@@ -1163,6 +1171,14 @@ const StudyNew = () => {
                 handleClose={handleCloseSurvey}
                 setStudySurveySetList={setStudySurveySetList}
                 initialSurveySetList={null}
+                mode="create"
+            />
+
+			<ECrfConnectDialog
+                isOpen={isOpenCrf}
+                handleClose={handleCloseCrf}
+                setStudyCrfSetList={setStudyCrfSetList}
+                initialCrfSetList={null}
                 mode="create"
             />
             <StudyDeleteConfirmDialog

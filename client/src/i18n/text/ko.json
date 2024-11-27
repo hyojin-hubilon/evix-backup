@@ -168,7 +168,9 @@
         "view_results": "결과 보기",
         "settings": "세팅",
         "survey_successfully_deleted": "설문이 성공적으로 삭제되었습니다.",
+		"crf_successfully_deleted": "ECRF가 성공적으로 삭제되었습니다.",
         "failed_delete_survey": "설문 삭제에 실패했습니다.",
+		"failed_delete_crf": "ECRF 삭제에 실패했습니다.",
         "new_survey_connected": "새로운 설문이 성공적으로 연결되었습니다.",
         "failed_connect_survey": "설문 연결에 실패했습니다.",
         "no_new_surveys": "새로 추가된 설문이 없습니다.",
@@ -238,7 +240,16 @@
 		"no_studies_created" : "There are no studies created.",
 		"start_your_project" : "Start your project by creating a new Study.",
 		"no_surveys_connect" : "연결 가능한 설문이 없습니다.",
-		"create_a_survey" : "설문 생성하기"
+		"create_a_survey" : "설문 생성하기",
+		"monthly" : "월",
+		"weekly" : "주",
+		"daily" : "일",
+		"crf_connection": "eCRF Sheet 연결",
+		"connect_one_or_more_crf" : "1개 이상의 eCRF Sheet를 연결해주세요.",
+		"if_there_are_multiple_crfs" : "eCRF Sheet가 여러개일 경우, 설정 순서에 따라 진행됩니다.",
+		"crf_title" : "eCRF Sheet 제목",
+		"no_crf_connect" :  "연결 가능한 eCRF Sheet가 없습니다.",
+		"create_a_crf" : "eCRF Sheet 생성하기"
     },
     "eic": {
         "has_been_saved": "전자동의서가 저장되었습니다.",

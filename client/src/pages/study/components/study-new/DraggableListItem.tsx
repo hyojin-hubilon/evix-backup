@@ -4,6 +4,7 @@ import { RegistrableSurvey } from '@/types/survey';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import { useState } from 'react';
 import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 export type DraggableItemListProps = {
     item: RegistrableSurvey;
@@ -25,6 +26,8 @@ const DraggableListItem = ({
     const [survey, setSurvey] = useState(item);
     const theme = useTheme();
     const { grey } = theme.palette;
+	
+	const { t, i18n } = useTranslation();
 
     const handleChangeFrequency = (e) => {
         const changedSurvey = { ...survey, frequency: e };
@@ -66,32 +69,69 @@ const DraggableListItem = ({
                     <Grid container alignItems="center" gap={1}>
                         <DragHandleIcon sx={{ color: grey[500] }} />
                         <ListItemText primary={survey.title} sx={{ maxWidth: '280px' }} />
-                        <Select
-                            size="small"
-                            value={survey.frequency}
-                            onChange={(e) => handleChangeFrequency(e.target.value)}
-                            sx={{ width: '60px', bgcolor: 'white' }}
-                            disabled={isDisabled}
-                        >
-                            <MenuItem value="monthly">월</MenuItem>
-                            <MenuItem value="weekly">주</MenuItem>
-                            <MenuItem value="daily">일</MenuItem>
-                        </Select>
-                        {/* 마다 */}
-                        {t('study.repeat')}
-                        <Select
-                            size="small"
-                            value={survey.times}
-                            onChange={(e) => handleChangeTimes(e.target.value)}
-                            sx={{ width: '60px', bgcolor: 'white' }}
-                            disabled={isDisabled}
-                        >
-                            <MenuItem value={1}>1</MenuItem>
-                            <MenuItem value={2}>2</MenuItem>
-                            <MenuItem value={3}>3</MenuItem>
-                        </Select>
-                        {/* 회 반복 */}
-                        {t('study.time_per')}
+
+
+						{
+							i18n.language === 'en' ? <>
+							
+							{t('study.repeat')}
+							<Select
+								size="small"
+								value={survey.times}
+								onChange={(e) => handleChangeTimes(e.target.value)}
+								sx={{ width: '60px', bgcolor: 'white' }}
+								disabled={isDisabled}
+							>
+								<MenuItem value={1}>1</MenuItem>
+								<MenuItem value={2}>2</MenuItem>
+								<MenuItem value={3}>3</MenuItem>
+							</Select>
+							{/* 회 반복 */}
+							{t('study.time_per')}
+							<Select
+								size="small"
+								value={survey.frequency}
+								onChange={(e) => handleChangeFrequency(e.target.value)}
+								sx={{ width: '90px', bgcolor: 'white' }}
+								disabled={isDisabled}
+							>
+								<MenuItem value="monthly">{t('study.monthly')}</MenuItem>
+								<MenuItem value="weekly">{t('study.weekly')}</MenuItem>
+								<MenuItem value="daily">{t('study.daily')}</MenuItem>
+							</Select>
+							{/* 마다 */}
+							</>
+							:
+							<>
+							<Select
+								size="small"
+								value={survey.frequency}
+								onChange={(e) => handleChangeFrequency(e.target.value)}
+								sx={{ width: '60px', bgcolor: 'white' }}
+								disabled={isDisabled}
+							>
+								<MenuItem value="monthly">{t('study.monthly')}</MenuItem>
+								<MenuItem value="weekly">{t('study.weekly')}</MenuItem>
+								<MenuItem value="daily">{t('study.daily')}</MenuItem>
+							</Select>
+							{/* 마다 */}
+							{t('study.repeat')}
+							<Select
+								size="small"
+								value={survey.times}
+								onChange={(e) => handleChangeTimes(e.target.value)}
+								sx={{ width: '60px', bgcolor: 'white' }}
+								disabled={isDisabled}
+							>
+								<MenuItem value={1}>1</MenuItem>
+								<MenuItem value={2}>2</MenuItem>
+								<MenuItem value={3}>3</MenuItem>
+							</Select>
+							{/* 회 반복 */}
+							{t('study.time_per')}
+						</>
+						}
+                        
                         <Button color="error" onClick={() => handleDeleteSurvey()}>
                             {/* 삭제 */}
                             {t('common.delete')}

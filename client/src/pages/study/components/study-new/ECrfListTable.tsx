@@ -1,4 +1,3 @@
-import { RegistrableSurvey } from '@/types/survey';
 import {
     TableContainer,
     Paper,
@@ -8,53 +7,52 @@ import {
     TableCell,
     TableBody,
     useTheme,
-    FormControl,
-    Checkbox,
     IconButton,
 } from '@mui/material';
 import dayjs from 'dayjs';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import PreviewIcon from '@mui/icons-material/Preview';
 import { t } from 'i18next';
+import { MyCRFList } from '@/types/ecrf';
 
-export type SurveyAdd = {
+export type CrfAdd = {
     type: 'add' | 'delete';
-    survey: RegistrableSurvey;
+    crf: MyCRFList;
 };
 
-type SurveyListTableProps = {
-    surveyList: RegistrableSurvey[];
-    selectedSurvey: RegistrableSurvey[];
-    handleSelected: (selectedSurvey: SurveyAdd) => void;
-    handleSelectPreview: (previewSurveyNo: number) => void;
+type ECrfListTableProps = {
+    crfList: MyCRFList[];
+    selectedCrf: MyCRFList[];
+    handleSelected: (selectedCrf: CrfAdd) => void;
+    // handleSelectPreview: (previewSurveyNo: number) => void;
 };
-const SurveyListTable = ({
-    surveyList,
-    selectedSurvey,
+const ECrfListTable = ({
+    crfList,
+    selectedCrf,
     handleSelected,
-    handleSelectPreview,
-}: SurveyListTableProps) => {
+    // handleSelectPreview,
+}: ECrfListTableProps) => {
     const theme = useTheme();
     const { divider } = theme.palette;
     const ref = useRef({});
 
-    const handleSelectSurvey = (e: ChangeEvent<HTMLInputElement>, survey) => {
+    const handleSelectCrf = (e: ChangeEvent<HTMLInputElement>, crf) => {
         const checked = e.target.checked;
-        if (checked) handleSelected({ type: 'add', survey: survey });
-        else handleSelected({ type: 'delete', survey: survey });
+        if (checked) handleSelected({ type: 'add', crf: crf });
+        else handleSelected({ type: 'delete', crf: crf });
     };
 
     useEffect(() => {
         for (const key in ref.current) {
             if (ref.current[key]) {
                 const numKey = Number(key);
-                const findIndex = selectedSurvey.findIndex((survey) => survey.survey_no === numKey);
+                const findIndex = selectedCrf.findIndex((crf) => crf.crf_no === numKey);
 
                 if (findIndex > -1) ref.current[key].checked = true;
                 else ref.current[key].checked = false;
             }
         }
-    }, [selectedSurvey, surveyList]);
+    }, [selectedCrf, crfList]);
 
     return (
         <TableContainer component={Paper}>
@@ -75,16 +73,16 @@ const SurveyListTable = ({
 							{t('study.updated_at')}
 							{/* 업데이트 */}
 						</TableCell>
-                        <TableCell align="center">
+                        {/* <TableCell align="center">
 							{t('common.preview')}
+							</TableCell> */}
 							{/* 미리보기 */}
-							</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {surveyList.map((survey) => (
+                    {crfList.map((crf) => (
                         <TableRow
-                            key={survey.survey_no}
+                            key={crf.crf_no}
                             sx={{
                                 'td, th': { borderBottom: `1px solid ${divider}` },
                                 '&:last-child td, &:last-child th': { border: 0 },
@@ -93,24 +91,24 @@ const SurveyListTable = ({
                             <TableCell align="center">
                                 <input
                                     type="checkbox"
-                                    onChange={(e) => handleSelectSurvey(e, survey)}
-                                    ref={(element) => (ref.current[survey.survey_no] = element)}
+                                    onChange={(e) => handleSelectCrf(e, crf)}
+                                    ref={(element) => (ref.current[crf.crf_no] = element)}
                                 />
                             </TableCell>
                             <TableCell component="th" scope="row">
-                                {survey.title}
+                                {crf.crf_title}
                             </TableCell>
                             <TableCell align="center">
-                                {dayjs(survey.updated_at).format('YYYY-MM-DD')}
+                                {dayjs(crf.created_at).format('YYYY-MM-DD')}
                             </TableCell>
-                            <TableCell align="center">
+                            {/* <TableCell align="center">
                                 <IconButton
                                     color="primary"
-                                    onClick={() => handleSelectPreview(survey.survey_no)}
+                                    onClick={() => handleSelectPreview(crf.crf_no)}
                                 >
                                     <PreviewIcon />
                                 </IconButton>
-                            </TableCell>
+                            </TableCell> */}
                         </TableRow>
                     ))}
                 </TableBody>
@@ -119,4 +117,4 @@ const SurveyListTable = ({
     );
 };
 
-export default SurveyListTable;
+export default ECrfListTable;
