@@ -513,6 +513,34 @@ const studyApi = {
             throw e;
         }
     },
+	/**
+     * 임상시험(Study) - CRF(증례기록서) 페어 
+     * @param data
+     * @returns
+     */
+    postCrfpair: async (data) => {
+        try {
+            const responseData = await api<object>(`${BASE_API_URL}/study-case-report-form-pair`, 'post', data);
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+	/**
+     * 임상시험(Study) - CRF(증례기록서) 페어 해제
+     * @param data
+     * @returns
+     */
+	deleteCrfpair: async (data) => {
+        try {
+            const responseData = await api<object>(`${BASE_API_URL}/study-case-report-form-pair/unpairing`, 'delete', data);
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
 };
 
 export default studyApi;

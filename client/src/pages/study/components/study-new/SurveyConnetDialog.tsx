@@ -20,7 +20,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import SurveyListTable, { SurveyAdd } from './SurveyListTable';
 import { useEffect, useState } from 'react';
-import { RegistrableSurvey } from '@/types/survey';
+import { RegistrableSurvey, SurveyDetail } from '@/types/survey';
 import DraggableList from './DraggableList';
 import { DropResult } from '@hello-pangea/dnd';
 import { reorder } from '@/utils/helper';
@@ -36,7 +36,7 @@ interface SurveyConnectDialogProps {
     isOpen: boolean;
     handleClose: () => void;
     setStudySurveySetList: (list: any[]) => void;
-    initialSurveySetList: any[] | null;
+    initialSurveySetList: SurveyDetail[] | null;
     mode: 'create' | 'edit';
     studyNo?: number;
     startDate?: string;
@@ -74,7 +74,7 @@ const SurveyConnectDialog = ({
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [surveyToDelete, setSurveyToDelete] = useState<RegistrableSurvey | null>(null);
 
-    // console.log('initialSurveySetList: ', initialSurveySetList);
+    console.log('initialSurveySetList: ', initialSurveySetList);
 
     // 등록 가능한 설문 목록 api 분리
     const fetchSurvey = async () => {
@@ -144,7 +144,7 @@ const SurveyConnectDialog = ({
         // Study Info -> Survey Edit 시
         if (initialSurveySetList) {
             const flattenedSurveys = initialSurveySetList.flatMap((set) =>
-                set.surveyList.map((survey) => ({
+                set.surveyList.map((survey:SurveyDetail) => ({
                     ...survey,
                     frequency: set.survey_cycle.toLowerCase(),
                     times: set.number_in_cycle,
