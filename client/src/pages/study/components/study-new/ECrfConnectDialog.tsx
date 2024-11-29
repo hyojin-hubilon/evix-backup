@@ -75,7 +75,7 @@ const ECrfConnectDialog = ({
 
     // console.log('initialSurveySetList: ', initialSurveySetList);
 
-    // 등록 가능한 설문 목록 api 분리
+    // 등록 가능한 CRF 목록 api 분리
     const fetchECrf = async () => {
         try {
 			const response = await ecrfApi.getCRFList();
@@ -130,26 +130,27 @@ const ECrfConnectDialog = ({
     // };
 
     useEffect(() => {
-        // Study Info -> Survey Edit 시
-        // if (initialCrfSetList) {
-        //     const flattenedSurveys = initialCrfSetList.flatMap((set) =>
-        //         set.surveyList.map((survey) => ({
-        //             ...survey,
-        //             frequency: set.survey_cycle.toLowerCase(),
-        //             times: set.number_in_cycle,
-        //             set_no: set.set_no, // set_no를 추가
-        //         }))
-        //     );
-        //     setSelectedCrf(flattenedSurveys);
-        // }
-
-		console.log(initialCrfSetList);
-
 		if(isOpen) {
 			fetchECrf();
 			setSearchText('');
 		}
-    }, [initialCrfSetList, isOpen]);
+    }, [isOpen]);
+
+	useEffect(() => {
+        if (initialCrfSetList) {
+            const selectedCrfs = crfList.filter((crf) => {
+				const findedCrf = initialCrfSetList.findIndex(set => set.crf_no === crf.crf_no);
+				if(findedCrf > -1) return true;
+			}).map((crf) => {
+				const findedCrf = initialCrfSetList.findIndex(set => set.crf_no === crf.crf_no);
+				return {...crf, sort : initialCrfSetList[findedCrf].sort};
+			});
+
+			selectedCrfs.sort((a, b) => a.sort - b.sort );			
+            setSelectedCrf(selectedCrfs);
+        }
+
+	}, [initialCrfSetList, crfList])
 
 	
 

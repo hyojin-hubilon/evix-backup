@@ -3,8 +3,9 @@ import { StudyCrfListRespone } from "@/types/ecrf";
 import { StudyCrfSet } from "@/types/study";
 import { Box, Button, Link, List, ListItem, Typography, useTheme } from "@mui/material";
 import { t } from "i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ECrfConnectDialog from "../study-new/ECrfConnectDialog";
+import ecrfApi from "@/apis/ecrf";
 
 type StudyCrfSheetsType = {
 	stdNo: number;
@@ -19,6 +20,16 @@ const StudyCrfSheets = ({stdNo, statusLabel}: StudyCrfSheetsType) => {
 	const handleCloseCrf = () => {
 		setIsOpenCrf(false);
 	}
+
+	useEffect(() => {
+		const getECRFList = async () => {
+			const reponse = await ecrfApi.getStudyCrfpair(stdNo);
+			const crfList = reponse.content;
+			setInitialCrfSetList(crfList);
+		}
+
+		getECRFList();
+	}, [stdNo])
 
 	
 	return (
@@ -67,7 +78,7 @@ const StudyCrfSheets = ({stdNo, statusLabel}: StudyCrfSheetsType) => {
 										cursor: 'pointer',
 									}}
 									// onClick={() =>
-									// 	handleShowSurvey(survey.survey_no)
+									// 	handleShowCrf(crf.crf_no)
 									// }
 								>
 									{crf.crf_title}

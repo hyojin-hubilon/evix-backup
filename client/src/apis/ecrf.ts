@@ -2,9 +2,10 @@ import {
     ResCommonError,
     api
 } from '@/apis/axios-common';
-import { CRFPostReqBody, CRFPostResponse, CRFPutReqBody, MyCRFList } from '@/types/ecrf';
+import { CRFPostReqBody, CRFPostResponse, CRFPutReqBody, MyCRFList, StudyCrfListRespone } from '@/types/ecrf';
 
 const BASE_API_URL = '/researcher/case-report-form';
+const BASE_API_URL_2 = '/researcher/study-case-report-form-pair';
 
 const ecrfApi = {
    
@@ -68,6 +69,50 @@ const ecrfApi = {
 			throw e;
 		}
 	},
+
+	/**
+	 * 임상시험(Study) - CRF(증례기록서) 페어 목록 조회회
+	 * @param stdNo
+	 * @returns
+	 */
+	getStudyCrfpair: async (stdNo) => {
+		try {
+			const responseData = await api<StudyCrfListRespone[]>(`${BASE_API_URL_2}/list-pair/${stdNo}`, 'get');
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
+	
+	/**
+     * 임상시험(Study) - CRF(증례기록서) 페어 
+     * @param data
+     * @returns
+     */
+    postCrfpair: async (data) => {
+        try {
+            const responseData = await api<object>(`${BASE_API_URL_2}`, 'post', data);
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
+	/**
+     * 임상시험(Study) - CRF(증례기록서) 페어 해제
+     * @param data
+     * @returns
+     */
+	deleteCrfpair: async (data) => {
+        try {
+            const responseData = await api<object>(`${BASE_API_URL_2}/unpairing`, 'delete', data);
+            return responseData;
+        } catch (error) {
+            const e = error as ResCommonError;
+            throw e;
+        }
+    },
 }
 
 export default ecrfApi;

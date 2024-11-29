@@ -50,14 +50,15 @@ export interface MyCRFList {
 	created_user_no:number;
 	crf_no:number;
 	crf_title:string;
-	std_no:string | null;
+	std_no:number | null;
 	std_status:string | null;
 	std_title:string | null;
 	std_type:string | null;
+	sort:number;
 }
 
 export interface StudyCrfListRespone {
-	pair_no: number;
+	pair_no: number; //post 할때 pair_no는 필요없는 걸까..
 	std_no: number,
 	crf_no: number,
 	crf_title: string,

@@ -82,8 +82,8 @@ const StudyNew = () => {
 	
 	const [surveyTitles, setSurveyTitles] = useState<string[]>();
 	const [studyCrfSetList, setStudyCrfSetList] = useState<StudyCrfSet[]>([]);
-	const [eCrfList, setECrfList] = useState<StudyCrfListRespone[]>([]);
-	const [eCRFTitles, setECRFTitles] = useState<string[]>();
+	// const [eCrfList, setECrfList] = useState<StudyCrfListRespone[]>([]);
+	// const [eCRFTitles, setECRFTitles] = useState<string[]>();
 	const [eicYorN, setEicYorN] = useState<'Y' | 'N'>('N');
 
 
@@ -291,12 +291,6 @@ const StudyNew = () => {
 
     const [studyDetail, setStudyDetail] = useState<StudyDetail>();
 
-	const getECRFList = async () => { //이게 여기있을 필요가 없는거 같음.... (edit - study info에 있어야됨..)
-		const reponse = await studyApi.getStudyCrfpair(stdNo);
-		const crfList = reponse.content;
-		setECrfList(crfList);
-	}
-
     const fetchStudyDetail = async (stdNo:number) => {
         try {
             const response = await studyApi.getStudyDetail(stdNo);
@@ -320,12 +314,6 @@ const StudyNew = () => {
 			});
 
 			setSurveyTitles(titles);
-
-			if(std_type == 'eCRF') {
-				getECRFList(); 
-			}
-			
-
             setInviteList(studyContents['inviteList']);
             setManagerList(studyContents['managerList']);
 
