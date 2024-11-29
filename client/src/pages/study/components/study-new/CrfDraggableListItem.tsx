@@ -1,5 +1,5 @@
 import { Draggable } from '@hello-pangea/dnd';
-import { Grid, Button, ListItem, ListItemText, MenuItem, Select, useTheme } from '@mui/material';
+import { Grid, Button, ListItem, ListItemText, MenuItem, Select, useTheme, Box } from '@mui/material';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import { useState } from 'react';
 import { t } from 'i18next';
@@ -15,6 +15,7 @@ const CrfDraggableListItem = ({
     item,
     index,
     deleteItem,
+	
 }: CrfDraggableItemListProps) => {
     const [crf, setCrf] = useState(item);
     const theme = useTheme();
@@ -26,7 +27,7 @@ const CrfDraggableListItem = ({
     };
 
     return (
-        <Draggable draggableId={item.crf_title} index={index}>
+        <Draggable draggableId={`crfDraggable-${item.crf_no}`} index={index}>
             {(provided, snapshot) => (
                 <ListItem
                     ref={provided.innerRef}
@@ -43,9 +44,11 @@ const CrfDraggableListItem = ({
                         },
                     }}
                 >
-                    <Grid container alignItems="center" gap={1}>
-                        <DragHandleIcon sx={{ color: grey[500] }} />
-                        <ListItemText primary={crf.crf_title} sx={{ maxWidth: '280px' }} />
+                    <Grid container alignItems="center" justifyContent="space-between "gap={1}>
+						<Box display="flex" gap={1}>
+							<DragHandleIcon sx={{ color: grey[500] }} />
+							<ListItemText primary={crf.crf_title} sx={{ maxWidth: '280px' }} />
+						</Box>
                         <Button color="error" onClick={() => handleDeleteCrf()}>
                             {/* 삭제 */}
                             {t('common.delete')}

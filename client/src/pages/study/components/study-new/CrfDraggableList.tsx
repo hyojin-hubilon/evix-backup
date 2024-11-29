@@ -6,30 +6,24 @@ import CrfDraggableListItem from './CrfDraggableListItem';
 export type CrfDraggableListProps = {
     items: MyCRFList[];
     onDragEnd: OnDragEndResponder;
-    itemChanged: (items) => void;
     onDeleteClick: (survey) => void;
-    addedCrf: Set<number>;
+    // addedCrf: Set<number>;
 };
 
 const CrfDraggableList = ({
     items,
     onDragEnd,
-    itemChanged,
     onDeleteClick,
-    addedCrf
+    // addedCrf
 }: CrfDraggableListProps) => {
-    const handleChangeCrf = (item: MyCRFList, index: number) => {
-        items[index] = item;
-        itemChanged(items);
-    };
-
+    
     const handleDeleteCrf = (crf: MyCRFList) => {
         onDeleteClick(crf);
     };
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable-list">
+            <Droppable droppableId="droppable-list" type="content">
                 {(provided) => (
                     <List ref={provided.innerRef} {...provided.droppableProps}>
                         {items.map((item: MyCRFList, index: number) => (
@@ -38,6 +32,7 @@ const CrfDraggableList = ({
                                 index={index}
                                 key={item.crf_no}
                                 deleteItem={handleDeleteCrf}
+								// isAddedSurvey={addedCrf.has(item.crf_no)}
                             />
                         ))}
                         {provided.placeholder}

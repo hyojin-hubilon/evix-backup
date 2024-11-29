@@ -7,8 +7,9 @@ import {
     axios_file_instance,
     file_api,
 } from '@/apis/axios-common';
+import { StudyCrfListRespone } from '@/types/ecrf';
 import * as StudyApiType from '@/types/study';
-import { ParticipantsList, StdType } from '@/types/study';
+import { ParticipantsList } from '@/types/study';
 
 const BASE_API_URL = '/researcher/study';
 
@@ -18,7 +19,7 @@ const studyApi = {
      * @param data
      * @returns
      */
-    createStudy: async (data: any, stdType:StdType) => {
+    createStudy: async (data: FormData, stdType:StudyApiType.StdType) => {
         try {
 			if(stdType === 'eCRF') {
 				const responseData = await file_api<object>(`${BASE_API_URL}/e-crf`, 'post', data);
@@ -45,7 +46,7 @@ const studyApi = {
      * @param data
      * @returns
      */
-    updateStudy: async (data: any, stdType:StdType) => {
+    updateStudy: async (data: StudyApiType.Study, stdType:StudyApiType.StdType) => {
         try {
 			if(stdType === 'eCRF') {
 				const responseData = await api<object>(`${BASE_API_URL}/e-crf`, 'put', data);
@@ -290,7 +291,7 @@ const studyApi = {
      * Study 배포
      * @param deployData
      */
-    deployStudy: async (deployData, stdType:StdType) => {
+    deployStudy: async (deployData, stdType:StudyApiType.StdType) => {
         try {
 			if(stdType === 'eCRF') {
 				// const response = await file_api<object>(`${BASE_API_URL}/deploy`, 'put', deployData);
@@ -513,6 +514,21 @@ const studyApi = {
             throw e;
         }
     },
+	/**
+	 * 임상시험(Study) - CRF(증례기록서) 페어 목록 조회회
+	 * @param stdNo
+	 * @returns
+	 */
+	getStudyCrfpair: async (stdNo) => {
+		try {
+			const responseData = await api<StudyCrfListRespone[]>(`${BASE_API_URL}/study-case-report-form-pair/list-pair/${stdNo}`, 'get');
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
+	
 	/**
      * 임상시험(Study) - CRF(증례기록서) 페어 
      * @param data

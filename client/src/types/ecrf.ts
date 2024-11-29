@@ -55,3 +55,23 @@ export interface MyCRFList {
 	std_title:string | null;
 	std_type:string | null;
 }
+
+export interface StudyCrfListRespone {
+	pair_no: number;
+	std_no: number,
+	crf_no: number,
+	crf_title: string,
+	sort: number
+}
+
+export interface StudyCrfPairPostBody {
+	std_no: number,
+    crf_no: number,
+    sort: number
+}
+
+
+export interface StudyCrfPairDeleteBody {
+	pair_no: number,
+    std_no: number   
+}

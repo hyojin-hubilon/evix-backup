@@ -35,12 +35,13 @@ import ecrfApi from '@/apis/ecrf';
 import { MyCRFList } from '@/types/ecrf';
 import CrfDraggableList from './CrfDraggableList';
 import ECrfListTable, { CrfAdd } from './ECrfListTable';
+import { StudyCrfSet } from '@/types/study';
 
 interface ECrfConnectDialogProps {
     isOpen: boolean;
     handleClose: () => void;
-    setStudyCrfSetList: (list: any[]) => void;
-    initialCrfSetList: any[] | null;
+    setStudyCrfSetList: (list: StudyCrfSet[]) => void;
+    initialCrfSetList: StudyCrfSet[] | null;
     mode: 'create' | 'edit';
     studyNo?: number;
     startDate?: string;
@@ -92,8 +93,9 @@ const ECrfConnectDialog = ({
             // setShowDeleteConfirm(true);
         } else {
             // mode가 'create'인 경우 바로 삭제
+			console.log(selectedCrf)
             const newSelectedCrf = selectedCrf.filter(
-                (s) => s.crf_no !== s.crf_no
+                (s) => crf.crf_no !== s.crf_no
             );
             setSelectedCrf(newSelectedCrf);
         }
@@ -151,14 +153,15 @@ const ECrfConnectDialog = ({
 
 	
 
-    //Survey 새로 추가되었는지 여부 판별하기 위함
+    //CRF가 새로 추가되었는지 여부 판별하기 위함
     const [addedCrf, setAddedCrf] = useState(new Set<number>());
 
     const handleSelectedCrf = (addCrf: CrfAdd) => {
+		console.log(addCrf);
         if (addCrf.type === 'add') {
             const newCrfItem = { ...addCrf.crf };
             setSelectedCrf([...selectedCrf, newCrfItem]);
-            (new Set(addedCrf).add(newCrfItem.crf_no));
+            setAddedCrf(new Set(addedCrf).add(newCrfItem.crf_no));
         } else {
             // const newItems = setSelectedCrf
             //     .filter((crf) => crf.crf_no !== addCrf.crf.crf_no)
@@ -179,151 +182,24 @@ const ECrfConnectDialog = ({
         setSelectedCrf(newItems);
     };
 
-    const handleChangeSurveyItem = (items: MyCRFList[]) => {
-        setSelectedCrf(items);
+
+    const handleConnectCrf = () => {
+		console.log(selectedCrf);
+
+		//새로 추가할때
+		const newStudyCefSetList: StudyCrfSet[] = selectedCrf.map((crf, index) => { 
+			return {
+				crf_no: crf.crf_no,
+				sort: index
+			}
+		});
+			
+		console.log(newStudyCefSetList);
+
+		setStudyCrfSetList(newStudyCefSetList);
+
+        handleClose();
     };
-
-    // const handleConnectSurvey = async () => {
-    //     if (mode === 'edit') {
-    //         let newStudySurveySetList: StudySurveySet[];
-
-    //         if (initialSurveySetList) {
-    //             // 기존 설문이 있는 경우
-    //             const newSurveys = selectedSurvey.filter(
-    //                 (survey) =>
-    //                     !initialSurveySetList.some((set) =>
-    //                         set.surveyList.some(
-    //                             (s: { survey_no: number }) => s.survey_no === survey.survey_no
-    //                         )
-    //                     )
-    //             );
-
-    //             newStudySurveySetList = newSurveys.reduce(
-    //                 (acc: StudySurveySet[], survey: RegistrableSurvey) => {
-    //                     const cycleKey = survey.frequency.toUpperCase();
-    //                     const timesKey = survey.times ?? 1;
-    //                     const existingSet = acc.find(
-    //                         (set) =>
-    //                             set.survey_cycle === cycleKey && set.number_in_cycle === timesKey
-    //                     );
-
-    //                     if (existingSet) {
-    //                         existingSet.surveyList.push({
-    //                             survey_no: survey.survey_no,
-    //                             sort: existingSet.surveyList.length + 1,
-    //                             title: survey.title,
-    //                         });
-    //                     } else {
-    //                         acc.push({
-    //                             survey_cycle: cycleKey,
-    //                             number_in_cycle: timesKey,
-    //                             sort: 1,
-    //                             surveyList: [
-    //                                 { survey_no: survey.survey_no, sort: 1, title: survey.title },
-    //                             ],
-    //                         });
-    //                     }
-
-    //                     return acc;
-    //                 },
-    //                 []
-    //             );
-    //         } else {
-    //             // initialSurveySetList가 null인 경우 (기존 설문이 없는 경우)
-    //             newStudySurveySetList = selectedSurvey.reduce(
-    //                 (acc: StudySurveySet[], survey: RegistrableSurvey) => {
-    //                     const cycleKey = survey.frequency.toUpperCase();
-    //                     const timesKey = survey.times ?? 1;
-    //                     const existingSet = acc.find(
-    //                         (set) =>
-    //                             set.survey_cycle === cycleKey && set.number_in_cycle === timesKey
-    //                     );
-
-    //                     if (existingSet) {
-    //                         existingSet.surveyList.push({
-    //                             survey_no: survey.survey_no,
-    //                             sort: existingSet.surveyList.length + 1,
-    //                             title: survey.title,
-    //                         });
-    //                     } else {
-    //                         acc.push({
-    //                             survey_cycle: cycleKey,
-    //                             number_in_cycle: timesKey,
-    //                             sort: 1,
-    //                             surveyList: [
-    //                                 { survey_no: survey.survey_no, sort: 1, title: survey.title },
-    //                             ],
-    //                         });
-    //                     }
-
-    //                     return acc;
-    //                 },
-    //                 []
-    //             );
-    //         }
-
-    //         if (newStudySurveySetList.length > 0) {
-    //             try {
-    //                 const data = {
-    //                     std_no: studyNo,
-    //                     std_start_date: initialSurveySetList
-    //                         ? initialSurveySetList[0].survey_start_date
-    //                         : startDate,
-    //                     std_end_date: initialSurveySetList
-    //                         ? initialSurveySetList[0].survey_end_date
-    //                         : endDate,
-    //                     studySurveySetList: newStudySurveySetList,
-    //                 };
-    //                 await studyApi.postSurvey(data);
-    //                 setSuccessMessage(t('study.new_survey_connected')); //새로운 설문이 성공적으로 연결되었습니다.
-    //                 setOpenAlert(true);
-    //             } catch (error) {
-    //                 console.error('Failed to post survey:', error);
-    //                 setSuccessMessage(t('study.failed_connect_survey')); //설문 연결에 실패했습니다.
-    //                 setOpenAlert(true);
-    //             }
-    //         } else {
-    //             setSuccessMessage(t('study.no_new_surveys')); //새로 추가된 설문이 없습니다.
-    //             setOpenAlert(true);
-    //         }
-    //     } else if (mode === 'create') {
-    //         const newStudySurveySetList: StudySurveySet[] = selectedSurvey.reduce(
-    //             (acc: StudySurveySet[], survey: RegistrableSurvey) => {
-    //                 const cycleKey = survey.frequency.toUpperCase();
-    //                 const timesKey = survey.times ?? 1;
-
-    //                 const existingSet = acc.find(
-    //                     (set) => set.survey_cycle === cycleKey && set.number_in_cycle === timesKey
-    //                 );
-
-    //                 if (existingSet) {
-    //                     existingSet.surveyList.push({
-    //                         survey_no: survey.survey_no,
-    //                         // sort: 1,
-    //                         sort: existingSet.surveyList.length + 1,
-    //                         title: survey.title,
-    //                     });
-    //                 } else {
-    //                     acc.push({
-    //                         survey_cycle: cycleKey,
-    //                         number_in_cycle: timesKey,
-    //                         sort: 1,
-    //                         surveyList: [
-    //                             { survey_no: survey.survey_no, sort: 1, title: survey.title },
-    //                         ],
-    //                     });
-    //                 }
-
-    //                 return acc;
-    //             },
-    //             []
-    //         );
-
-    //         setStudySurveySetList(newStudySurveySetList);
-    //     }
-
-    //     handleClose();
-    // };
 
     const handleSearchCrf = (e:FormEvent) => {
         e.preventDefault();
@@ -428,15 +304,14 @@ const ECrfConnectDialog = ({
                                         <CrfDraggableList
                                             items={selectedCrf}
                                             onDragEnd={onDragEnd}
-                                            itemChanged={handleChangeSurveyItem}
                                             onDeleteClick={handleDeleteClick}
                                             // mode={mode}
-                                            addedCrf={addedCrf}
+                                            // addedCrf={addedCrf}
                                         />
                                     </Box>
 
                                     <Button
-                                        // onClick={handleConnectSurvey}
+                                        onClick={handleConnectCrf}
                                         variant="contained"
                                         sx={{ width: '10rem' }}
                                     >
@@ -460,11 +335,11 @@ const ECrfConnectDialog = ({
 									:
 									<Box p="1rem " textAlign="center">
 										<Typography gutterBottom>
-											{/* 연결 가능한 설문이 없습니다. */}
+											{/* 연결 가능한 ECRF Sheet가 없습니다. */}
 											{t('study.no_crf_connect')}
 										</Typography>
 										<Link to="/survey/samples" target="_blank" rel="noopener noreferrer" onClick={() => handleClose()}>
-											{/* 설문 생성하기 */}
+											{/* ECRF Sheet 생성하기 */}
 											{t('study.create_a_crf')}
 										</Link>
 									</Box>

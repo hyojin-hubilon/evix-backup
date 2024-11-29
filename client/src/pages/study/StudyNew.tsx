@@ -28,7 +28,7 @@ import studyApi from '@/apis/study';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Drug } from '@/apis/test/drug/drugsAPI_TEST';
 import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
-import { InviteMemberTempType, StdType, StudyDetail, StudySurveyList, StudySurveySetList } from '@/types/study';
+import { InviteMemberTempType, StdType, Study, StudyCrfSet, StudyDetail, StudySurveyList, StudySurveySetList } from '@/types/study';
 import MemberInvitement from './components/study-new/MemberInvitement';
 import MemberManagement from './components/study-new/MemberManagement';
 import StudyDeleteConfirmDialog from './components/study-new/StudyDeleteConfirmDialog';
@@ -40,7 +40,7 @@ import AddLinkIcon from '@mui/icons-material/AddLink';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import DatePicker from 'antd/lib/date-picker';
 import ECrfConnectDialog from './components/study-new/ECrfConnectDialog';
-import { MyCRFList } from '@/types/ecrf';
+import { MyCRFList, StudyCrfListRespone } from '@/types/ecrf';
 
 const FormTooltip = ({text}: {text: React.ReactNode}) => {
     return (
@@ -79,9 +79,10 @@ const StudyNew = () => {
     const [inviteList, setInviteList] = useState<InviteMemberTempType[]>([]);
     const [managerList, setManagerList] = useState<any[]>([]);
     const [studySurveySetList, setStudySurveySetList] = useState<StudySurveySetList[]>([]);
-	const [studyCrfSetList, setStudyCrfSetList] = useState<MyCRFList[]>([]);
+	
 	const [surveyTitles, setSurveyTitles] = useState<string[]>();
-	const [eCrfSetList, setECrfSetList] = useState<any[]>([]);
+	const [studyCrfSetList, setStudyCrfSetList] = useState<StudyCrfSet[]>([]);
+	const [eCrfList, setECrfList] = useState<StudyCrfListRespone[]>([]);
 	const [eCRFTitles, setECRFTitles] = useState<string[]>();
 	const [eicYorN, setEicYorN] = useState<'Y' | 'N'>('N');
 
@@ -167,7 +168,7 @@ const StudyNew = () => {
 
     const handleSubmit = async () => {
         if (validate()) {
-            const studyData = {
+            const studyData : Study = {
                 std_payment_status: 'WAIT',
                 deploy_method: 'IMMEDIATE',
                 std_status: 'STD-CREATED',
@@ -179,13 +180,21 @@ const StudyNew = () => {
                 description,
                 disease,
                 location: country,
-                drug_code: drug?.itemCode ?? null,
-                drug_brand_name: drug?.companyName ?? null,
-                drug_manufacturer_name: drug?.productName ?? null,
-                studySurveySetList: studySurveySetList ?? [],
-                inviteList: members ?? [],
+                drug_code: drug?.itemCode ? drug.itemCode :  null,
+                drug_brand_name: drug?.companyName ? drug.companyName :  null,
+                drug_manufacturer_name: drug?.productName ? drug.productName :  null,
+                studySurveySetList: studySurveySetList ? studySurveySetList :  [], //Study Type이 ePRO, eCOA 일 경우 연결할 Survey 목록
+				studyCaseReportFormPairList: studyCrfSetList ? studyCrfSetList : [], //Study Type이 eCRF일 경우 연결할 CRF Sheet 목록
+                inviteList: members ? members : [],
 				use_your_own_consent_form: stdType === 'eCRF' ?  eicYorN : null//Study Type이 eCRF일 경우 EIC를 DCT에 파일 업로드 없이 기관에서 받을 경우 필요한 컬럼
             };
+
+			if(stdType === 'eCRF') {
+				delete studyData.studySurveySetList; //Study Type이 eCRF일 경우 연결할 Survey 리스트 항목 지움
+			} else {
+				delete studyData.studyCaseReportFormPairList; //Study Type이 ePRO, eCOA일 경우 CRF Sheet 리스트 항목 지움
+				delete studyData.use_your_own_consent_form; //Study Type이 ePRO, eCOA일 경우 EIC 유무 지움
+			}
 
             // FormData 객체 생성 및 데이터 추가
             const formData = new FormData();
@@ -270,8 +279,8 @@ const StudyNew = () => {
         } else if (mode === 'edit') {
             return (privilege: string): string => {
                 const inviteEmails = managerList
-                    .filter((i) => i.std_privilege === privilege)
-                    .map((i) => i.email);
+                    .filter((i) => i.std_privilege === privilege) //InviteMemberTempType..?
+                    .map((i) => i.email); //edit에선 추가 불가능 하니까 빼도 될듯..?
                 return inviteEmails.length > 0
                     ? inviteEmails.join(', ')
                     : t('study.please_set_it_invite'); //'초대하기 팝업에서 설정해주세요.';
@@ -281,6 +290,12 @@ const StudyNew = () => {
     }, [members, inviteList, mode]);
 
     const [studyDetail, setStudyDetail] = useState<StudyDetail>();
+
+	const getECRFList = async () => { //이게 여기있을 필요가 없는거 같음.... (edit - study info에 있어야됨..)
+		const reponse = await studyApi.getStudyCrfpair(stdNo);
+		const crfList = reponse.content;
+		setECrfList(crfList);
+	}
 
     const fetchStudyDetail = async (stdNo:number) => {
         try {
@@ -306,7 +321,10 @@ const StudyNew = () => {
 
 			setSurveyTitles(titles);
 
-			setECrfSetList(studyContents['eCrfSetList']);
+			if(std_type == 'eCRF') {
+				getECRFList(); 
+			}
+			
 
             setInviteList(studyContents['inviteList']);
             setManagerList(studyContents['managerList']);
@@ -330,7 +348,7 @@ const StudyNew = () => {
 
     const handleUpdate = async () => {
         if (validate()) {
-            const studyData = {
+            const studyData :Study = {
                 std_no: stdNo,
                 title,
                 std_type: stdType === 'ePRO' ? 'E-PRO' : (stdType === 'eCOA' ? 'E-COA' : 'E-CRF'),
@@ -341,9 +359,12 @@ const StudyNew = () => {
                 disease,
                 drug_code: medicineYOrN === 'true' ? drug?.itemCode ?? null : null,
                 drug_brand_name: medicineYOrN === 'true' ? drug?.companyName ?? null : null,
-                drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null,
-				use_your_own_consent_form: stdType === 'eCRF' ?  eicYorN : null//Study Type이 eCRF일 경우 EIC를 DCT에 파일 업로드 없이 기관에서 받을 경우 필요한 컬럼
+                drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName ?? null : null
             };
+
+			if(stdType === 'eCRF') {
+				studyData.use_your_own_consent_form = eicYorN; //Study Type이 eCRF일 경우 EIC를 DCT에 파일 업로드 없이 기관에서 받을 경우 필요한 컬럼
+			}
 
             try {
                 const response = await studyApi.updateStudy(studyData, stdType);
@@ -381,7 +402,7 @@ const StudyNew = () => {
             });
         }
 
-        const studyData = {
+        const studyData : Study = {
             std_no: stdNo,
             title,
 			std_type: stdType === 'ePRO' ? 'E-PRO' : (stdType === 'eCOA' ? 'E-COA' : 'E-CRF'),
@@ -390,12 +411,15 @@ const StudyNew = () => {
             target_number: parseInt(participants),
             description,
             disease,
-            drug_code: medicineYOrN === 'true' ? drug?.itemCode : null,
-            drug_brand_name: medicineYOrN === 'true' ? drug?.companyName : null,
-            drug_manufacturer_name: medicineYOrN === 'true' ? drug?.productName : null,
-            std_status: 'STD-PROGRESSION',
-			use_your_own_consent_form: stdType === 'eCRF' ?  eicYorN : null
+            drug_code: medicineYOrN === 'true' ? (drug?.itemCode ? drug?.itemCode : null) : null,
+            drug_brand_name: medicineYOrN === 'true' ? (drug?.companyName ? drug?.companyName : null) : null,
+            drug_manufacturer_name: medicineYOrN === 'true' ? (drug?.productName ?  drug.productName : null) : null,
+            std_status: 'STD-PROGRESSION'
         };
+
+		if(stdType === 'eCRF') {
+			studyData.use_your_own_consent_form = eicYorN; //Study Type이 eCRF일 경우 EIC를 DCT에 파일 업로드 없이 기관에서 받을 경우 필요한 컬럼
+		}
 
         try {
             const response = await studyApi.deployStudy(studyData, stdType);

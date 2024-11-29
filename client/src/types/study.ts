@@ -14,6 +14,11 @@ export interface StudySurveySet {
     surveyList: Survey[];
 }
 
+export interface StudyCrfSet {
+	crf_no:number;
+	sort:number;
+}
+
 export interface Study {
     std_no?: number; // 수정 시에만 필요
     std_type: string;
@@ -25,12 +30,16 @@ export interface Study {
     disease: string;
     target_number: number;
     drug_code: string | null;
+	drug_brand_name: string | null;
+	drug_manufacturer_name: string | null;
     std_status?: string; // 생성 시에만 필요
     std_payment_status?: string; // 생성 시에만 필요
     deploy_method?: string; // 생성 시에만 필요
     deploy_date?: string; // 생성 시에만 필요
-    studySurveySetList: StudySurveySet[];
-    inviteList: Invite[];
+    studySurveySetList?: StudySurveySet[];
+	use_your_own_consent_form?: "Y" | "N" | null | undefined;
+	studyCaseReportFormPairList?: StudyCrfSet[];
+    inviteList?: InviteMemberTempType[];
 }
 
 export interface StudyUserInvite {
@@ -195,7 +204,7 @@ export interface StudyDetail {
     deployed_at: string | null;
     std_privilege: string;
     studySurveySetList: StudySurveySetList[];
-	eCrfSetList : [];
+	studyCaseReportFormPairList : StudyCrfSet[];
     managerList: {
         std_no: number;
         user_no: number;
