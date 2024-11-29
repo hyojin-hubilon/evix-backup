@@ -18,7 +18,7 @@ import {
 import StudyMemberStatus from './study-info/StudyMemberStatus';
 import { STUDY_STATUS, STUDY_STATUS_KEY } from './StudyListItem';
 import MemberManagement from './study-new/MemberManagement';
-import { surveyCycle, surveyCycleEn } from '@/types/study';
+import { Invite, Manager, StudyCrfSet, StudyDetail, StudySurveySetList, surveyCycle, surveyCycleEn } from '@/types/study';
 import studyApi from '@/apis/study';
 import DeleteModal from './eic/DeleteModal';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -32,59 +32,11 @@ import SurveyConnectDialog from './study-new/SurveyConnetDialog';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import SurveyPreview from '@/pages/survey/SurveyPreview';
+import ECrfConnectDialog from './study-new/ECrfConnectDialog';
+import StudyCrfSheets from './study-info/StudyCrfSheets';
 
 interface StudyInfoProps {
-    studyDetail: {
-        std_no: number;
-        std_type: string;
-        title: string;
-        std_start_date: string;
-        std_end_date: string;
-        description: string;
-        disease: string;
-        target_number: number;
-        eic_name: string | null;
-        eic_origin_name: string | null;
-        std_status: string;
-        updated_at: string;
-        drug_brand_name: string;
-        drug_code: string;
-        drug_manufacturer_name: string;
-        studySurveySetList: {
-            set_no: number;
-            std_no: number;
-            survey_start_date: string;
-            survey_end_date: string;
-            survey_cycle: string;
-            number_in_cycle: number;
-            surveyList: {
-                set_no: number;
-                survey_no: number;
-                survey_cnt: number;
-                title: string;
-                sort: number;
-            }[];
-        }[];
-        managerList: {
-            std_no: number;
-            user_no: number;
-            std_privilege: string;
-            email: string;
-            first_name: string;
-            last_name: string;
-            profile_image_url: string | null;
-            profile_image_name: string | null;
-            company_name: string;
-            invited_at: string;
-        }[];
-        inviteList: {
-            std_no: number;
-            user_email: string;
-            std_privilege: string;
-            created_at: string;
-            accepted_at: string | null;
-        }[];
-    };
+    studyDetail: StudyDetail;
     ownerId: number;
     onSurveyClose: () => void;
 }
@@ -115,7 +67,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
     };
 
     const [isOpenSurvey, setIsOpenSurvey] = useState(false);
-    const [studySurveySetList, setStudySurveySetList] = useState(studyDetail.studySurveySetList);
+    const [studySurveySetList, setStudySurveySetList] = useState<StudySurveySetList[]>(studyDetail.studySurveySetList);
 
     const handleCloseSurvey = () => {
         setIsOpenSurvey(!isOpenSurvey);
@@ -148,8 +100,8 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
     const [basePdfFile, setBasePdfFile] = useState<File | null>(null);
     const [isUploadBasePdfOpen, setIsUploadBasePdfOpen] = useState<boolean>(false);
     const [isCreateEicOpen, setIsCreateEicOpen] = useState<boolean>(false);
-    const [managerList, setManagerList] = useState<any[]>(studyDetail.managerList);
-    const [inviteList, setInviteList] = useState<any[]>(studyDetail.inviteList);
+    const [managerList, setManagerList] = useState<Manager[]>(studyDetail.managerList);
+    const [inviteList, setInviteList] = useState<Invite[]>(studyDetail.inviteList);
 
     const handlePreviewOpen = () => {
         setIsPreviewEicOpen(true);
@@ -242,7 +194,7 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
     const [surveyNo, setSurveyNo] = useState<number | null>(null);
     const [isPreview, setIsPreview] = useState(false);
 
-    const handleShowSurvey = (surveyNo) => {
+    const handleShowSurvey = (surveyNo:number) => {
         setSurveyNo(surveyNo);
         setIsPreview(true);
     };
@@ -331,7 +283,12 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                 </Grid>
                 <Grid item xs={5}>
                     <Box display="flex" gap={1} alignItems="center">
-                        <Typography variant="h4">Survey & Electronic consent form</Typography>
+						{
+						studyDetail.std_type !== 'E-CRF' ?
+						<Typography variant="h4">Survey & Electronic consent form</Typography>
+						:
+						<Typography variant="h4">eCRF Sheets & Electronic consent form</Typography>
+						}
                     </Box>
                 </Grid>
                 <Grid item xs={7} alignSelf="stretch">
@@ -428,83 +385,90 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                     </MainCard>
                 </Grid>
                 <Grid item xs={5} alignSelf="stretch">
-                    <MainCard sx={{ height: '100%' }}>
-                        <Box
-                            sx={{
-                                p: '1rem',
-                                bgcolor: theme.palette.grey[100],
-                                borderRadius: '4px',
-                                mb: '0.5rem',
-                            }}
-                        >
-                            <Box display="flex" alignItems="center" justifyContent="space-between">
-                                <Typography variant="h5">Survey</Typography>
-                                {(statusLabel === 'New' || statusLabel === 'Pause') && (
-                                    <Button
-                                        variant="outlined"
-                                        onClick={() => setIsOpenSurvey(true)}
-                                    >
-                                        Edit
-                                    </Button>
-                                )}
-                            </Box>
-                            <List
-                                sx={{
-                                    listStyle: 'disc',
-                                    pl: '20px',
-                                    'li': {
-                                        display: 'list-item',
-                                        pl: 0,
-                                        pb: 0,
-                                    },
-                                }}
-                            >
-                                {studyDetail.studySurveySetList &&
-                                    studyDetail.studySurveySetList.length > 0 &&
-                                    studyDetail.studySurveySetList.map((surveySet) =>
-                                        surveySet.surveyList.map((survey) => (
-                                            <ListItem
-                                                key={survey.survey_no}
-                                                sx={{ display: 'block' }}
-                                            >
-                                                <Link
-                                                    sx={{
-                                                        display: 'inline-block',
-                                                        marginRight: '0.5rem',
-                                                        cursor: 'pointer',
-                                                    }}
-                                                    onClick={() =>
-                                                        handleShowSurvey(survey.survey_no)
-                                                    }
-                                                >
-                                                    {survey.title}
-                                                </Link>
-                                                <Typography sx={{ display: 'inline-block' }}>
-                                                    {i18n.language === 'en' ? (
-                                                        <>
-                                                            {t('study.repeat')}{' '}
-                                                            {surveySet.number_in_cycle === 1
-                                                                ? 'once a'
-                                                                : surveySet.number_in_cycle +
-                                                                  t('study.time_per')}{' '}
-                                                            {surveyCycleEn[surveySet.survey_cycle]}
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            {surveyCycle[surveySet.survey_cycle]}
-                                                            {t('study.repeat')}{' '}
-                                                            {surveySet.number_in_cycle}
-                                                            {t('study.time_per')}
-                                                        </>
-                                                    )}
-                                                    {/* {surveyCycle[surveySet.survey_cycle]}마다{' '}
-                                                    {surveySet.number_in_cycle}회 반복 */}
-                                                </Typography>
-                                            </ListItem>
-                                        ))
-                                    )}
-                            </List>
-                        </Box>
+						<MainCard sx={{ height: '100%' }}>
+
+						{
+						studyDetail.std_type !== 'E-CRF' ? 
+						//Study Type이 E-CRF가 아닐때(E-PRO, E-COA) Survey 리스트 
+					
+							<Box
+								sx={{
+									p: '1rem',
+									bgcolor: theme.palette.grey[100],
+									borderRadius: '4px',
+									mb: '0.5rem',
+								}}
+							>
+								<Box display="flex" alignItems="center" justifyContent="space-between">
+									<Typography variant="h5">Survey</Typography>
+									{(statusLabel === 'New' || statusLabel === 'Pause') && (
+										<Button
+											variant="outlined"
+											onClick={() => setIsOpenSurvey(true)}
+										>
+											Edit
+										</Button>
+									)}
+								</Box>
+								<List
+									sx={{
+										listStyle: 'disc',
+										pl: '20px',
+										'li': {
+											display: 'list-item',
+											pl: 0,
+											pb: 0,
+										},
+									}}
+								>
+									{studyDetail.studySurveySetList &&
+										studyDetail.studySurveySetList.length > 0 &&
+										studyDetail.studySurveySetList.map((surveySet) =>
+											surveySet.surveyList.map((survey) => (
+												<ListItem
+													key={survey.survey_no}
+													sx={{ display: 'block' }}
+												>
+													<Link
+														sx={{
+															display: 'inline-block',
+															marginRight: '0.5rem',
+															cursor: 'pointer',
+														}}
+														onClick={() =>
+															handleShowSurvey(survey.survey_no)
+														}
+													>
+														{survey.title}
+													</Link>
+													<Typography sx={{ display: 'inline-block' }}>
+														{i18n.language === 'en' ? (
+															<>
+																{t('study.repeat')}{' '}
+																{surveySet.number_in_cycle === 1
+																	? 'once a'
+																	: surveySet.number_in_cycle +
+																	t('study.time_per')}{' '}
+																{surveyCycleEn[surveySet.survey_cycle]}
+															</>
+														) : (
+															<>
+																{surveyCycle[surveySet.survey_cycle]}
+																{t('study.repeat')}{' '}
+																{surveySet.number_in_cycle}
+																{t('study.time_per')}
+															</>
+														)}
+													</Typography>
+												</ListItem>
+											))
+										)}
+								</List>
+							</Box>
+							:
+							//Study Type이 E-CRF가 일때 eCRF Sheet 리스트 
+							<StudyCrfSheets stdNo={studyDetail.std_no} statusLabel={statusLabel} />
+						}
                         <Box
                             sx={{
                                 p: '1rem',
@@ -618,6 +582,9 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                 studyNo={studyDetail.std_no}
                 handleClose={handleCloseMember}
             />
+
+			
+
             <SurveyConnectDialog
                 isOpen={isOpenSurvey}
                 handleClose={handleCloseSurvey}

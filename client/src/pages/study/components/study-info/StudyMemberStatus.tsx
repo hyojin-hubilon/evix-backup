@@ -11,31 +11,12 @@ import {
     useTheme,
 } from '@mui/material';
 import { t } from 'i18next';
+import { Invite, Manager } from '@/types/study';
 
-export interface ManagerType {
-    std_no: number;
-    user_no: number;
-    std_privilege: string;
-    email: string;
-    first_name: string;
-    last_name: string;
-    profile_image_url: string | null;
-    profile_image_name: string | null;
-    company_name: string;
-    invited_at: string;
-}
-
-interface InviteType {
-    std_no: number;
-    user_email: string;
-    std_privilege: string;
-    created_at: string;
-    accepted_at: string | null;
-}
 
 interface StudyMemberStatusProps {
-    managerList: ManagerType[];
-    inviteList: InviteType[];
+    managerList: Manager[];
+    inviteList: Invite[];
 }
 
 const StudyMemberStatus = ({ managerList, inviteList }: StudyMemberStatusProps) => {

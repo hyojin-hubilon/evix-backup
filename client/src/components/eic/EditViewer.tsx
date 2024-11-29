@@ -15,6 +15,7 @@ import studyApi from '@/apis/study';
 import { useNavigate } from 'react-router-dom';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { t } from 'i18next';
+import { StudyDetail } from '@/types/study';
 
 const headerHeight = 80;
 
@@ -23,19 +24,6 @@ const customTemplatePresetKey = 'custom';
 
 const templatePresets = getTemplatePresets();
 
-interface StudyDetail {
-    std_no: number;
-    std_type: string;
-    title: string;
-    std_start_date: string;
-    std_end_date: string;
-    description: string;
-    disease: string;
-    target_number: number;
-    drug_code: string;
-    drug_brand_name: string;
-    drug_manufacturer_name: string;
-}
 
 interface EditViewerProps {
     eicFile: any;
@@ -107,9 +95,10 @@ const EditViewer = ({ eicFile, onClose, studyDetail, fetchStudyDetail }: EditVie
 
     const onChangeBasePDF = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target && e.target.files) {
-            readFile(e.target.files[0], 'dataURL').then(async (basePdf) => {
+            readFile(e.target.files[0], 'dataURL').then((basePdf) => {
                 if (designer.current) {
                     designer.current.updateTemplate(
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                         Object.assign(cloneDeep(designer.current.getTemplate()), {
                             basePdf,
                         })

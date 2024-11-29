@@ -2,7 +2,7 @@ export interface RegistrableSurvey {
     //스터디에 등록가능한 서베이
     survey_no: number;
     title: string;
-    updated_at: string | Date; ///researcher/survey/my-list-registrable 추가해야함
+    updated_at?: string | Date; ///researcher/survey/my-list-registrable 추가해야함
     frequency: string; //반복 주기
     times: number; //반복 횟수
     sort: number; // 순번

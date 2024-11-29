@@ -28,7 +28,7 @@ import studyApi from '@/apis/study';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Drug } from '@/apis/test/drug/drugsAPI_TEST';
 import SurveyConnectDialog from './components/study-new/SurveyConnetDialog';
-import { InviteMemberTempType, StdType, Study, StudyCrfSet, StudyDetail, StudySurveyList, StudySurveySetList } from '@/types/study';
+import { InviteMemberTempType, Manager, StdType, Study, StudyCrfSet, StudyDetail, StudySurveyList, StudySurveySetList } from '@/types/study';
 import MemberInvitement from './components/study-new/MemberInvitement';
 import MemberManagement from './components/study-new/MemberManagement';
 import StudyDeleteConfirmDialog from './components/study-new/StudyDeleteConfirmDialog';
@@ -77,7 +77,7 @@ const StudyNew = () => {
     const [isOpenSurvey, setIsOpenSurvey] = useState(false);
 	const [isOpenCrf, setIsOpenCrf] = useState(false);
     const [inviteList, setInviteList] = useState<InviteMemberTempType[]>([]);
-    const [managerList, setManagerList] = useState<any[]>([]);
+    const [managerList, setManagerList] = useState<Manager[]>([]);
     const [studySurveySetList, setStudySurveySetList] = useState<StudySurveySetList[]>([]);
 	
 	const [surveyTitles, setSurveyTitles] = useState<string[]>();

@@ -31,12 +31,13 @@ import SurveyDeleteDialog from './SurveyDeleteDialog';
 import { t } from 'i18next';
 import { ResCommonSuccess } from '@/apis/axios-common';
 import { Link, useNavigate } from 'react-router-dom';
+import { StudySurveyList, StudySurveySetList } from '@/types/study';
 
 interface SurveyConnectDialogProps {
     isOpen: boolean;
     handleClose: () => void;
     setStudySurveySetList: (list: any[]) => void;
-    initialSurveySetList: SurveyDetail[] | null;
+    initialSurveySetList: StudySurveySetList[] | null;
     mode: 'create' | 'edit';
     studyNo?: number;
     startDate?: string;
@@ -144,7 +145,7 @@ const SurveyConnectDialog = ({
         // Study Info -> Survey Edit 시
         if (initialSurveySetList) {
             const flattenedSurveys = initialSurveySetList.flatMap((set) =>
-                set.surveyList.map((survey:SurveyDetail) => ({
+                set.surveyList.map((survey:StudySurveyList) => ({
                     ...survey,
                     frequency: set.survey_cycle.toLowerCase(),
                     times: set.number_in_cycle,

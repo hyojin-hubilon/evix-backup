@@ -32,7 +32,7 @@ import { t } from 'i18next';
 
 import { Link, useNavigate } from 'react-router-dom';
 import ecrfApi from '@/apis/ecrf';
-import { MyCRFList } from '@/types/ecrf';
+import { MyCRFList, StudyCrfListRespone } from '@/types/ecrf';
 import CrfDraggableList from './CrfDraggableList';
 import ECrfListTable, { CrfAdd } from './ECrfListTable';
 import { StudyCrfSet } from '@/types/study';
@@ -41,7 +41,7 @@ interface ECrfConnectDialogProps {
     isOpen: boolean;
     handleClose: () => void;
     setStudyCrfSetList: (list: StudyCrfSet[]) => void;
-    initialCrfSetList: StudyCrfSet[] | null;
+    initialCrfSetList: StudyCrfListRespone[] | null;
     mode: 'create' | 'edit';
     studyNo?: number;
     startDate?: string;

@@ -60,19 +60,6 @@ export interface UpdateMemberPrivilegeRequest {
 // 내 Study 목록
 // ===================================
 
-export interface ManagerList {
-    std_no: number;
-    user_no: number;
-    std_privilege: string;
-    profile_image_url: string;
-    profile_image_name: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    company_name: string;
-    invited_at: string | Date;
-}
-
 export interface MyStudyList {
     active_yn: 'Y' | 'N';
     delete_yn: 'Y' | 'N';
@@ -86,7 +73,7 @@ export interface MyStudyList {
     std_start_date: string;
     std_end_date: string;
     std_privilege: string;
-    managerList: ManagerList[];
+    managerList: Manager[];
     std_type: string;
 }
 
@@ -134,7 +121,7 @@ export interface invitedStudy {
     invite_token: string;
     created_at: string;
 }
-interface Manager {
+export interface Manager {
     std_no: number;
     user_no: number;
     std_privilege: string;
@@ -147,7 +134,7 @@ interface Manager {
     invited_at: string | null;
 }
 
-interface Invite {
+export interface Invite {
     std_no: number;
     user_email: string;
     std_privilege: string;
@@ -176,7 +163,7 @@ export interface StudySurveySetList {
 
 export interface StudyDetail {
     std_no: number;
-    std_type: string;
+    std_type: 'E-PRO' | 'E-COA' | 'E-CRF';
     title: string;
     std_start_date: string;
     std_end_date: string;
@@ -205,25 +192,8 @@ export interface StudyDetail {
     std_privilege: string;
     studySurveySetList: StudySurveySetList[];
 	studyCaseReportFormPairList : StudyCrfSet[];
-    managerList: {
-        std_no: number;
-        user_no: number;
-        std_privilege: string;
-        email: string;
-        first_name: string;
-        last_name: string;
-        company_name: string | null;
-        profile_image_url: string;
-        profile_image_name: string;
-        invited_at: string | null;
-    }[];
-    inviteList: {
-        std_no: number;
-        user_email: string;
-        std_privilege: string;
-        created_at: string;
-        accepted_at: string | null;
-    }[];
+    managerList:Manager[];
+    inviteList: Invite[];
 }
 
 // 주기에 따른 매핑
