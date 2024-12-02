@@ -274,6 +274,9 @@ const SurveyConnectDialog = ({
                 );
             }
 
+			console.log(newStudySurveySetList);
+			// return;
+			
             if (newStudySurveySetList.length > 0) {
                 try {
                     const data = {

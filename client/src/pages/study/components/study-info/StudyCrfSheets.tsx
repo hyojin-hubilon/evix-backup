@@ -21,17 +21,17 @@ const StudyCrfSheets = ({stdNo, statusLabel}: StudyCrfSheetsType) => {
 		setIsOpenCrf(false);
 	}
 
-	const getECRFList = async () => {
+	const getECRFList = useCallback(async () => {
 		const reponse = await ecrfApi.getStudyCrfpair(stdNo);
 		const crfList = reponse.content;
 		setInitialCrfSetList(crfList);
-	};
+	}, [stdNo]);
 
 	
 	const postNewCrfPair = async (crfList) => {
 		const response = await ecrfApi.postCrfpair(crfList);
 		console.log('new crf post');
-		//List로 post 하려하는데 기존에 있던걸 빼야하는 것 같은데 그럼 sort를 어떻게 다시 넣는단 말인가?
+		//api 변경예정
 		if(response.code === 200) {
 			getECRFList()
 			console.log(response);
@@ -41,11 +41,11 @@ const StudyCrfSheets = ({stdNo, statusLabel}: StudyCrfSheetsType) => {
 
 	useEffect(() => {
 		getECRFList();
-	}, [stdNo])
+	}, [getECRFList])
 
 	const saveNewCrfList = (crfList: StudyCrfSet[]) => {
-		postNewCrfPair(crfList);
-	}	
+		//postNewCrfPair(crfList);
+	};
 	
 	return (
 		<>

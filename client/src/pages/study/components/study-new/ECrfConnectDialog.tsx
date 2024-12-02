@@ -44,8 +44,6 @@ interface ECrfConnectDialogProps {
     initialCrfSetList: StudyCrfListRespone[] | null;
     mode: 'create' | 'edit';
     studyNo?: number;
-    startDate?: string;
-    endDate?: string;
 }
 
 
@@ -55,9 +53,7 @@ const ECrfConnectDialog = ({
     setStudyCrfSetList,
     initialCrfSetList,
     mode,
-    studyNo,
-    startDate,
-    endDate,
+    studyNo
 }: ECrfConnectDialogProps) => {
     const theme = useTheme();
     const { grey } = theme.palette;
