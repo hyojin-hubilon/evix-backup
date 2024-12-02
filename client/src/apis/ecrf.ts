@@ -71,7 +71,7 @@ const ecrfApi = {
 	},
 
 	/**
-	 * 임상시험(Study) - CRF(증례기록서) 페어 목록 조회회
+	 * 임상시험(Study) - CRF(증례기록서) 페어 목록 조회
 	 * @param stdNo
 	 * @returns
 	 */

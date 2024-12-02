@@ -3,7 +3,7 @@ import { StudyCrfListRespone } from "@/types/ecrf";
 import { StudyCrfSet } from "@/types/study";
 import { Box, Button, Link, List, ListItem, Typography, useTheme } from "@mui/material";
 import { t } from "i18next";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from 'react';
 import ECrfConnectDialog from "../study-new/ECrfConnectDialog";
 import ecrfApi from "@/apis/ecrf";
 
@@ -21,16 +21,31 @@ const StudyCrfSheets = ({stdNo, statusLabel}: StudyCrfSheetsType) => {
 		setIsOpenCrf(false);
 	}
 
-	useEffect(() => {
-		const getECRFList = async () => {
-			const reponse = await ecrfApi.getStudyCrfpair(stdNo);
-			const crfList = reponse.content;
-			setInitialCrfSetList(crfList);
-		}
+	const getECRFList = async () => {
+		const reponse = await ecrfApi.getStudyCrfpair(stdNo);
+		const crfList = reponse.content;
+		setInitialCrfSetList(crfList);
+	};
 
+	
+	const postNewCrfPair = async (crfList) => {
+		const response = await ecrfApi.postCrfpair(crfList);
+		console.log('new crf post');
+		//List로 post 하려하는데 기존에 있던걸 빼야하는 것 같은데 그럼 sort를 어떻게 다시 넣는단 말인가?
+		if(response.code === 200) {
+			getECRFList()
+			console.log(response);
+			
+		}
+	};
+
+	useEffect(() => {
 		getECRFList();
 	}, [stdNo])
 
+	const saveNewCrfList = (crfList: StudyCrfSet[]) => {
+		postNewCrfPair(crfList);
+	}	
 	
 	return (
 		<>
@@ -92,7 +107,7 @@ const StudyCrfSheets = ({stdNo, statusLabel}: StudyCrfSheetsType) => {
 			<ECrfConnectDialog
                 isOpen={isOpenCrf}
                 handleClose={handleCloseCrf}
-                setStudyCrfSetList={setStudyCrfSetList}
+                setStudyCrfSetList={saveNewCrfList}
                 initialCrfSetList={initialCrfSetList}
                 mode="edit"
                 studyNo={stdNo}

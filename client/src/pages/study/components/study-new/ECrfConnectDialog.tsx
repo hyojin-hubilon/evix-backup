@@ -164,13 +164,13 @@ const ECrfConnectDialog = ({
             setSelectedCrf([...selectedCrf, newCrfItem]);
             setAddedCrf(new Set(addedCrf).add(newCrfItem.crf_no));
         } else {
-            // const newItems = setSelectedCrf
-            //     .filter((crf) => crf.crf_no !== addCrf.crf.crf_no)
-            //     .map((crf, index) => ({ ...crf, sort: index + 1 }));
-            // setSelectedCrf(newItems);
-            // setAddedCrf(
-            //     new Set([...addedCrf].filter((no) => no !== addCrf.crf.crf_no))
-            // );
+            const newItems = selectedCrf
+                .filter((crf) => crf.crf_no !== addCrf.crf.crf_no)
+                .map((crf, index) => ({ ...crf, sort: index + 1 }));
+            setSelectedCrf(newItems);
+            setAddedCrf(
+                new Set([...addedCrf].filter((no) => no !== addCrf.crf.crf_no))
+            );
         }
     };
 
@@ -187,17 +187,39 @@ const ECrfConnectDialog = ({
     const handleConnectCrf = () => {
 		console.log(selectedCrf);
 
-		//새로 추가할때
-		const newStudyCefSetList: StudyCrfSet[] = selectedCrf.map((crf, index) => { 
-			return {
-				crf_no: crf.crf_no,
-				sort: index
-			}
-		});
-			
-		console.log(newStudyCefSetList);
+			if(mode=== 'create') {
 
-		setStudyCrfSetList(newStudyCefSetList);
+			
+			//새로 추가할때
+			const newStudyCefSetList: StudyCrfSet[] = selectedCrf.map((crf, index) => { 
+				return {
+					crf_no: crf.crf_no,
+					sort: index
+				}
+			});
+
+			
+
+			setStudyCrfSetList(newStudyCefSetList);
+		
+
+			} else {
+				const newStudyCefSetList: StudyCrfSet[] = selectedCrf.map((crf, index) => { 
+					return {
+						crf_no: crf.crf_no,
+						sort: index,
+						std_no: studyNo
+					}
+				});
+	
+				console.log(newStudyCefSetList);
+	
+				setStudyCrfSetList(newStudyCefSetList);
+			}
+			
+		
+
+		
 
         handleClose();
     };
