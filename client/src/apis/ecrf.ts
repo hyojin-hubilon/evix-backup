@@ -55,6 +55,18 @@ const ecrfApi = {
 			throw e;
 		}
 	},
+	getRegistrableCRFList : async() => {
+		try {
+			const responeData = await api<MyCRFList[] | SelectedCrfList[]>(
+				`${BASE_API_URL}/my-list-registrable`,
+				'get'
+			)
+			return responeData;
+		} catch(error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
 	deleteCrf : async (crfNo: number) => {
 		try {
 			const responseData = await api<object>(

@@ -1,4 +1,3 @@
-import MainCard from "@/components/MainCard";
 import { StudyCrfListRespone, StudyCrfPairPostBody } from "@/types/ecrf";
 import { StudyCrfSet, StudyCrfSetForEdit } from "@/types/study";
 import { Box, Button, Link, List, ListItem, Typography, useTheme } from "@mui/material";
@@ -53,7 +52,7 @@ const StudyCrfSheets = ({stdNo, statusLabel}: StudyCrfSheetsType) => {
 			if(findIndex > -1) return true;
 			else return false;
 		});
-		
+
 		setInitialCrfSetList(newInitial)
 	}, [studyCrfSetList])
 	

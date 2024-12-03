@@ -77,7 +77,7 @@ const ECrfConnectDialog = ({
     // 등록 가능한 CRF 목록 api 분리
     const fetchECrf = async () => {
         try {
-			const response = await ecrfApi.getCRFList();
+			const response = await ecrfApi.getRegistrableCRFList();
 			const crfList = response.content || [];
 			setCrfList(crfList);
 			setSearchedResult(crfList);
@@ -350,7 +350,7 @@ const ECrfConnectDialog = ({
 											{/* 연결 가능한 ECRF Sheet가 없습니다. */}
 											{t('study.no_crf_connect')}
 										</Typography>
-										<Link to="/survey/samples" target="_blank" rel="noopener noreferrer" onClick={() => handleClose()}>
+										<Link to="/e-crf/builder" target="_blank" rel="noopener noreferrer" onClick={() => handleClose()}>
 											{/* ECRF Sheet 생성하기 */}
 											{t('study.create_a_crf')}
 										</Link>
