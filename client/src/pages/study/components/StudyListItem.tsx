@@ -16,7 +16,7 @@ import {
     useTheme,
 } from '@mui/material';
 
-import { ManagerList, StudyListItemProps } from '@/types/study';
+import { Manager, StudyListItemProps } from '@/types/study';
 import { useEffect, useState } from 'react';
 import MemberManagement from './study-new/MemberManagement';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -73,7 +73,7 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
 
     const { userProfile } = useUserProfile();
 
-    const managerList: ManagerList[] = study.managerList;
+    const managerList: Manager[] = study.managerList;
 
     const navigate = useNavigate();
 
