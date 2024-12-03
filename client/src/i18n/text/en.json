@@ -247,6 +247,7 @@
         "completion": "Completion",
         "incomplete": "Incomplete",
 		"deployFailure": "Please connect the survey with the EIC",
+		"deployFailure2" : "Please connect the eCRF Sheets with the EIC",
 		"no_studies_created" : "There are no studies created.",
 		"start_your_project" : "Start your project by creating a new Study.",
 		"no_surveys_connect" : "There are no surveys available to connect.",

@@ -3,31 +3,22 @@ import {
     Box,
     Button,
     Dialog,
-    DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
     FormControl,
     Grid,
-    Hidden,
     IconButton,
-    List,
     OutlinedInput,
     Snackbar,
     Typography,
     useTheme,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import SurveyListTable, { SurveyAdd } from './SurveyListTable';
 import { FormEvent, useEffect, useState } from 'react';
-import { RegistrableSurvey } from '@/types/survey';
-import DraggableList from './DraggableList';
 import { DropResult } from '@hello-pangea/dnd';
 import { reorder } from '@/utils/helper';
-import SurveyConnectPreview from './SurveyConnectPreview';
 
-import studyApi from '@/apis/study';
-import SurveyDeleteDialog from './SurveyDeleteDialog';
+
 import { t } from 'i18next';
 
 import { Link, useNavigate } from 'react-router-dom';
@@ -63,6 +54,7 @@ const ECrfConnectDialog = ({
     const [searchText, setSearchText] = useState('');
     const [previewSurveyNo, setPreviewSurveyNo] = useState<number>();
     const [crfList, setCrfList] = useState<MyCRFList[]>([]);
+	const [allCrfList, setAllCrfList] = useState<MyCRFList[]>([]);
     const [searchedResult, setSearchedResult] = useState<MyCRFList[]>([]);
     const [selectedCrf, setSelectedCrf] = useState<MyCRFList[]>([]);
 
@@ -75,7 +67,17 @@ const ECrfConnectDialog = ({
 	const confirm = useConfirmation();
 
     // 등록 가능한 CRF 목록 api 분리
-    const fetchECrf = async () => {
+	const fetchECrf = async () => {
+        try {
+			const response = await ecrfApi.getCRFList();
+			const crfList = response.content || [];
+			setAllCrfList(crfList);
+        } catch (error) {
+            console.error('Failed to fetch surveys:', error);
+        }
+    };
+
+    const fetchECrfRegistrable = async () => {
         try {
 			const response = await ecrfApi.getRegistrableCRFList();
 			const crfList = response.content || [];
@@ -121,13 +123,15 @@ const ECrfConnectDialog = ({
     useEffect(() => {
 		if(isOpen) {
 			fetchECrf();
+			fetchECrfRegistrable();
 			setSearchText('');
 		}
     }, [isOpen]);
 
 	useEffect(() => {
         if (initialCrfSetList) {
-            const selectedCrfs = crfList.filter((crf) => {
+			console.log(initialCrfSetList)
+            const selectedCrfs = allCrfList.filter((crf) => {
 				const findedCrf = initialCrfSetList.findIndex(set => set.crf_no === crf.crf_no);
 				if(findedCrf > -1) return true;
 			}).map((crf) => {
@@ -139,7 +143,7 @@ const ECrfConnectDialog = ({
             setSelectedCrf(selectedCrfs);
         }
 
-	}, [initialCrfSetList, crfList])
+	}, [initialCrfSetList, allCrfList])
 
 	
 

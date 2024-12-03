@@ -55,6 +55,7 @@ export interface MyCRFList {
 	std_title:string | null;
 	std_type:string | null;
 	sort:number;
+	pair_no: number;
 }
 
 export interface StudyCrfListRespone {

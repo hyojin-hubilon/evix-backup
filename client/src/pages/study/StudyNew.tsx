@@ -41,6 +41,7 @@ import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import DatePicker from 'antd/lib/date-picker';
 import ECrfConnectDialog from './components/study-new/ECrfConnectDialog';
 import { MyCRFList, StudyCrfListRespone } from '@/types/ecrf';
+import ecrfApi from '@/apis/ecrf';
 
 const FormTooltip = ({text}: {text: React.ReactNode}) => {
     return (
@@ -261,8 +262,9 @@ const StudyNew = () => {
     useEffect(() => {
         if (state?.mode === 'edit') {
             setMode('edit');
-            void fetchStudyDetail(state.stdNo as number); // 스터디 상세 정보 가져오기
+            fetchStudyDetail(state.stdNo as number); // 스터디 상세 정보 가져오기
 			setRangePickerDisable([true, false]);
+			
         }
     }, []);
 
@@ -289,6 +291,13 @@ const StudyNew = () => {
         return (privilege: string) => t('study.please_set_it_invite'); //'초대하기 팝업에서 설정해주세요.';
     }, [members, inviteList, mode]);
 
+	const [crfSetList, setCrfSetList] = useState<StudyCrfListRespone[]>([]);
+	const getECRFList = async (stdNo) => {
+		const reponse = await ecrfApi.getStudyCrfpair(stdNo);
+		const crfList = reponse.content;
+		setCrfSetList(crfList);
+	};
+	
     const [studyDetail, setStudyDetail] = useState<StudyDetail>();
 
     const fetchStudyDetail = async (stdNo:number) => {
@@ -316,6 +325,11 @@ const StudyNew = () => {
 			setSurveyTitles(titles);
             setInviteList(studyContents['inviteList']);
             setManagerList(studyContents['managerList']);
+
+			if(studyContents['std_type'] === 'E-CRF') {
+				getECRFList(studyContents['std_no'])
+			}
+
 
             if (studyContents['drug_code']) {
                 setDrug({
@@ -381,11 +395,19 @@ const StudyNew = () => {
     };
 
     const handleDeploy = async () => {
-        const { studySurveySetList, eic_name } = studyDetail || {};
+        const { studySurveySetList, eic_name, std_type, use_your_own_consent_form } = studyDetail || {};
 
-        if (!studySurveySetList || !eic_name) {
+		
+        if (std_type !=='E-CRF' && (!studySurveySetList || !eic_name)) {
             return confirm({
                 description: t('study.deployFailure'), // Survey와 EIC를 연결해주세요.
+                variant: 'info',
+            });
+        }
+
+		if (std_type ==='E-CRF' && (!crfSetList || (use_your_own_consent_form == 'N' && !eic_name))) {
+            return confirm({
+                description: t('study.deployFailure2'), //  eCRF Sheet와 EIC를 연결해주세요.
                 variant: 'info',
             });
         }

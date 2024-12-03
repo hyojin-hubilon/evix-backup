@@ -237,6 +237,7 @@
         "completion": "참여자",
         "incomplete": "미참여자",
         "deployFailure": "Survey와 EIC를 연결해주세요.",
+		"deployFailure2" : "eCRF Sheet와 EIC를 연결해주세요.",
 		"no_studies_created" : "There are no studies created.",
 		"start_your_project" : "Start your project by creating a new Study.",
 		"no_surveys_connect" : "연결 가능한 설문이 없습니다.",

@@ -1,11 +1,13 @@
-import React from 'react';
-import { Container, Box, Typography, Grid, Button, Link, ListItem, Card } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Container, Box, Typography, Grid, Button, Link, ListItem, Card, List } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useTheme } from '@mui/material';
 import MainCard from '@/components/MainCard';
-import { surveyCycle, surveyCycleEn } from '@/types/study';
+import { StudyDetail, surveyCycle, surveyCycleEn } from '@/types/study';
 import { useTranslation } from 'react-i18next';
+import ecrfApi from '@/apis/ecrf';
+import { StudyCrfListRespone } from '@/types/ecrf';
 
 const StudyPreviewPage = () => {
     const theme = useTheme();
@@ -13,7 +15,9 @@ const StudyPreviewPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
 	const { t, i18n } = useTranslation();
-    const studyDetail = location.state?.studyDetail;
+    const studyDetail: StudyDetail = location.state?.studyDetail;
+
+	const [ crfList, setCrfList ] = useState<StudyCrfListRespone[]>([]);
 
     console.log('studyDetail: ', studyDetail);
 
@@ -30,6 +34,19 @@ const StudyPreviewPage = () => {
         const names = members.map((member) => `${member.first_name} ${member.last_name}`);
         return names.length > 1 ? `${names[0]} ${t('study.and')} ${names.length - 1}${t('study.other_person')}` : names[0];
     };
+
+	const getStudyECRFList = async (stdNo) => {
+		const reponse = await ecrfApi.getStudyCrfpair(stdNo);
+		const crfList = reponse.content;
+		setCrfList(crfList);
+	};
+
+	
+	useEffect(() => {
+		if(studyDetail && studyDetail.std_type === 'E-CRF') {
+			getStudyECRFList(studyDetail.std_no);
+		}
+	}, [studyDetail])
 
     return (
         <Container>
@@ -168,7 +185,10 @@ const StudyPreviewPage = () => {
                         )}
                     </Grid>
                     <Grid container alignItems="flex-start">
-                        <Grid item xs={3}>
+						{
+							studyDetail.std_type !== 'E-CRF' ? 
+							<>
+							<Grid item xs={3}>
                             <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
                                 <Typography variant="h5">Survey</Typography>
                             </Box>
@@ -183,8 +203,7 @@ const StudyPreviewPage = () => {
                                         sx={{ pt: '0.2rem' }}
                                         gap={0.5}
                                     >
-                                        {studyDetail.studySurveySetList &&
-                                            studyDetail.studySurveySetList.length > 0 &&
+                                        {
                                             studyDetail.studySurveySetList.map((surveySet) =>
                                                 surveySet.surveyList.map((survey) => (
                                                     <ListItem key={survey.survey_no}>
@@ -226,7 +245,48 @@ const StudyPreviewPage = () => {
                                     </Typography>
                                 </Box>
                             )}
+                        </Grid></>
+						:
+						<>
+						{/* 스터디가 eCRF일때 eCRF Sheets 리스트 */}
+						<Grid item xs={3}>
+                            <Box display="flex" alignItems="center" sx={{ pt: '0.2rem' }} gap={0.5}>
+                                <Typography variant="h5">eCRF Sheets</Typography>
+                            </Box>
                         </Grid>
+                        <Grid item xs={9}>
+                            {crfList &&
+                            crfList.length > 0 ? (
+                                <Card sx={{boxShadow: 'none', border: `1px solid ${theme.palette.grey.A800}` }}>
+                                    <ul style={{ padding: '0.2rem 0 0 2rem' }}>
+                                        {   
+										crfList.map((crf) =>
+											<li key={crf.crf_no}>
+												<Link>{crf.crf_title}</Link>
+											</li>
+										)}
+                                    </ul>
+                                </Card>
+                            ) : (
+                                <Box
+                                    display="flex"
+                                    alignItems="center"
+                                    sx={{ pt: '0.2rem' }}
+                                    gap={0.5}
+                                >
+                                    <Typography>
+										{t('study.none')}
+										{/* 없음 */}
+									</Typography>
+                                    <Typography variant="body2" color="error">
+										{t('study.make_sure_connect')}
+                                        {/* * Study 배포전에 반드시 업로드해주세요. */}
+                                    </Typography>
+                                </Box>
+                            )}
+                        </Grid></>
+						}
+                        
                     </Grid>
                     <Grid container alignItems="flex-start">
                         <Grid item xs={3}>

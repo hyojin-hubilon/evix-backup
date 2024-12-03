@@ -198,6 +198,7 @@ export interface StudyDetail {
 	studyCaseReportFormPairList : StudyCrfSet[];
     managerList:Manager[];
     inviteList: Invite[];
+	use_your_own_consent_form?: 'Y' | 'N' | null;
 }
 
 // 주기에 따른 매핑
