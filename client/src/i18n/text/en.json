@@ -259,7 +259,8 @@
 		"if_there_are_multiple_crfs" : "If there are multiple eCRF Sheets, they are processed according to the order of settings.",
 		"crf_title" : "eCRF Sheet Title",
 		"no_crf_connect" :  "There are no eCRF Sheets available to connect.",
-		"create_a_crf" : "Create a eCRF Sheet"
+		"create_a_crf" : "Create a eCRF Sheet",
+		"are_you_sure_to_delete_pair" : "Are you sure you want to delete the eCRF Sheet?"
 	},
     "eic": {
         "has_been_saved": "Your electronic consent form has been saved.",

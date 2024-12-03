@@ -75,7 +75,7 @@ const SurveyConnectDialog = ({
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [surveyToDelete, setSurveyToDelete] = useState<RegistrableSurvey | null>(null);
 
-    console.log('initialSurveySetList: ', initialSurveySetList);
+    // console.log('initialSurveySetList: ', initialSurveySetList);
 
     // 등록 가능한 설문 목록 api 분리
     const fetchSurvey = async () => {

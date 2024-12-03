@@ -2,7 +2,7 @@ import {
     ResCommonError,
     api
 } from '@/apis/axios-common';
-import { CRFPostReqBody, CRFPostResponse, CRFPutReqBody, MyCRFList, StudyCrfListRespone } from '@/types/ecrf';
+import { CRFPostReqBody, CRFPostResponse, CRFPutReqBody, MyCRFList, SelectedCrfList, StudyCrfListRespone, StudyCrfPairDeleteBody, StudyCrfPairPostBody } from '@/types/ecrf';
 
 const BASE_API_URL = '/researcher/case-report-form';
 const BASE_API_URL_2 = '/researcher/study-case-report-form-pair';
@@ -45,7 +45,7 @@ const ecrfApi = {
 	},
 	getCRFList : async() => {
 		try {
-			const responeData = await api<MyCRFList[]>(
+			const responeData = await api<MyCRFList[] | SelectedCrfList[]>(
 				`${BASE_API_URL}/full-my-list`,
 				'get'
 			)
@@ -90,7 +90,7 @@ const ecrfApi = {
      * @param data
      * @returns
      */
-    postCrfpair: async (data) => {
+    postCrfpair: async (data : StudyCrfPairPostBody[]) => {
         try {
             const responseData = await api<object>(`${BASE_API_URL_2}`, 'post', data);
             return responseData;
@@ -104,7 +104,7 @@ const ecrfApi = {
      * @param data
      * @returns
      */
-	deleteCrfpair: async (data) => {
+	deleteCrfpair: async (data: StudyCrfPairDeleteBody) => {
         try {
             const responseData = await api<object>(`${BASE_API_URL_2}/unpairing`, 'delete', data);
             return responseData;

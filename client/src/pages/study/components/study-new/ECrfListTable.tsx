@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import PreviewIcon from '@mui/icons-material/Preview';
 import { t } from 'i18next';
-import { MyCRFList } from '@/types/ecrf';
+import { MyCRFList, SelectedCrfList } from '@/types/ecrf';
 
 export type CrfAdd = {
     type: 'add' | 'delete';
@@ -36,7 +36,7 @@ const ECrfListTable = ({
     const { divider } = theme.palette;
     const ref = useRef({});
 
-    const handleSelectCrf = (e: ChangeEvent<HTMLInputElement>, crf) => {
+    const handleSelectCrf = (e: ChangeEvent<HTMLInputElement>, crf: MyCRFList) => {
         const checked = e.target.checked;
         if (checked) handleSelected({ type: 'add', crf: crf });
         else handleSelected({ type: 'delete', crf: crf });

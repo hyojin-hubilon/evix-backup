@@ -19,6 +19,10 @@ export interface StudyCrfSet {
 	sort:number;
 }
 
+export interface StudyCrfSetForEdit extends StudyCrfSet {
+	std_no:number | null;
+}
+
 export interface Study {
     std_no?: number; // 수정 시에만 필요
     std_type: string;

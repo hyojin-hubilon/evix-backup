@@ -31,7 +31,7 @@ const DraggableList = ({
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable-list">
+            <Droppable droppableId="droppable-list" isDropDisabled={mode === 'edit' ? true : false}>
                 {(provided) => (
                     <List ref={provided.innerRef} {...provided.droppableProps}>
                         {items.map((item: RegistrableSurvey, index: number) => (
@@ -42,6 +42,7 @@ const DraggableList = ({
                                 itemChanged={handleChangeSurvey}
                                 deleteItem={handleDeleteSurvey}
                                 mode={mode}
+								
                                 isAddedSurvey={addedSurveys.has(item.survey_no)}
                             />
                         ))}

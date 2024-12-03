@@ -32,15 +32,17 @@ import { t } from 'i18next';
 
 import { Link, useNavigate } from 'react-router-dom';
 import ecrfApi from '@/apis/ecrf';
-import { MyCRFList, StudyCrfListRespone } from '@/types/ecrf';
+import { MyCRFList, SelectedCrfList, StudyCrfListRespone } from '@/types/ecrf';
 import CrfDraggableList from './CrfDraggableList';
 import ECrfListTable, { CrfAdd } from './ECrfListTable';
-import { StudyCrfSet } from '@/types/study';
+import { StudyCrfSet, StudyCrfSetForEdit } from '@/types/study';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
 
 interface ECrfConnectDialogProps {
     isOpen: boolean;
     handleClose: () => void;
-    setStudyCrfSetList: (list: StudyCrfSet[]) => void;
+    setStudyCrfSetList?: (list: StudyCrfSet[]) => void;
+	saveNewCrfList?:(list: StudyCrfSetForEdit[]) => void;
     initialCrfSetList: StudyCrfListRespone[] | null;
     mode: 'create' | 'edit';
     studyNo?: number;
@@ -51,6 +53,7 @@ const ECrfConnectDialog = ({
     isOpen,
     handleClose,
     setStudyCrfSetList,
+	saveNewCrfList,
     initialCrfSetList,
     mode,
     studyNo
@@ -67,9 +70,9 @@ const ECrfConnectDialog = ({
     const [openAlert, setOpenAlert] = useState<boolean>(false);
 
     // const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [crfToDelete, setCrfToDelete] = useState<MyCRFList | null>(null);
+    
 
-    // console.log('initialSurveySetList: ', initialSurveySetList);
+	const confirm = useConfirmation();
 
     // 등록 가능한 CRF 목록 api 분리
     const fetchECrf = async () => {
@@ -83,10 +86,12 @@ const ECrfConnectDialog = ({
         }
     };
 
-    const handleDeleteClick = (crf: MyCRFList) => {
+    const handleDeleteClick = (crf: SelectedCrfList) => {
         if (mode === 'edit') {
-            // setSurveyToDelete(crf);
-            // setShowDeleteConfirm(true);
+            confirm({
+				description : t('study.are_you_sure_to_delete_pair'),
+				variant : 'danger'
+			}).then(() => handleDeleteConfirm(crf));
         } else {
             // mode가 'create'인 경우 바로 삭제
 			console.log(selectedCrf)
@@ -97,33 +102,21 @@ const ECrfConnectDialog = ({
         }
     };
 
-    // const handleDeleteConfirm = async () => {
-    //     if (crfToDelete) {
-    //         try {
-    //             await studyApi.deleteCrfpair({
-    //                 std_no: studyNo,
-    //                 //pair_no: crfToDelete.pair_no, //?
-    //             });
-    //             const newSelectedCrf = selectedCrf.filter(
-    //                 (s) => s.crf_no !== crfToDelete.crf_no
-    //             );
-    //             setSelectedCrf(newSelectedCrf);
-    //             setSuccessMessage(t('study.crf_successfully_deleted')); //ECRF가 성공적으로 삭제되었습니다.
-    //             setOpenAlert(true);
-    //         } catch (error) {
-    //             console.error('Failed to disconnect survey:', error);
-    //             setSuccessMessage(t('study.failed_delete_survey')); //설문 삭제에 실패했습니다.
-    //             setOpenAlert(true);
-    //         }
-    //     }
-    //     setShowDeleteConfirm(false);
-    //     setCrfToDelete(null);
-    // };
-
-    // const handleDeleteCancel = () => {
-    //     setShowDeleteConfirm(false);
-    //     setCrfToDelete(null);
-    // };
+    const handleDeleteConfirm = async (crfToDelete:SelectedCrfList) => {
+            try {
+                await ecrfApi.deleteCrfpair({
+                    std_no: crfToDelete.std_no,
+                    pair_no: crfToDelete.pair_no
+                });
+                const newSelectedCrf = selectedCrf.filter(
+                    (s) => s.crf_no !== crfToDelete.crf_no
+                );
+                setStudyCrfSetList && setStudyCrfSetList(newSelectedCrf);
+            } catch (error) {
+                console.error('Failed to disconnect survey:', error);
+            }
+        
+    };
 
     useEffect(() => {
 		if(isOpen) {
@@ -139,7 +132,7 @@ const ECrfConnectDialog = ({
 				if(findedCrf > -1) return true;
 			}).map((crf) => {
 				const findedCrf = initialCrfSetList.findIndex(set => set.crf_no === crf.crf_no);
-				return {...crf, sort : initialCrfSetList[findedCrf].sort};
+				return {...crf, sort : initialCrfSetList[findedCrf].sort, pair_no: initialCrfSetList[findedCrf].pair_no};
 			});
 
 			selectedCrfs.sort((a, b) => a.sort - b.sort );			
@@ -183,7 +176,7 @@ const ECrfConnectDialog = ({
     const handleConnectCrf = () => {
 		console.log(selectedCrf);
 
-			if(mode=== 'create') {
+			if(mode === 'create') {
 
 			
 			//새로 추가할때
@@ -196,21 +189,21 @@ const ECrfConnectDialog = ({
 
 			
 
-			setStudyCrfSetList(newStudyCefSetList);
+			setStudyCrfSetList && setStudyCrfSetList(newStudyCefSetList);
 		
 
 			} else {
-				const newStudyCefSetList: StudyCrfSet[] = selectedCrf.map((crf, index) => { 
+				const newStudyCefSetList: StudyCrfSetForEdit[] = selectedCrf.map((crf, index) => { 
 					return {
 						crf_no: crf.crf_no,
 						sort: index,
-						std_no: studyNo
+						std_no: studyNo ? studyNo : null
 					}
 				});
 	
 				console.log(newStudyCefSetList);
 	
-				setStudyCrfSetList(newStudyCefSetList);
+				saveNewCrfList && saveNewCrfList(newStudyCefSetList);
 			}
 			
 		
@@ -386,12 +379,6 @@ const ECrfConnectDialog = ({
                     {successMessage}
                 </Alert>
             </Snackbar>
-
-            {/* <SurveyDeleteDialog
-                isOpen={showDeleteConfirm}
-                handleClose={handleDeleteCancel}
-                handleConfirm={handleDeleteConfirm}
-            /> */}
         </>
     );
 };

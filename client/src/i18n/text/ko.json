@@ -249,7 +249,8 @@
 		"if_there_are_multiple_crfs" : "eCRF Sheet가 여러개일 경우, 설정 순서에 따라 진행됩니다.",
 		"crf_title" : "eCRF Sheet 제목",
 		"no_crf_connect" :  "연결 가능한 eCRF Sheet가 없습니다.",
-		"create_a_crf" : "eCRF Sheet 생성하기"
+		"create_a_crf" : "eCRF Sheet 생성하기",
+		"are_you_sure_to_delete_pair" : "eCRF Sheet의 연결을 해제하시겠습니까?"
     },
     "eic": {
         "has_been_saved": "전자동의서가 저장되었습니다.",

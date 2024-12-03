@@ -59,14 +59,18 @@ export interface MyCRFList {
 
 export interface StudyCrfListRespone {
 	pair_no: number; //post 할때 pair_no는 필요없는 걸까..
-	std_no: number,
+	std_no: number | null,
 	crf_no: number,
 	crf_title: string,
 	sort: number
 }
 
+export interface SelectedCrfList extends MyCRFList, StudyCrfListRespone {
+
+}
+
 export interface StudyCrfPairPostBody {
-	std_no: number,
+	std_no: number | null,
     crf_no: number,
     sort: number
 }
@@ -74,5 +78,5 @@ export interface StudyCrfPairPostBody {
 
 export interface StudyCrfPairDeleteBody {
 	pair_no: number,
-    std_no: number   
+    std_no: number | null  
 }

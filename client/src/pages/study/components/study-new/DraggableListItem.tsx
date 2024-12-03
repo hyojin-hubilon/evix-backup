@@ -49,7 +49,7 @@ const DraggableListItem = ({
     const isDisabled = mode === 'edit' && !isAddedSurvey;
 
     return (
-        <Draggable draggableId={item.title} index={index}>
+        <Draggable draggableId={item.title} index={index} isDragDisabled={mode === 'edit' ? true : false}>
             {(provided, snapshot) => (
                 <ListItem
                     ref={provided.innerRef}
@@ -67,7 +67,10 @@ const DraggableListItem = ({
                     }}
                 >
                     <Grid container alignItems="center" gap={1}>
-                        <DragHandleIcon sx={{ color: grey[500] }} />
+						{
+							mode === 'create' && <DragHandleIcon sx={{ color: grey[500] }} />
+						}
+                        
                         <ListItemText primary={survey.title} sx={{ maxWidth: '280px' }} />
 
 

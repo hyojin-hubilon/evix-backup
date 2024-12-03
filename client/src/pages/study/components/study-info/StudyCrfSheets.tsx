@@ -1,6 +1,6 @@
 import MainCard from "@/components/MainCard";
-import { StudyCrfListRespone } from "@/types/ecrf";
-import { StudyCrfSet } from "@/types/study";
+import { StudyCrfListRespone, StudyCrfPairPostBody } from "@/types/ecrf";
+import { StudyCrfSet, StudyCrfSetForEdit } from "@/types/study";
 import { Box, Button, Link, List, ListItem, Typography, useTheme } from "@mui/material";
 import { t } from "i18next";
 import { useEffect, useState, useCallback } from 'react';
@@ -28,7 +28,7 @@ const StudyCrfSheets = ({stdNo, statusLabel}: StudyCrfSheetsType) => {
 	}, [stdNo]);
 
 	
-	const postNewCrfPair = async (crfList) => {
+	const postNewCrfPair = async (crfList : StudyCrfPairPostBody[]) => {
 		const response = await ecrfApi.postCrfpair(crfList);
 		console.log('new crf post');
 		//api 변경예정
@@ -43,9 +43,19 @@ const StudyCrfSheets = ({stdNo, statusLabel}: StudyCrfSheetsType) => {
 		getECRFList();
 	}, [getECRFList])
 
-	const saveNewCrfList = (crfList: StudyCrfSet[]) => {
-		//postNewCrfPair(crfList);
+	const saveNewCrfList = (crfList: StudyCrfSetForEdit[]) => {
+		postNewCrfPair(crfList);
 	};
+
+	useEffect(() => {
+		const newInitial = initialCrfSetList.filter((initial) => {
+			const findIndex  = studyCrfSetList.findIndex(crfset => crfset.crf_no === initial.crf_no)  
+			if(findIndex > -1) return true;
+			else return false;
+		});
+		
+		setInitialCrfSetList(newInitial)
+	}, [studyCrfSetList])
 	
 	return (
 		<>
@@ -107,7 +117,8 @@ const StudyCrfSheets = ({stdNo, statusLabel}: StudyCrfSheetsType) => {
 			<ECrfConnectDialog
                 isOpen={isOpenCrf}
                 handleClose={handleCloseCrf}
-                setStudyCrfSetList={saveNewCrfList}
+                saveNewCrfList={saveNewCrfList}
+				setStudyCrfSetList={setStudyCrfSetList}
                 initialCrfSetList={initialCrfSetList}
                 mode="edit"
                 studyNo={stdNo}
