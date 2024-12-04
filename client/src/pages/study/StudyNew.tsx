@@ -1129,7 +1129,9 @@ const StudyNew = () => {
                                                 {/* <Button variant="outlined" onClick={handleUpdate}>
                                                     수정
                                                 </Button> */}
-                                                <Button
+												{
+													studyDetail && studyDetail?.std_end_date > dayjs().format('YYYY-MM-DD') &&
+													<Button
                                                     variant="outlined"
                                                     color="info"
                                                     onClick={() => handleOpenDialog('pause')}
@@ -1137,6 +1139,7 @@ const StudyNew = () => {
                                                     {t('common.pause')}
                                                     {/* 일시중지 */}
                                                 </Button>
+												}
                                                 <Button
                                                     variant="contained"
                                                     onClick={() => handleOpenDialog('done')}
