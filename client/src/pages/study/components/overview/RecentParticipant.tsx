@@ -57,7 +57,7 @@ const RecentParticipant = ({ participantList, onMoreClick }) => {
                             <TableCell>Name</TableCell>
                             <TableCell align="right">Date of Birth</TableCell>
                             <TableCell align="right">Round Info.</TableCell>
-                            <TableCell align="right">Institution</TableCell>
+                            {/* <TableCell align="right">Institution</TableCell> */}
                             <TableCell align="right">Status</TableCell>
                         </TableRow>
                     </TableHead>
@@ -75,7 +75,7 @@ const RecentParticipant = ({ participantList, onMoreClick }) => {
                                 </TableCell>
                                 <TableCell align="right">{row.dateOfBirth}</TableCell>
                                 <TableCell align="right">{row.roundInfo}</TableCell>
-                                <TableCell align="right">{row.institution}</TableCell>
+                                {/* <TableCell align="right">{row.institution}</TableCell> */}
                                 <TableCell align="right">{row.status}</TableCell>
                             </TableRow>
                         ))}
