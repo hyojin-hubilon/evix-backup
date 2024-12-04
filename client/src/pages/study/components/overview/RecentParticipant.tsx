@@ -14,8 +14,15 @@ import {
     useTheme,
 } from '@mui/material';
 import { t } from 'i18next';
+import { ParticipantsList, StudyType } from '@/types/study';
 
-const RecentParticipant = ({ participantList, onMoreClick }) => {
+type RecentParticipantTypes = {
+	participantList: ParticipantsList[],
+	onMoreClick:() => void;
+	studyType: StudyType
+}
+
+const RecentParticipant = ({ participantList, onMoreClick, studyType }: RecentParticipantTypes) => {
     const theme = useTheme();
     const { divider } = theme.palette;
 
@@ -25,7 +32,7 @@ const RecentParticipant = ({ participantList, onMoreClick }) => {
         gender: participant.gender,
         dateOfBirth: participant.birthday,
         age: participant.age,
-        roundInfo: participant.number_answer + '/' + participant.total_number_survey,
+        roundInfo: studyType === 'E-CRF' ? participant.number_answer : participant.number_answer + '/' + participant.total_number_survey,
         institution: participant.allotment_agency_name,
         status: participant.participation_status === 'PROGRESS' ? 'In Progress' : 'Complete',
     }));

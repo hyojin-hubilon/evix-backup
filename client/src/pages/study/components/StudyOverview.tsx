@@ -5,7 +5,7 @@ import GenderAgeChart from './overview/GenderAgeChart';
 import AllPartTransitionChart from './overview/AllPartTransitionChart';
 import PartByHospitalsChart from './overview/PartByHospitalsChart';
 import RecentParticipant from './overview/RecentParticipant';
-import { ParticipantsList, ParticipationRateByAge } from '@/types/study';
+import { ParticipantsList, ParticipationRateByAge, StudyType } from '@/types/study';
 import { t } from 'i18next';
 import { downloadPNG } from '@/utils/helper';
 import { useRef } from 'react';
@@ -21,6 +21,7 @@ type StudyOverviewProps = {
     participationRateByPeriod: any;
     onPeriodChange: (newPeriod: 'WEEK' | 'MONTH' | 'YEAR') => void;
     onMoreClick: () => void;
+	stdType: StudyType
 };
 
 const StudyOverView = ({
@@ -31,6 +32,7 @@ const StudyOverView = ({
     participationRateByPeriod,
     onPeriodChange,
     onMoreClick,
+	stdType
 }: StudyOverviewProps) => {
 
 	
@@ -106,6 +108,7 @@ const StudyOverView = ({
                     <RecentParticipant
                         participantList={participantList}
                         onMoreClick={onMoreClick}
+						studyType={stdType}
                     />
                 </MainCard>
             </Grid>

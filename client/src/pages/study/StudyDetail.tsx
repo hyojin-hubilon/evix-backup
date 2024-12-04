@@ -308,6 +308,7 @@ const StudyDetail = () => {
                             participationRateByPeriod={participationRateByPeriod}
                             onPeriodChange={handlePeriodChange}
                             onMoreClick={() => setActiveTab('2')} // 최근 참여자 More 버튼 클릭 시 Participants 탭으로 이동
+							stdType={studyDetail.std_type}
                         />
                     )}
                 {studyDetail && activeTab === '1' && (

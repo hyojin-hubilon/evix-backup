@@ -281,3 +281,4 @@ export interface ParticipantsList {
 }
 
 export type StdType = 'ePRO' | 'eCOA' | 'eCRF';
+export type StudyType = 'E-PRO' | 'E-COA' | 'E-CRF';
