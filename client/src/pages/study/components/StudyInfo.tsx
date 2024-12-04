@@ -37,7 +37,7 @@ import StudyCrfSheets from './study-info/StudyCrfSheets';
 
 interface StudyInfoProps {
     studyDetail: StudyDetail;
-    ownerId: number;
+    ownerId: number | null;
     onSurveyClose: () => void;
 }
 
@@ -300,7 +300,8 @@ const StudyInfo = ({ studyDetail, ownerId, onSurveyClose }: StudyInfoProps) => {
                                     {/* Study 타입 */}
                                 </Typography>
                                 <Box display="flex" gap={1}>
-                                    <Chip color="primary" label={studyDetail.std_type} />
+                                    <Chip label={studyDetail.std_type} color={
+									studyDetail?.std_type === 'E-PRO' ? "primary" : "info"}/>
                                 </Box>
                             </ListItem>
                             <ListItem>

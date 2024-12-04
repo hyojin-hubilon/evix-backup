@@ -9,14 +9,14 @@ import StudyParticipants from './components/StudyParicipations';
 import { useNavigate, useParams } from 'react-router-dom';
 import studyApi from '@/apis/study';
 import { STUDY_STATUS, STUDY_STATUS_KEY, TitleStatusIcon } from './components/StudyListItem';
-import { ParticipantsList, ParticipationRateByAge, totalParticipants } from '@/types/study';
+import { Manager, ParticipantsList, ParticipationRateByAge, StudyDetail as StdDetail, totalParticipants } from '@/types/study';
 import dayjs from 'dayjs';
 import { t } from 'i18next';
 
 const StudyDetail = () => {
     const { stdNo } = useParams<{ stdNo: string | undefined }>();
 
-    const [studyDetail, setStudyDetail] = useState<any>();
+    const [studyDetail, setStudyDetail] = useState<StdDetail>({} as StdDetail);
 
     const [totalParticipants, setTotalParticipants] = useState<totalParticipants | null>(null);
     const [participationRateByAge, setParticipationRateByAge] =
@@ -75,7 +75,7 @@ const StudyDetail = () => {
         try {
             const response = await studyApi.participantList(stdNo);
 
-            setParticipantList(response.content as ParticipantsList[]);
+            setParticipantList(response.content);
             // setParticipantList([
             //     {
             //         'std_no': 3,
@@ -191,7 +191,7 @@ const StudyDetail = () => {
 
     const statusLabel = STUDY_STATUS[studyDetail?.std_status as STUDY_STATUS_KEY];
     const owner = studyDetail?.managerList?.find(
-        (manager: any) => manager.std_privilege === 'OWNER'
+        (manager: Manager) => manager.std_privilege === 'OWNER'
     );
 
     const handleEditClick = (std_no: number) => {
@@ -208,10 +208,10 @@ const StudyDetail = () => {
                             label={
                                 <>
                                     <TitleStatusIcon
-                                        status={studyDetail?.std_status}
+                                        status={studyDetail?.std_end_date < today ? 'STD-Expired' : studyDetail?.std_status}
                                         color="white"
                                     />{' '}
-                                    {statusLabel}
+                                    {studyDetail?.std_end_date < today ? 'Expired' : statusLabel}
                                 </>
                             }
                             sx={{
@@ -222,19 +222,25 @@ const StudyDetail = () => {
                                 ...(studyDetail?.std_status === 'STD-DONE' && {
                                     bgcolor: stdStatus.completed,
                                 }), //Completed
-                                ...(studyDetail?.endDate < today &&
+                                ...(studyDetail?.std_end_date < today &&
                                     'STD-Expired' && {
                                         bgcolor: stdStatus.expired,
                                     }), //Expired
                                 color: 'white',
                             }}
                         />
+						<Chip
+								label={studyDetail?.std_type}
+								sx={{mr:'0.3rem'}} 
+								color={
+									studyDetail?.std_type === 'E-PRO' ? "primary" : "info"}
+								/>
                         <Typography variant="h3">{studyDetail?.title || ''}</Typography>
                         <Button
                             variant="outlined"
                             sx={{ width: '3rem', minWidth: '48px' }}
                             onClick={() => {
-                                handleEditClick(studyDetail.std_no);
+                                handleEditClick(studyDetail?.std_no);
                             }}
                         >
                             <EditOutlined style={{ fontSize: '1.2rem' }} />
@@ -307,7 +313,7 @@ const StudyDetail = () => {
                 {studyDetail && activeTab === '1' && (
                     <StudyInfo
                         studyDetail={studyDetail}
-                        ownerId={owner.user_no}
+                        ownerId={owner ? owner.user_no : null}
                         onSurveyClose={() => fetchStudyDetail(parseInt(stdNo!, 10))}
                     />
                 )}

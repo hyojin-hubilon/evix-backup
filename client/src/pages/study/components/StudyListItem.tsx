@@ -4,6 +4,7 @@ import {
     AvatarGroup,
     Box,
     Card,
+    Chip,
     ClickAwayListener,
     Grid,
     Grow,
@@ -179,18 +180,30 @@ const StudyListItem = ({ study }: StudyListItemProps) => {
                             />{' '}
                             {statusLabel}
                         </Typography>
-                        <Typography
-                            variant="h4"
-                            onClick={handleShowStudy}
-                            sx={{
-                                maxHeight: '30px',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                            }}
-                        >
-                            {study.title}
-                        </Typography>
+						<Box display="flex" alignItems="center" mt="0.3rem" mb="0.3rem">
+							<Chip
+								label={study.std_type}
+								size="small" 
+								sx={{mr:'0.3rem',
+									fontSize:'0.7rem',
+									opacity: (study.std_status === 'STD-PROGRESSION' && endDate > today) ? 1 : 0.5
+								}} 
+								color={
+									study.std_type === 'E-PRO' ? "primary" : "info"}
+								/>
+							<Typography
+								variant="h4"
+								onClick={handleShowStudy}
+								sx={{
+									maxHeight: '30px',
+									textOverflow: 'ellipsis',
+									whiteSpace: 'nowrap',
+									overflow: 'hidden',
+								}}
+							>
+								{study.title}
+							</Typography>
+						</Box>
                         <Typography variant="caption" sx={{ color: theme.palette.grey[500] }}>
                             {study.std_start_date} ~ {study.std_end_date}
                         </Typography>
