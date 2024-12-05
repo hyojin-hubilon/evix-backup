@@ -8,7 +8,7 @@ const BASE_API_URL = '/researcher/case-report-form';
 const BASE_API_URL_2 = '/researcher/study-case-report-form-pair';
 
 const ecrfApi = {
-   
+   // CRF(증례기록서) 등록
     postNewCRF: async (ecrf: CRFPostReqBody) => {
         try {
             const responseData = await api<CRFPostResponse>(BASE_API_URL, 'post', ecrf);
@@ -19,6 +19,7 @@ const ecrfApi = {
 			throw e;
 		}
 	},
+	// CRF(증례기록서) 수정
 	saveCRF: async (ecrf: CRFPostReqBody) => {
         try {
             const responseData = await api<CRFPutReqBody>(BASE_API_URL, 'put', ecrf);
@@ -29,7 +30,11 @@ const ecrfApi = {
 			throw e;
 		}
 	},
-
+	/**
+	 * CRF(증례기록서) 상세 조회
+	 * @param crfNo
+	 * @returns
+	 */
 	getCRF: async (crfNo: number) => {
 		try {
 			const responseData = await api<object>(
@@ -43,6 +48,9 @@ const ecrfApi = {
 			throw e;
 		}
 	},
+	/**
+	 * 내 CRF(증례기록서) 목록 조회
+	 */
 	getCRFList : async() => {
 		try {
 			const responeData = await api<MyCRFList[] | SelectedCrfList[]>(
@@ -55,6 +63,9 @@ const ecrfApi = {
 			throw e;
 		}
 	},
+	/**
+	 * 연결가능한 CRF(증례기록서) 목록 조회
+	 */
 	getRegistrableCRFList : async() => {
 		try {
 			const responeData = await api<MyCRFList[] | SelectedCrfList[]>(
@@ -67,12 +78,35 @@ const ecrfApi = {
 			throw e;
 		}
 	},
+	/**
+	 * CRF(증례기록서) 삭제
+	 * @param crfNo
+	 * @returns
+	 */
 	deleteCrf : async (crfNo: number) => {
 		try {
 			const responseData = await api<object>(
 				`${BASE_API_URL}`,
 				'delete',
 				{crf_no: crfNo}
+			);
+
+			return responseData;
+		} catch (error) {
+			const e = error as ResCommonError;
+			throw e;
+		}
+	},
+	/**
+	 * CRF(증례기록서) 복사 조회
+	 * @param crf_no
+	 * @returns
+	 */
+	copyCrf : async (crfNo: number) => {
+		try {
+			const responseData = await api<object>(
+				`${BASE_API_URL}/copy/${crfNo}`,
+				'get'
 			);
 
 			return responseData;

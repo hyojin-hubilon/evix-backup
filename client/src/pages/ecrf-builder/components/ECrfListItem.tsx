@@ -48,7 +48,7 @@ const ECrfListItem = ({ crf, refresh }: ECrfListItemProps) => {
 			description: t('ecrf.would_duplicate')//"복제하시겠습니까?"
 		})
 		.then(() => { 
-			navigate(`/e-crf/copy/${crf.crf_no}`, {state: 'copy'});
+			// navigate(`/e-crf/copy/${crf.crf_no}`, {state: 'copy'});
 		})
 	}
 
@@ -96,6 +96,12 @@ const ECrfListItem = ({ crf, refresh }: ECrfListItemProps) => {
 						} 
 					
                         <Typography variant="h4" mt="0.3rem" mb="0.3rem">{crf.crf_title}</Typography>
+						
+						<Typography variant="h5">
+                            {crf.created_user_first_name ? crf.created_user_first_name : ''}
+							{crf.created_user_last_name ? crf.created_user_last_name : ''}
+                        </Typography>
+
 						<Typography variant="caption" sx={{ color: theme.palette.grey[500] }} mb="0">
                             {t('ecrf.created_date')} { dayjs(crf.created_at).format('YYYY.MM.DD') }
                         </Typography>

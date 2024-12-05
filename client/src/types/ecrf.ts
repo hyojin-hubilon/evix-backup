@@ -56,6 +56,8 @@ export interface MyCRFList {
 	std_type:string | null;
 	sort:number;
 	pair_no: number;
+	created_user_first_name: string | null;
+	created_user_last_name: string | null;
 }
 
 export interface StudyCrfListRespone {
