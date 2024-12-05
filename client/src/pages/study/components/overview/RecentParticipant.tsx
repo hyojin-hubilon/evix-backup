@@ -35,6 +35,7 @@ const RecentParticipant = ({ participantList, onMoreClick, studyType }: RecentPa
         roundInfo: studyType === 'E-CRF' ? participant.number_answer : participant.number_answer + '/' + participant.total_number_survey,
         institution: participant.allotment_agency_name,
         status: participant.participation_status === 'PROGRESS' ? 'In Progress' : 'Complete',
+		created_at : participant.created_at
     }));
 
     return (
@@ -66,6 +67,7 @@ const RecentParticipant = ({ participantList, onMoreClick, studyType }: RecentPa
                             <TableCell align="right">Round Info.</TableCell>
                             {/* <TableCell align="right">Institution</TableCell> */}
                             <TableCell align="right">Status</TableCell>
+							<TableCell align="right">Update Date</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -84,6 +86,7 @@ const RecentParticipant = ({ participantList, onMoreClick, studyType }: RecentPa
                                 <TableCell align="right">{row.roundInfo}</TableCell>
                                 {/* <TableCell align="right">{row.institution}</TableCell> */}
                                 <TableCell align="right">{row.status}</TableCell>
+								<TableCell align="right">{row.created_at}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

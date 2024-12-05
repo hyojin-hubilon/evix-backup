@@ -278,6 +278,7 @@ export interface ParticipantsList {
     allotment_agency_name: string;
     total_number_survey: number;
     participation_status: 'PROGRESS' | 'COMPLETE';
+	created_at: string;
 }
 
 export type StdType = 'ePRO' | 'eCOA' | 'eCRF';
