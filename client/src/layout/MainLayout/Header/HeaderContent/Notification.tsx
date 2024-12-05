@@ -32,6 +32,9 @@ import { NotificationResponse } from '@/types/notification';
 import SanitizeHTML from '@/components/@extended/SanitizeHtml';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { useDispatch, useSelector } from 'react-redux';
+import { setNotiCount } from '@store/reducers/menu';
+import { IRootState } from '@/store/reducers';
 dayjs.extend(utc);
 
 
@@ -64,14 +67,16 @@ const Notification = () => {
     const anchorRef = useRef<HTMLButtonElement>(null);
     const [open, setOpen] = useState(false);
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
-    const [notificationCount, setNotificationCount] = useState<Number>(0);
+    
+	const dispatch = useDispatch();
+	const { notificationCount } = useSelector((state: IRootState) => state.menu);
 
     useEffect(() => {
         fetchNotificationCount();
     }, []);
 
     const handleToggle = () => {
-        if (notificationCount === 0) return;
+        if (!notificationCount) return;
         setOpen((prevOpen) => !prevOpen);
         fetchRecentNotifications();
     };
@@ -95,7 +100,8 @@ const Notification = () => {
         try {
             const response = await notificationApi.readAllNotifications();
             if (response.code === 200 && response.content) {
-                setNotificationCount(0);
+                // setNotificationCount(0);
+				dispatch(setNotiCount({ notificationCount: 0 }));
                 setOpen(false);
             }
         } catch (error) {
@@ -108,7 +114,8 @@ const Notification = () => {
             const response = await notificationApi.getUnreadNotificationCount();
 
             if (response.code === 200 && response.content) {
-                setNotificationCount(response.content);
+				dispatch(setNotiCount({ notificationCount: response.content }));
+                // setNotificationCount(response.content);
             }
         } catch (error) {
             console.error('Failed to fetch notifications:', error);

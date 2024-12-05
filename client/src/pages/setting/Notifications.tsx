@@ -3,9 +3,12 @@ import MainCard from '@/components/MainCard';
 import { NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import {
     Avatar,
+    Box,
+    Button,
     Container,
     Divider,
     Grid,
+    IconButton,
     List,
     ListItem,
     ListItemAvatar,
@@ -23,6 +26,8 @@ import { paginator } from '@/utils/helper';
 import { t } from 'i18next';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { useDispatch } from 'react-redux';
+import { setNotiCount } from '@store/reducers/menu';
 dayjs.extend(utc);
 
 const avatarSX = {
@@ -46,7 +51,7 @@ const Notifications = () => {
 	const [ pageCount, setPageCount ] = useState(0);
 	const [ page, setPage] = useState(1);
 	const itemPerPage = 10;
-	
+	const dispatch = useDispatch();
 
     useEffect(() => {
         fetchAllNotifications();
@@ -71,9 +76,40 @@ const Notifications = () => {
 		setPage(paginator(searched, value, itemPerPage).page);
 	}
 
+	const handleMarkAllAsRead = async () => {
+        try {
+            const response = await notificationApi.readAllNotifications();
+            if (response.code === 200 && response.content) {
+                dispatch(setNotiCount({ notificationcount: 0 }));
+            }
+        } catch (error) {
+            console.error('Failed to mark all notifications as read:', error);
+        }
+    };
+
+
     return (
         <Container maxWidth="md">
-            <MainCard title="Notification" elevation={0} border={false} content={false} boxShadow>
+            <MainCard title={
+				<Box display="flex" justifyContent="space-between">
+					<Typography variant='h5'>
+						Notification
+					</Typography>
+					<Button size="small" onClick={handleMarkAllAsRead}>
+						<Typography
+							variant="body2"
+							color="primary"
+							sx={{ textDecoration: 'underline' }}
+						>
+							Mark All as Read
+						</Typography>
+					</Button>
+				</Box>
+				}
+				elevation={0}
+				border={false}
+				content={false}
+				boxShadow>
                 <List
                     component="nav"
                     sx={{
