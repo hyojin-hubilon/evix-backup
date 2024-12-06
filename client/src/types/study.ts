@@ -269,16 +269,22 @@ export interface totalParticipants {
 export interface ParticipantsList {
     std_no: number;
     participant_no: number;
-    std_privilege: string;
+    std_privilege?: string;
     full_name: string;
     gender: string;
     birthday: string;
     age: number;
-    number_answer: number;
+    number_answer?: number;
     allotment_agency_name: string;
-    total_number_survey: number;
-    participation_status: 'PROGRESS' | 'COMPLETE';
-	created_at: string;
+    total_number_survey?: number;
+    participation_status?: 'PROGRESS' | 'COMPLETE';
+	created_at?: string;
+}
+
+export interface EProParticipantRows extends ParticipantsList {
+	id: number;
+	round_info:string | number;
+	status: string;
 }
 
 export type StdType = 'ePRO' | 'eCOA' | 'eCRF';

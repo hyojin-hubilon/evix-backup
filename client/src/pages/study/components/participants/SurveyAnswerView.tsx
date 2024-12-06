@@ -1,6 +1,6 @@
 import surveyApi from "@/apis/survey";
 import { Box, Dialog, DialogContent, DialogTitle, Grid, IconButton, List, ListItem, ListItemButton, Typography, useTheme } from "@mui/material";
-import { SelectedParticipantType } from "../StudyParicipations";
+import { SelectedParticipantType } from "../EProParicipations";
 import CloseIcon from '@mui/icons-material/Close';
 import { t } from "i18next";
 import { Container } from '../../../survey/components/FormBuilder/ItemTypeSection/styles';
@@ -26,7 +26,7 @@ const SurveyAnswerView = ({
 	const [surveySets, setSurveySets] = useState<ParticipantSurveyAnswerSet[]>([]);
 	const [surveyAnswer, setSurveyAnswer] = useState<ParticipantSurveyDetail | null>(null);
 
-	const getSurveyAnswerSets = async (stdNo, participantNo) => {
+	const getSurveyAnswerSets = async (stdNo:number, participantNo:number) => {
 		const response = await surveyApi.getParticipantsSurveySets(stdNo, participantNo);
 		setSurveySets(response.content);
 		console.log(response)
@@ -56,6 +56,7 @@ const SurveyAnswerView = ({
                 onClose={handleClose}
                 aria-labelledby="survey-answer-view-title"
                 aria-describedby="survey-answer-view-description"
+				aria-hidden="true"
 				fullWidth={surveySets.length === 0 ? false : true}
 				maxWidth={surveySets.length === 0 ? 'sm' : 'lg' }
             >
@@ -73,9 +74,9 @@ const SurveyAnswerView = ({
 				<DialogContent sx={{p:0}}>
 					
 
-					 {
-					 	surveySets.length === 0 ? 
-					 	
+					{
+						surveySets.length === 0 ? 
+						
 						<Box minHeight="6rem" justifyContent="center" p="2rem">
 							<Typography textAlign="center" pt="2rem">
 								{t('study.no_record_survey')}

@@ -5,9 +5,10 @@ import {
     gridClasses,
 } from '@mui/x-data-grid';
 import { Box, Grid, useTheme } from '@mui/material';
-import { ParticipantsList } from '@/types/study';
-import { useState } from 'react';
+import { EProParticipantRows, ParticipantsList } from '@/types/study';
+import { useEffect, useState } from 'react';
 import SurveyAnswerView from './participants/SurveyAnswerView';
+import studyApi from '@/apis/study';
 
 function CustomToolbar() {
     return (
@@ -22,31 +23,26 @@ export type SelectedParticipantType = {
 	participantNo: number | null
 }
 
-const StudyParticipants = ({ participantList } : {participantList: ParticipantsList[]}) => {
+export type EProParticipantsType = {
+	stdNo: string | undefined
+}
+const EProParticipants = ({ stdNo } : EProParticipantsType) => {
     const theme = useTheme();
-    const rows = participantList.map((participant, index) => ({
-        id: participant.participant_no,
-        name: participant.full_name,
-        gender: participant.gender,
-        dateOfBirth: participant.birthday,
-        age: participant.age,
-        roundInfo: participant.number_answer + '/' + participant.total_number_survey,
-        institution: participant.allotment_agency_name,
-        status: participant.participation_status === 'PROGRESS' ? 'In Progress' : 'Complete',
-		stdNo: participant.std_no,
-		participantNo: participant.participant_no
-    }));
+    
 
 	const [ selectedParticipant, setSelectedParticipant ] = useState<SelectedParticipantType>({stdNo: null, participantNo: null });
 	const [ showSurveyList, setShowSurveyList] = useState<boolean>(false);
+	// const [participantList, setParticipantList] = useState<ParticipantsList[]>([]);
+	const [ rows, setRows] = useState<EProParticipantRows[]>([]);
+	
 
     const columns = [
-        { field: 'name', headerName: 'Name', width: 150 },
+        { field: 'full_name', headerName: 'Name', width: 150 },
         { field: 'gender', headerName: 'Gender', width: 100 },
-        { field: 'dateOfBirth', headerName: 'Date of birth', width: 200 },
+        { field: 'birthday', headerName: 'Date of birth', width: 200 },
         { field: 'age', headerName: 'Age', width: 100 },
-        { field: 'roundInfo', headerName: 'Round Info.', width: 150 },
-        { field: 'institution', headerName: 'Institution', width: 200 },
+        { field: 'round_info', headerName: 'Round Info.', width: 150 },
+        { field: 'allotment_agency_name', headerName: 'Institution', width: 200 },
         { field: 'status', headerName: 'Status', width: 150 },
     ];
 
@@ -54,8 +50,8 @@ const StudyParticipants = ({ participantList } : {participantList: ParticipantsL
 	
 	const handleSelectOne = (e) => {
 		console.log(e);
-		if(e.row.stdNo && e.row.participantNo) {
-			setSelectedParticipant({stdNo: e.row.stdNo, participantNo: e.row.participantNo })
+		if(e.row.std_no && e.row.participant_no) {
+			setSelectedParticipant({stdNo: e.row.std_no, participantNo: e.row.participant_no })
 			setShowSurveyList(true);
 		}	
 	}
@@ -64,6 +60,41 @@ const StudyParticipants = ({ participantList } : {participantList: ParticipantsL
 		setShowSurveyList(false);
 		setSelectedParticipant({stdNo: null, participantNo: null })
 	}
+
+	const fetchParticipantsList = async (stdNo: number) => {
+        try {
+            const response = await studyApi.participantList(stdNo);
+
+            
+			
+			const rows = response.content.map((participant, index) => ({
+				id: participant.participant_no,
+				full_name: participant.full_name,
+				gender: participant.gender,
+				birthday: participant.birthday,
+				age: participant.age,
+				round_info: participant.number_answer + '/' + participant.total_number_survey,
+				allotment_agency_name: participant.allotment_agency_name,
+				status: participant.participation_status === 'PROGRESS' ? 'In Progress' : 'Complete',
+				std_no: participant.std_no,
+				participant_no: participant.participant_no
+			}));
+
+			setRows(rows);
+
+           
+        } catch (error) {
+            console.error('Failed to fetch participants list: ', error);
+        }
+    };
+
+
+	useEffect(() => {
+		if(stdNo) {
+			const std_no = Number(stdNo);
+			fetchParticipantsList(std_no);
+		}
+	}, [])
 
     return (
         <Grid item xs={12}>
@@ -99,4 +130,4 @@ const StudyParticipants = ({ participantList } : {participantList: ParticipantsL
     );
 };
 
-export default StudyParticipants;
+export default EProParticipants;

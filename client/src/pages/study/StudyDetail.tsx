@@ -5,13 +5,14 @@ import { useEffect, useState } from 'react';
 import { ApexDonutChartSeriesType } from './components/overview/CircleChart';
 import StudyOverView from './components/StudyOverview';
 import StudyInfo from './components/StudyInfo';
-import StudyParticipants from './components/StudyParicipations';
+import EProParticipantsType from './components/EProParicipations';
 import { useNavigate, useParams } from 'react-router-dom';
 import studyApi from '@/apis/study';
 import { STUDY_STATUS, STUDY_STATUS_KEY, TitleStatusIcon } from './components/StudyListItem';
 import { Manager, ParticipantsList, ParticipationRateByAge, StudyDetail as StdDetail, totalParticipants } from '@/types/study';
 import dayjs from 'dayjs';
 import { t } from 'i18next';
+import EProParticipants from './components/EProParicipations';
 
 const StudyDetail = () => {
     const { stdNo } = useParams<{ stdNo: string | undefined }>();
@@ -21,7 +22,6 @@ const StudyDetail = () => {
     const [totalParticipants, setTotalParticipants] = useState<totalParticipants | null>(null);
     const [participationRateByAge, setParticipationRateByAge] =
         useState<ParticipationRateByAge | null>(null);
-    const [participantList, setParticipantList] = useState<ParticipantsList[]>([]);
     const [recentParticipantList, setRecentParticipantList] = useState<ParticipantsList[]>([]);
     const [participationRateByPeriod, setParticipationRateByPeriod] = useState<any>();
 
@@ -32,12 +32,12 @@ const StudyDetail = () => {
 
     useEffect(() => {
         if (stdNo) {
-            const stdNoParsed = parseInt(stdNo, 10);
+            const stdNoParsed = Number(stdNo);
 
             fetchStudyDetail(stdNoParsed);
             fetchTotalParticipants(stdNoParsed);
             fetchOverviewByAge(stdNoParsed);
-            fetchParticipantsList(stdNoParsed);
+            // fetchParticipantsList(stdNoParsed);
             fetchRecentParticipantList(stdNoParsed);
             fetchOverviewByPeriod(stdNoParsed, 'WEEK');
         }
@@ -71,57 +71,7 @@ const StudyDetail = () => {
         }
     };
 
-    const fetchParticipantsList = async (stdNo: number) => {
-        try {
-            const response = await studyApi.participantList(stdNo);
-
-            setParticipantList(response.content);
-            // setParticipantList([
-            //     {
-            //         'std_no': 3,
-            //         'participant_no': 1,
-            //         'std_privilege': 'PARTICIPANT',
-            //         'full_name': '이*덕',
-            //         'gender': 'male',
-            //         'birthday': 'Jun 24, 2000',
-            //         'age': 1,
-            //         'number_answer': 1,
-            //         'allotment_agency_name': '대웅제약',
-            //         'total_number_survey': 400,
-            //         'participation_status': 'PROGRESS',
-            //     },
-            //     {
-            //         'std_no': 3,
-            //         'participant_no': 2,
-            //         'std_privilege': 'PARTICIPANT',
-            //         'full_name': '이*진',
-            //         'gender': 'male',
-            //         'birthday': 'Jun 24, 2000',
-            //         'age': 15,
-            //         'number_answer': 2,
-            //         'allotment_agency_name': '보령제약',
-            //         'total_number_survey': 400,
-            //         'participation_status': 'PROGRESS',
-            //     },
-            //     {
-            //         'std_no': 3,
-            //         'participant_no': 3,
-            //         'std_privilege': 'PARTICIPANT',
-            //         'full_name': '박*영',
-            //         'gender': 'male',
-            //         'birthday': 'Jun 24, 2000',
-            //         'age': 31,
-            //         'number_answer': 2,
-            //         'allotment_agency_name': '보령제약',
-            //         'total_number_survey': 400,
-            //         'participation_status': 'COMPLETE',
-            //     },
-            // ]);
-        } catch (error) {
-            console.error('Failed to fetch participants list: ', error);
-        }
-    };
-
+    
     const fetchRecentParticipantList = async (stdNo: number) => {
         try {
             const response = await studyApi.recentParticipantLogs(stdNo);
@@ -319,7 +269,7 @@ const StudyDetail = () => {
                     />
                 )}
                 {studyDetail && activeTab === '2' && (
-                    <StudyParticipants participantList={participantList} />
+                    <EProParticipants stdNo={stdNo} />
                 )}
             </Grid>
         </>
