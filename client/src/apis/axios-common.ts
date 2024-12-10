@@ -61,7 +61,7 @@ axios_instance.interceptors.response.use( //MDPP 제외
     (response) => response,
     (error) => {
         if (ignoreAPIUrl.indexOf(error?.response?.config?.url) === -1 && location.href.indexOf(ignoreMdppUrl) === -1) {
-            if ([401, 403, 404].includes(error?.response?.status)) {
+            if ([401, 403].includes(error?.response?.status)) {
                 if (typeof window !== 'undefined') {
                     location.href = '/login';
                 }
@@ -86,7 +86,7 @@ axios_file_instance.interceptors.response.use(
     (response) => response,
     (error) => {
         if (ignoreAPIUrl.indexOf(error?.response?.config?.url) === -1) {
-            if ([401, 403, 404].includes(error?.response?.status)) {
+            if ([401, 403].includes(error?.response?.status)) {
                 if (typeof window !== 'undefined') {
                     location.href = '/login';
                 }
@@ -165,11 +165,11 @@ export async function api<T>(
         }
         if (Axios.isAxiosError<ResCommonError>(error)) {
             if (error.response !== undefined) {
+				dispatch(setAlert({ alertOpen: true, alertText: error.message, alertType: AlertType.error }));
                 const errorResult = error.response.data;
                 errorResult.code == error.response.status;
                 throw errorResult;
             } else {
-				// dispatch(setAlert({ alertOpen: true, alertText: error.message, alertType: AlertType.error }));
                 throw generateError(ResCustomErrorCode.NONE_RESPONSE, null, null, error.message);
             }
         } else {

@@ -261,7 +261,8 @@
 		"crf_title" : "eCRF Sheet Title",
 		"no_crf_connect" :  "There are no eCRF Sheets available to connect.",
 		"create_a_crf" : "Create a eCRF Sheet",
-		"are_you_sure_to_delete_pair" : "Are you sure you want to delete the eCRF Sheet?"
+		"are_you_sure_to_delete_pair" : "Are you sure you want to delete the eCRF Sheet?",
+		"add_participant" : "Add Participant"
 	},
     "eic": {
         "has_been_saved": "Your electronic consent form has been saved.",

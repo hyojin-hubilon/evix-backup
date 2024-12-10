@@ -13,6 +13,7 @@ import { Manager, ParticipantsList, ParticipationRateByAge, StudyDetail as StdDe
 import dayjs from 'dayjs';
 import { t } from 'i18next';
 import EProParticipants from './components/EProParicipations';
+import ECrfParticipants from './components/ECrfParicipations';
 
 const StudyDetail = () => {
     const { stdNo } = useParams<{ stdNo: string | undefined }>();
@@ -222,7 +223,7 @@ const StudyDetail = () => {
                                 <Tab label="Participants " value="2" />
                             )}
                             {/* 설문 결과 상세 */}
-                            {studyDetail?.std_status !== 'STD-CREATED' && (
+                            {studyDetail?.std_status !== 'STD-CREATED' && studyDetail?.std_type !== 'E-CRF' && (
                                 <Tab label="Survey Report" value="3" />
                             )}
                         </Tabs>
@@ -268,8 +269,12 @@ const StudyDetail = () => {
                         onSurveyClose={() => fetchStudyDetail(parseInt(stdNo!, 10))}
                     />
                 )}
-                {studyDetail && activeTab === '2' && (
+                {studyDetail && studyDetail.std_type !== 'E-CRF' && activeTab === '2' && (
                     <EProParticipants stdNo={stdNo} />
+                )}
+
+				{studyDetail && studyDetail.std_type === 'E-CRF' && activeTab === '2' && (
+                    <ECrfParticipants stdNo={stdNo} />
                 )}
             </Grid>
         </>
