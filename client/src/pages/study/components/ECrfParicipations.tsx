@@ -80,7 +80,7 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
 	const handleSelectOne = (participant:ECrfRows) => {
 		if(participant.std_no && participant.std_crf_participant_no) {
 			setSelectedParticipant(participant);
-			setOpenAdd(true);
+			// setOpenAdd(true);
 		}	
 	}
 
