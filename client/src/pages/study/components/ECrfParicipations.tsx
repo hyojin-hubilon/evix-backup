@@ -1,16 +1,19 @@
 import {
     DataGrid,
+    GridColDef,
+    GridRenderCellParams,
     GridToolbarContainer,
     GridToolbarQuickFilter,
     gridClasses,
 } from '@mui/x-data-grid';
 import { Box, Button, Grid, useTheme } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import ecrfParticipantApi from '@/apis/eCrfParticipant';
 import AddParticipant from './eCrfParticipants/AddParticipant';
-import { ECrfParticipant } from '@/types/ecrfParticipant';
+import { ECrfParticipant, ECrfParticipantDelete } from '@/types/ecrfParticipant';
 import dayjs from 'dayjs';
-import { ParticipantsList } from '@/types/study';
+import { useConfirmation } from '@/context/ConfirmDialogContext';
+import { t } from 'i18next';
 
 function CustomToolbar() {
     return (
@@ -30,18 +33,46 @@ export type EProParticipantsType = {
 const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
     const theme = useTheme();
 	const [stdNum, setStdNum] = useState(Number(stdNo));
-
+	const confirm = useConfirmation();
 	
 	const [selectedParticipant, setSelectedParticipant] = useState<ECrfParticipant | null>(null);
 	const [ rows, setRows] = useState<ECrfRows[]>([]);
 	const [ openAdd, setOpenAdd] = useState(false);
 	
 
-    const columns = [
+    const columns:GridColDef[] = [
         { field: 'full_name', headerName: 'Name', width: 150 },
         { field: 'gender', headerName: 'Gender', width: 150 },
         { field: 'birthday', headerName: 'Date of birth', width: 200 },
 		{ field: 'created_at', headerName: 'Created at', width: 200 },
+		{
+			field: "action",
+			headerName: "Action",
+			sortable: false,
+			// align:'center',
+			width: 200,
+			
+			renderCell: (params:GridRenderCellParams) => {
+				const onClickEdit = (e:MouseEvent) => {
+					e.stopPropagation(); // don't select this row after clicking
+					const currentRow : ECrfRows = params.row as ECrfRows;
+					return handleSelectOne(currentRow);
+				}
+
+				const onClickDelete = (e:MouseEvent) => {
+					e.stopPropagation(); // don't select this row after clicking
+					const currentRow : ECrfRows = params.row as ECrfRows;
+					return handleDeleteOne(currentRow.std_no, currentRow.std_crf_participant_no);
+				}
+		
+				return (
+					<Box>
+						<Button onClick={(e) => onClickEdit(e)} variant="contained" color="primary" sx={{mr:'0.5rem'}}>Edit</Button>
+						<Button onClick={(e) => onClickDelete(e)} variant="outlined" color="error">Delete</Button>
+					</Box>
+			);
+			}
+		},
     ];
 
 
@@ -75,6 +106,31 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
             console.error('Failed to fetch participants list: ', error);
         }
     };
+
+	const deleteOneParticipant = async (std_no:number, std_crf_participant_no:number) => {
+		try {
+			const deleteOne : ECrfParticipantDelete = {
+				std_crf_participant_no: std_crf_participant_no,
+				std_no:std_no
+			}
+			const response =  await ecrfParticipantApi.deleteECrfParticipant(deleteOne);
+			if(response.result) {
+				fetchParticipantsList(stdNum);
+			}
+		} catch (error) {
+			console.error('Failed to delete participants list: ', error);
+		}
+	}
+
+
+	const handleDeleteOne = (std_no:number, std_crf_participant_no:number) => {
+		if(std_no && std_crf_participant_no) {
+			confirm({
+				description: t('study.are_you_sure_to_delete_this_participant'),
+				variant: 'info'
+			}).then(() => deleteOneParticipant(std_no, std_crf_participant_no))
+		}	
+	}
 
 
 	useEffect(() => {

@@ -72,7 +72,7 @@ const AddParticipant = ({
 				std_no: stdNo,
 				full_name: values.full_name,
 				gender: values.gender,
-				birthday: values.birthday
+				birthday: dayjs(values.birthday).format('YYYYMMDD')
 			}
 	
 			const response = await ecrfParticipantApi.postECrfParticipant(newParticipant);
