@@ -1,20 +1,23 @@
 import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult } from "@hello-pangea/dnd";
 import { Fragment, useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { Grid, Box, Button, Select, MenuItem } from "@mui/material";
+import { Grid, Box, Button, Select, MenuItem, Typography } from "@mui/material";
 
-import { Clone, DropBox, Handle, Handle2, Item, Kiosk, MainBox, Notice } from "./styles";
+import { Clone, DropBox, FileInputBox, Handle, Handle2, Item, ItemContent, Kiosk, MainBox, Notice, VisuallyHiddenInput } from "./styles";
 import SelectedItemEdit from "./SelectedItemEdit";
 
-
-import AddIcon from '@mui/icons-material/Add';
 import TableEditor from "./TableEditor";
 import { CRFFormJson, DeletedItem, Idstype, ItemType, SelectedItem } from "@/types/ecrf";
 
+import AddIcon from '@mui/icons-material/Add';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+
 import DroppedItem from "./DroppedItem";
 import useSticky from "@/utils/useSticky";
+import AddFileInput from "./AddFileInput";
+
+
 
 
 const getParentIndexByChildId = (list: Idstype[], childId: string) => {
@@ -148,14 +151,14 @@ const ITEMS: ItemType[] = [
 			placeholder: 'Placeholder'
 		}
     },
-	{
-        id: uuidv4(),
-        itemType: 'File Input',
-		content: {
-			title: 'File Input Title',
-			label: 'Label'
-		}
-    },
+	// {
+    //     id: uuidv4(),
+    //     itemType: 'File Input',
+	// 	content: {
+	// 		title: 'File Input Title',
+	// 		label: 'Label'
+	// 	}
+    // },
 	{
         id: uuidv4(),
         itemType: 'Datepicker',
@@ -181,8 +184,21 @@ type ECrfBuilderType = {
 const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 	const { ref } = useSticky();
 	const [ids, setIds] = useState<Idstype[]>([ {[uuidv4()] : []} ]);
-	const [selectedItem, setSelectedItem] = useState<SelectedItem>({} as SelectedItem);
+	const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
 	const [openTableEditor, setOpenTableEditor] = useState(false);
+
+	const fileSet = {
+		id: uuidv4(),
+		itemType: 'File Input',
+		content: {
+			title: 'File Input Title',
+			label: 'Label'
+		}
+	}
+
+	const [ fileAddShow, setFileAddShow ] = useState(false);
+	const [ fileInput, setFileInput ] = useState<ItemType>(fileSet);
+	const [editFileShow, setEditFileShow] = useState<boolean>(false);
 	
     const onDragEnd = (result:DropResult) => {
         const { source, destination } = result;
@@ -248,6 +264,21 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 		setIds(deleteItem(ids, deletedItem.id, deletedItem.index));
 	}
 
+	const editFileInput = () => {
+		setSelectedItem(null);
+		setEditFileShow(true);
+	}
+
+	const changeFileAddShow = (e:boolean) => {
+		setFileAddShow(e);
+		if(editFileShow) {
+			setEditFileShow(false);
+		}
+		if(!e) {
+			setFileInput(fileSet); //파일인풋 삭제 시 file title, label 등 리셋
+		}
+	}
+
 	const addColumnList = (value:string) => {
 		const times = Number(value);
 		let newColumns = {};
@@ -258,7 +289,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 	}
 
 	const handleSetCrf = () => {		
-		const newItems : CRFFormJson[] = ids.map((idsItem, i) => {
+		let newItems : CRFFormJson[] = ids.map((idsItem, i) => {
 			const newCrf = {}
 			Object.keys(idsItem).map((id, j) => {				
 				if(idsItem[id].length > 0) {
@@ -270,7 +301,12 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 
 			return newCrf;
 		})
-	
+
+		if(fileAddShow) {
+			newItems = [fileInput, ...newItems];
+		}
+		
+		console.log(newItems)
 		// Object.keys(ids).map((id, i) => {
 			// if(ids[id].length > 0) {
 
@@ -284,7 +320,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 			
 		// });
 
-		console.log(newItems);
+		
 
 		saveCRF(newItems);
 	}
@@ -305,6 +341,11 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 		result[parentId][columnId][itemIndex] = item;
 		
 		setIds(result);
+	}
+
+	const handleSaveFileInputChanges = (item:ItemType) => {
+		setFileInput(item);
+		setEditFileShow(false);
 	}
 
 
@@ -358,12 +399,18 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 						</Box>
 					</Grid>
 					<Grid item xs={7}>
+						{/* 파일 인풋 영역 */}
+						{
+							fileAddShow &&
+							<AddFileInput fileInput={fileInput} fileAddShow={(e) => changeFileAddShow(e)} editFileInput={editFileInput} />
+						}
+						
 						<Box>
 							{/* 메인 박스 */}
 							<Droppable droppableId="MAIN"  type="content">
 								{(provided, snapshot) => (
-									<MainBox ref={provided.innerRef}>
-										
+									<MainBox ref={provided.innerRef} sx={{mb: '0.5rem', p: '1rem'}}>
+										<Typography variant="h5">Form Add</Typography>
 										{ids.map((id1, i) => (
 											<Draggable key={i} draggableId={"main"+i} index={i}>
 												{(provided, snapshot) => (
@@ -432,12 +479,34 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 									<MenuItem value="4">
 										Four Column
 									</MenuItem>
-								</Select> 
+								</Select>
+
+								{
+									!fileAddShow && <Button variant="contained" onClick={() => setFileAddShow(true)}>Add File Input Area</Button>
+								}
+								
 							</Box>
 						</Box>
 					</Grid>
 					<Grid item xs={3}>
-						<SelectedItemEdit selectedItem={selectedItem} saveChanges={handleSaveChanges} />
+						{
+							(selectedItem || editFileShow) &&
+							<>
+							{
+								editFileShow ?
+								<SelectedItemEdit selectedItem={fileInput} saveChanges={handleSaveFileInputChanges} />
+									:
+									<>
+									{
+										selectedItem &&<SelectedItemEdit selectedItem={selectedItem} saveChanges={handleSaveChanges} />
+									}
+								
+								</>
+							}
+							</>
+						}
+						
+						
 					</Grid>
 				</Grid>
 			</DragDropContext>

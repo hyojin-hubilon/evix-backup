@@ -2,22 +2,24 @@ import { Box, Button, Checkbox, FormControlLabel, IconButton, OutlinedInput, Sta
 
 import { EditBox } from "./styles"
 import { ChangeEvent, useEffect, useState } from "react";
-import { ItemContents, SelectedItem } from "@/types/ecrf";
+import { ItemContents, ItemType, SelectedItem } from "@/types/ecrf";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 type SelectedItemEditType = {
-	selectedItem: SelectedItem;
-	saveChanges: (item) => void
+	selectedItem: SelectedItem | ItemType;
+	saveChanges: (item) => void;
+	fileEdit?:boolean;
 }
-const SelectedItemEdit = ({selectedItem, saveChanges} : SelectedItemEditType) => {
+const SelectedItemEdit = ({selectedItem, saveChanges, fileEdit} : SelectedItemEditType) => {
 	const [ title, setTitle ] = useState<string>('');
 	const [ desc, setDesc ] = useState<string>('');
+	const [ label, setLabel ] = useState<string>('');
 	const [ options, setOptions ] = useState<string[]>([]);
 	const [ required, setRequired ] = useState<boolean>(false);
 	
 	const handleSaveChanges = () => {
 		const newItem = { ...selectedItem };
-		const itemContents = {...selectedItem.content, title: title, description : desc, options: options, required: required};
+		const itemContents = {...selectedItem.content, title: title, description : desc, label: label, options: options, required: required};
 		newItem.content = itemContents;
 		saveChanges(newItem);
 	}
@@ -27,6 +29,7 @@ const SelectedItemEdit = ({selectedItem, saveChanges} : SelectedItemEditType) =>
 		if(content) {
 			setTitle(content.title);
 			setDesc(content.description ? content.description : '');
+			setLabel(content.label ? content.label : '');
 			setOptions(content.options ? content.options : []);
 			setRequired(content.required ? content.required : false);
 		}
@@ -61,7 +64,7 @@ const SelectedItemEdit = ({selectedItem, saveChanges} : SelectedItemEditType) =>
 			{
 			selectedItem.itemType !== 'Table' ?
 			<Box>
-				<Typography variant="h5">Edit {selectedItem.itemType }</Typography>
+				<Typography variant="h5">Edit {selectedItem.itemType}</Typography>
 				<Stack spacing={1} m="1rem 0 0">
 					<OutlinedInput
 						size="small"
@@ -74,6 +77,13 @@ const SelectedItemEdit = ({selectedItem, saveChanges} : SelectedItemEditType) =>
 						placeholder="Description"
 						value={desc}
 						onChange={(e) => setDesc(e.target.value)}
+						/>
+
+					<OutlinedInput
+						size="small"
+						placeholder="Label"
+						value={label}
+						onChange={(e) => setLabel(e.target.value)}
 						/>
 					{
 						options.length > 0 && 

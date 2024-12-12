@@ -166,3 +166,12 @@ export const VisuallyHiddenInput = styled('input')({
 	whiteSpace: 'nowrap',
 	width: 1,
 });
+
+export const FileInputBox = styled('div')`
+	background: white;
+  	margin: 0;
+	padding: 1rem;
+	min-height: 20px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+`

@@ -3,7 +3,7 @@ import { Draggable } from "@hello-pangea/dnd"
 import { AddedItem, Handle, ItemContent, VisuallyHiddenInput } from "./styles"
 
 import DragHandleIcon from '@mui/icons-material/DragHandle';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, MenuItem, Radio, RadioGroup, Select, Stack, TextField, Typography } from "@mui/material";
@@ -116,7 +116,7 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 									}
 								</FormGroup> 
 						}
-						{
+						{/* {
 							(droppedItem.itemType === 'File Input') &&
 								<Button
 									component="label"
@@ -133,7 +133,7 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 										multiple
 									/>
 								</Button>
-						}
+						} */}
 						{
 							(droppedItem.itemType === 'Datepicker') &&
 								<Box alignItems="center" display="flex" gap={1}
