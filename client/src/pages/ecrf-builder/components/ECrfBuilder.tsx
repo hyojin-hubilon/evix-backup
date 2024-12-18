@@ -185,7 +185,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 	const { ref } = useSticky();
 	const [ids, setIds] = useState<Idstype[]>([ {[uuidv4()] : []} ]);
 	const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
-	const [openTableEditor, setOpenTableEditor] = useState(false);
+	const [openTableEditor, setOpenTableEditor] = useState(true);
 
 	const fileSet = {
 		id: uuidv4(),
