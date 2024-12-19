@@ -1,52 +1,41 @@
-import { ColumnDef, createColumnHelper, useReactTable, getCoreRowModel, flexRender, TableOptions, Table } from "@tanstack/react-table";
+import { createColumnHelper, useReactTable, getCoreRowModel, flexRender, TableOptions, Table, ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import TableHeader from "./TableHeader";
-
 declare module '@tanstack/react-table' {
-    interface Column<TData, TValue> { //ColumnDef..?
+	interface ColumnDefBase<TData, TValue> {
 		id: string | number;
 		created:boolean,
-		accessor:number;
 		label:string, 
-		dataType: 'Text' | 'Number'
-    }
-}
-
-export type ColumData = {
-	id: number;
-	created:boolean,
-	accessor:number;
-	label:string, 
-	dataType: 'Text' | 'Number'
+		dataType: 'Text' | 'Number' | 'Add'
+	}
 }
 
 export type TablePreset = {
-	column1: ColumData;
-	column2: ColumData;	
+	column1: string;
+	column2: string;	
 };
 
 
 const ECrfTable = () => {
 	const [data, setData] = useState<TablePreset[]>([])
 
-	
-
 	const columns = useMemo<ColumnDef<TablePreset, unknown>[]>(() => [
 		{
 			id: 'column1',
-			accessorKey: 'column1',
+			created: true,
 			dataType: 'Text',
 			label: 'Col 1',
-			header: (props) => { return <TableHeader {...props}/> }
-			//cell: info => info.getValue(),
 		},
 		{
 			id: 'column2',
-			accessorKey: 'column2',
-			dataType: 'Text',
+			created: true,
+			dataType: 'Number',
 			label: 'Col 2',
-			accessorFn: row => row.column2,
-			//cell: info => info.getValue(),
+		},
+		{ id: '999999',
+			created: false,
+			dataType: 'Add',
+			label: 'Add Column'
 		}
 	],[])
 
@@ -59,25 +48,19 @@ const ECrfTable = () => {
 			maxSize: 400,
 			// header: TableHeader,
 		},
-		getCoreRowModel: getCoreRowModel()
+		getCoreRowModel: getCoreRowModel(),
+		
 	})
 	console.log(table);
 	return (
 		<>
-		<div>
-			<div>
+		<div className="tableBorder">
+			<div className="eCrfTable">
 			{table.getHeaderGroups().map((headerGroup, i) => {
-				console.log(headerGroup)
 				return (
 				<div className="tr" key={i}>
 					{
-						headerGroup.headers.map((header, index) => {
-							
-							return (
-							<div key={index}>
-								{flexRender(header.column.columnDef.header, header.getContext())}
-							</div>
-						)})	
+						headerGroup.headers.map((header, index) => <TableHeader header={header} key={index} />)						
 					}
 				</div>
 			)})}

@@ -26,7 +26,6 @@ export interface CardProps { //question
 interface PayloadProps<T> {
 	[key: string]: T;
 }
-
 interface ActionProps {
 	type: string;
 	payload: PayloadProps<any>;
@@ -64,7 +63,7 @@ export const requiredSlice = createSlice({
 	name: "Required",
 	initialState: "",
 	reducers: {
-		setRequiredCardId: (state: string, action: ActionProps) => action.payload.cardId,
+		setRequiredCardId: (state: string, action: ActionProps):string => action.payload.cardId,
 		removeRequiredCardId: () => "",
 	},
 });
@@ -82,7 +81,7 @@ const sortEtcItem = (currentContents: ItemTypeProps[]) => {
 const deleteEtcItem = (currentContents: ItemTypeProps[]) => {
 	const etcIndex = currentContents.findIndex((content) => content.isEtc);
 	if (etcIndex !== -1) {
-	  	currentContents.splice(etcIndex, 1);
+		currentContents.splice(etcIndex, 1);
 	}
 	return currentContents;
 };
@@ -91,7 +90,7 @@ export const cardSlice = createSlice({
 	name: "Cards",
 	initialState: [initialCards] as CardProps[],
 	reducers: {
-	 	addCard: (state: CardProps[], action: ActionProps) => {
+		addCard: (state: CardProps[], action: ActionProps) => {
 			const copiedState = state.map((card) => ({ ...card, isFocused: false }));
 	
 			if (Number(action.payload.focusedCardIndex) > 0) {
@@ -101,13 +100,13 @@ export const cardSlice = createSlice({
 			}
 
 			return copiedState;
-	  	},
+		},
 
 		addExistCard: (state: CardProps[], action: ActionProps) => {
 			const copiedState = state.map((card) => ({ ...card, isFocused: false }));	
 			copiedState.push(createExistCard(action.payload.cardId, action.payload.cardTitle, action.payload.inputType, action.payload.contents, action.payload.isFocused, action.payload.isRequired));
 			return copiedState;
-	  	},
+		},
   
 		copyCard: (state: CardProps[], action: ActionProps) => {
 			const copiedState = state.map((card) => ({ ...card, isFocused: false }));
@@ -190,7 +189,7 @@ export const cardSlice = createSlice({
 				deleteEtcItem(targetCard.contents as ItemTypeProps[]);
 			}
 			targetCard.inputType = action.payload.inputType as QuestionTypes;
-	  	},
+		},
   
 		addSelectItem: (state: CardProps[], action: ActionProps) => {
 			const contents = state.find((card) => card.id === action.payload.id)

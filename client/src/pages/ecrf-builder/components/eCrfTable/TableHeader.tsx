@@ -3,22 +3,22 @@ import { useEffect, useState } from "react";
 import WestRoundedIcon from '@mui/icons-material/WestRounded';
 import EastRoundedIcon from '@mui/icons-material/EastRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
-import TextFieldsRoundedIcon from '@mui/icons-material/TextFieldsRounded';
+import FormatAlignLeftRoundedIcon from '@mui/icons-material/FormatAlignLeftRounded';
 import TagRoundedIcon from '@mui/icons-material/TagRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Column, ColumnDef, ColumnDefTemplate, Header, HeaderContext } from "@tanstack/react-table";
-import { ColumData, TablePreset } from "./ECrfTable";
-import { TreeDataNode } from "antd";
 
+interface CustomHeaderProps<TData> {
+	header: Header<TData, unknown>;
+}
+  
 
-const TableHeader = (props: HeaderContext<TablePreset, unknown>)  => {
-	
-	const { column, header } = props;
-	const {columnDef}  = column;
-
-	console.log(column, header, )
+const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
+	const { column } = header;
+	const { columnDef } = column;
+	console.log(column)
 	//console.log(id, created, label, dataType, getResizerProps, getHeaderProps);
-	const [expanded, setExpanded] = useState(column.columnDef.dataType || false);
+	const [expanded, setExpanded] = useState(columnDef.dataType || false);
 	const [referenceElement, setReferenceElement] = useState(null);
 	const [popperElement, setPopperElement] = useState(null);
 	const [inputRef, setInputRef] = useState(null);
@@ -26,7 +26,7 @@ const TableHeader = (props: HeaderContext<TablePreset, unknown>)  => {
 	//   placement: "bottom",
 	//   strategy: "absolute"
 	// });
-	// const [header, setHeader] = useState(label);
+	const [label, setLabel] = useState(columnDef.label);
 	const [typeReferenceElement, setTypeReferenceElement] = useState(null);
 	const [typePopperElement, setTypePopperElement] = useState(null);
 	const [showType, setShowType] = useState(false);
@@ -82,16 +82,16 @@ const TableHeader = (props: HeaderContext<TablePreset, unknown>)  => {
 	// ];
   
 	let propertyIcon;
-	// switch (dataType) {
-	// 	case "number":
-	// 		propertyIcon = <TagRoundedIcon />;
-	// 		break;
-	// 	case "text":
-	// 		propertyIcon = <TextFieldsRoundedIcon />;
-	// 		break;
-	// 	default:
-	// 		break;
-	// }
+	switch (columnDef.dataType) {
+		case "Number":
+			propertyIcon = <TagRoundedIcon />;
+			break;
+		case "Text":
+			propertyIcon = <FormatAlignLeftRoundedIcon />;
+			break;
+		default:
+			break;
+	}
   
 	// useEffect(() => {
 	// 	if (created) {
@@ -99,9 +99,9 @@ const TableHeader = (props: HeaderContext<TablePreset, unknown>)  => {
 	// 	}
 	// }, [created]);
   
-	// useEffect(() => {
-	// 	setHeader(label);
-	// }, [label]);
+	useEffect(() => {
+		setLabel(columnDef.label);
+	}, [columnDef.label]);
   
 	useEffect(() => {
 		if (inputRef) {
@@ -131,15 +131,14 @@ const TableHeader = (props: HeaderContext<TablePreset, unknown>)  => {
 		//dataDispatch({type: "update_column_header", columnId: id, label: header});
 	}
 
-	return column.id !== '999999' ? (
+	return columnDef.id !== '999999' ? (
 		<>
-			<div className='th noselect'>
-				<div className='th-content'>
-				<span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
-				Table Header
-				{column.columnDef.label}
+			<div style={{width: columnDef.size}}className="th noselect">
+				<div className="th-content">
+					<span className="svg-icon svg-gray icon-margin">{propertyIcon}</span>
+					{columnDef.label}
 				</div>
-				<div className='resizer' />
+				<div className="resizer" />
 			</div>
 			{/* {expanded && <div className='overlay' onClick={() => setExpanded(false)} />} */}
 			{/* {expanded && (
@@ -217,16 +216,16 @@ const TableHeader = (props: HeaderContext<TablePreset, unknown>)  => {
 			)} */}
 		</>
 	) : (
-		<div className='th noselect'>
-		`	<div
-				className='th-content'
-				style={{display: "flex", justifyContent: "center"}}
+		<div className="th noselect">
+			<div
+				className="th-content"
 				// onClick={(e) => dataDispatch({type: "add_column_to_left", columnId: 999999, focus: true})}
 				>
-				<span className='svg-icon-sm svg-gray'>
-				<AddRoundedIcon />
+				<span className="svg-icon svg-gray icon-margin">
+					<AddRoundedIcon />
 				</span>
-			</div>`
+
+			</div>
 		</div>
 	);
   
