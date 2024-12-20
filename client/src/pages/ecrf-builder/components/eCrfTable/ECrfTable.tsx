@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import TableHeader from "./TableHeader";
 declare module '@tanstack/react-table' {
 	interface ColumnDefBase<TData, TValue> {
-		id: string | number;
+		id: string;
 		created:boolean,
 		label:string, 
 		dataType: 'Text' | 'Number' | 'Add'
@@ -11,35 +11,34 @@ declare module '@tanstack/react-table' {
 }
 
 export type TablePreset = {
-	column1: string;
-	column2: string;	
+	[id:string]: string;
 };
 
 
 const ECrfTable = () => {
-	const [data, setData] = useState<TablePreset[]>([])
+	const [data, setData] = useState<TablePreset[][]>([])
 
-	const columns = useMemo<ColumnDef<TablePreset, unknown>[]>(() => [
-		{
-			id: 'column1',
-			created: true,
-			dataType: 'Text',
-			label: 'Col 1',
-		},
-		{
-			id: 'column2',
-			created: true,
-			dataType: 'Number',
-			label: 'Col 2',
-		},
-		{ id: '999999',
-			created: false,
-			dataType: 'Add',
-			label: 'Add Column'
-		}
+	const columns = useMemo<ColumnDef<TablePreset[], unknown>[]>(() => [
+		// {
+		// 	id: 0,
+		// 	created: true,
+		// 	dataType: 'Text',
+		// 	label: 'Col 1',
+		// },
+		// {
+		// 	id: 1,
+		// 	created: true,
+		// 	dataType: 'Number',
+		// 	label: 'Col 2',
+		// },
+		// { id: 999999,
+		// 	created: false,
+		// 	dataType: 'Add',
+		// 	label: 'Add Column'
+		// }
 	],[])
 
-	const table: Table<TablePreset> = useReactTable({
+	const table: Table<TablePreset[]> = useReactTable({
 		columns,
 		data,
 		defaultColumn: {

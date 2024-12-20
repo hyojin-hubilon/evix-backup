@@ -63,7 +63,7 @@ export const requiredSlice = createSlice({
 	name: "Required",
 	initialState: "",
 	reducers: {
-		setRequiredCardId: (state: string, action: ActionProps):string => action.payload.cardId,
+		setRequiredCardId: (state: string, action: ActionProps) => action.payload.cardId,
 		removeRequiredCardId: () => "",
 	},
 });
