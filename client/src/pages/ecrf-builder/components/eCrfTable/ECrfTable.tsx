@@ -3,9 +3,10 @@ import { useMemo, useState } from "react";
 import TableHeader from "./TableHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { TableStateProps } from "@/store/reducers/table";
+import TableCell from './TableCell';
 declare module '@tanstack/react-table' {
 	interface ColumnDefBase<TData, TValue> {
-		id: string;
+		id: string | number,
 		created:boolean,
 		label:string, 
 		dataType: 'Text' | 'Number' | 'Add',
@@ -22,15 +23,8 @@ export interface TablePreset {
 const ECrfTable = () => {
 	const dispatch = useDispatch();
 	
-	const { columns, data } = useSelector((state: { tables: TableStateProps }) => ({
-		columns: state.tables.columns,
-		data: state.tables.data
-	}));
+	const { columns, data } = useSelector((state: { tables: TableStateProps }) => state.tables);
 	
-	
-	console.log(columns, data)
-	
-
 	const table: Table<TablePreset[]> = useReactTable({
 		columns,
 		data,
@@ -43,7 +37,9 @@ const ECrfTable = () => {
 		getCoreRowModel: getCoreRowModel(),
 		
 	})
-	console.log(table);
+
+	console.log(data)
+	
 	return (
 		<>
 		<div className="tableBorder">
@@ -57,9 +53,13 @@ const ECrfTable = () => {
 					</div>
 				)})}
 
-				<div className="tr">
-					
-				</div>
+				{table.getRowModel().rows.map(row => (
+					<div key={row.id} className="tr">
+						{
+							row.getVisibleCells().map((cell, i)=> <TableCell cell={cell} key={i} cellIndex={i} />)
+						}
+					</div>
+				))}				
 			</div>
 		</div>
 		</>

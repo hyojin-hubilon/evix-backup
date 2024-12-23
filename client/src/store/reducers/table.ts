@@ -1,7 +1,7 @@
 import { TablePreset } from "@/pages/ecrf-builder/components/eCrfTable/ECrfTable";
 import { shortId } from "@/pages/ecrf-builder/components/eCrfTable/utils";
 import { createSlice, original, PayloadAction } from "@reduxjs/toolkit";
-import { ColumnDef, Column } from '@tanstack/react-table';
+import { ColumnDef, Column, RowModel, CellContext, Row, Table } from '@tanstack/react-table';
 import { focus } from '@/store/reducers/survey';
 import { WritableDraft } from 'immer';
 
@@ -18,14 +18,14 @@ const initicalColumns: ColumnDef<TablePreset[], unknown>[] = [
 		id: '0',
 		created: true,
 		dataType: 'Text',
-		label: 'Col 1',
-		
+		label: 'Col 1'
 	},
 	{
 		id: '1',
 		created: true,
 		dataType: 'Number',
 		label: 'Col 2',
+		// accessorFn: (row: TablePreset[], index: number) => row[index].content as string
 		
 	},
 	{ 
@@ -33,9 +33,12 @@ const initicalColumns: ColumnDef<TablePreset[], unknown>[] = [
 		created: false,
 		dataType: 'Add',
 		label: 'Add Column',
+		// accessorFn: (row: TablePreset[], index: number) => row[index].content as string
 		
 	}
 ]
+
+console.log(initicalColumns)
 
 const PreData: TablePreset[][] = [
 	[
@@ -46,6 +49,10 @@ const PreData: TablePreset[][] = [
 		{
 			type: "Number",
 			content: 2
+		},
+		{
+			type: "Add",
+			content: "3"
 		}
 	]
 ];
@@ -57,7 +64,7 @@ const initialState: TableStateProps = {
 };
 
 
-type PayloadProps ={
+type PayloadProps = {
 	columnId:string;
 	dataType: string;
 	label:string;
