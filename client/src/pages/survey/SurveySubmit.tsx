@@ -12,7 +12,7 @@ import { Formik, Form } from "formik";
 
 const SurveySubmit = () => {
 	const previewCards = useSelector((state: PreviewStateProps) => state.previewCards);
-  	const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
 	const { survey_no } = useParams<{ survey_no: any }>();
 	const [ survey, setSurvey ]  = useState<SurveyDetail>({} as SurveyDetail);
@@ -23,7 +23,7 @@ const SurveySubmit = () => {
 
 	const { primary } = theme.palette;
 	
-	const getSurveyDeatil = async (surveyNumber) => {
+	const getSurveyDeatil = async (surveyNumber:number) => {
 		try {
 			const response = await surveyApi.getSurvey(surveyNumber);
             if (response.result && response.code === 200) {
@@ -68,7 +68,7 @@ const SurveySubmit = () => {
 	}
 
 	useEffect(() => {
-		const surveyNumber = survey_no;
+		const surveyNumber:number = survey_no;
 		if(surveyNumber) getSurveyDeatil(surveyNumber);
 	}, []);
 

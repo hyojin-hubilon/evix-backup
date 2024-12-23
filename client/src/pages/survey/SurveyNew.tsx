@@ -287,7 +287,7 @@ const SurveyNew = () => {
 	const handleButtonClick = (
 		temp: boolean,//임시저장: true / 저장 : false
 		formikProps: FormikProps<{cards: CardProps[]}>
-	  ) => {
+		) => {
 		
 		const { isValid, values, errors } = formikProps;
 		console.log(isValid, values, errors);
@@ -322,7 +322,7 @@ const SurveyNew = () => {
 						actions.setSubmitting(false);
 					}}
 				>
-					 {formikProps => {
+				{formikProps => {
 						const {
 							isSubmitting,
 						} = formikProps;

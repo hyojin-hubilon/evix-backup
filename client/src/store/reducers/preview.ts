@@ -31,11 +31,11 @@ export const previewSlice = createSlice({
 	name: "Preview",
 	initialState: [] as PreviewProps[],
 	reducers: {
-	 	addPreview: (state: PreviewProps[], action: ActionProps) => {
+		addPreview: (state: PreviewProps[], action: ActionProps) => {
 			const copiedState = [...state];
 			copiedState.push(createNewPreview(action.payload.cardId, action.payload.question, action.payload.questionType, action.payload.exampleList, action.payload.isRequired));
 			return copiedState;
-	  	},
+		},
 
 		resetAll: (state: PreviewProps[]) => {
 			state = [] as PreviewProps[]

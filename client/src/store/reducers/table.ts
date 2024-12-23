@@ -1,53 +1,58 @@
 import { TablePreset } from "@/pages/ecrf-builder/components/eCrfTable/ECrfTable";
 import { shortId } from "@/pages/ecrf-builder/components/eCrfTable/utils";
-import { createSlice, original } from "@reduxjs/toolkit";
+import { createSlice, original, PayloadAction } from "@reduxjs/toolkit";
 import { ColumnDef, Column } from '@tanstack/react-table';
 import { focus } from '@/store/reducers/survey';
+import { WritableDraft } from 'immer';
 
 // Define the initial state of the table
-interface TableState {
+export interface TableStateProps {
 	skipReset:boolean;
-	data: TablePreset[];
+	data: TablePreset[][];
 	columns: ColumnDef<TablePreset[], unknown>[];
 }
 
 
-const initicalColumns: ColumnDef<TablePreset[]>[] = [
+const initicalColumns: ColumnDef<TablePreset[], unknown>[] = [
 	{
 		id: '0',
 		created: true,
 		dataType: 'Text',
 		label: 'Col 1',
-		accessorFn: (originalRow: TablePreset[], index: number) => {
-			const row = originalRow[index];
-			return JSON.stringify(row);
-		}
+		
 	},
 	{
 		id: '1',
 		created: true,
 		dataType: 'Number',
 		label: 'Col 2',
-		accessorFn: (originalRow: TablePreset[], index: number) => {
-			const row = originalRow[index];
-			return JSON.stringify(row);
-		}
+		
 	},
 	{ 
 		id:'999999',
 		created: false,
 		dataType: 'Add',
 		label: 'Add Column',
-		accessorFn: (originalRow: TablePreset[], index: number) => {
-			const row = originalRow[index];
-			return JSON.stringify(row);
-		}
+		
 	}
 ]
 
-const initialState: TableState = {
+const PreData: TablePreset[][] = [
+	[
+		{
+			type: "Text",
+			content: "1"
+		},
+		{
+			type: "Number",
+			content: 2
+		}
+	]
+];
+
+const initialState: TableStateProps = {
 	skipReset: false,
-	data: [] as TablePreset[],
+	data: PreData,
 	columns: initicalColumns
 };
 
@@ -58,6 +63,7 @@ type PayloadProps ={
 	label:string;
 	rowIndex:number;
 	value: string;
+	type: string;
 	focus:boolean;
 }
 interface ActionProps {
@@ -66,161 +72,100 @@ interface ActionProps {
 }
 
 export const tableSlice = createSlice({
-	name: 'Columns',
+	name: 'Tables',
 	initialState,
 	reducers: {
-		editColumns: (state:TableState, action: ActionProps) => {
-			switch (action.type) {
+		editColumns: (state: WritableDraft<TableStateProps>, action: PayloadAction<PayloadProps>) => {
+			switch (action.payload.type) {
 				case "add_row":
-					return {
-						...state,
-						skipReset: true,
-						data: [...state.data, {}]
-					};
+					state.skipReset = true;
+					state.data.push([] as TablePreset[]);
+					break;
 					
 				case "update_column_type": {
 					const typeIndex = state.columns.findIndex(
 						(column) => column.id === action.payload.columnId
 					);
-
+		
 					switch (action.payload.dataType) {
 						case "Number":
-							if (state.columns[typeIndex].dataType === "Number") {
-								return state;
-							} else {
-								return {
-									...state,
-									columns: [
-										...state.columns.slice(0, typeIndex),
-										{ ...state.columns[typeIndex], dataType: action.payload.dataType },
-										...state.columns.slice(typeIndex + 1, state.columns.length)
-									],
-									data: state.data.map((row) => ({
-										...row,
-										[action.payload.columnId]: isNaN(Number(row[action.payload.columnId]))
+							if (state.columns[typeIndex].dataType !== "Number") {
+								state.columns[typeIndex].dataType = action.payload.dataType;
+								state.data.forEach((row) => {
+									row[action.payload.columnId] = isNaN(Number(row[action.payload.columnId]))
 										? ""
-										: Number.parseInt(String(row[action.payload.columnId]))
-									}))
-								};
+										: Number.parseInt(String(row[action.payload.columnId]));
+								});
 							}
+							break;
 						case "Text":
-							if (state.columns[typeIndex].dataType === "Text") {
-								return state;
-							} else {
-								return {
-									...state,
-									skipReset: true,
-									columns: [
-										...state.columns.slice(0, typeIndex),
-										{ ...state.columns[typeIndex], dataType: action.payload.dataType },
-										...state.columns.slice(typeIndex + 1, state.columns.length)
-									],
-									data: state.data.map((row) => ({
-										...row,
-										[action.payload.columnId]: row[action.payload.columnId] + ""
-									}))
-								};
+							if (state.columns[typeIndex].dataType !== "Text") {
+								state.skipReset = true;
+								state.columns[typeIndex].dataType = action.payload.dataType;
+								state.data.forEach((row) => {
+									row[action.payload.columnId] = row[action.payload.columnId] + "";
+								});
 							}
-							default:
-								return state;
-						}
+							break;
+						default:
+							break;
 					}
-			case "update_column_header": {
-				{
+					break;
+				}
+				case "update_column_header": {
 					const index = state.columns.findIndex(
 						(column) => column.id === action.payload.columnId
 					);
-					return {
-						...state,
-						skipReset: true,
-						columns: [
-							...state.columns.slice(0, index),
-							{ ...state.columns[index], label: action.payload.label },
-							...state.columns.slice(index + 1, state.columns.length)
-						]
-					};
+					state.skipReset = true;
+					state.columns[index].label = action.payload.label;
+					break;
 				}
-			}
-			case "update_cell":
-				return {
-				...state,
-				skipReset: true,
-				data: state.data.map((row, index) => {
-					if (index === action.payload.rowIndex) {
-						return {
-							...state.data[action.payload.rowIndex],
-							[action.payload.columnId]: action.payload.value
-						};
-					}
-					return row;
-				})
-				};
-			case "add_column_to_left": {
-				const leftIndex = state.columns.findIndex(
-					(column) => column.id === action.payload.columnId
-				);
-
-				const leftId = shortId();
-				return {
-				...state,
-				skipReset: true,
-				columns: [
-					...state.columns.slice(0, leftIndex),
-					{
+				case "update_cell":
+					state.skipReset = true;
+					state.data[action.payload.rowIndex][action.payload.columnId] = action.payload.value;
+					break;
+				case "add_column_to_left": {
+					const leftIndex = state.columns.findIndex(
+						(column) => column.id === action.payload.columnId
+					);
+		
+					const leftId = shortId();
+					state.skipReset = true;
+					state.columns.splice(leftIndex, 0, {
 						id: leftId,
 						label: "Column",
-						accessor: leftId,
-						dataType: "text",
+						dataType: "Text",
 						created: action.payload.focus && true,
-						options: []
-					},
-					...state.columns.slice(leftIndex, state.columns.length)
-				]
-				};
-			}
-			case "add_column_to_right": {
-				const rightIndex = state.columns.findIndex(
-					(column) => column.id === action.payload.columnId
-				);
-				const rightId = shortId();
-				return {
-					...state,
-					skipReset: true,
-					columns: [
-						...state.columns.slice(0, rightIndex + 1),
-						{
-							id: rightId,
-							label: "Column",
-							accessor: rightId,
-							dataType: "text",
-							created: action.payload.focus && true,
-							options: []
-						},
-						...state.columns.slice(rightIndex + 1, state.columns.length)
-					]
-				};
-			}
-			case "delete_column": {
-				const deleteIndex = state.columns.findIndex(
-					(column) => column.id === action.payload.columnId
-				);
-				return {
-					...state,
-					skipReset: true,
-					columns: [
-						...state.columns.slice(0, deleteIndex),
-						...state.columns.slice(deleteIndex + 1, state.columns.length)
-					]
-				};
-			}
-				
-			case "enable_reset":
-				return {
-				...state,
-				skipReset: false
-				};
-			default:
-				return state;
+					});
+					break;
+				}
+				case "add_column_to_right": {
+					const rightIndex = state.columns.findIndex(
+						(column) => column.id === action.payload.columnId
+					);
+					const rightId = shortId();
+					state.skipReset = true;
+					state.columns.splice(rightIndex + 1, 0, {
+						id: rightId,
+						label: "Column",
+						dataType: "Text",
+						created: action.payload.focus && true,
+					});
+					break;
+				}
+				case "delete_column": {
+					const deleteIndex = state.columns.findIndex(
+						(column) => column.id === action.payload.columnId
+					);
+					state.skipReset = true;
+					state.columns.splice(deleteIndex, 1);
+					break;
+				}
+				case "enable_reset":
+					state.skipReset = false;
+					break;
+				default:
+					break;
 			}
 		}
 	}	
@@ -228,4 +173,4 @@ export const tableSlice = createSlice({
 
 export const {
 	editColumns
-  } = tableSlice.actions;
+} = tableSlice.actions;

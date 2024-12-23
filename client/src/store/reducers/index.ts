@@ -6,6 +6,7 @@ import menu from './menu'; // 우리가 정의한 menu 슬라이스를 import �
 import snack from './snack';
 import { cardSlice, requiredSlice } from './survey';
 import { previewSlice } from './preview';
+import { tableSlice } from './table';
 
 // ==============================|| COMBINE REDUCERS ||============================== //
 
@@ -16,7 +17,8 @@ const reducers = combineReducers({
 	cards: cardSlice.reducer,
 	required: requiredSlice.reducer,
 	previewCards : previewSlice.reducer,
-	snack
+	snack,
+	tables: tableSlice.reducer
 });
 export type IRootState = ReturnType<typeof reducers>;
 

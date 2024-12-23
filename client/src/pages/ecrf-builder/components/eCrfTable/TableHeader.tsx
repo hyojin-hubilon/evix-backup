@@ -16,7 +16,7 @@ interface CustomHeaderProps<TData> {
 const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
 	const { column } = header;
 	const { columnDef } = column;
-	console.log(column)
+	
 	//console.log(id, created, label, dataType, getResizerProps, getHeaderProps);
 	const [expanded, setExpanded] = useState(columnDef.dataType || false);
 	const [referenceElement, setReferenceElement] = useState(null);
