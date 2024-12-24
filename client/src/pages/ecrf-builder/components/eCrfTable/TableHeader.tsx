@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import WestRoundedIcon from '@mui/icons-material/WestRounded';
 import EastRoundedIcon from '@mui/icons-material/EastRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
@@ -9,6 +9,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Column, ColumnDef, ColumnDefTemplate, Header, HeaderContext } from "@tanstack/react-table";
 import { useDispatch } from "react-redux";
 import { editColumns } from "@/store/reducers/table";
+import { Box, Button, Menu, MenuItem, Popper, OutlinedInput } from '@mui/material';
 
 interface CustomHeaderProps<TData> {
 	header: Header<TData, unknown>;
@@ -22,15 +23,21 @@ const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
 
 	const dispatch = useDispatch();
 	
-	//console.log(id, created, label, dataType, getResizerProps, getHeaderProps);
+	// column 수정 메뉴 관련
+	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const open = Boolean(anchorEl);
+	const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
+
+	const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
+
 	
-	const [referenceElement, setReferenceElement] = useState(null);
-	const [popperElement, setPopperElement] = useState(null);
-	const [inputRef, setInputRef] = useState(null);
-	// const {styles, attributes} = usePopper(referenceElement, popperElement, {
-	//   placement: "bottom",
-	//   strategy: "absolute"
-	// });
+
+
 	const [label, setLabel] = useState(columnDef.label);
 	const [typeReferenceElement, setTypeReferenceElement] = useState(null);
 	const [typePopperElement, setTypePopperElement] = useState(null);
@@ -64,28 +71,6 @@ const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
 	// 		label: "Delete"
 	// 	}
 	// ];
-  
-	// const types = [
-	// 	{
-	// 		onClick: (e) => {
-	// 		// dataDispatch({type: "update_column_type", columnId: id, dataType: "text"});
-	// 		setShowType(false);
-	// 		setExpanded(false);
-	// 		},
-	// 		icon: <TextFieldsRoundedIcon />,
-	// 		label: "Text"
-	// 	},
-	// 	{
-	// 		onClick: (e) => {
-	// 		// dataDispatch({type: "update_column_type", columnId: id, dataType: "number"});
-	// 		setShowType(false);
-	// 		setExpanded(false);
-	// 		},
-	// 		icon: <TagRoundedIcon />,
-	// 		label: "Number"
-	// 	}
-	// ];
-  
 	
 	// useEffect(() => {
 	// 	if (created) {
@@ -99,8 +84,8 @@ const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
   
 	useEffect(() => {
 		if (inputRef) {
-			// inputRef.focus();
-			// inputRef.select();
+			inputRef.focus();
+			inputRef.select();
 		}
 	}, [inputRef]);
   
@@ -109,32 +94,54 @@ const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
 	//   strategy: "fixed"
 	// });
   
-	function handleKeyDown(e) {
+	const handleKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {
-			//dataDispatch({type: "update_column_header", columnId: id, label: header});
-			//setExpanded(false);
+			dispatch(editColumns({type: "update_column_header", columnId: columnDef.id, label: label, focus: false}));
+			handleClose();
 		}
 	}
   
-	function handleChange(e) {
-		//setHeader(e.target.value);
+	const handleChangeLabel = (e: ChangeEvent<HTMLInputElement>) =>{
+		setLabel(e.target.value);
 	}
   
-	function handleBlur(e) {
+	const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
 		e.preventDefault();
-		//dataDispatch({type: "update_column_header", columnId: id, label: header});
+		dispatch(editColumns({type: "update_column_header", columnId: columnDef.id, label: label, focus: false}));
 	}
 
 	return columnDef.id !== '999999' ? (
 		<>
-			<div style={{width: columnDef.size}} className="th noselect">
+			<div style={{width: columnDef.size}} className="th noselect" onClick={(e) => handleClick(e)}>
 				<div className="th-content">
-					<span className="svg-icon svg-gray icon-margin"><FormatAlignLeftRoundedIcon /></span>
-					{columnDef.label}
+						<span className="svg-icon svg-gray icon-margin"><FormatAlignLeftRoundedIcon /></span>
+						{ label }
 				</div>
 				<div className="resizer" />
 			</div>
-			{/* {expanded && <div className='overlay' onClick={() => setExpanded(false)} />} */}
+
+			<Menu
+				id="basic-menu"
+				anchorEl={anchorEl}
+				open={open}
+				onClose={handleClose}
+				MenuListProps={{
+					'aria-labelledby': 'basic-button',
+				}}
+			>
+				<Box sx={{p:'0.5rem', width:'200px'}}>
+					<input
+						className='form-input'
+						ref={setInputRef}
+						type='text'
+						value={label}
+						style={{padding: '0.2rem'}}
+						onChange={(e) => handleChangeLabel(e)}
+						onBlur={(e) => handleBlur(e)}
+						onKeyDown={(e) => handleKeyDown(e)}
+					/>
+				</Box>
+			</Menu>
 			{/* {expanded && (
 				<div ref={setPopperElement} style={{...styles.popper, zIndex: 3}} {...attributes.popper}>
 				<div

@@ -11,7 +11,6 @@ const TableCell = ({cell}:CustomCellProps<any>)  => {
 	// console.log(cell.getContext());
 	const { column, row } = cell;
 	const [value, setValue] = useState({value: row.getValue(column.id), update: false});
-	console.log(cell, value, flexRender(cell.column.columnDef.cell, cell.getContext()));
 	
 	return column.columnDef.id !== '999999' ? (
 		<div style={{width: column.columnDef.size}} className="td noselect">
