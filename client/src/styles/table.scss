@@ -1,8 +1,8 @@
 .eCrfTable {
 	border-spacing: 0;
-	display: flex;
-	flex-direction: column;
-	width: fit-content;
+	// display: flex;
+	// flex-direction: column;
+	// width: fit-content;
 
 
 	.sort-button {
@@ -21,19 +21,7 @@
 		}
 	}
 
-	.svg-icon {
-		display: flex;
-		align-items: center;
-		svg {
-			position: relative;
-			height: 1rem;
-			width: 1rem;
-		}	  
-	}
-
-	.icon-margin {
-		margin-right: 5px;
-	}
+	
 
 	.th {
 		border-top: 1px solid #e0e0e0;
@@ -119,6 +107,8 @@
 		display: flex;
 		align-items: center;
 	}
+
+	
 		
   
 	.resizer {
@@ -138,4 +128,35 @@
 			background-color: #8ecae6;
 		}
 	} 
+}
+
+.sort-button {
+	padding: 0.25rem 0.75rem;
+	width: 100%;
+	background-color: transparent;
+	border: 0;
+	font-size: 0.875rem;
+	color: #757575;
+	cursor: pointer;
+	text-align: left;
+	display: flex;
+	align-items: center;
+}
+  
+.sort-button:hover {
+	background-color: #eeeeee;
+}
+
+.svg-icon {
+	display: flex;
+	align-items: center;
+	svg {
+		position: relative;
+		height: 1rem;
+		width: 1rem;
+	}	  
+}
+
+.icon-margin {
+	margin-right: 5px;
 }

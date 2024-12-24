@@ -27,16 +27,7 @@ const ECrfTable = () => {
 		defaultColumn: {
 			size: 200,
 			minSize: 50,
-			maxSize: 400,
-			// cell: ({getValue, row: { index }, column: { id }, table}) => {
-
-			// 	const initialValue = getValue()
-			// 	console.log(initialValue)
-			
-			// 	return (
-			// 	<p style={{ color: 'red' }}>{ String(initialValue) }</p>
-			// 	)
-			// }
+			maxSize: 400
 		},
 		getCoreRowModel: getCoreRowModel(),
 	});

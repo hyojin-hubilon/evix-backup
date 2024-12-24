@@ -35,42 +35,38 @@ const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
 
 	const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
 
-	
-
 
 	const [label, setLabel] = useState(columnDef.label);
-	const [typeReferenceElement, setTypeReferenceElement] = useState(null);
-	const [typePopperElement, setTypePopperElement] = useState(null);
-	const [showType, setShowType] = useState(false);
-	// const buttons = [
-	// 	{
-	// 		onClick: (e) => {
-	// 		// dataDispatch({type: "update_column_header", columnId: id, label: header});
-	// 		// dataDispatch({type: "add_column_to_left", columnId: id, focus: false});
-	// 		setExpanded(false);
-	// 		},
-	// 		icon: <WestRoundedIcon />,
-	// 		label: "Insert left"
-	// 	},
-	// 	{
-	// 		onClick: (e) => {
-	// 		// dataDispatch({type: "update_column_header", columnId: id, label: header});
-	// 		// dataDispatch({type: "add_column_to_right", columnId: id, focus: false});
-	// 		setExpanded(false);
-	// 		},
-	// 		icon: <EastRoundedIcon />,
-	// 		label: "Insert right"
-	// 	},
-	// 	{
-	// 		onClick: (e) => {
-	// 		// dataDispatch({type: "update_column_header", columnId: id, label: header});
-	// 		// dataDispatch({type: "delete_column", columnId: id});
-	// 		setExpanded(false);
-	// 		},
-	// 		icon: <DeleteOutlineRoundedIcon />,
-	// 		label: "Delete"
-	// 	}
-	// ];
+	
+	const subMenu = [
+		{
+			onClick: (e) => {
+				dispatch(editColumns({type: "update_column_header", columnId: columnDef.id, label: label}));
+				dispatch(editColumns({type: "add_column_to_left", columnId: columnDef.id}));
+				handleClose();
+			},
+			icon: <WestRoundedIcon sx={{fontSize: '1rem'}}/>,
+			label: "Insert left"
+		},
+		{
+			onClick: (e) => {
+				dispatch(editColumns({type: "update_column_header", columnId: columnDef.id, label: label}));
+				dispatch(editColumns({type: "add_column_to_right", columnId: columnDef.id}));
+				handleClose();
+			},
+			icon: <EastRoundedIcon sx={{fontSize: '1rem'}}/>,
+			label: "Insert right"
+		},
+		{
+			onClick: (e) => {
+				dispatch(editColumns({type: "update_column_header", columnId: columnDef.id, label: label}));
+				dispatch(editColumns({type: "delete_column", columnId: columnDef.id}));
+				handleClose();
+			},
+			icon: <DeleteOutlineRoundedIcon sx={{fontSize: '1rem'}} />,
+			label: "Delete"
+		}
+	];
 	
 	// useEffect(() => {
 	// 	if (created) {
@@ -89,11 +85,7 @@ const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
 		}
 	}, [inputRef]);
   
-	// const typePopper = usePopper(typeReferenceElement, typePopperElement, {
-	//   placement: "right",
-	//   strategy: "fixed"
-	// });
-  
+	
 	const handleKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {
 			dispatch(editColumns({type: "update_column_header", columnId: columnDef.id, label: label, focus: false}));
@@ -134,87 +126,22 @@ const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
 						className='form-input'
 						ref={setInputRef}
 						type='text'
+						
 						value={label}
-						style={{padding: '0.2rem'}}
+						style={{padding: '0.2rem', width:'100%'}}
 						onChange={(e) => handleChangeLabel(e)}
 						onBlur={(e) => handleBlur(e)}
 						onKeyDown={(e) => handleKeyDown(e)}
 					/>
 				</Box>
-			</Menu>
-			{/* {expanded && (
-				<div ref={setPopperElement} style={{...styles.popper, zIndex: 3}} {...attributes.popper}>
-				<div
-					className='bg-white shadow-5 border-radius-md'
-					style={{
-					width: 240
-					}}>
-					<div style={{paddingTop: "0.75rem", paddingLeft: "0.75rem", paddingRight: "0.75rem"}}>
-					<div className='is-fullwidth' style={{marginBottom: 12}}>
-						<input
-						className='form-input'
-						ref={setInputRef}
-						type='text'
-						value={header}
-						style={{width: "100%"}}
-						onChange={handleChange}
-						onBlur={handleBlur}
-						onKeyDown={handleKeyDown}
-						/>
-					</div>
-					<span className='font-weight-600 font-size-75' style={{textTransform: "uppercase", color: grey(500)}}>
-						Property Type
-					</span>
-					</div>
-					<div style={{padding: "4px 0px"}}>
-					<button
-						className='sort-button'
-						type='button'
-						onMouseEnter={() => setShowType(true)}
-						onMouseLeave={() => setShowType(false)}
-						ref={setTypeReferenceElement}>
-						<span className='svg-icon svg-text icon-margin'>{propertyIcon}</span>
-						<span style={{textTransform: "capitalize"}}>{dataType}</span>
-					</button>
-					{showType && (
-						<div
-						className='shadow-5 bg-white border-radius-m'
-						ref={setTypePopperElement}
-						onMouseEnter={() => setShowType(true)}
-						onMouseLeave={() => setShowType(false)}
-						{...typePopper.attributes.popper}
-						style={{
-							...typePopper.styles.popper,
-							width: 200,
-							backgroundColor: "white",
-							zIndex: 4,
-							padding: "4px 0px"
-						}}>
-						{types.map((type) => (
-							<button className='sort-button' onClick={type.onClick}>
-							<span className='svg-icon svg-text icon-margin'>{type.icon}</span>
-							{type.label}
-							</button>
-						))}
-						</div>
-					)}
-					</div>
-					<div
-					key={shortId()}
-					style={{
-						borderTop: `2px solid ${grey(200)}`,
-						padding: "4px 0px"
-					}}>
-					{buttons.map((button) => (
-						<button type='button' className='sort-button' onMouseDown={button.onClick}>
-						<span className='svg-icon svg-text icon-margin'>{button.icon}</span>
-						{button.label}
+
+				{subMenu.map((button, i) => (
+						<button type="button" className="sort-button" onClick={button.onClick} key={i}>
+							<span className="svg-icon svg-text icon-margin">{ button.icon }</span>
+							{button.label}
 						</button>
-					))}
-					</div>
-				</div>
-				</div>
-			)} */}
+				))}
+			</Menu>
 		</>
 	) : (
 		<div className="th noselect" style={{width: '40px', borderRight: '1px solid #e0e0e0', minWidth:'40px'}}>

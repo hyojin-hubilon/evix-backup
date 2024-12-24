@@ -55,7 +55,7 @@ type PayloadProps = {
 	rowIndex?:number;
 	value?: string;
 	type: string;
-	focus:boolean;
+	focus?:boolean;
 }
 interface ActionProps {
 	type: string;
