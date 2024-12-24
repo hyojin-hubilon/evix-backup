@@ -1,22 +1,18 @@
-import { createColumnHelper, useReactTable, getCoreRowModel, flexRender, TableOptions, Table, ColumnDef, Column } from '@tanstack/react-table';
+import { createColumnHelper, useReactTable, getCoreRowModel, flexRender, TableOptions, Table, ColumnDef, Column, CellContext } from '@tanstack/react-table';
 import { useMemo, useState } from "react";
 import TableHeader from "./TableHeader";
 import { useDispatch, useSelector } from "react-redux";
-import { TableStateProps } from "@/store/reducers/table";
+import { editColumns, TableStateProps } from "@/store/reducers/table";
 import TableCell from './TableCell';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+
 declare module '@tanstack/react-table' {
 	interface ColumnDefBase<TData, TValue> {
 		id: string | number,
 		created:boolean,
 		label:string, 
-		dataType: 'Text' | 'Number' | 'Add',
 		accessorFn?: (row: TData) => TValue;
 	}
-}
-
-export interface TablePreset {
-	type:"Text" | "Number" | "Add";
-	content : string | number;
 }
 
 
@@ -25,20 +21,25 @@ const ECrfTable = () => {
 	
 	const { columns, data } = useSelector((state: { tables: TableStateProps }) => state.tables);
 	
-	const table: Table<TablePreset[]> = useReactTable({
+	const table: Table<any> = useReactTable({
 		columns,
 		data,
 		defaultColumn: {
 			size: 200,
 			minSize: 50,
 			maxSize: 400,
-			// header: TableHeader,
+			// cell: ({getValue, row: { index }, column: { id }, table}) => {
+
+			// 	const initialValue = getValue()
+			// 	console.log(initialValue)
+			
+			// 	return (
+			// 	<p style={{ color: 'red' }}>{ String(initialValue) }</p>
+			// 	)
+			// }
 		},
 		getCoreRowModel: getCoreRowModel(),
-		
-	})
-
-	console.log(data)
+	});
 	
 	return (
 		<>
@@ -46,7 +47,7 @@ const ECrfTable = () => {
 			<div className="eCrfTable">
 				{table.getHeaderGroups().map((headerGroup, i) => {
 					return (
-					<div className="tr" key={i}>
+					<div className="thead tr" key={i}>
 						{
 							headerGroup.headers.map((header, index) => <TableHeader header={header} key={index} />)						
 						}
@@ -56,10 +57,16 @@ const ECrfTable = () => {
 				{table.getRowModel().rows.map(row => (
 					<div key={row.id} className="tr">
 						{
-							row.getVisibleCells().map((cell, i)=> <TableCell cell={cell} key={i} cellIndex={i} />)
+							row.getVisibleCells().map((cell, i)=> <TableCell cell={cell} key={i} />)
 						}
 					</div>
-				))}				
+				))}
+				<div className="tr add-row" onClick={() => dispatch(editColumns({type: "add_row", focus: false}))}>
+					<span className='svg-icon svg-gray' style={{marginRight: 4}}>
+						<AddRoundedIcon />	
+					</span>
+					New
+				</div>
 			</div>
 		</div>
 		</>

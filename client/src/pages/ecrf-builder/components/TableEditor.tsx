@@ -22,7 +22,7 @@ const TableEditor = ({isOpen, handleClose} : TableEditorType) => {
 	const rows = []
 
 	return (
-		<Dialog open={isOpen} onClose={handleClose} maxWidth="lg">
+		<Dialog open={isOpen} onClose={handleClose} maxWidth="xl">
 			<DialogTitle>
 				Table Editor
 			</DialogTitle>

@@ -1,7 +1,9 @@
 .eCrfTable {
 	border-spacing: 0;
- 	border-top: 1px solid #e0e0e0;
-  	border-bottom: 1px solid #e0e0e0;
+	display: flex;
+	flex-direction: column;
+	width: fit-content;
+
 
 	.sort-button {
 		padding: 0.25rem 0.75rem;
@@ -33,10 +35,13 @@
 		margin-right: 5px;
 	}
 
+	.th {
+		border-top: 1px solid #e0e0e0;
+	}
+
 	.tr {
 		display: flex;
-		flex: 1 0 auto;
-		min-width: 300px;
+		border-left: 1px solid #e0e0e0;
 	}	
 	
 	.tr {
@@ -54,6 +59,7 @@
 		border-bottom: 1px solid #e0e0e0;
 		border-right: 1px solid #e0e0e0;
 		position: relative;
+		min-width: 86px;
 	}
   
 
@@ -64,10 +70,13 @@
 		padding: 0;
 		display: flex;
 		flex-direction: column;
+		
 	}
 	
 	.td-content {
 		display: block;
+		padding: 0.5rem;
+		min-height: 30px;
 	}
 	
 	.add-row {
@@ -76,6 +85,8 @@
 		display: flex;
 		align-items: center;
 		font-size: 0.875rem;
+		border-right: 1px solid #e0e0e0;
+		border-bottom: 1px solid #e0e0e0;
 		cursor: pointer;
 
 		&:hover {

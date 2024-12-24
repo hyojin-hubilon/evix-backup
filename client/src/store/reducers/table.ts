@@ -1,4 +1,3 @@
-import { TablePreset } from "@/pages/ecrf-builder/components/eCrfTable/ECrfTable";
 import { shortId } from "@/pages/ecrf-builder/components/eCrfTable/utils";
 import { createSlice, original, PayloadAction } from "@reduxjs/toolkit";
 import { ColumnDef, Column, RowModel, CellContext, Row, Table } from '@tanstack/react-table';
@@ -8,54 +7,39 @@ import { WritableDraft } from 'immer';
 // Define the initial state of the table
 export interface TableStateProps {
 	skipReset:boolean;
-	data: TablePreset[][];
-	columns: ColumnDef<TablePreset[], unknown>[];
+	data: any[];
+	columns: ColumnDef<any, unknown>[];
 }
 
 
-const initicalColumns: ColumnDef<TablePreset[], unknown>[] = [
+const initicalColumns: ColumnDef<any, unknown>[] = [
 	{
 		id: '0',
 		created: true,
-		dataType: 'Text',
-		label: 'Col 1'
+		label: 'Column',
+		accessorKey: '0'
 	},
 	{
 		id: '1',
 		created: true,
-		dataType: 'Number',
-		label: 'Col 2',
-		// accessorFn: (row: TablePreset[], index: number) => row[index].content as string
-		
+		label: 'Column',
+		accessorKey: '1'
 	},
 	{ 
 		id:'999999',
 		created: false,
-		dataType: 'Add',
 		label: 'Add Column',
-		// accessorFn: (row: TablePreset[], index: number) => row[index].content as string
-		
+		accessorKey: '999999'
 	}
 ]
 
 console.log(initicalColumns)
 
-const PreData: TablePreset[][] = [
-	[
-		{
-			type: "Text",
-			content: "1"
-		},
-		{
-			type: "Number",
-			content: 2
-		},
-		{
-			type: "Add",
-			content: "3"
-		}
-	]
-];
+const PreData = [{
+	'0': '0',
+	'1': 1,
+	'999999': ''
+}];
 
 const initialState: TableStateProps = {
 	skipReset: false,
@@ -65,11 +49,11 @@ const initialState: TableStateProps = {
 
 
 type PayloadProps = {
-	columnId:string;
-	dataType: string;
-	label:string;
-	rowIndex:number;
-	value: string;
+	columnId?:string;
+	dataType?: string;
+	label?:string;
+	rowIndex?:number;
+	value?: string;
 	type: string;
 	focus:boolean;
 }
@@ -82,54 +66,28 @@ export const tableSlice = createSlice({
 	name: 'Tables',
 	initialState,
 	reducers: {
-		editColumns: (state: WritableDraft<TableStateProps>, action: PayloadAction<PayloadProps>) => {
+		editColumns: (state: TableStateProps, action: PayloadAction<PayloadProps>) => {
 			switch (action.payload.type) {
 				case "add_row":
 					state.skipReset = true;
-					state.data.push([] as TablePreset[]);
+					state.data.push([]);
 					break;
-					
-				case "update_column_type": {
-					const typeIndex = state.columns.findIndex(
-						(column) => column.id === action.payload.columnId
-					);
-		
-					switch (action.payload.dataType) {
-						case "Number":
-							if (state.columns[typeIndex].dataType !== "Number") {
-								state.columns[typeIndex].dataType = action.payload.dataType;
-								state.data.forEach((row) => {
-									row[action.payload.columnId] = isNaN(Number(row[action.payload.columnId]))
-										? ""
-										: Number.parseInt(String(row[action.payload.columnId]));
-								});
-							}
-							break;
-						case "Text":
-							if (state.columns[typeIndex].dataType !== "Text") {
-								state.skipReset = true;
-								state.columns[typeIndex].dataType = action.payload.dataType;
-								state.data.forEach((row) => {
-									row[action.payload.columnId] = row[action.payload.columnId] + "";
-								});
-							}
-							break;
-						default:
-							break;
-					}
-					break;
-				}
+				
 				case "update_column_header": {
 					const index = state.columns.findIndex(
 						(column) => column.id === action.payload.columnId
 					);
 					state.skipReset = true;
-					state.columns[index].label = action.payload.label;
+					if (action.payload.label !== undefined) {
+						state.columns[index].label = action.payload.label;
+					}
 					break;
 				}
 				case "update_cell":
 					state.skipReset = true;
-					state.data[action.payload.rowIndex][action.payload.columnId] = action.payload.value;
+					if (action.payload.rowIndex !== undefined && action.payload.columnId !== undefined) {
+						state.data[action.payload.rowIndex][action.payload.columnId] = action.payload.value;
+					}
 					break;
 				case "add_column_to_left": {
 					const leftIndex = state.columns.findIndex(
@@ -140,9 +98,9 @@ export const tableSlice = createSlice({
 					state.skipReset = true;
 					state.columns.splice(leftIndex, 0, {
 						id: leftId,
-						label: "Column",
-						dataType: "Text",
+						label: 'Column',
 						created: action.payload.focus && true,
+						accessorKey: leftId
 					});
 					break;
 				}
@@ -155,8 +113,8 @@ export const tableSlice = createSlice({
 					state.columns.splice(rightIndex + 1, 0, {
 						id: rightId,
 						label: "Column",
-						dataType: "Text",
 						created: action.payload.focus && true,
+						accessorKey: rightId
 					});
 					break;
 				}

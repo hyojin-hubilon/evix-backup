@@ -7,6 +7,8 @@ import FormatAlignLeftRoundedIcon from '@mui/icons-material/FormatAlignLeftRound
 import TagRoundedIcon from '@mui/icons-material/TagRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Column, ColumnDef, ColumnDefTemplate, Header, HeaderContext } from "@tanstack/react-table";
+import { useDispatch } from "react-redux";
+import { editColumns } from "@/store/reducers/table";
 
 interface CustomHeaderProps<TData> {
 	header: Header<TData, unknown>;
@@ -16,9 +18,12 @@ interface CustomHeaderProps<TData> {
 const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
 	const { column } = header;
 	const { columnDef } = column;
+
+
+	const dispatch = useDispatch();
 	
 	//console.log(id, created, label, dataType, getResizerProps, getHeaderProps);
-	const [expanded, setExpanded] = useState(columnDef.dataType || false);
+	
 	const [referenceElement, setReferenceElement] = useState(null);
 	const [popperElement, setPopperElement] = useState(null);
 	const [inputRef, setInputRef] = useState(null);
@@ -81,18 +86,7 @@ const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
 	// 	}
 	// ];
   
-	let propertyIcon;
-	switch (columnDef.dataType) {
-		case "Number":
-			propertyIcon = <TagRoundedIcon />;
-			break;
-		case "Text":
-			propertyIcon = <FormatAlignLeftRoundedIcon />;
-			break;
-		default:
-			break;
-	}
-  
+	
 	// useEffect(() => {
 	// 	if (created) {
 	// 		setExpanded(true);
@@ -133,9 +127,9 @@ const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
 
 	return columnDef.id !== '999999' ? (
 		<>
-			<div style={{width: columnDef.size}}className="th noselect">
+			<div style={{width: columnDef.size}} className="th noselect">
 				<div className="th-content">
-					<span className="svg-icon svg-gray icon-margin">{propertyIcon}</span>
+					<span className="svg-icon svg-gray icon-margin"><FormatAlignLeftRoundedIcon /></span>
 					{columnDef.label}
 				</div>
 				<div className="resizer" />
@@ -216,12 +210,13 @@ const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
 			)} */}
 		</>
 	) : (
-		<div className="th noselect">
+		<div className="th noselect" style={{width: '40px', borderRight: '1px solid #e0e0e0', minWidth:'40px'}}>
 			<div
-				className="th-content"
-				// onClick={(e) => dataDispatch({type: "add_column_to_left", columnId: 999999, focus: true})}
+				className="th-content" 
+				style={{display:'flex', justifyContent:'center', alignItems:'center', width:'inherit'}}
+				onClick={(e) => dispatch(editColumns({type: "add_column_to_left", columnId: '999999', focus: true}))}
 				>
-				<span className="svg-icon svg-gray icon-margin">
+				<span className="svg-icon svg-gray">
 					<AddRoundedIcon />
 				</span>
 
