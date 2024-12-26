@@ -151,14 +151,6 @@ const ITEMS: ItemType[] = [
 			placeholder: 'Placeholder'
 		}
     },
-	// {
-    //     id: uuidv4(),
-    //     itemType: 'File Input',
-	// 	content: {
-	// 		title: 'File Input Title',
-	// 		label: 'Label'
-	// 	}
-    // },
 	{
         id: uuidv4(),
         itemType: 'Datepicker',
@@ -187,7 +179,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 	const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
 	const [openTableEditor, setOpenTableEditor] = useState(true);
 
-	const fileSet = {
+	const fileSet: ItemType = {
 		id: uuidv4(),
 		itemType: 'File Input',
 		content: {
@@ -198,7 +190,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 
 	const [ fileAddShow, setFileAddShow ] = useState(false);
 	const [ fileInput, setFileInput ] = useState<ItemType>(fileSet);
-	const [editFileShow, setEditFileShow] = useState<boolean>(false);
+	const [ editFileShow, setEditFileShow ] = useState<boolean>(false);
 	
     const onDragEnd = (result:DropResult) => {
         const { source, destination } = result;
@@ -208,7 +200,6 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
         if (!destination) {
             return;
         }
-
 		
         switch (source.droppableId) {
 			case 'MAIN': 
@@ -252,10 +243,6 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
     };
 
 	const editThisItem = (item:ItemType, columnId:string, index:number) => {
-		if(item.itemType === 'Table') {
-			setOpenTableEditor(true);
-		} 
-		
 		const selected:SelectedItem = {...item, columnId: columnId, index:index};
 		setSelectedItem(selected);
 	}
@@ -307,26 +294,27 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 		}
 		
 		console.log(newItems)
-		// Object.keys(ids).map((id, i) => {
-			// if(ids[id].length > 0) {
-
-			// 	const items = ids[id].map(item => {
-			// 		delete item["id"];
-			// 		return item;
-			// 	})
-			// 	const newIds = {[i] : items} //uuid를 number로 변경
-			// 	Object.assign(newCrf, newIds);
-			// }
-			
-		// });
-
-		
-
-		saveCRF(newItems);
+		// saveCRF(newItems);
 	}
 
 	const handleCloseTableEditor = () => {
 		setOpenTableEditor(false);
+	}
+
+	const handleSaveTable = (tableState:[{[x:number] : string}[]]) => {
+		if(selectedItem) {
+			const columnId = selectedItem.columnId;
+			const itemIndex = selectedItem.index;
+
+			const parentId = getParentIndexByChildId(ids, columnId);
+			
+			const newItem = selectedItem
+			newItem.content.table = tableState;
+			const result = Array.from(ids);
+			result[parentId][columnId][itemIndex] = newItem;
+			
+			setIds(result);
+		}
 	}
 
 	const handleSaveChanges = (item:SelectedItem) => {
@@ -340,6 +328,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 		const result = Array.from(ids);
 		result[parentId][columnId][itemIndex] = item;
 		
+		console.log(result);
 		setIds(result);
 	}
 
@@ -498,7 +487,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 									:
 									<>
 									{
-										selectedItem &&<SelectedItemEdit selectedItem={selectedItem} saveChanges={handleSaveChanges} />
+										selectedItem && <SelectedItemEdit selectedItem={selectedItem} saveChanges={handleSaveChanges} openTableEditor={() => setOpenTableEditor(true)}/>
 									}
 								
 								</>
@@ -519,7 +508,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 				</Grid>
 			</Grid>
 
-			<TableEditor isOpen={openTableEditor} handleClose={handleCloseTableEditor}/>
+			<TableEditor isOpen={openTableEditor} handleClose={handleCloseTableEditor} handleSave={handleSaveTable}/>
 		</>
 	);
 }

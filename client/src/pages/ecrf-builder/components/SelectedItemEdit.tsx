@@ -8,9 +8,9 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 type SelectedItemEditType = {
 	selectedItem: SelectedItem | ItemType;
 	saveChanges: (item) => void;
-	fileEdit?:boolean;
+	openTableEditor?: () => void;
 }
-const SelectedItemEdit = ({selectedItem, saveChanges, fileEdit} : SelectedItemEditType) => {
+const SelectedItemEdit = ({selectedItem, saveChanges, openTableEditor} : SelectedItemEditType) => {
 	const [ title, setTitle ] = useState<string>('');
 	const [ desc, setDesc ] = useState<string>('');
 	const [ label, setLabel ] = useState<string>('');
@@ -61,8 +61,6 @@ const SelectedItemEdit = ({selectedItem, saveChanges, fileEdit} : SelectedItemEd
 	
 	return (
 		<EditBox>
-			{
-			selectedItem.itemType !== 'Table' ?
 			<Box>
 				<Typography variant="h5">Edit {selectedItem.itemType}</Typography>
 				<Stack spacing={1} m="1rem 0 0">
@@ -78,13 +76,20 @@ const SelectedItemEdit = ({selectedItem, saveChanges, fileEdit} : SelectedItemEd
 						value={desc}
 						onChange={(e) => setDesc(e.target.value)}
 						/>
-
-					<OutlinedInput
-						size="small"
-						placeholder="Label"
-						value={label}
-						onChange={(e) => setLabel(e.target.value)}
+					{
+						selectedItem.itemType === 'Table' ?
+						<Button onClick={openTableEditor} variant="outlined">Open table content editor</Button>
+						:
+						<OutlinedInput
+							size="small"
+							placeholder="Label"
+							value={label}
+							onChange={(e) => setLabel(e.target.value)}
 						/>
+					}
+
+					
+					
 					{
 						options.length > 0 && 
 						<Stack>
@@ -122,9 +127,7 @@ const SelectedItemEdit = ({selectedItem, saveChanges, fileEdit} : SelectedItemEd
 					<Button variant="contained" onClick={handleSaveChanges}>Save</Button>
 				</Stack>
 			</Box>
-			:
-			<Typography variant="h5">Edit Item</Typography>
-		}
+		
 	</EditBox>
 	)
 }

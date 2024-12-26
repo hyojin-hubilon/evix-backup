@@ -4,7 +4,6 @@ import { ColumnDef } from '@tanstack/react-table';
 
 // Define the initial state of the table
 export interface TableStateProps {
-	skipReset:boolean;
 	data: any[];
 	columns: ColumnDef<any, unknown>[];
 }
@@ -33,15 +32,14 @@ const initicalColumns: ColumnDef<any, unknown>[] = [
 
 console.log(initicalColumns)
 
-const PreData = [{
+const preData = [{
 	'0': 'Click to edit',
 	'1': '',
 	'999999': ''
 }];
 
 const initialState: TableStateProps = {
-	skipReset: false,
-	data: PreData,
+	data: preData,
 	columns: initicalColumns
 };
 
@@ -67,7 +65,6 @@ export const tableSlice = createSlice({
 		editColumns: (state: TableStateProps, action: PayloadAction<PayloadProps>) => {
 			switch (action.payload.type) {
 				case "add_row":
-					state.skipReset = true;
 					state.data.push({});
 					break;
 				
@@ -75,14 +72,12 @@ export const tableSlice = createSlice({
 					const index = state.columns.findIndex(
 						(column) => column.id === action.payload.columnId
 					);
-					state.skipReset = true;
 					if (action.payload.label !== undefined) {
 						state.columns[index].label = action.payload.label;
 					}
 					break;
 				}
 				case "update_cell":
-					state.skipReset = true;
 					if (action.payload.rowIndex !== undefined && action.payload.columnId !== undefined) {
 						state.data[action.payload.rowIndex][action.payload.columnId] = action.payload.value;
 					}
@@ -93,7 +88,6 @@ export const tableSlice = createSlice({
 					);
 		
 					const leftId = shortId();
-					state.skipReset = true;
 					state.columns.splice(leftIndex, 0, {
 						id: leftId,
 						label: 'Column',
@@ -107,7 +101,6 @@ export const tableSlice = createSlice({
 						(column) => column.id === action.payload.columnId
 					);
 					const rightId = shortId();
-					state.skipReset = true;
 					state.columns.splice(rightIndex + 1, 0, {
 						id: rightId,
 						label: "Column",
@@ -120,12 +113,12 @@ export const tableSlice = createSlice({
 					const deleteIndex = state.columns.findIndex(
 						(column) => column.id === action.payload.columnId
 					);
-					state.skipReset = true;
 					state.columns.splice(deleteIndex, 1);
 					break;
 				}
-				case "enable_reset":
-					state.skipReset = false;
+				case "table_reset":
+					state.columns = initicalColumns;
+					state.data = preData;
 					break;
 				default:
 					break;

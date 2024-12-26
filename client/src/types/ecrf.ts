@@ -1,3 +1,10 @@
+import { ColumnDef } from "@tanstack/react-table";
+
+export type TablePreData = {
+	columns : ColumnDef<any, unknown>[],
+	data: any[]
+}
+
 export type ItemContents = {
 	title: string;
 	label?:string;
@@ -5,11 +12,12 @@ export type ItemContents = {
 	placeholder?: string;
 	description?:string;
 	required?:boolean // default = false?;
+	table?: TablePreData | { [key: string]: string; }[][]; //첫번째는 수정 전용, 두번째는 저장용
 }
 
 export type ItemType = {
 	id:string; //draggableid, key로 사용, json 저장시에는 삭제
-	itemType: string;
+	itemType: 'Headline' | 'Paragraph' | 'Radio Buttons' | 'Checkbox' | 'Select Box' | 'Text Input' | 'Text Area' | 'Datepicker' | 'Table' | 'File Input';
 	content: ItemContents;
 }
 

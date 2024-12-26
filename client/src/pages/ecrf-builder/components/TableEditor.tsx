@@ -1,7 +1,8 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material";
 import ECrfTable from "./eCrfTable/ECrfTable";
 import { useSelector } from "react-redux";
-import { TableStateProps } from "@/store/reducers/table";
+import { editColumns, TableStateProps } from "@/store/reducers/table";
+import { dispatch } from "@/store";
 
 type TableEditorType = {
 	isOpen: boolean;
@@ -14,17 +15,17 @@ const TableEditor = ({isOpen, handleClose, handleSave} : TableEditorType) => {
 	const handleSaveTable = () => {
 		console.log(columns, data);
 		const columnIds: string[] = [];
-		const columnNames: string[] = [];
+		const columnNames: { [key: string]: string }[] = [];
 		columns.forEach((column) => {
 			if(column.id !== undefined && column.id !== '999999') {
 				columnIds.push(column.id);
-				columnNames.push(column.label);
+				columnNames.push({"COLUMN" : column.label});
 			}
 		});
 
-		const rows = data.map((row) => {
-			const newRow: { [key: string]: any }[] = [];
-			columnIds.forEach((columnId) => {
+		const rows = data.map((row: { [key: string]: string }) => {
+			const newRow: { [key: string]: string }[] = [];
+			columnIds.forEach((columnId:string) => {
 				if(row[columnId]) {
 					const value = {"TEXT" : row[columnId]};
 					newRow.push(value);
@@ -37,14 +38,11 @@ const TableEditor = ({isOpen, handleClose, handleSave} : TableEditorType) => {
 			return newRow;
 		})
 
-		console.log(columnIds, rows);
+		const tableState = [[...columnNames], ...rows]
 
-		
-
-		const tableState = [...columnNames]
-
-		// handleSave(tableState);
-		// handleClose();
+		dispatch(editColumns({type: "table_reset"}));
+		handleSave(tableState);
+		handleClose();
 	}
 
 	return (
