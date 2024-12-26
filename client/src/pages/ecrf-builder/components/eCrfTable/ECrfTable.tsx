@@ -1,4 +1,4 @@
-import { createColumnHelper, useReactTable, getCoreRowModel, flexRender, TableOptions, Table, ColumnDef, Column, CellContext } from '@tanstack/react-table';
+import { useReactTable, getCoreRowModel, Table } from '@tanstack/react-table';
 import { useMemo, useState } from "react";
 import TableHeader from "./TableHeader";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,11 +15,11 @@ declare module '@tanstack/react-table' {
 	}
 }
 
-
 const ECrfTable = () => {
 	const dispatch = useDispatch();
 	
 	const { columns, data } = useSelector((state: { tables: TableStateProps }) => state.tables);
+	
 	
 	const table: Table<any> = useReactTable({
 		columns,
@@ -31,7 +31,7 @@ const ECrfTable = () => {
 		},
 		getCoreRowModel: getCoreRowModel(),
 	});
-	
+
 	return (
 		<>
 		<div className="tableBorder">

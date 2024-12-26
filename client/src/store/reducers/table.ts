@@ -1,8 +1,6 @@
 import { shortId } from "@/pages/ecrf-builder/components/eCrfTable/utils";
 import { createSlice, original, PayloadAction } from "@reduxjs/toolkit";
-import { ColumnDef, Column, RowModel, CellContext, Row, Table } from '@tanstack/react-table';
-import { focus } from '@/store/reducers/survey';
-import { WritableDraft } from 'immer';
+import { ColumnDef } from '@tanstack/react-table';
 
 // Define the initial state of the table
 export interface TableStateProps {
@@ -16,7 +14,7 @@ const initicalColumns: ColumnDef<any, unknown>[] = [
 	{
 		id: '0',
 		created: true,
-		label: 'Column',
+		label: 'Click to edit',
 		accessorKey: '0'
 	},
 	{
@@ -36,8 +34,8 @@ const initicalColumns: ColumnDef<any, unknown>[] = [
 console.log(initicalColumns)
 
 const PreData = [{
-	'0': '0',
-	'1': 1,
+	'0': 'Click to edit',
+	'1': '',
 	'999999': ''
 }];
 
@@ -70,7 +68,7 @@ export const tableSlice = createSlice({
 			switch (action.payload.type) {
 				case "add_row":
 					state.skipReset = true;
-					state.data.push([]);
+					state.data.push({});
 					break;
 				
 				case "update_column_header": {
@@ -99,7 +97,7 @@ export const tableSlice = createSlice({
 					state.columns.splice(leftIndex, 0, {
 						id: leftId,
 						label: 'Column',
-						created: action.payload.focus && true,
+						created: action.payload.focus ? true : false,
 						accessorKey: leftId
 					});
 					break;
@@ -113,7 +111,7 @@ export const tableSlice = createSlice({
 					state.columns.splice(rightIndex + 1, 0, {
 						id: rightId,
 						label: "Column",
-						created: action.payload.focus && true,
+						created: action.payload.focus ? true : false,
 						accessorKey: rightId
 					});
 					break;
