@@ -3,13 +3,15 @@ import ECrfTable from "./eCrfTable/ECrfTable";
 import { useSelector } from "react-redux";
 import { editColumns, TableStateProps } from "@/store/reducers/table";
 import { dispatch } from "@/store";
+import { useEffect } from "react";
 
 type TableEditorType = {
 	isOpen: boolean;
 	handleClose: () => void;
 	handleSave: (tableState) => void;
+	tableData: {[x:number] : string}[][] | null;
 }
-const TableEditor = ({isOpen, handleClose, handleSave} : TableEditorType) => {
+const TableEditor = ({isOpen, handleClose, handleSave, tableData} : TableEditorType) => {
 	const { columns, data } = useSelector((state: { tables: TableStateProps }) => state.tables);
 
 	const handleSaveTable = () => {
@@ -40,10 +42,17 @@ const TableEditor = ({isOpen, handleClose, handleSave} : TableEditorType) => {
 
 		const tableState = [[...columnNames], ...rows]
 
-		dispatch(editColumns({type: "table_reset"}));
 		handleSave(tableState);
 		handleClose();
 	}
+
+	useEffect(() => {
+		if(tableData) {
+			dispatch(editColumns({type: "table_data_set", columns: tableData[0], data: tableData.slice(1)}));
+		} else {
+			dispatch(editColumns({type: "table_reset"}));
+		}
+	}, [tableData])
 
 	return (
 		<Dialog open={isOpen} onClose={handleClose} maxWidth="xl">

@@ -16,6 +16,8 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import DroppedItem from "./DroppedItem";
 import useSticky from "@/utils/useSticky";
 import AddFileInput from "./AddFileInput";
+import { dispatch } from "@/store";
+import { editColumns } from "@/store/reducers/table";
 
 
 
@@ -177,7 +179,8 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 	const { ref } = useSticky();
 	const [ids, setIds] = useState<Idstype[]>([ {[uuidv4()] : []} ]);
 	const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
-	const [openTableEditor, setOpenTableEditor] = useState(true);
+	const [selectedTableData, setSelectedTableData] = useState<{[x:number] : string}[][] | null>(null);
+	const [openTableEditor, setOpenTableEditor] = useState(false);
 
 	const fileSet: ItemType = {
 		id: uuidv4(),
@@ -243,6 +246,14 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
     };
 
 	const editThisItem = (item:ItemType, columnId:string, index:number) => {
+		
+		if(item.content.table) {
+			setSelectedTableData(item.content.table);
+		} else {
+			setSelectedTableData(null);
+		}
+
+		console.log(selectedTableData, item);
 		const selected:SelectedItem = {...item, columnId: columnId, index:index};
 		setSelectedItem(selected);
 	}
@@ -294,14 +305,14 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 		}
 		
 		console.log(newItems)
-		// saveCRF(newItems);
+		saveCRF(newItems);
 	}
 
 	const handleCloseTableEditor = () => {
 		setOpenTableEditor(false);
 	}
 
-	const handleSaveTable = (tableState:[{[x:number] : string}[]]) => {
+	const handleSaveTable = (tableState:{[x:number] : string}[][]) => {
 		if(selectedItem) {
 			const columnId = selectedItem.columnId;
 			const itemIndex = selectedItem.index;
@@ -508,7 +519,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 				</Grid>
 			</Grid>
 
-			<TableEditor isOpen={openTableEditor} handleClose={handleCloseTableEditor} handleSave={handleSaveTable}/>
+			<TableEditor isOpen={openTableEditor} handleClose={handleCloseTableEditor} handleSave={handleSaveTable} tableData={selectedTableData ? selectedTableData : null}/>
 		</>
 	);
 }

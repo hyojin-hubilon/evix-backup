@@ -8,7 +8,6 @@ export interface TableStateProps {
 	columns: ColumnDef<any, unknown>[];
 }
 
-
 const initicalColumns: ColumnDef<any, unknown>[] = [
 	{
 		id: '0',
@@ -52,6 +51,8 @@ type PayloadProps = {
 	value?: string;
 	type: string;
 	focus?:boolean;
+	columns?: { [key: string]: string; }[];
+	data?:{ [key: string]: string; }[][];
 }
 interface ActionProps {
 	type: string;
@@ -119,6 +120,36 @@ export const tableSlice = createSlice({
 				case "table_reset":
 					state.columns = initicalColumns;
 					state.data = preData;
+					break;
+				case "table_data_set" :
+					if(action.payload.columns) {
+						const preColumns = action.payload.columns.map((column, i) => {
+							return {
+								id: String(i),
+								created: true,
+								label: column['COLUMN'],
+								accessorKey: String(i)
+							}}
+						);
+						state.columns = [...preColumns, {
+							id: '999999',
+							created: false,
+							label: 'Add Column',
+							accessorKey: '999999'
+						}];
+					}
+					if(action.payload.data) {
+						const preData = action.payload.data.map((row, i) => {
+							const oneRow = {}; 
+							row.forEach((cell, j) => {	
+								if(cell['TEXT']) oneRow[String(j)] = cell['TEXT'];
+								else oneRow[String(j)] = cell['INPUT'];
+							});
+							return oneRow;
+						});
+
+						state.data = preData;
+					}
 					break;
 				default:
 					break;

@@ -1,10 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-export type TablePreData = {
-	columns : ColumnDef<any, unknown>[],
-	data: any[]
-}
-
 export type ItemContents = {
 	title: string;
 	label?:string;
@@ -12,7 +7,7 @@ export type ItemContents = {
 	placeholder?: string;
 	description?:string;
 	required?:boolean // default = false?;
-	table?: TablePreData | { [key: string]: string; }[][]; //첫번째는 수정 전용, 두번째는 저장용
+	table?: { [key: string]: string; }[][]; //첫번째는 수정 전용, 두번째는 저장용
 }
 
 export type ItemType = {
