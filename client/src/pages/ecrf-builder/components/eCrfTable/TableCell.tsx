@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { Cell, Column, ColumnDef, ColumnDefTemplate, flexRender, Header, HeaderContext } from "@tanstack/react-table";
+import { Input } from '@mui/material';
+import { Cell } from "@tanstack/react-table";
 import { useState } from 'react';
 
 interface CustomCellProps<TData> {
@@ -8,14 +7,26 @@ interface CustomCellProps<TData> {
 }
   
 const TableCell = ({cell}:CustomCellProps<any>)  => {
-	// console.log(cell.getContext());
 	const { column, row } = cell;
 	const [value, setValue] = useState({value: row.getValue(column.id), update: false});
 	
 	return column.columnDef.id !== '999999' ? (
 		<div style={{width: column.columnDef.size}} className="td noselect">
 			<div className="td-content">
-				{ value.value ? String(value.value)  : '' }
+				<Input
+					value={value.value ? String(value.value) : ''}
+					onChange={(e) => setValue({value: e.target.value, update: true})}
+					onBlur={() => setValue({value: value.value, update: false})}
+					sx={{
+						'&::before' : {
+							display: 'none'
+						},
+						'&.Mui-focused' : {
+							'&::after' : {
+								display: 'none'
+							}
+						}
+					}} />
 			</div>
 			<div className="resizer" />
 		</div>
