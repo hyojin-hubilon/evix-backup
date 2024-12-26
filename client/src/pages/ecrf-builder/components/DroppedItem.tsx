@@ -6,7 +6,7 @@ import DragHandleIcon from '@mui/icons-material/DragHandle';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Button, Checkbox, FormControlLabel, FormGroup, MenuItem, Radio, RadioGroup, Select, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, FormControlLabel, FormGroup, MenuItem, Radio, RadioGroup, Select, Stack, Table, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers"
 
 
@@ -116,24 +116,7 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 									}
 								</FormGroup> 
 						}
-						{/* {
-							(droppedItem.itemType === 'File Input') &&
-								<Button
-									component="label"
-									role={undefined}
-									variant="contained"
-									tabIndex={-1}
-									startIcon={<CloudUploadIcon />}
-									disabled={true}
-								>
-									Upload files
-									<VisuallyHiddenInput
-										type="file"
-										onChange={(event) => console.log(event.target.files)}
-										multiple
-									/>
-								</Button>
-						} */}
+					
 						{
 							(droppedItem.itemType === 'Datepicker') &&
 								<Box alignItems="center" display="flex" gap={1}
@@ -153,6 +136,40 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 									}}>
 									<DatePicker disabled  />
 								</Box>
+						}
+						{
+							droppedItem.itemType === 'Table' && droppedItem.content.table &&
+
+							<Table>
+								<thead>
+									<tr>
+									{
+										droppedItem.content.table[0].map((column, i) => {
+											return <th key={i}>{column['COLUMN']}</th>
+										})
+									}
+									</tr>
+								</thead>
+								<tbody>
+								{
+									droppedItem.content.table.slice(1).map(
+										(row, i) => {
+											return <tr key={i}>
+												{
+													row.map((column, k) => {
+														return <td key={k}>{
+															column['TEXT'] ? column['TEXT'] : column['INPUT']
+														}</td>
+													})
+												}
+											</tr>
+										}
+										
+									)
+								}
+								</tbody>
+
+							</Table>
 						}
 						</Stack>
 						<Box sx={{position:'absolute', right: '5px', top:'5px'}}>
