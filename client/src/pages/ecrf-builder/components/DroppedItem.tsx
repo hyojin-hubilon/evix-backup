@@ -46,7 +46,7 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 						<DragHandleIcon fontSize="small" color="secondary" />
 					</Handle>
 					<ItemContent>
-						<Stack spacing={1}>
+						<Stack spacing={1} maxWidth="inherit">
 						<Typography variant="h6" sx={{fontSize: '0.7rem'}}>{droppedItem.itemType}</Typography>
 						{ droppedItem.content?.required &&  <Typography sx={{fontSize: '0.7rem', color:'red'}}>* Required</Typography>}
 						<Typography>{droppedItem.content?.title}</Typography>
@@ -141,7 +141,7 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 						{
 							// 테이블 미리보기
 							droppedItem.itemType === 'Table' && droppedItem.content.table &&
-							
+							<Box sx={{overflowX: 'auto', maxWidth: '100%'}}>
 								<table className="viewTable">
 									<thead>
 										<tr>
@@ -174,6 +174,7 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 									</tbody>
 
 								</table>
+							</Box>	
 						}
 						</Stack>
 						<Box sx={{position:'absolute', right: '5px', top:'5px'}}>

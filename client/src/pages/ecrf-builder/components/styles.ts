@@ -50,6 +50,7 @@ export const AddedItem = styled('div', {
 	lineHeight: '1.7',
 	borderRadius: '3px',
 	background: '#fff',
+	maxWidth:'inherit',
 	border: isDragging ? '1px dashed #000' : '1px solid #ddd',
 	'&:last-child' : {
 		marginBottom : '0!important'
@@ -93,6 +94,7 @@ export const ItemContent = styled("div", {
 		cursor: 'pointer',
 		alignSelf: 'stretch',
 		flex: 1,
+		maxWidth: '95.4%',
 		position:'relative'
 }))
 

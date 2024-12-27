@@ -432,9 +432,9 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 																	<DropBox
 																		ref={provided.innerRef}
 																		isDraggingOver={snapshot.isDraggingOver}
-																		style={{flex:1}}
+																		style={{width:'100%'}}
 																		>
-																			<Box display="flex" flexDirection="column" gap={0.5}>
+																			<Box display="flex" flexDirection="column" gap={0.5} maxWidth="inherit">
 																			{id1[id2].length > 0
 																			? id1[id2].map(
 																				(droppedItem: ItemType, index) => (
