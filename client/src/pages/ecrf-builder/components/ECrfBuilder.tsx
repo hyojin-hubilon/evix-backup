@@ -172,10 +172,12 @@ const ITEMS: ItemType[] = [
 ];
 
 type ECrfBuilderType = {
-	saveCRF: (crf : CRFFormJson[]) => void
+	saveCRF: (crf : CRFFormJson[]) => void,
+	eCrfJson?: Idstype[] | null;
+	existFileSet?: ItemType | null;
 }
 
-const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
+const ECrfBuilder = ({saveCRF, eCrfJson}: ECrfBuilderType) => {
 	const { ref } = useSticky();
 	const [ids, setIds] = useState<Idstype[]>([ {[uuidv4()] : []} ]);
 	const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
@@ -192,7 +194,7 @@ const ECrfBuilder = ({saveCRF}: ECrfBuilderType) => {
 	}
 
 	const [ fileAddShow, setFileAddShow ] = useState(false);
-	const [ fileInput, setFileInput ] = useState<ItemType>(fileSet);
+	const [ fileInput, setFileInput ] = useState<any>(fileSet);
 	const [ editFileShow, setEditFileShow ] = useState<boolean>(false);
 	
     const onDragEnd = (result:DropResult) => {

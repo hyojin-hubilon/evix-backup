@@ -2,7 +2,7 @@ import {
     ResCommonError,
     api
 } from '@/apis/axios-common';
-import { CRFPostReqBody, CRFPostResponse, CRFPutReqBody, MyCRFList, SelectedCrfList, StudyCrfListRespone, StudyCrfPairDeleteBody, StudyCrfPairPostBody } from '@/types/ecrf';
+import { CRFPostReqBody, CRFPostResponse, CRFPutReqBody, ECrfDetail, MyCRFList, SelectedCrfList, StudyCrfListRespone, StudyCrfPairDeleteBody, StudyCrfPairPostBody } from '@/types/ecrf';
 
 const BASE_API_URL = '/researcher/case-report-form';
 const BASE_API_URL_2 = '/researcher/study-case-report-form-pair';
@@ -102,9 +102,9 @@ const ecrfApi = {
 	 * @param crf_no
 	 * @returns
 	 */
-	copyCrf : async (crfNo: number) => {
+	copyCrf : async (crfNo: number|string) => {
 		try {
-			const responseData = await api<object>(
+			const responseData = await api<ECrfDetail>(
 				`${BASE_API_URL}/copy/${crfNo}`,
 				'get'
 			);

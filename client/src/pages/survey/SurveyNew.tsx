@@ -65,15 +65,6 @@ const SurveyNew = () => {
 	const [ disease, setDisease ] = useState('');
 
 	useEffect(() => {
-		console.log(locations, parmas)
-
-		if(locations.state) setLocationState(locations.state);
-		else setLocationState(null);
-
-		
-	}, [locations])
-
-	useEffect(() => {
 		console.log(locations.pathname.startsWith('/survey/edit') && parmas.survey_no)
 		if((locations.pathname.startsWith('/survey/edit') && parmas.survey_no) || (locations.state == 'edit' && parmas.survey_no)) {
 			setLocationState('edit');
@@ -83,12 +74,14 @@ const SurveyNew = () => {
 		}
 
 		if(locations.state == 'copy' && parmas.survey_no) {
+			setLocationState('copy');
 			getCopyingSurveyDeatil(parmas.survey_no);
 			setSurveyNo(null);
 			return;
 		}
 
 		if(locations.state == 'new') {
+			setLocationState('new');
 			if(parmas.survey_no) {
 				getCopyingSurveyDeatil(parmas.survey_no);
 				setSurveyNo(null);
@@ -100,7 +93,7 @@ const SurveyNew = () => {
 		}
 	}, [])
 
-	const getCopyingSurveyDeatil = async (surveyNo) => {
+	const getCopyingSurveyDeatil = async (surveyNo:string) => {
 		console.log(locations.state, 'stateCheck')
 		try {
 			const response = await surveyApi.getCopyingSurvey(surveyNo);
@@ -155,7 +148,7 @@ const SurveyNew = () => {
 						id: cardId + example.example_no,
 						text: example.example_title,
 						example_title: example.example_title,
-						isEtc: example.example_type === 'OTHER' ? true : false,
+						isEtc: example.example_type === ExampleTypes.OTHER ? true : false,
 					})
 				});
 	

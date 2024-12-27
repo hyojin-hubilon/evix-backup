@@ -1,4 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
+import ECrf from '../pages/ecrf-builder/ECrf';
 
 export type ItemContents = {
 	title: string;
@@ -10,7 +11,7 @@ export type ItemContents = {
 	table?: { [key: string]: string; }[][]; //첫번째는 수정 전용, 두번째는 저장용
 }
 
-export type ItemType = {
+export interface ItemType {
 	id:string; //draggableid, key로 사용, json 저장시에는 삭제
 	itemType: 'Headline' | 'Paragraph' | 'Radio Buttons' | 'Checkbox' | 'Select Box' | 'Text Input' | 'Text Area' | 'Datepicker' | 'Table' | 'File Input';
 	content: ItemContents;
@@ -85,4 +86,15 @@ export interface StudyCrfPairPostBody {
 export interface StudyCrfPairDeleteBody {
 	pair_no: number,
     std_no: number | null  
+}
+
+export interface ECrfDetail {
+	created_at: string | Date;
+	created_user_no: number;
+	crf_description: string;
+	crf_form_json: CRFFormJson[] | ItemType[];
+	crf_no: number;
+	crf_title: string;
+	updated_at: string | Date;
+	updated_user_no: number;
 }
