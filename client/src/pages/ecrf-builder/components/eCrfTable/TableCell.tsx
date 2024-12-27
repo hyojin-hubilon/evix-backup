@@ -19,7 +19,7 @@ const TableCell = ({cell}:CustomCellProps<any>)  => {
 	}, [value, column.id, row.index]);
 	
 	return column.columnDef.id !== '999999' ? (
-		<div style={{width: column.columnDef.size}} className="td noselect">
+		<div style={{width: column.columnDef.size}} className="td">
 			<div className="td-content">
 				<Input
 					value={value.value ? String(value.value) : ''}
@@ -36,7 +36,7 @@ const TableCell = ({cell}:CustomCellProps<any>)  => {
 						}
 					}} />
 			</div>
-			<div className="resizer" />
+			{/* <div className="resizer" /> */}
 		</div>
 	) : (
 		<div className="td" style={{width: '40px', minWidth: '40px'}} />

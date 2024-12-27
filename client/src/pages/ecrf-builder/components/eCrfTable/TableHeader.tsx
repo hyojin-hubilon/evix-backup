@@ -109,7 +109,7 @@ const TableHeader = <TData, >({header}:CustomHeaderProps<TData>)  => {
 						<span className="svg-icon svg-gray icon-margin"><FormatAlignLeftRoundedIcon /></span>
 						{ label }
 				</div>
-				<div className="resizer" />
+				{/* <div className="resizer" /> */}
 			</div>
 
 			<Menu

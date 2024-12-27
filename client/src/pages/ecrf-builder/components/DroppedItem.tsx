@@ -6,8 +6,9 @@ import DragHandleIcon from '@mui/icons-material/DragHandle';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Button, Checkbox, FormControlLabel, FormGroup, MenuItem, Radio, RadioGroup, Select, Stack, Table, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, FormControlLabel, FormGroup, MenuItem, Radio, RadioGroup, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers"
+import { Input } from "antd";
 
 
 type DroppedItemType = {
@@ -138,38 +139,41 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 								</Box>
 						}
 						{
+							// 테이블 미리보기
 							droppedItem.itemType === 'Table' && droppedItem.content.table &&
-
-							<Table>
-								<thead>
-									<tr>
-									{
-										droppedItem.content.table[0].map((column, i) => {
-											return <th key={i}>{column['COLUMN']}</th>
-										})
-									}
-									</tr>
-								</thead>
-								<tbody>
-								{
-									droppedItem.content.table.slice(1).map(
-										(row, i) => {
-											return <tr key={i}>
-												{
-													row.map((column, k) => {
-														return <td key={k}>{
-															column['TEXT'] ? column['TEXT'] : column['INPUT']
-														}</td>
-													})
-												}
-											</tr>
+							
+								<table className="viewTable">
+									<thead>
+										<tr>
+										{
+											droppedItem.content.table[0].map((column, i) => {
+												return <th key={i}><div className="th-content">{column['COLUMN']}</div></th>
+											})
 										}
-										
-									)
-								}
-								</tbody>
+										</tr>
+									</thead>
+									<tbody>
+									{
+										droppedItem.content.table.slice(1).map(
+											(row, i) => {
+												return <tr key={i}>
+													{
+														row.map((column, k) => {
+															return <td key={k}>
+																<div className="td-content">
+																	{ column['TEXT'] ? column['TEXT'] : <Input size="small" disabled /> }
+																</div>
+															</td>
+														})
+													}
+												</tr>
+											}
+											
+										)
+									}
+									</tbody>
 
-							</Table>
+								</table>
 						}
 						</Stack>
 						<Box sx={{position:'absolute', right: '5px', top:'5px'}}>

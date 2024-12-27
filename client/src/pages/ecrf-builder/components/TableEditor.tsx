@@ -41,7 +41,7 @@ const TableEditor = ({isOpen, handleClose, handleSave, tableData} : TableEditorT
 		})
 
 		const tableState = [[...columnNames], ...rows]
-
+		console.log(tableState);
 		handleSave(tableState);
 		handleClose();
 	}
