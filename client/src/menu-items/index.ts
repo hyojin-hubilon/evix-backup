@@ -1,6 +1,6 @@
 // project import
 import { MenuItems } from '@/types/menu';
-import { OrderedListOutlined, AppstoreAddOutlined, DashboardOutlined, BarChartOutlined, SettingOutlined, QuestionCircleOutlined, DollarOutlined, LineChartOutlined } from '@ant-design/icons';
+import { OrderedListOutlined, AppstoreAddOutlined, DashboardOutlined, BarChartOutlined, SettingOutlined, QuestionCircleOutlined, DollarOutlined, LineChartOutlined, EditOutlined } from '@ant-design/icons';
 const icons = {
     OrderedListOutlined,
     AppstoreAddOutlined,
@@ -9,7 +9,8 @@ const icons = {
 	SettingOutlined,
 	QuestionCircleOutlined,
 	DollarOutlined,
-	LineChartOutlined
+	LineChartOutlined,
+	EditOutlined
 };
 
 
@@ -48,13 +49,31 @@ const menuItems: MenuItems = {
 					disabled: true
 				},
 				{
-					id: 'survey-list',
-					title: 'Survey',
-					type: 'item',
-					url: '/survey',
-					icon: icons.BarChartOutlined,
-					breadcrumbs: false
-				}
+					id: 'builder',
+					title: 'Builder',
+					type: 'collapse',
+					icon: icons.AppstoreAddOutlined,
+					breadcrumbs: false,
+					children: [
+						{
+							id: 'survey-list',
+							title: 'Survey Design',
+							type: 'item',
+							url: '/survey',
+							icon: icons.BarChartOutlined,
+							breadcrumbs: false
+						},
+						{
+							id: 'ecrf-list',
+							title: 'eCRF Design',
+							type: 'item',
+							url: '/e-crf',
+							icon: icons.EditOutlined,
+							breadcrumbs: false
+						}
+					]
+				},
+				
 			]	
 		},
 		{

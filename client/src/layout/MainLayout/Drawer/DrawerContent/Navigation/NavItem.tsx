@@ -37,10 +37,13 @@ const NavItem = ({ item, level }: CustomProps) => {
 
     const { drawerOpen, openItem } = useSelector((state: IRootState) => state.menu);
 
-    const itemHandler = (item) => {
-        navigation(item.url);
-        dispatch(activeItem({ openItem: [item.id] }));
+    const itemHandler = (item : MenuItem) => {
+		if(item.url) {
+			navigation(item.url);
+			dispatch(activeItem({ openItem: [item.id] }));
+		}
     };
+	
     const Icon = item.icon;
     const itemIcon = Icon ? <Icon style={{ fontSize: drawerOpen ? '1rem' : '1.25rem' }} /> : '';
     const isSelected = openItem.findIndex((id) => id === item.id) > -1;
@@ -127,7 +130,7 @@ const NavItem = ({ item, level }: CustomProps) => {
                     {itemIcon}
                 </ListItemIcon>
             )}
-            {(drawerOpen || (!drawerOpen && level !== 1)) && (
+            {drawerOpen && (
                 <ListItemText
                     primary={
                         <Typography
