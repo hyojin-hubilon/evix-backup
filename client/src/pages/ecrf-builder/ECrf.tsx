@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const ECrf = () => {
 	const [title, setTitle] = useState<string>('');
+	const [titleError, setTitleError] = useState<boolean>(false);
 	const [desc, setDesc] = useState<string>('');
 
 	const confirm = useConfirmation();
@@ -76,6 +77,7 @@ const ECrf = () => {
 		
 		if(eCrf.crf_form_json) {
 			const detail = eCrf.crf_form_json;
+			console.log(detail, 'detail');
 
 			let editJson : CRFFormJson[] | ItemType[] = [];
 			//첫번째에 파일인풋이 있는 경우
@@ -86,21 +88,25 @@ const ECrf = () => {
 				editJson = detail;
 			}
 
+				//ids Type으로 변경
+				const crfData: Idstype[] = [];
+				editJson.map((edit: CRFFormJson | ItemType) => {
+					const newObject: Idstype = {};
+					if(Object.keys(edit).length !== 0) {
+						Object.keys(edit).map((key) => {
+							newObject[uuidv4()] = edit[key as keyof typeof edit];
+						});
+					} else {
+						newObject[uuidv4()] = [];
+					}
+					
 
-			//ids Type으로 변경
-			const crfData: Idstype[] = [];
-			editJson.map((edit: CRFFormJson | ItemType) => {
-				const newObject: Idstype = {};
-				
-				Object.keys(edit).map((key) => {
-					newObject[uuidv4()] = edit[key];
+					crfData.push(newObject);
 				});
+				
 
-				crfData.push(newObject);
-			});
-
-
-			setECrfJson(crfData);
+				setECrfJson(crfData);
+			
 		}
 		
 	}
@@ -109,6 +115,11 @@ const ECrf = () => {
 	
 
 	const handlePostOrPutCrf = async (crf: CRFFormJson[]) => {
+		if(title === '') {
+			setTitleError(true);
+			return;
+		}
+
 		const crfToJson = crf;
 
 		if(editorState === 'edit' && crfNo) {
@@ -119,8 +130,10 @@ const ECrf = () => {
 				crf_form_json : crfToJson
 			});
 			if(resp.code == 200) {
-				void confirm({
+				confirm({
 					description: 'CRF가 저장되었습니다.'
+				}).then(() => {
+					navigate('/e-crf');
 				});
 	
 				return;
@@ -132,20 +145,26 @@ const ECrf = () => {
 				crf_form_json : crfToJson
 			});
 			if(resp.code == 200) {
-				void confirm({
+				confirm({
 					description: 'CRF가 저장되었습니다.'
+				}).then(() => {	
+					navigate('/e-crf');
 				});
 	
 				return;
 			}
 		}
-
-		
 	}
 
 	const handleSaveCrf = (crf: CRFFormJson[]) => {
 		handlePostOrPutCrf(crf);
 	}
+
+	useEffect(() => {
+		if(titleError && title !== '') {
+			setTitleError(false);
+		}
+	}, [title])
 
 	return (	
 		<>
@@ -157,7 +176,7 @@ const ECrf = () => {
 				</Grid> */}
 				<Grid item xs={5}>
 					<Box sx={{p: '1rem', background:'#fff', border: '1px solid #ddd', borderRadius:'5px'}}>
-						<OutlinedInput size='small' placeholder='CRF Title' fullWidth sx={{mb: '0.5rem'}} value={title} onChange={(e) => setTitle(e.target.value)}/>
+						<OutlinedInput size='small' placeholder='CRF Title' fullWidth sx={{mb: '0.5rem'}} value={title} onChange={(e) => setTitle(e.target.value)} error={titleError} />
 						<OutlinedInput size='small' placeholder='CRF Description' fullWidth value={desc} onChange={(e) => setDesc(e.target.value)}/>
 					</Box>
 				</Grid>
