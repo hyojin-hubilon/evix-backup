@@ -48,7 +48,7 @@ const ECrfListItem = ({ crf, refresh }: ECrfListItemProps) => {
 			description: t('ecrf.would_duplicate')//"복제하시겠습니까?"
 		})
 		.then(() => { 
-			// navigate(`/e-crf/copy/${crf.crf_no}`, {state: 'copy'});
+			navigate(`/e-crf/copy/${crf.crf_no}`, {state: 'copy'});
 		})
 	}
 

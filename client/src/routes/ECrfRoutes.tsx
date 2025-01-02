@@ -26,6 +26,10 @@ const ECrfRoutes = {
             path: 'edit/:crf_no',
             element: <ECrf />,
         },
+		{
+            path: 'copy/:crf_no',
+            element: <ECrf />,
+        },
     ],
 };
 

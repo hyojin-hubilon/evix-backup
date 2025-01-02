@@ -16,10 +16,6 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import DroppedItem from "./DroppedItem";
 import useSticky from "@/utils/useSticky";
 import AddFileInput from "./AddFileInput";
-import { dispatch } from "@/store";
-import { editColumns } from "@/store/reducers/table";
-
-
 
 
 const getParentIndexByChildId = (list: Idstype[], childId: string) => {
@@ -177,7 +173,7 @@ type ECrfBuilderType = {
 	existFileSet?: ItemType | null;
 }
 
-const ECrfBuilder = ({saveCRF, eCrfJson}: ECrfBuilderType) => {
+const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 	const { ref } = useSticky();
 	const [ids, setIds] = useState<Idstype[]>([ {[uuidv4()] : []} ]);
 	const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
@@ -254,8 +250,12 @@ const ECrfBuilder = ({saveCRF, eCrfJson}: ECrfBuilderType) => {
 		} else {
 			setSelectedTableData(null);
 		}
+		
+		if(item.itemType !== 'File Input') {
+			setEditFileShow(false);
+		}
+		
 
-		console.log(selectedTableData, item);
 		const selected:SelectedItem = {...item, columnId: columnId, index:index};
 		setSelectedItem(selected);
 	}
@@ -288,7 +288,7 @@ const ECrfBuilder = ({saveCRF, eCrfJson}: ECrfBuilderType) => {
 		setIds([...ids, newColumns]);
 	}
 
-	const handleSetCrf = () => {		
+	const handleSetCrf = () => {
 		let newItems : CRFFormJson[] = ids.map((idsItem, i) => {
 			const newCrf = {}
 			Object.keys(idsItem).map((id, j) => {				
@@ -306,7 +306,6 @@ const ECrfBuilder = ({saveCRF, eCrfJson}: ECrfBuilderType) => {
 			newItems = [fileInput, ...newItems];
 		}
 		
-		console.log(newItems)
 		saveCRF(newItems);
 	}
 
@@ -350,10 +349,21 @@ const ECrfBuilder = ({saveCRF, eCrfJson}: ECrfBuilderType) => {
 		setEditFileShow(false);
 	}
 
+	useEffect(() => {
+		if(eCrfJson) {
+			setIds(eCrfJson);
+		}
+	}, [eCrfJson]);
+
+	useEffect(() => {
+		if(existFileSet) {
+			setFileInput(existFileSet);
+			setFileAddShow(true);
+		}
+	}, [existFileSet]);
 
 	return (
 		<>	
-			
 			<DragDropContext onDragEnd={onDragEnd}>
 				<Grid container spacing={1}>
 					<Grid item xs={2}>
@@ -413,7 +423,8 @@ const ECrfBuilder = ({saveCRF, eCrfJson}: ECrfBuilderType) => {
 								{(provided, snapshot) => (
 									<MainBox ref={provided.innerRef} sx={{mb: '0.5rem', p: '1rem'}}>
 										<Typography variant="h5">Form Add</Typography>
-										{ids.map((id1, i) => (
+										{ids.map((id1, i) => {
+											return (
 											<Draggable key={i} draggableId={"main"+i} index={i}>
 												{(provided, snapshot) => (
 													<DropBox
@@ -456,7 +467,7 @@ const ECrfBuilder = ({saveCRF, eCrfJson}: ECrfBuilderType) => {
 													</DropBox>
 												)}		
 											</Draggable>
-										))}
+										)})}
 
 										{provided.placeholder}
 									</MainBox>

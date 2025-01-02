@@ -20,9 +20,9 @@ const ecrfApi = {
 		}
 	},
 	// CRF(증례기록서) 수정
-	saveCRF: async (ecrf: CRFPostReqBody) => {
+	saveCRF: async (ecrf: CRFPutReqBody) => {
         try {
-            const responseData = await api<CRFPutReqBody>(BASE_API_URL, 'put', ecrf);
+            const responseData = await api<CRFPostResponse>(BASE_API_URL, 'put', ecrf);
 
 			return responseData;
 		} catch (error) {

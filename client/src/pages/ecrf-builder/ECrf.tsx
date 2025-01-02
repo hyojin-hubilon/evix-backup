@@ -5,6 +5,7 @@ import ecrfApi from '@/apis/ecrf';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { CRFFormJson, ECrfDetail, Idstype, ItemType } from '@/types/ecrf';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 
 const ECrf = () => {
 	const [title, setTitle] = useState<string>('');
@@ -72,37 +73,78 @@ const ECrf = () => {
 	const setCrfDetail = (eCrf:ECrfDetail) => {
 		setTitle(eCrf.crf_title);
 		setDesc(eCrf.crf_description);
+		
 		if(eCrf.crf_form_json) {
 			const detail = eCrf.crf_form_json;
+
+			let editJson : CRFFormJson[] | ItemType[] = [];
+			//첫번째에 파일인풋이 있는 경우
 			if('itemType' in detail[0] && detail[0].itemType === 'File Input') {
 				setExistFileSet(detail[0]);
+				editJson = detail.slice(1);
+			} else {
+				editJson = detail;
 			}
 
-			//setECrfJson();
+
+			//ids Type으로 변경
+			const crfData: Idstype[] = [];
+			editJson.map((edit: CRFFormJson | ItemType) => {
+				const newObject: Idstype = {};
+				
+				Object.keys(edit).map((key) => {
+					newObject[uuidv4()] = edit[key];
+				});
+
+				crfData.push(newObject);
+			});
+
+
+			setECrfJson(crfData);
 		}
 		
 	}
+
+	
 	
 
-	const handlePostCrf = async (crf: CRFFormJson[]) => {
+	const handlePostOrPutCrf = async (crf: CRFFormJson[]) => {
 		const crfToJson = crf;
 
-		const resp = await ecrfApi.postNewCRF({
-			crf_title: title,
-			crf_description: desc,
-			crf_form_json : crfToJson
-		});
-		if(resp.code == 200) {
-			void confirm({
-				description: 'CRF가 저장되었습니다.'
+		if(editorState === 'edit' && crfNo) {
+			const resp = await ecrfApi.saveCRF({
+				crf_no: crfNo as number,
+				crf_title: title,
+				crf_description: desc,
+				crf_form_json : crfToJson
 			});
-
-			return;
+			if(resp.code == 200) {
+				void confirm({
+					description: 'CRF가 저장되었습니다.'
+				});
+	
+				return;
+			}
+		} else {
+			const resp = await ecrfApi.postNewCRF({
+				crf_title: title,
+				crf_description: desc,
+				crf_form_json : crfToJson
+			});
+			if(resp.code == 200) {
+				void confirm({
+					description: 'CRF가 저장되었습니다.'
+				});
+	
+				return;
+			}
 		}
+
+		
 	}
 
 	const handleSaveCrf = (crf: CRFFormJson[]) => {
-		void handlePostCrf(crf);
+		handlePostOrPutCrf(crf);
 	}
 
 	return (	
