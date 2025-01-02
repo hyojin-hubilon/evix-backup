@@ -92,6 +92,7 @@ const ECrf = () => {
 				const crfData: Idstype[] = [];
 				editJson.map((edit: CRFFormJson | ItemType) => {
 					const newObject: Idstype = {};
+					// Drop된 내용이 없을 경우를 체크
 					if(Object.keys(edit).length !== 0) {
 						Object.keys(edit).map((key) => {
 							newObject[uuidv4()] = edit[key as keyof typeof edit];
@@ -99,7 +100,6 @@ const ECrf = () => {
 					} else {
 						newObject[uuidv4()] = [];
 					}
-					
 
 					crfData.push(newObject);
 				});
