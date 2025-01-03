@@ -3,6 +3,7 @@ import { CRFFormJson, ECrfDetail } from "@/types/ecrf";
 import { useEffect, useState } from "react";
 import { ItemType } from '../../../../types/ecrf';
 import { Box, Card, Stack, Typography } from "@mui/material";
+import InputItem from "./InputItem";
 
 type ECrfPreviewType = {
 	crfNo: number | null;
@@ -40,6 +41,10 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		if(crfNo) getCrfDetail(crfNo);
 	}, [crfNo]);
 
+	const changeValue = (item:ItemType) => {
+
+	}
+
 	return (
 		<div>
 			{
@@ -56,7 +61,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 						crfJson && crfJson.map((crf:CRFFormJson, index) => {
 							return (
 								<Card key={index}>
-									<Box display="flex" gap={1} sx={{width:'100%'}} flexDirection="row" flexWrap="wrap">
+									<Box display="flex" sx={{width:'100%'}} flexDirection="row" flexWrap="wrap">
 									{
 										Object.keys(crf).map((key) => {
 											const items: ItemType[] = crf[key];
@@ -65,7 +70,11 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 														{
 															items && items.map((item, index2) => {
 																return (
-																	<Box key={index2} sx={{width:"100%", border: '1px solid #ddd'}}>{item.itemType}</Box>
+																	<Box key={index2} sx={{width:"100%", border: '1px solid #ddd'}} p={1}>
+																		{ item.content.title && <Typography variant="h5">{ item.content.title }</Typography> }
+																		{ item.content.description && <Typography variant="body1">{ item.content.description }</Typography> }
+																		<InputItem item={item} onChange={changeValue} />	
+																	</Box>
 																)
 															})
 														}
