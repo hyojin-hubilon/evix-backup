@@ -24,6 +24,7 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { t } from 'i18next';
 import { MyCRFList } from '@/types/ecrf';
+import PreivewDialog from './components/PreviewDialog';
 dayjs.extend(isBetween);
 const { RangePicker } = DatePicker;
 
@@ -39,6 +40,13 @@ const ECrfList = () => {
 	const [ itemPerPage, setItemPerPage ] = useState(10);
 	const [activeDateSetting, setActiveDateSetting] = useState('full');
 	const [ dateSet, setDateSet ] = useState<{startDt: string, endDt: string}>({startDt : '', endDt: ''});
+
+
+	const [previewOpen, setPreviewOpen] = useState(false);
+	const [selectedCrfNo, setSelectedCrfNo] = useState<number | null>(null);
+	const handleCloseDialog = () => {
+		setPreviewOpen(false);
+	}
     
     // Surrvey 데이터 불러오기
     const fetchCrf = async () => {
@@ -121,6 +129,11 @@ const ECrfList = () => {
 		setPage(1);
 	}, [dateSet, searchTerm])
 
+	const handlePreview = (crfNo:number) => {
+		setSelectedCrfNo(crfNo);
+		setPreviewOpen(true);
+	}
+
 
     return (
         <Container maxWidth="lg">
@@ -199,7 +212,7 @@ const ECrfList = () => {
 							
 							return (
 								<Grid item xs={12} key={index}>
-									<ECrfListItem crf={crf} refresh={fetchCrf} />
+									<ECrfListItem crf={crf} refresh={fetchCrf} preivew={(crfNo:number) => handlePreview(crfNo)} />
 								</Grid>
 							)
 						})}
@@ -251,6 +264,7 @@ const ECrfList = () => {
                     </>
                 )}                
             </Grid>
+			<PreivewDialog isOpen={previewOpen} handleClose={handleCloseDialog} selectedCrf={selectedCrfNo} />
         </Container>
     );
 };

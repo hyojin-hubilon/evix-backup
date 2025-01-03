@@ -1,4 +1,4 @@
-import { Box, Grid, OutlinedInput } from '@mui/material';
+import { Box, Grid, OutlinedInput, Typography } from '@mui/material';
 import ECrfBuilder from './components/ECrfBuilder';
 import { useEffect, useState } from 'react';
 import ecrfApi from '@/apis/ecrf';
@@ -117,6 +117,10 @@ const ECrf = () => {
 	const handlePostOrPutCrf = async (crf: CRFFormJson[]) => {
 		if(title === '') {
 			setTitleError(true);
+			confirm({
+				description: 'Please enter a title.',
+				variant: 'info'
+			})
 			return;
 		}
 
@@ -169,15 +173,16 @@ const ECrf = () => {
 	return (	
 		<>
 			<Grid container mb={1} spacing={1}>
-				{/* <Grid item xs={2}>
-					<Typography variant="h3" gutterBottom>
+				<Grid item xs={2}>
+					
+				</Grid>
+				<Grid item xs={7}>
+					{/* <Typography variant="h3" gutterBottom>
 						eCRF Builder
-					</Typography>
-				</Grid> */}
-				<Grid item xs={5}>
+					</Typography> */}
 					<Box sx={{p: '1rem', background:'#fff', border: '1px solid #ddd', borderRadius:'5px'}}>
-						<OutlinedInput size='small' placeholder='CRF Title' fullWidth sx={{mb: '0.5rem'}} value={title} onChange={(e) => setTitle(e.target.value)} error={titleError} />
-						<OutlinedInput size='small' placeholder='CRF Description' fullWidth value={desc} onChange={(e) => setDesc(e.target.value)}/>
+						<OutlinedInput size='small' placeholder='eCRF Title' fullWidth sx={{mb: '0.5rem'}} value={title} onChange={(e) => setTitle(e.target.value)} error={titleError} />
+						<OutlinedInput size='small' placeholder='eCRF Description' fullWidth value={desc} onChange={(e) => setDesc(e.target.value)}/>
 					</Box>
 				</Grid>
 				<Grid item xs={4}>

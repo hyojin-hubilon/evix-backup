@@ -13,10 +13,11 @@ import { MyCRFList } from '@/types/ecrf';
 
 type ECrfListItemProps = {
 	crf: MyCRFList,
-	refresh: () => void
+	refresh: () => void,
+	preivew: (crfNo: number) => void
 }
 
-const ECrfListItem = ({ crf, refresh }: ECrfListItemProps) => {
+const ECrfListItem = ({ crf, refresh, preivew }: ECrfListItemProps) => {
     const theme = useTheme();
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	
@@ -32,7 +33,7 @@ const ECrfListItem = ({ crf, refresh }: ECrfListItemProps) => {
 	};
 
 	const handlePreview = () => {
-		navigate(`/e-crf/preview/${crf.crf_no}`)
+		preivew(crf.crf_no);
 	}
 
 	const deleteThisCrf = async () => {

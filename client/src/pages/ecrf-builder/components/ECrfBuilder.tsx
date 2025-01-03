@@ -1,9 +1,9 @@
-import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult } from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, Droppable, DropResult } from "@hello-pangea/dnd";
 import { Fragment, useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { Grid, Box, Button, Select, MenuItem, Typography } from "@mui/material";
 
-import { Clone, DropBox, FileInputBox, Handle, Handle2, Item, ItemContent, Kiosk, MainBox, Notice, VisuallyHiddenInput } from "./styles";
+import { Clone, DropBox, Handle2, Item, Kiosk, MainBox, Notice } from "./styles";
 import SelectedItemEdit from "./SelectedItemEdit";
 
 import TableEditor from "./TableEditor";
@@ -16,82 +16,9 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import DroppedItem from "./DroppedItem";
 import useSticky from "@/utils/useSticky";
 import AddFileInput from "./AddFileInput";
-
-
-const getParentIndexByChildId = (list: Idstype[], childId: string) => {
-	return list.findIndex((e, i) => Object.keys(list[i]).some((key2) => key2 === childId));
-}
-
-const reorder = (destinationId:string, startIndex:number, endIndex:number, ids: Idstype[]) => {
-    const result = Array.from(ids);
-	const parentIndex = getParentIndexByChildId(ids, destinationId);
-
-	const itemsResult = Array.from(ids[parentIndex][destinationId]);
-	const [removed] = itemsResult.splice(startIndex, 1);
-    itemsResult.splice(endIndex, 0, removed);
-
-	result[parentIndex][destinationId] = itemsResult;
-
-    return result;
-};
-
-const copy = (list: Idstype[], source:ItemType[], droppableSource: DraggableLocation, droppableDestination: DraggableLocation) => {
-	const destinationId = droppableDestination.droppableId;
-	const parentIndex = getParentIndexByChildId(list, destinationId);
-	
-    const sourceClone = Array.from(source);
-    const destClone = Array.from(list[parentIndex][destinationId]);
-    const item = sourceClone[droppableSource.index];
-
-    destClone.splice(droppableDestination.index, 0, { ...item, id: uuidv4() });
-	const result = list;
-	result[parentIndex][destinationId] = destClone;
-	
-    return result;
-};
-
-const move = (droppableSource:DraggableLocation, droppableDestination:DraggableLocation, ids: Idstype[]) => {
-	const sourceId = droppableSource.droppableId;
-	const destinationId = droppableDestination.droppableId;
-
-	const sourceParentIndex = getParentIndexByChildId(ids, sourceId);
-	const destinationParentIndex = getParentIndexByChildId(ids, destinationId);
-	
-	const sourceClone = Array.from(ids[sourceParentIndex][sourceId]);
-	const destClone = Array.from(ids[destinationParentIndex][destinationId]);
-	const [removed] = sourceClone.splice(droppableSource.index, 1);
-
-	destClone.splice(droppableDestination.index, 0, removed);
-
-	const result = ids;
-	result[sourceParentIndex][sourceId] = sourceClone;
-	result[destinationParentIndex][destinationId]= destClone;
-
-	return result;
-};
-
-
-const reorderParentBox = (sourceIndex:number, destIndex:number, ids: Idstype[]) => {
-	const result = Array.from(ids);
-	const [removed] = result.splice(sourceIndex, 1);
-	result.splice(destIndex, 0, removed);
-
-	return result;	
-}
-
-const deleteItem = (list:Idstype[], droppableId:string, index:number) => {
-	const result = Array.from(list);
-	const parentIndex = getParentIndexByChildId(list, droppableId);
-
-	const itemsResult = Array.from(list[parentIndex][droppableId]);
-	
-    itemsResult.splice(index, 1);
-
-	result[parentIndex][droppableId] = itemsResult;
-
-    return result;	
-}
-
+import { useConfirmation } from "@/context/ConfirmDialogContext";
+import { useNavigate } from "react-router-dom";
+import { copy, deleteItem, getParentIndexByChildId, move, reorder, reorderParentBox } from "./utils";
 
 
 const ITEMS: ItemType[] = [
@@ -179,6 +106,9 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 	const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
 	const [selectedTableData, setSelectedTableData] = useState<{[x:number] : string}[][] | null>(null);
 	const [openTableEditor, setOpenTableEditor] = useState(false);
+
+	const confirm = useConfirmation();
+	const navigate = useNavigate();
 
 	const fileSet: ItemType = {
 		id: uuidv4(),
@@ -362,6 +292,17 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 		}
 	}, [existFileSet]);
 
+	const handleCancelCrf = () => {
+		confirm({
+			title : 'All work done so far will be cancelled. Do you still want to cancel?',
+			description: 'The action cannot be reversed.',
+			variant: 'danger'
+		})
+		.then(() => { 
+			navigate('/e-crf');
+		});
+	}
+
 	return (
 		<>	
 			<DragDropContext onDragEnd={onDragEnd}>
@@ -502,6 +443,8 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 						</Box>
 					</Grid>
 					<Grid item xs={3}>
+						<Box position="sticky"
+							sx={{top: '70px'}}>
 						{
 							(selectedItem || editFileShow) &&
 							<>
@@ -518,16 +461,19 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 							}
 							</>
 						}
-						
+						</Box>
 						
 					</Grid>
 				</Grid>
 			</DragDropContext>
 			
-            <Grid container>
-				<Grid item xs={12}>
-					<Box sx={{borderTop:'1px solid #eee', pt: '1rem', mt:'1rem'}} display="flex" justifyContent="flex-end">
-						<Button variant="contained" size="large" onClick={() => handleSetCrf()}>Save</Button>
+            <Grid container sx={{borderTop:'1px solid #eee', pt: '1rem', mt:'1rem'}} >
+				<Grid item xs={2}>
+				</Grid>
+				<Grid item xs={7}>
+					<Box display="flex" gap={1}>
+						<Button variant="outlined" color="error" size="large" fullWidth onClick={() => handleCancelCrf()}>Cancel</Button>
+						<Button variant="contained" size="large" onClick={() => handleSetCrf()} fullWidth>Submit</Button>
 					</Box>
 				</Grid>
 			</Grid>

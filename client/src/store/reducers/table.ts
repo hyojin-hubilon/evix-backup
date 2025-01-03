@@ -1,4 +1,4 @@
-import { shortId } from "@/pages/ecrf-builder/components/eCrfTable/utils";
+import { shortId } from "@/pages/ecrf-builder/components/utils";
 import { createSlice, original, PayloadAction } from "@reduxjs/toolkit";
 import { ColumnDef } from '@tanstack/react-table';
 
