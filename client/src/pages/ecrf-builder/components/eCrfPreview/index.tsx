@@ -48,33 +48,34 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 					{
 						crfDetail.crf_description && <Typography variant="h6">{crfDetail.crf_description}</Typography>
 					}
-					<Stack>
+					<Stack spacing={1}>
 					{
-						crfFile	&& <Card>{crfFile.itemType}</Card>
+						crfFile	&& <Card><Box p={1}>{crfFile.itemType}</Box></Card>
 					}
 					{
 						crfJson && crfJson.map((crf:CRFFormJson, index) => {
 							return (
-								<Box key={index} display="flex" sx={{width:'100%', border: '1px solid black', padding: '10px'}}>
+								<Card key={index}>
+									<Box display="flex" gap={1} sx={{width:'100%'}} flexDirection="row" flexWrap="wrap">
 									{
 										Object.keys(crf).map((key) => {
 											const items: ItemType[] = crf[key];
 											return (
-												<Box display="flex" flexDirection="column" key={key}>
-												{
-													items && items.map((item, index2) => {
-														return (
-															<Card key={index2}>{item.itemType}</Card>
-														)
-													})
-												}
-												
+												<Box key={key} display="flex" flexDirection="column" p={1} flex="1">
+														{
+															items && items.map((item, index2) => {
+																return (
+																	<Box key={index2} sx={{width:"100%", border: '1px solid #ddd'}}>{item.itemType}</Box>
+																)
+															})
+														}
 												</Box>
 											)
 											
 										})
 									}
-								</Box>
+									</Box>
+								</Card>
 							)
 						})
 					}
