@@ -1,11 +1,11 @@
 import { Box, Grid, OutlinedInput, Typography } from '@mui/material';
-import ECrfBuilder from './components/ECrfBuilder';
 import { useEffect, useState } from 'react';
 import ecrfApi from '@/apis/ecrf';
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { CRFFormJson, ECrfDetail, Idstype, ItemType } from '@/types/ecrf';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
+import ECrfBuilder from './components/eCrfBuilder';
 
 const ECrf = () => {
 	const [title, setTitle] = useState<string>('');

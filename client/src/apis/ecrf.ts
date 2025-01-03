@@ -37,7 +37,7 @@ const ecrfApi = {
 	 */
 	getCRF: async (crfNo: number) => {
 		try {
-			const responseData = await api<object>(
+			const responseData = await api<ECrfDetail>(
 				`${BASE_API_URL}/${crfNo}`,
 				'get'
 			);

@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import ECrfPreview from "./eCrfPreview";
 
 type PreivewDialogType = {
@@ -10,11 +10,12 @@ type PreivewDialogType = {
 const PreivewDialog = ({isOpen, handleClose, selectedCrf} : PreivewDialogType) => {
 	return (
 		<Dialog open={isOpen} onClose={handleClose} maxWidth="xl">
-			<DialogTitle variant="h4">
-				eCRF Design Preview
-			</DialogTitle>
-			<DialogContent sx={{minWidth: '700px'}}>
-				<ECrfPreview />
+			<Box p={2}>
+				<Typography variant="h5"> eCRF Design Preview</Typography>
+				<Typography variant="body1">You can preview your design.</Typography>
+			</Box>
+			<DialogContent sx={{minWidth: '800px', backgroundColor: '#f2f2f2'}} >
+				<ECrfPreview crfNo={selectedCrf}/>
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={handleClose}>Close</Button>

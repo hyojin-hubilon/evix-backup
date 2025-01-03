@@ -6,7 +6,7 @@ import { Grid, Box, Button, Select, MenuItem, Typography } from "@mui/material";
 import { Clone, DropBox, Handle2, Item, Kiosk, MainBox, Notice } from "./styles";
 import SelectedItemEdit from "./SelectedItemEdit";
 
-import TableEditor from "./TableEditor";
+import TableEditor from "../TableEditor";
 import { CRFFormJson, DeletedItem, Idstype, ItemType, SelectedItem } from "@/types/ecrf";
 
 import AddIcon from '@mui/icons-material/Add';
@@ -18,7 +18,7 @@ import useSticky from "@/utils/useSticky";
 import AddFileInput from "./AddFileInput";
 import { useConfirmation } from "@/context/ConfirmDialogContext";
 import { useNavigate } from "react-router-dom";
-import { copy, deleteItem, getParentIndexByChildId, move, reorder, reorderParentBox } from "./utils";
+import { copy, deleteItem, getParentIndexByChildId, move, reorder, reorderParentBox } from "../utils";
 
 
 const ITEMS: ItemType[] = [
