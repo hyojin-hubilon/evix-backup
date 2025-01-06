@@ -264,7 +264,7 @@ const ECrfList = () => {
                     </>
                 )}                
             </Grid>
-			<PreivewDialog isOpen={previewOpen} handleClose={handleCloseDialog} selectedCrf={selectedCrfNo} />
+			{/* <PreivewDialog isOpen={previewOpen} handleClose={handleCloseDialog} selectedCrf={selectedCrfNo} /> */}
         </Container>
     );
 };

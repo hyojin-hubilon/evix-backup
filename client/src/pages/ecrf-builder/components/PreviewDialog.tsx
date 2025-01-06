@@ -14,7 +14,7 @@ const PreivewDialog = ({isOpen, handleClose, selectedCrf} : PreivewDialogType) =
 				<Typography variant="h5"> eCRF Design Preview</Typography>
 				<Typography variant="body1">You can preview your design.</Typography>
 			</Box>
-			<DialogContent sx={{minWidth: '800px', backgroundColor: '#f2f2f2'}} >
+			<DialogContent sx={{minWidth: '1200px', backgroundColor: '#f2f2f2'}} >
 				<ECrfPreview crfNo={selectedCrf}/>
 			</DialogContent>
 			<DialogActions>

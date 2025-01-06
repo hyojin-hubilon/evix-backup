@@ -1,9 +1,11 @@
 import ecrfApi from "@/apis/ecrf";
 import { CRFFormJson, ECrfDetail } from "@/types/ecrf";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { ItemType } from '../../../../types/ecrf';
-import { Box, Card, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, Stack, Typography } from "@mui/material";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InputItem from "./InputItem";
+import CrfFileDropzone from "./CrfFileDropZone";
 
 type ECrfPreviewType = {
 	crfNo: number | null;
@@ -45,18 +47,35 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 
 	}
 
+	const onChangeFile = (e: File[]) => {
+		console.log(e)
+	}
+
 	return (
 		<div>
 			{
 				crfDetail && <>
-					<Typography variant="h3">{crfDetail.crf_title}</Typography>
-					{
-						crfDetail.crf_description && <Typography variant="h6">{crfDetail.crf_description}</Typography>
-					}
+					
 					<Stack spacing={1}>
 					{
-						crfFile	&& <Card><Box p={1}>{crfFile.itemType}</Box></Card>
+						crfFile	&& <Card>
+								<Box p={2}>
+									<Typography variant="h5">
+										File Upload
+									</Typography>
+									<Typography mb={1}>
+										Attach the file to upload. (jpg, jpeg, png, pdf files under 5mb) - Up to 3 files can be attached.<br />
+									</Typography>
+									<CrfFileDropzone changefiles={onChangeFile}/>
+								</Box>
+							</Card>
 					}
+					<Box mb={1}>
+						<Typography variant="h3">{crfDetail.crf_title}</Typography>
+						{
+							crfDetail.crf_description && <Typography variant="h6">{crfDetail.crf_description}</Typography>
+						}
+					</Box>
 					{
 						crfJson && crfJson.map((crf:CRFFormJson, index) => {
 							return (
@@ -71,8 +90,10 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 															items && items.map((item, index2) => {
 																return (
 																	<Box key={index2} sx={{width:"100%", border: '1px solid #ddd'}} p={1}>
-																		{ item.content.title && <Typography variant="h5">{ item.content.title }</Typography> }
+																		
+																		<Typography variant="h5">{ item.content.title }</Typography>
 																		{ item.content.description && <Typography variant="body1">{ item.content.description }</Typography> }
+																		
 																		<InputItem item={item} onChange={changeValue} />	
 																	</Box>
 																)
