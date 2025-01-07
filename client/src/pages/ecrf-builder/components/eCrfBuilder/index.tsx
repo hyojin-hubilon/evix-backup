@@ -430,9 +430,6 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 									<MenuItem value="3">
 										Three Column
 									</MenuItem>
-									<MenuItem value="4">
-										Four Column
-									</MenuItem>
 								</Select>
 
 								{

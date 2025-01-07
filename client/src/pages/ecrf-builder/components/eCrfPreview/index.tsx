@@ -14,6 +14,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 	const [crfDetail, setCrfDetail] = useState<ECrfDetail | null>(null);
 	const [crfFile, setCrfFile] = useState<ItemType | null>(null)
 	const [crfJson, setCrfJson] = useState<CRFFormJson[] | null>(null);
+	const [addedFiles, setAddedFiles] = useState<(File | null)[]>([null, null, null]);
 	
 	const getCrfDetail = async (crfNo:number) => {
 		const response = await ecrfApi.getCRF(crfNo);
@@ -47,9 +48,15 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 
 	}
 
-	const onChangeFile = (e: File[]) => {
-		console.log(e)
+	const onChangeFile = (file: File | null, indexNum:number) => {
+		const newFiles = [...addedFiles];
+		newFiles.splice(indexNum, 1, file);
+		setAddedFiles(newFiles);
 	}
+
+	useEffect(() => {
+		console.log(addedFiles)
+	}, [addedFiles])
 
 	return (
 		<div>
@@ -65,8 +72,13 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 									</Typography>
 									<Typography mb={1}>
 										Attach the file to upload. (jpg, jpeg, png, pdf files under 5mb) - Up to 3 files can be attached.<br />
+										{/* 업로드 할 파일을 첨부하세요. (5mb이하의 jpg, jpeg, png, pdf 파일) - 최대 3개 첨부가능 */}
 									</Typography>
-									<CrfFileDropzone changefiles={onChangeFile}/>
+									<Box display="flex" gap={1} flexWrap="wrap">
+										<CrfFileDropzone changefiles={(file) => onChangeFile(file, 0)}/>
+										<CrfFileDropzone changefiles={(file) => onChangeFile(file, 1)}/>
+										<CrfFileDropzone changefiles={(file) => onChangeFile(file, 2)}/>
+									</Box>
 								</Box>
 							</Card>
 					}
