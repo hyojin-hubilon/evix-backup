@@ -9,7 +9,9 @@ const StyledDropzone = styled('div')`
 	flex: 1;
 	border: 1px dashed #ddd;
 	padding: 10px;
+
 	border-radius: 8px;
+	min-height: 80px;
 `;
 
 type CrfFileDropzoneType = {
@@ -24,7 +26,7 @@ const CrfFileDropzone = ({changefiles} : CrfFileDropzoneType) => {
 		setMyFile(acceptedFiles[0])
 	}, [myFile])
 
-	const {getRootProps, getInputProps, acceptedFiles} = useDropzone({
+	const {getRootProps, getInputProps} = useDropzone({
 		onDrop, 
 		maxSize: 5242880, 
 		accept: {
@@ -34,6 +36,7 @@ const CrfFileDropzone = ({changefiles} : CrfFileDropzoneType) => {
 			'application/pdf': []
 		},
 		multiple: false,
+		noDrag: true
 	});
 
 	
@@ -46,21 +49,23 @@ const CrfFileDropzone = ({changefiles} : CrfFileDropzoneType) => {
 		<StyledDropzone>
 			{
 				myFile !== null ? 
-				<Box display="flex">
-					<Typography maxWidth="200px" sx={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>{myFile.name}</Typography>
+				<Box display="flex" alignItems="center">
+					<Typography maxWidth="250px" sx={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>{myFile.name}</Typography>
 					<IconButton onClick={removeFile}><HighlightOffIcon /></IconButton>
 				</Box>
 				:
-				<div {...getRootProps()}>
+				<Box {...getRootProps()} width="100%" display="flex" alignItems="center" justifyContent="center" flexDirection="column" sx={{cursor: 'pointer'}}>
 					<input {...getInputProps()} />
-					{/* <Typography variant="body1">						
-						Drag &apos;n&apos; drop some files here, or click to select files.
+					<Box textAlign="center">
+					<FileUploadOutlinedIcon  />
+					<Typography variant="body1">						
+						Click to select file
 						
-					</Typography> */}
-					<Box width="100%" textAlign="center">
-					<FileUploadOutlinedIcon />
+					</Typography>
+					
+						
 					</Box>
-				</div>
+				</Box>
 				
 			}
 		</StyledDropzone>

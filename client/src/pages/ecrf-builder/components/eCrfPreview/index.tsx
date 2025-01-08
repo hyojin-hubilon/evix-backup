@@ -65,7 +65,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 					
 					<Stack spacing={1}>
 					{
-						crfFile	&& <Card>
+						crfFile	&& <Card sx={{marginBottom: '1rem'}}>
 								<Box p={2}>
 									<Typography variant="h5">
 										File Upload
@@ -97,15 +97,12 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 										Object.keys(crf).map((key) => {
 											const items: ItemType[] = crf[key];
 											return (
+
 												<Box key={key} display="flex" flexDirection="column" p={1} flex="1">
 														{
 															items && items.map((item, index2) => {
 																return (
 																	<Box key={index2} sx={{width:"100%", border: '1px solid #ddd'}} p={1}>
-																		
-																		<Typography variant="h5">{ item.content.title }</Typography>
-																		{ item.content.description && <Typography variant="body1">{ item.content.description }</Typography> }
-																		
 																		<InputItem item={item} onChange={changeValue} />	
 																	</Box>
 																)
