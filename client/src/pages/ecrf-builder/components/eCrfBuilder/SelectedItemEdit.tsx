@@ -13,13 +13,13 @@ type SelectedItemEditType = {
 const SelectedItemEdit = ({selectedItem, saveChanges, openTableEditor} : SelectedItemEditType) => {
 	const [ title, setTitle ] = useState<string>('');
 	const [ desc, setDesc ] = useState<string>('');
-	const [ label, setLabel ] = useState<string>('');
+	const [ placeholder, setPlaceholder] = useState<string>('');
 	const [ options, setOptions ] = useState<string[]>([]);
 	const [ required, setRequired ] = useState<boolean>(false);
 	
 	const handleSaveChanges = () => {
 		const newItem = { ...selectedItem };
-		const itemContents = {...selectedItem.content, title: title, description : desc, label: label, options: options, required: required};
+		const itemContents = {...selectedItem.content, title: title, description : desc, placeholder: placeholder, options: options, required: required};
 		newItem.content = itemContents;
 		saveChanges(newItem);
 	}
@@ -29,7 +29,6 @@ const SelectedItemEdit = ({selectedItem, saveChanges, openTableEditor} : Selecte
 		if(content) {
 			setTitle(content.title);
 			setDesc(content.description ? content.description : '');
-			setLabel(content.label ? content.label : '');
 			setOptions(content.options ? content.options : []);
 			setRequired(content.required ? content.required : false);
 		}
@@ -76,23 +75,26 @@ const SelectedItemEdit = ({selectedItem, saveChanges, openTableEditor} : Selecte
 						value={desc}
 						onChange={(e) => setDesc(e.target.value)}
 						/>
+
+						{
+							(selectedItem.itemType === 'Text Area' || selectedItem.itemType === 'Text Input') && 
+							<OutlinedInput
+								size="small"
+								placeholder="Placeholder"
+								value={placeholder}
+								onChange={(e) => setPlaceholder(e.target.value)}
+							/>
+						}
 					{
-						selectedItem.itemType === 'Table' ?
+						selectedItem.itemType === 'Table' &&
 						<Button onClick={openTableEditor} variant="outlined">Open table content editor</Button>
-						:
-						<OutlinedInput
-							size="small"
-							placeholder="Label"
-							value={label}
-							onChange={(e) => setLabel(e.target.value)}
-						/>
 					}
 
 					
 					
 					{
 						options.length > 0 && 
-						<Stack>
+						<Stack spacing={1} pt={1}>
 							<Typography variant="h5">Options</Typography>
 							{
 								options.map((option, index) =>
@@ -101,6 +103,7 @@ const SelectedItemEdit = ({selectedItem, saveChanges, openTableEditor} : Selecte
 											size="small"
 											value={option}
 											onChange={(e) => handleOptionChange(e.target.value, index)}
+											fullWidth
 										/>
 										{
 											options.length > 1 &&
@@ -113,16 +116,19 @@ const SelectedItemEdit = ({selectedItem, saveChanges, openTableEditor} : Selecte
 									
 								)	
 							}
-							<Button onClick={handleAddOption}>Add Options</Button>
+							<Button onClick={handleAddOption} variant="outlined">Add Options</Button>
 						</Stack>
 					}
-
-					<FormControlLabel
+					{
+						(selectedItem.itemType !== 'Headline' && selectedItem.itemType !== 'Paragraph') &&
+						<FormControlLabel
 								control={
 								<Checkbox checked={required} onChange={handleChangeRequired} name="required" />
 								}
 								label="Required"
 							/>
+					}
+					
 					
 					<Button variant="contained" onClick={handleSaveChanges}>Save</Button>
 				</Stack>

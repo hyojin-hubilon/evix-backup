@@ -47,14 +47,14 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 					</Handle>
 					<ItemContent>
 						<Stack spacing={1} maxWidth="inherit">
+							
 						<Typography variant="h6" sx={{fontSize: '0.7rem'}}>{droppedItem.itemType}</Typography>
-						{ droppedItem.content?.required &&  <Typography sx={{fontSize: '0.7rem', color:'red'}}>* Required</Typography>}
-						<Typography>{droppedItem.content?.title}</Typography>
+						<Box display="flex" mb={1}>
+							<Typography variant="h5">{droppedItem.content?.title}</Typography>
+							{ droppedItem.content?.required &&  <Typography sx={{fontSize: '0.7rem', color:'red'}}>* Required</Typography>}
+						</Box>
 						{
 							droppedItem.content?.description && <Typography>{ droppedItem.content?.description }</Typography>
-						}
-						{
-							droppedItem.content?.label && <Typography variant="h6">{ droppedItem.content?.label }</Typography>
 						}
 						{
 							(droppedItem.content?.placeholder && droppedItem.itemType === 'Text Input') && 
@@ -72,7 +72,6 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 									multiline
 									rows={3}
 									disabled
-									
 								/>
 						}
 						{

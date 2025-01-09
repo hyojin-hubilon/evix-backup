@@ -3,7 +3,6 @@ import ECrf from '../pages/ecrf-builder/ECrf';
 
 export type ItemContents = {
 	title: string;
-	label?:string;
 	options?: Array<string>;
 	placeholder?: string;
 	description?:string;

@@ -8,15 +8,14 @@ type InputItemType = {
 }
 const InputItem = ({ item, onChange }: InputItemType) => {
 	return (
-	<>	
+	<Box>
 		<Stack spacing={1} maxWidth="inherit">
-			<Typography>{item.content?.title}</Typography>
-			{ item.content?.required &&  <Typography sx={{fontSize: '0.7rem', color:'red'}}>* Required</Typography>}
+			<Box display="flex" mb={1}>
+				<Typography variant="h5">{item.content?.title}</Typography>
+				{ item.content?.required &&  <Typography sx={{fontSize: '0.7rem', color:'red'}}>* Required</Typography>}
+			</Box>
 			{
 				item.content?.description && <Typography>{ item.content?.description }</Typography>
-			}
-			{
-				item.content?.label && <Typography variant="h6">{ item.content?.label }</Typography>
 			}
 			{
 				(item.content?.placeholder && item.itemType === 'Text Input') && 
@@ -37,7 +36,7 @@ const InputItem = ({ item, onChange }: InputItemType) => {
 			{
 				(item.content?.options && item.itemType === 'Select Box') &&
 					<Select size="small" value="Select">
-						<MenuItem value="Select" disabled>
+						<MenuItem value="Select">
 							<em>Select</em>
 						</MenuItem>
 						{
@@ -136,7 +135,7 @@ const InputItem = ({ item, onChange }: InputItemType) => {
 				</Box>	
 			}
 		</Stack>
-	</>)
+	</Box>)
 }
 
 export default InputItem

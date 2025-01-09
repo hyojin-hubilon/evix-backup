@@ -92,17 +92,17 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 						crfJson && crfJson.map((crf:CRFFormJson, index) => {
 							return (
 								<Card key={index}>
-									<Box display="flex" sx={{width:'100%'}} flexDirection="row" flexWrap="wrap">
+									<Box display="flex" sx={{width:'100%'}} flexDirection="row" flexWrap="wrap" gap={1} p={1}>
 									{
 										Object.keys(crf).map((key) => {
 											const items: ItemType[] = crf[key];
 											return (
 
-												<Box key={key} display="flex" flexDirection="column" p={1} flex="1">
+												<Box key={key} display="flex" flexDirection="column" flex="1" gap={1}>
 														{
 															items && items.map((item, index2) => {
 																return (
-																	<Box key={index2} sx={{width:"100%", border: '1px solid #ddd'}} p={1}>
+																	<Box key={index2} p={1}  border="1px solid #ddd">
 																		<InputItem item={item} onChange={changeValue} />	
 																	</Box>
 																)

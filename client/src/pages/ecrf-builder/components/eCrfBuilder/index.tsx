@@ -41,7 +41,7 @@ const ITEMS: ItemType[] = [
         itemType: 'Radio Buttons',
 		content: {
 			title: "Radio Title",
-			options: ['option 1', 'options 2']
+			options: ['option 1', 'option 2']
 		}
     },
     {
@@ -80,8 +80,7 @@ const ITEMS: ItemType[] = [
         id: uuidv4(),
         itemType: 'Datepicker',
 		content: {
-			title: 'Datepicker',
-			label: 'Label'
+			title: 'Datepicker'
 		}
     },
     {
@@ -114,8 +113,7 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 		id: uuidv4(),
 		itemType: 'File Input',
 		content: {
-			title: 'File Input Title',
-			label: 'Label'
+			title: 'File Input Title'
 		}
 	}
 

@@ -31,13 +31,13 @@ const AddFileInput = ({fileInput, fileAddShow, editFileInput}:AddFileInputType) 
 				
 				<FileInputBox>
 					<Box>
-						<Typography variant="h6">{fileInput.content.title}</Typography>
-						{ fileInput.content.required &&  <Typography sx={{fontSize: '0.7rem', color:'red'}}>* Required</Typography>}
+						<Box display="flex" mb={1}>
+							<Typography variant="h5">{fileInput.content.title}</Typography>
+							{ fileInput.content.required && <Typography sx={{fontSize: '0.7rem', color:'red'}}>* Required</Typography>}
+						</Box>
+						
 						{
 							fileInput.content.description && <Typography>{fileInput.content.description}</Typography>
-						}
-						{
-							fileInput.content.label && <Typography variant="h6">{fileInput.content.label}</Typography>
 						}
 						<Button
 							component="label"
