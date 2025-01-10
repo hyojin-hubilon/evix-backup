@@ -50,7 +50,7 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 							
 						<Typography variant="h6" sx={{fontSize: '0.7rem'}}>{droppedItem.itemType}</Typography>
 						<Box display="flex" mb={1}>
-							<Typography variant="h5">{droppedItem.content?.title}</Typography>
+							<Typography variant={droppedItem.itemType ==='Headline' ? 'h3' : 'h5'}>{droppedItem.content?.title}</Typography>
 							{ droppedItem.content?.required &&  <Typography sx={{fontSize: '0.7rem', color:'red'}}>* Required</Typography>}
 						</Box>
 						{

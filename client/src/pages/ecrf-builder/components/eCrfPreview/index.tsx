@@ -2,7 +2,7 @@ import ecrfApi from "@/apis/ecrf";
 import { CRFFormJson, ECrfDetail } from "@/types/ecrf";
 import { ChangeEvent, useEffect, useState } from "react";
 import { ItemType } from '../../../../types/ecrf';
-import { Box, Button, Card, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, Divider, Stack, Typography } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InputItem from "./InputItem";
 import CrfFileDropzone from "./CrfFileDropZone";
@@ -82,7 +82,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 								</Box>
 							</Card>
 					}
-					<Box mb={1}>
+					<Box mb={1} p="1rem 1rem 0 1rem">
 						<Typography variant="h3">{crfDetail.crf_title}</Typography>
 						{
 							crfDetail.crf_description && <Typography variant="h6">{crfDetail.crf_description}</Typography>
@@ -91,20 +91,20 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 					{
 						crfJson && crfJson.map((crf:CRFFormJson, index) => {
 							return (
-								<Card key={index}>
+								<>
+								<Box key={index} sx={{background: '#eeeeee', borderRadius: '4px'}}>
 									<Box display="flex" sx={{width:'100%'}} flexDirection="row" flexWrap="wrap" gap={1} p={1}>
 									{
 										Object.keys(crf).map((key) => {
 											const items: ItemType[] = crf[key];
 											return (
-
 												<Box key={key} display="flex" flexDirection="column" flex="1" gap={1}>
 														{
 															items && items.map((item, index2) => {
 																return (
-																	<Box key={index2} p={1}  border="1px solid #ddd">
+																	<Card key={index2} sx={item.itemType ==='Headline' ? {background: 'transparent', padding: 1, boxShadow: 'none'} : {padding: 1}}>
 																		<InputItem item={item} onChange={changeValue} />	
-																	</Box>
+																	</Card>
 																)
 															})
 														}
@@ -114,7 +114,11 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 										})
 									}
 									</Box>
-								</Card>
+									
+								</Box>
+
+								<Divider sx={{borderColor:'#ddd'}} />
+								</>
 							)
 						})
 					}

@@ -10,13 +10,16 @@ const InputItem = ({ item, onChange }: InputItemType) => {
 	return (
 	<Box>
 		<Stack spacing={1} maxWidth="inherit">
-			<Box display="flex" mb={1}>
-				<Typography variant="h5">{item.content?.title}</Typography>
-				{ item.content?.required &&  <Typography sx={{fontSize: '0.7rem', color:'red'}}>* Required</Typography>}
-			</Box>
-			{
-				item.content?.description && <Typography>{ item.content?.description }</Typography>
-			}
+			
+				<Box display="flex" mb={0.5}>
+					<Typography variant={item.itemType ==='Headline' ? 'h3' : 'h5'}>{item.content?.title}</Typography>
+					{ item.content?.required &&  <Typography sx={{fontSize: '0.7rem', color:'red'}}>* Required</Typography>}
+				</Box>
+				{
+					item.content?.description && <Typography variant="body1">{ item.content?.description }</Typography>
+				}
+			
+
 			{
 				(item.content?.placeholder && item.itemType === 'Text Input') && 
 					<TextField
@@ -93,7 +96,7 @@ const InputItem = ({ item, onChange }: InputItemType) => {
 								}
 							}
 						}}>
-						<DatePicker   />
+						<DatePicker format="YYYY/MM/DD"  />
 					</Box>
 			}
 			{
