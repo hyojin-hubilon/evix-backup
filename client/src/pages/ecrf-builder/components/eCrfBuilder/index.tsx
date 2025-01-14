@@ -20,6 +20,8 @@ import { useConfirmation } from "@/context/ConfirmDialogContext";
 import { useNavigate } from "react-router-dom";
 import { copy, deleteItem, getParentIndexByChildId, move, reorder, reorderParentBox } from "../utils";
 
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 const ITEMS: ItemType[] = [
     {
@@ -301,6 +303,12 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 		});
 	}
 
+	const deleteThis = (idsIndex:number) => {
+		const newArray = [...ids];
+		newArray.splice(idsIndex, 1);
+		setIds(newArray);
+	}
+
 	return (
 		<>	
 			<DragDropContext onDragEnd={onDragEnd}>
@@ -331,7 +339,7 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 														style={provided.draggableProps.style}
 														>
 														<DragIndicatorIcon color="secondary" fontSize="small" />
-														{item.itemType} 
+														{item.itemType}
 													</Item>
 													{snapshot.isDragging && (
 														<Clone isDragging={snapshot.isDragging}>{item.itemType}</Clone>
@@ -373,9 +381,20 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 														>
 														<Handle2
 															{...provided.dragHandleProps}
+															style={{position: 'relative'}}
 														>
 															<DragHandleIcon fontSize="small" color="secondary" />
+
+															{
+																ids.length > 1 && 
+																<Button size="small" sx={{minWidth: '30px', position:'absolute', right: 0, top: '-3px'}} color="secondary" onClick={() => deleteThis(i)}>
+																	<DeleteIcon sx={{fontSize: '1.2rem'}}/>
+																</Button>
+															}
 														</Handle2>
+
+														
+														
 														<Box display="flex" gap={1}>
 														{Object.keys(ids[i]).map((id2, j) => { 
 															return (

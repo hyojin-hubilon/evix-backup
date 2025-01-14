@@ -278,7 +278,7 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
                     disableColumnFilter
                     disableColumnSelector
                     disableDensitySelector
-					onRowClick={(e) => handleSelectOne(e.row as ECrfRows)}
+					onRowClick={(e) => handleSelectOne(e.row as ECrfRows)} //List Participant eCRF로 이동?
                     sx={{
                         [`& .${gridClasses.virtualScrollerContent}`]: {
                             borderTop: `1px solid ${theme.palette.grey[500]}`,
