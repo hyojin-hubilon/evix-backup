@@ -33,8 +33,6 @@ const Palette = (mode: PaletteMode) => {
 
     const paletteColor = ThemeColors(colors);
 
-	console.log(paletteColor);
-
     return createTheme({
         palette: {
             mode,

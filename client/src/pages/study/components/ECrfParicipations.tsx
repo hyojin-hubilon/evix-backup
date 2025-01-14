@@ -2,26 +2,25 @@ import {
     DataGrid,
     GridColDef,
     GridRenderCellParams,
-    GridToolbarContainer,
-    GridToolbarQuickFilter,
     gridClasses,
+	useGridApiRef,
 } from '@mui/x-data-grid';
-import { Box, Button, Grid, useTheme } from '@mui/material';
-import { MouseEvent, useEffect, useState } from 'react';
+import { Box, Button, Grid, InputAdornment, MenuItem, OutlinedInput, Select, Typography, useTheme } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { MouseEvent, useCallback, useEffect, useState } from 'react';
 import ecrfParticipantApi from '@/apis/eCrfParticipant';
 import AddParticipant from './eCrfParticipants/AddParticipant';
 import { ECrfParticipant, ECrfParticipantDelete } from '@/types/ecrfParticipant';
 import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+dayjs.extend(isSameOrBefore);
+
 import { useConfirmation } from '@/context/ConfirmDialogContext';
 import { t } from 'i18next';
 
-function CustomToolbar() {
-    return (
-        <GridToolbarContainer>
-            <GridToolbarQuickFilter />
-        </GridToolbarContainer>
-    );
-}
+import DatePicker from "antd/lib/date-picker";
+const { RangePicker } = DatePicker;
+import { PlusOutlined } from '@ant-design/icons';
 
 export interface ECrfRows extends ECrfParticipant {
 	id: number;
@@ -32,19 +31,27 @@ export type EProParticipantsType = {
 }
 const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
     const theme = useTheme();
-	const [stdNum, setStdNum] = useState(Number(stdNo));
+	const [ stdNum, setStdNum ] = useState(Number(stdNo));
 	const confirm = useConfirmation();
 	
-	const [selectedParticipant, setSelectedParticipant] = useState<ECrfParticipant | null>(null);
-	const [ rows, setRows] = useState<ECrfRows[]>([]);
-	const [ openAdd, setOpenAdd] = useState(false);
-	
+	const [ selectedParticipant, setSelectedParticipant ] = useState<ECrfParticipant | null>(null);
+	const [ rows, setRows ] = useState<ECrfRows[]>([]);
+	const [ searchedRows, setSearchedRows ] = useState<ECrfRows[]>([]);
+	const [ openAdd, setOpenAdd ] = useState(false);
+
+	const today = dayjs();
+
+	const apiRef = useGridApiRef();	
 
     const columns:GridColDef[] = [
         { field: 'full_name', headerName: 'Name', width: 150 },
         { field: 'gender', headerName: 'Gender', width: 150 },
         { field: 'birthday', headerName: 'Date of birth', width: 200 },
-		{ field: 'created_at', headerName: 'Created at', width: 200 },
+		// { field: 'created_at', headerName: 'Created at', width: 200 }, //그럼 날짜검색은 생년월일인걸까...
+		{ field: 'age', headerName: 'Age', width: 150 },
+		{ field: 'round_info', headerName: 'Round info', width: 150 },
+		{ field: 'institution', headerName: 'Institution', width: 200 },
+		{ field: 'status', headerName: 'Status', width: 200 },
 		{
 			field: "action",
 			headerName: "Action",
@@ -77,31 +84,64 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
 
 
 	
+	const [ activeDateSetting, setActiveDateSetting ] = useState('full');
+	const [ dateSet, setDateSet ] = useState<{startDt: string, endDt: string}>({startDt : '', endDt: ''});
+	const [ searchTerm, setSearchTerm] = useState('');
+
+	
+	const handleSearchStudy = (text:string) => {
+		setSearchTerm(text);	
+	}
+
+	const handleChangeDateSetting = (newValue:string) => {
+        setActiveDateSetting(newValue);
+		if(newValue == 'full') {
+			setDateSet({
+				startDt: '',
+				endDt: ''
+			});
+		}
+	}
+
+	const onChangeDate = (date, dateString: string[]) => {
+		if(date == null) {
+			setActiveDateSetting('full')
+		}
+		setDateSet({
+			startDt: dateString[0],
+			endDt: dateString[1]
+		});
+	};
+	
 	const handleSelectOne = (participant:ECrfRows) => {
 		if(participant.std_no && participant.std_crf_participant_no) {
 			setSelectedParticipant(participant);
-			// setOpenAdd(true);
+			setOpenAdd(true);
 		}	
 	}
 
 	const fetchParticipantsList = async (stdNo: number) => {
         try {
             const response = await ecrfParticipantApi.getECrfParticipantList(stdNo);
-			console.log(response.content)
-			
-
-			const rows = response.content.map((participant, index) => ({
-				id: participant.std_crf_participant_no,
-				full_name : participant.full_name,
-				birthday: dayjs(participant.birthday).format('YYYY/MM/DD'),
-				created_at: dayjs(participant.created_at).format('YYYY/MM/DD'),
-				gender: participant.gender,
-				std_crf_participant_no: participant.std_crf_participant_no,
-				std_no: participant.std_no
-			}));
+			const rows = response.content.map((participant, index) => {
+				return {
+					id: participant.std_crf_participant_no,
+					full_name : participant.full_name,
+					birthday: dayjs(participant.birthday).format('YYYY/MM/DD'),
+					created_at: dayjs(participant.created_at).format('YYYY/MM/DD'),
+					gender: participant.gender,
+					std_crf_participant_no: participant.std_crf_participant_no,
+					std_no: participant.std_no,
+					age: today.diff(dayjs(participant.birthday), 'year'),
+					round_info: 1,//아직없음
+					institution : "아주대병원", //아직없음
+					status: "In progress", //없음
+				}
+			})
+		
 
 			setRows(rows);
-           
+			setSearchedRows(rows);
         } catch (error) {
             console.error('Failed to fetch participants list: ', error);
         }
@@ -127,7 +167,7 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
 		if(std_no && std_crf_participant_no) {
 			confirm({
 				description: t('study.are_you_sure_to_delete_this_participant'),
-				variant: 'info'
+				variant: 'danger'
 			}).then(() => deleteOneParticipant(std_no, std_crf_participant_no))
 		}	
 	}
@@ -139,40 +179,117 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
 		}
 	}, [])
 
+	useEffect(() => {
+		let newSearchedList = rows.filter(row => {
+				if(dateSet.startDt && dateSet.endDt) {
+					if(dayjs(dateSet.startDt).isSameOrBefore(dayjs(row.created_at),'day') && dayjs(row.created_at).isSameOrBefore(dayjs(dateSet.endDt), 'day')) return true;
+					else return false;
+				} else {
+					return true;
+				}
+			});
+	
+		if(searchTerm) {
+			newSearchedList = newSearchedList.filter(row => {
+				if(row.full_name.toLowerCase().includes(searchTerm.toLowerCase())) return true;
+				else if(row.gender.toLowerCase().includes(searchTerm.toLowerCase())) return true;
+				else if(row.birthday.toLowerCase().includes(searchTerm.toLowerCase())) return true;
+				//else if(STUDY_STATUS[row.std_status as STUDY_STATUS_KEY].toLowerCase().includes(searchTerm.toLowerCase())) return true; status?
+				else return false;
+			});
+		}
+
+		setSearchedRows(newSearchedList);
+	}, [dateSet, searchTerm])
+
 	const handleCloseAddPartipant = () => {
 		setOpenAdd(false);
 		fetchParticipantsList(stdNum);
-		setSelectedParticipant(null)
+		setSelectedParticipant(null);
 	}
 
     return (
         <Grid item xs={12}>
-            <Box sx={{ width: '100%' }} mb="1rem">
+			
+            <Box sx={{ width: '100%', borderRadius: '8px', backgroundColor: 'white', p: '1rem' }} mb="1rem">
+				<Typography variant='h4' gutterBottom>List Participants</Typography>
+				<Grid
+					container
+					width="100%"
+					sx={{ borderBottom: 1, borderColor: 'divider' }}
+					alignItems="center"
+					pb={1}
+					mt={2}
+					columnGap={1}
+				>
+					<Grid item xs={activeDateSetting == 'full' ? 7 : 4.5}>
+						<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
+							startAdornment={
+								<InputAdornment position="start">
+									<SearchIcon />
+								</InputAdornment>
+							}
+							value={searchTerm}
+							onChange={(e) => handleSearchStudy(e.target.value)}
+							placeholder="Institution, Age, Gender, Status"
+						/>
+					</Grid>
+					<Grid item xs={activeDateSetting == 'full' ? 2.5 : 2}>
+						<Select
+							size='small'
+							onChange={(e) => handleChangeDateSetting(e.target.value)}
+							value={activeDateSetting} fullWidth
+							sx={{bgcolor: 'white'}}
+							>
+							<MenuItem value="full">{t('study.full_period')}</MenuItem>
+							<MenuItem value="dates">{t('study.date_setting')}</MenuItem>
+						</Select>
+					</Grid>
+					{
+						activeDateSetting == 'dates' &&
+						<Grid item xs={3}>
+							<RangePicker
+								placement="bottomRight"
+								style={{
+									padding: '6px 11px',
+									borderRadius: '4px',
+									minHeight: '1.4375em',
+									borderColor: 'rgba(0, 0, 0, 0.23)',
+									width: '100%'
+								}}
+								onChange={onChangeDate}
+							/>
+						</Grid>
+					}
+					<Grid item xs={activeDateSetting == 'full' ? 2 : 2}>
+						<Button variant="contained" onClick={() => setOpenAdd(true)} fullWidth>
+							<PlusOutlined />
+							<Typography sx={{ ml: 1 }}>Add Participant</Typography>
+						</Button>
+					</Grid>
+				</Grid>
+				
+				
                 <DataGrid
                     columns={columns}
-                    rows={rows}
+                    rows={searchedRows}
+					apiRef={apiRef}
                     autoHeight
                     disableColumnFilter
                     disableColumnSelector
                     disableDensitySelector
 					onRowClick={(e) => handleSelectOne(e.row as ECrfRows)}
-                    slots={{ toolbar: CustomToolbar }}
                     sx={{
-                        border: '1px solid #ddd',
                         [`& .${gridClasses.virtualScrollerContent}`]: {
                             borderTop: `1px solid ${theme.palette.grey[500]}`,
                         },
                         [`& .${gridClasses.row}`]: {
                             borderBottom: `1px solid ${theme.palette.grey[400]}`,
-                        },
-                        bgcolor: 'white',
-                        p: '1rem',
+                        }
                     }}
                 />
             </Box>
-			<Box display="flex" justifyContent="flex-end">
-				<Button variant="contained" onClick={() => setOpenAdd(true)}>Add Participant</Button>
-			</Box>
+			
 			<AddParticipant
 				isOpen={openAdd}
 				handleClose={handleCloseAddPartipant} 

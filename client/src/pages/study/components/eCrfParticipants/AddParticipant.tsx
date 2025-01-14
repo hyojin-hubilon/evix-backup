@@ -91,6 +91,8 @@ const AddParticipant = ({
 				gender: participant.gender,
 				birthday: participant.birthday
 			});
+		} else {
+			formik.resetForm();
 		}
 	}, [participant])
 

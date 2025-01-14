@@ -2,8 +2,7 @@ import ecrfApi from "@/apis/ecrf";
 import { CRFFormJson, ECrfDetail } from "@/types/ecrf";
 import { ChangeEvent, useEffect, useState } from "react";
 import { ItemType } from '../../../../types/ecrf';
-import { Box, Button, Card, Divider, Stack, Typography } from "@mui/material";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import InputItem from "./InputItem";
 import CrfFileDropzone from "./CrfFileDropZone";
 
@@ -91,7 +90,6 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 					{
 						crfJson && crfJson.map((crf:CRFFormJson, index) => {
 							return (
-								<>
 								<Box key={index} sx={{background: '#eeeeee', borderRadius: '4px'}}>
 									<Box display="flex" sx={{width:'100%'}} flexDirection="row" flexWrap="wrap" gap={1} p={1}>
 									{
@@ -116,9 +114,6 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 									</Box>
 									
 								</Box>
-
-								<Divider sx={{borderColor:'#ddd'}} />
-								</>
 							)
 						})
 					}
