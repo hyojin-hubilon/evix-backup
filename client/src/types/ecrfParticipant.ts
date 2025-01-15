@@ -25,4 +25,7 @@ export interface ECrfParticipant {
 	signature_eic_extension?: 'Y' | 'N' | null;
 	signature_eic_name?: string | null;
 	std_crf_participant_no: number;
+	number_crf_input:number;
+	allotment_agency_name:string;
+	age: number;
 }

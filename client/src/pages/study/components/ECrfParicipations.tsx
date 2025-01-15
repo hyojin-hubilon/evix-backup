@@ -2,12 +2,11 @@ import {
     DataGrid,
     GridColDef,
     GridRenderCellParams,
-    gridClasses,
-	useGridApiRef,
+    gridClasses
 } from '@mui/x-data-grid';
-import { Box, Button, Grid, InputAdornment, MenuItem, OutlinedInput, Select, Typography, useTheme } from '@mui/material';
+import { Box, Button, Chip, Grid, InputAdornment, MenuItem, OutlinedInput, Select, Typography, useTheme } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { MouseEvent, useCallback, useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import ecrfParticipantApi from '@/apis/eCrfParticipant';
 import AddParticipant from './eCrfParticipants/AddParticipant';
 import { ECrfParticipant, ECrfParticipantDelete } from '@/types/ecrfParticipant';
@@ -21,6 +20,7 @@ import { t } from 'i18next';
 import DatePicker from "antd/lib/date-picker";
 const { RangePicker } = DatePicker;
 import { PlusOutlined } from '@ant-design/icons';
+import Participant from './eCrfParticipants/Participant';
 
 export interface ECrfRows extends ECrfParticipant {
 	id: number;
@@ -34,36 +34,57 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
 	const [ stdNum, setStdNum ] = useState(Number(stdNo));
 	const confirm = useConfirmation();
 	
-	const [ selectedParticipant, setSelectedParticipant ] = useState<ECrfParticipant | null>(null);
+	const [ participantEdit, setParticipantEdit ] = useState<ECrfParticipant | null>(null);
 	const [ rows, setRows ] = useState<ECrfRows[]>([]);
 	const [ searchedRows, setSearchedRows ] = useState<ECrfRows[]>([]);
 	const [ openAdd, setOpenAdd ] = useState(false);
 
-	const today = dayjs();
-
-	const apiRef = useGridApiRef();	
+	const [ selectedParticipant, setSelectedParticipant ] = useState<ECrfParticipant | null>(null);
 
     const columns:GridColDef[] = [
-        { field: 'full_name', headerName: 'Name', width: 150 },
-        { field: 'gender', headerName: 'Gender', width: 150 },
+        { field: 'full_name', headerName: 'Name', minWidth: 150,
+			renderCell: (param: GridRenderCellParams) => {
+				return (
+					<Box display="flex" alignItems="center" height="inherit" sx={{
+						'&:hover': {
+							textDecoration: 'underline',
+							cursor: 'pointer'
+						}
+					}}>
+						<Typography variant='h6'>{ param.formattedValue }</Typography>
+					</Box>
+				)
+			}
+		},
+        { field: 'gender', headerName: 'Gender', minWidth: 100 },
         { field: 'birthday', headerName: 'Date of birth', width: 200 },
-		// { field: 'created_at', headerName: 'Created at', width: 200 }, //그럼 날짜검색은 생년월일인걸까...
-		{ field: 'age', headerName: 'Age', width: 150 },
-		{ field: 'round_info', headerName: 'Round info', width: 150 },
-		{ field: 'institution', headerName: 'Institution', width: 200 },
-		{ field: 'status', headerName: 'Status', width: 200 },
+		{ field: 'age', headerName: 'Age', width: 100,
+			renderCell: (param: GridRenderCellParams) => {
+				return <b>{ param.formattedValue }</b>;
+			}
+		},
+		{ field: 'number_crf_input', headerName: 'Round info', width: 150,
+			renderCell: (param: GridRenderCellParams) => {
+				return <Chip label={param.formattedValue ? param.formattedValue : 0} color="info" />;
+			}
+		},
+		{ field: 'allotment_agency_name', headerName: 'Institution', width: 200,
+			renderCell: (param: GridRenderCellParams) => {
+				return <b>{ param.formattedValue ? param.formattedValue : '-' }</b>;
+			}
+		},
+		
+		{ field: 'created_at', headerName: 'Date of Participation', width: 200 },
 		{
-			field: "action",
-			headerName: "Action",
+			field: "actions",
+			headerName: "Actions",
 			sortable: false,
-			// align:'center',
 			width: 200,
-			
 			renderCell: (params:GridRenderCellParams) => {
 				const onClickEdit = (e:MouseEvent) => {
 					e.stopPropagation(); // don't select this row after clicking
 					const currentRow : ECrfRows = params.row as ECrfRows;
-					return handleSelectOne(currentRow);
+					return handleSelectEdit(currentRow);
 				}
 
 				const onClickDelete = (e:MouseEvent) => {
@@ -74,12 +95,12 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
 		
 				return (
 					<Box>
-						<Button onClick={(e) => onClickEdit(e)} variant="contained" color="primary" sx={{mr:'0.5rem'}}>Edit</Button>
-						<Button onClick={(e) => onClickDelete(e)} variant="outlined" color="error">Delete</Button>
+						<Button onClick={(e) => onClickDelete(e)} variant="outlined" color="error" sx={{mr:'0.5rem'}}>Delete</Button>
+						<Button onClick={(e) => onClickEdit(e)} variant="contained" color="primary">Edit</Button>
 					</Box>
 			);
 			}
-		},
+		}
     ];
 
 
@@ -113,11 +134,15 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
 		});
 	};
 	
-	const handleSelectOne = (participant:ECrfRows) => {
+	const handleSelectEdit = (participant:ECrfRows) => {
 		if(participant.std_no && participant.std_crf_participant_no) {
-			setSelectedParticipant(participant);
+			setParticipantEdit(participant);
 			setOpenAdd(true);
 		}	
+	}
+
+	const handleSelectOne = (participant:ECrfRows) => {
+		setSelectedParticipant(participant);
 	}
 
 	const fetchParticipantsList = async (stdNo: number) => {
@@ -132,14 +157,12 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
 					gender: participant.gender,
 					std_crf_participant_no: participant.std_crf_participant_no,
 					std_no: participant.std_no,
-					age: today.diff(dayjs(participant.birthday), 'year'),
-					round_info: 1,//아직없음
-					institution : "아주대병원", //아직없음
-					status: "In progress", //없음
+					age: participant.age,
+					number_crf_input: participant.number_crf_input,//아직없음
+					allotment_agency_name : participant.allotment_agency_name
 				}
 			})
 		
-
 			setRows(rows);
 			setSearchedRows(rows);
         } catch (error) {
@@ -193,7 +216,8 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
 			newSearchedList = newSearchedList.filter(row => {
 				if(row.full_name.toLowerCase().includes(searchTerm.toLowerCase())) return true;
 				else if(row.gender.toLowerCase().includes(searchTerm.toLowerCase())) return true;
-				else if(row.birthday.toLowerCase().includes(searchTerm.toLowerCase())) return true;
+				else if(row.allotment_agency_name.toLowerCase().includes(searchTerm.toLowerCase())) return true;
+				else if(row.age === Number(searchTerm)) return true;
 				//else if(STUDY_STATUS[row.std_status as STUDY_STATUS_KEY].toLowerCase().includes(searchTerm.toLowerCase())) return true; status?
 				else return false;
 			});
@@ -205,75 +229,79 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
 	const handleCloseAddPartipant = () => {
 		setOpenAdd(false);
 		fetchParticipantsList(stdNum);
-		setSelectedParticipant(null);
+		setParticipantEdit(null);
 	}
 
     return (
         <Grid item xs={12}>
 			
-            <Box sx={{ width: '100%', borderRadius: '8px', backgroundColor: 'white', p: '1rem' }} mb="1rem">
-				<Typography variant='h4' gutterBottom>List Participants</Typography>
-				<Grid
-					container
-					width="100%"
-					sx={{ borderBottom: 1, borderColor: 'divider' }}
-					alignItems="center"
-					pb={1}
-					mt={2}
-					columnGap={1}
-				>
-					<Grid item xs={activeDateSetting == 'full' ? 7 : 4.5}>
-						<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
-							startAdornment={
-								<InputAdornment position="start">
-									<SearchIcon />
-								</InputAdornment>
-							}
-							value={searchTerm}
-							onChange={(e) => handleSearchStudy(e.target.value)}
-							placeholder="Institution, Age, Gender, Status"
-						/>
-					</Grid>
-					<Grid item xs={activeDateSetting == 'full' ? 2.5 : 2}>
-						<Select
-							size='small'
-							onChange={(e) => handleChangeDateSetting(e.target.value)}
-							value={activeDateSetting} fullWidth
-							sx={{bgcolor: 'white'}}
-							>
-							<MenuItem value="full">{t('study.full_period')}</MenuItem>
-							<MenuItem value="dates">{t('study.date_setting')}</MenuItem>
-						</Select>
-					</Grid>
-					{
-						activeDateSetting == 'dates' &&
-						<Grid item xs={3}>
-							<RangePicker
-								placement="bottomRight"
-								style={{
-									padding: '6px 11px',
-									borderRadius: '4px',
-									minHeight: '1.4375em',
-									borderColor: 'rgba(0, 0, 0, 0.23)',
-									width: '100%'
-								}}
-								onChange={onChangeDate}
+            <Box sx={{ width: '100%', borderRadius: '8px', backgroundColor: 'white', p: '1rem', position:'relative' }} mb="1rem">
+				{
+					selectedParticipant ? 
+					<Participant participant={selectedParticipant} /> 
+				:
+				<>
+					<Typography variant='h4' gutterBottom>List Participants</Typography>
+					<Grid
+						container
+						width="100%"
+						sx={{ borderBottom: 1, borderColor: 'divider' }}
+						alignItems="center"
+						pb={1}
+						mt={2}
+						columnGap={1}
+					>
+						<Grid item xs={activeDateSetting == 'full' ? 7 : 4.5}>
+							<OutlinedInput size="small" fullWidth sx={{bgcolor: 'white'}} 
+								startAdornment={
+									<InputAdornment position="start">
+										<SearchIcon />
+									</InputAdornment>
+								}
+								value={searchTerm}
+								onChange={(e) => handleSearchStudy(e.target.value)}
+								placeholder="Institution, Age, Gender"
 							/>
 						</Grid>
-					}
-					<Grid item xs={activeDateSetting == 'full' ? 2 : 2}>
-						<Button variant="contained" onClick={() => setOpenAdd(true)} fullWidth>
-							<PlusOutlined />
-							<Typography sx={{ ml: 1 }}>Add Participant</Typography>
-						</Button>
+						<Grid item xs={activeDateSetting == 'full' ? 2.5 : 2}>
+							<Select
+								size='small'
+								onChange={(e) => handleChangeDateSetting(e.target.value)}
+								value={activeDateSetting} fullWidth
+								sx={{bgcolor: 'white'}}
+								>
+								<MenuItem value="full">{t('study.full_period')}</MenuItem>
+								<MenuItem value="dates">{t('study.date_setting')}</MenuItem>
+							</Select>
+						</Grid>
+						{
+							activeDateSetting == 'dates' &&
+							<Grid item xs={3}>
+								<RangePicker
+									placement="bottomRight"
+									style={{
+										padding: '6px 11px',
+										borderRadius: '4px',
+										minHeight: '1.4375em',
+										borderColor: 'rgba(0, 0, 0, 0.23)',
+										width: '100%'
+									}}
+									onChange={onChangeDate}
+								/>
+							</Grid>
+						}
+						<Grid item xs={activeDateSetting == 'full' ? 2 : 2}>
+							<Button variant="contained" onClick={() => setOpenAdd(true)} fullWidth>
+								<PlusOutlined />
+								<Typography sx={{ ml: 1 }}>Add Participant</Typography>
+							</Button>
+						</Grid>
 					</Grid>
-				</Grid>
 				
-				
-                <DataGrid
+					
+					<DataGrid
                     columns={columns}
                     rows={searchedRows}
-					apiRef={apiRef}
                     autoHeight
                     disableColumnFilter
                     disableColumnSelector
@@ -281,20 +309,27 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
 					onRowClick={(e) => handleSelectOne(e.row as ECrfRows)} //List Participant eCRF로 이동?
                     sx={{
                         [`& .${gridClasses.virtualScrollerContent}`]: {
-                            borderTop: `1px solid ${theme.palette.grey[500]}`,
+                            borderTop: `1px solid ${theme.palette.grey[400]}`,
                         },
                         [`& .${gridClasses.row}`]: {
-                            borderBottom: `1px solid ${theme.palette.grey[400]}`,
-                        }
+                            borderBottom: `1px solid ${theme.palette.grey[300]}`,
+                        },
+						// fontSize: '0.9rem'
                     }}
                 />
+				</>
+				}
+				
+                
+
+				
             </Box>
 			
 			<AddParticipant
 				isOpen={openAdd}
 				handleClose={handleCloseAddPartipant} 
 				stdNo={stdNum}
-				participant={selectedParticipant}
+				participant={participantEdit}
 			/>
         </Grid>
     );
