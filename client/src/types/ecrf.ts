@@ -64,15 +64,11 @@ export interface MyCRFList {
 }
 
 export interface StudyCrfListRespone {
-	pair_no: number; //post 할때 pair_no는 필요없는 걸까..
-	std_no: number | null,
+	pair_no: number, //post 할때 pair_no는 필요없는 걸까..
+	std_no: number,
 	crf_no: number,
 	crf_title: string,
 	sort: number
-}
-
-export interface SelectedCrfList extends MyCRFList, StudyCrfListRespone {
-
 }
 
 export interface StudyCrfPairPostBody {

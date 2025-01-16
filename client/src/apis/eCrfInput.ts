@@ -6,7 +6,7 @@ import {
 
 const BASE_API_URL = '/researcher/case-report-form-input';
 
-const ecrInputApi = {
+const eCrfInputApi = {
 	//POST CRF(증례기록서) Data 입력등록(파일첨부 포함)
 	postECrfInput: async (requestDto: any, crf_file_attachments: Array<any>) => {
 		try {
@@ -77,10 +77,10 @@ const ecrInputApi = {
 	},
 	/**
 	 * 참여자 > CRF(증례기록서) > Data 입력 목록 조회
-	 * @param pairNo
-	 * @param stdNo
-	 * @param crfNo
-	 * @param stdCrfParticipantNo
+	 * @param pairNo 스터디페어 number
+	 * @param stdNo 스터디 number
+	 * @param crfNo crf number
+	 * @param stdCrfParticipantNo participant number
 	 */
 	getECrfInputList: async (pairNo:number, stdNo: number, crfNo: number, stdCrfParticipantNo:number) => {
 		try {
@@ -93,4 +93,4 @@ const ecrInputApi = {
 	},
 }
 
-export default ecrInputApi;
+export default eCrfInputApi;

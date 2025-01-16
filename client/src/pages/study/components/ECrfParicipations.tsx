@@ -238,7 +238,7 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
             <Box sx={{ width: '100%', borderRadius: '8px', backgroundColor: 'white', p: '1rem', position:'relative' }} mb="1rem">
 				{
 					selectedParticipant ? 
-					<Participant participant={selectedParticipant} /> 
+					<Participant participant={selectedParticipant} backToList={() => setSelectedParticipant(null)}/> 
 				:
 				<>
 					<Typography variant='h4' gutterBottom>List Participants</Typography>
