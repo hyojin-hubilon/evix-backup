@@ -274,7 +274,7 @@ const StudyDetail = () => {
                 )}
 
 				{studyDetail && studyDetail.std_type === 'E-CRF' && activeTab === '2' && (
-                    <ECrfParticipants stdNo={stdNo} />
+                    <ECrfParticipants stdNo={stdNo} studyDetail={studyDetail} />
                 )}
             </Grid>
         </>

@@ -8,21 +8,25 @@ import DatePicker from "antd/lib/date-picker";
 import ecrfApi from "@/apis/ecrf";
 import { StudyCrfListRespone } from "@/types/ecrf";
 import eCrfInputApi from "@/apis/eCrfInput";
+import { StudyDetail } from "@/types/study";
+import ECrfInputDialog from "@/pages/ecrf-builder/components/ECrfInputDialog";
 const { RangePicker } = DatePicker;
 
 
 type ParticipantType = {
 	participant: ECrfParticipant;
 	backToList: () => void,
+	studyDetail: StudyDetail 
 }
 
-const Participant = ({participant, backToList}: ParticipantType) => {
+const Participant = ({participant, backToList, studyDetail}: ParticipantType) => {
 	const [ activeDateSetting, setActiveDateSetting ] = useState('full');
 	const [ dateSet, setDateSet ] = useState<{startDt: string, endDt: string}>({startDt : '', endDt: ''});
-	const [crfPairList, setCrfPairList] = useState<StudyCrfListRespone[] | []>([]);
-	const [activeTab, setActiveTab] = useState<number | null>(null);
-	const [selectedCrf, setSelectedCrf] =  useState<StudyCrfListRespone | null>(null);
+	const [ crfPairList, setCrfPairList ] = useState<StudyCrfListRespone[] | []>([]);
+	const [ activeTab, setActiveTab ] = useState<number | null>(null);
+	const [ selectedCrf, setSelectedCrf ] =  useState<StudyCrfListRespone | null>(null);
 	const [ inputList, setInputList] = useState<any[]>([]);
+	const [ openInput, setOpenInput ] = useState<boolean>(false);
 
 	const handleChangeDateSetting = (newValue:string) => {
         setActiveDateSetting(newValue);
@@ -49,10 +53,13 @@ const Participant = ({participant, backToList}: ParticipantType) => {
 			const reponse = await ecrfApi.getStudyCrfpair(participant.std_no);
 			const crfList = reponse.content;
 			setCrfPairList(crfList);
-			setActiveTab(crfList[0].pair_no);
-			const firstCrf = crfList[0];
-			setSelectedCrf(firstCrf);
-			getCRFInputList(firstCrf.pair_no, firstCrf.std_no, firstCrf.crf_no)
+			if(crfList[0]) {
+				setActiveTab(crfList[0].pair_no);
+				const firstCrf = crfList[0];
+				setSelectedCrf(firstCrf);
+				getCRFInputList(firstCrf.pair_no, firstCrf.std_no, firstCrf.crf_no)	
+			}
+			
 		} else {
 			setCrfPairList([])
 		}	
@@ -72,10 +79,17 @@ const Participant = ({participant, backToList}: ParticipantType) => {
 	}, [participant])
 
 	const handleChangeTab = (crf:StudyCrfListRespone) => {
-		console.log(crf.pair_no);
 		setActiveTab(crf.pair_no);
 		setSelectedCrf(crf);
 		getCRFInputList(crf.pair_no, crf.std_no, crf.crf_no);
+	}
+
+	const addNewInput = () => {
+		setOpenInput(true);
+	}
+
+	const handleCloseInput = () => {
+		setOpenInput(false);
 	}
 	
 	return (
@@ -91,10 +105,14 @@ const Participant = ({participant, backToList}: ParticipantType) => {
 				<ArrowLeftOutlined />
 				<Typography sx={{ ml: 1 }}>Move to List Participants</Typography>
 			</Button>
-			<Button variant="contained">
-				<PlusOutlined />
-				<Typography sx={{ ml: 1 }}>New Input eCRF</Typography>
-			</Button>
+			{
+				crfPairList && crfPairList.length > 0 &&
+				<Button variant="contained" onClick={addNewInput}>
+					<PlusOutlined />
+					<Typography sx={{ ml: 1 }}>New Input eCRF</Typography>
+				</Button>
+			}
+			
 			<Select
 				size='small'
 				onChange={(e) => handleChangeDateSetting(e.target.value)}
@@ -119,7 +137,7 @@ const Participant = ({participant, backToList}: ParticipantType) => {
 			}
 		</Box>
 		{
-			crfPairList && 
+			crfPairList && crfPairList.length > 0 ? 
 			<Box>
 				<Tabs
 					value={activeTab}
@@ -130,15 +148,40 @@ const Participant = ({participant, backToList}: ParticipantType) => {
 							<Tab label={crf.crf_title} key={index} value={crf.pair_no} onClick={() => handleChangeTab(crf)} />
 						)
 					}
-						
-					
 				</Tabs>
+				<Box>
+				{
+					inputList && inputList.length > 0 ?
+					<Box>
+					
+					</Box>	
+					:
+					<Box sx={{background: '#eee'}} p={2} borderRadius={1} mt={2} textAlign="center">
+						There is no eCRF Input.
+					</Box>
+				}
+				</Box>
+			</Box>
+
+			: 
+			<Box sx={{background: '#eee'}} p={2} borderRadius={1} mt={2} textAlign="center">
+				There is no eCRF Sheet connected. Please register the eCRF Sheet.
+				{/* 연결된 eCRF Sheet가 없습니다. eCRF Sheet를 등록 해 주세요. */}
 			</Box>
 		}
 
-		<Box>
-			
-		</Box>
+	
+
+		<ECrfInputDialog 
+			isOpen={openInput}
+			handleClose={handleCloseInput} 
+			studyDetail={studyDetail}
+			participant={participant}
+			crfPairList={crfPairList}
+			selectedCrf={selectedCrf}
+		/>
+
+		
 		
 		</>
 	);

@@ -21,15 +21,17 @@ import DatePicker from "antd/lib/date-picker";
 const { RangePicker } = DatePicker;
 import { PlusOutlined } from '@ant-design/icons';
 import Participant from './eCrfParticipants/Participant';
+import { StudyDetail } from '@/types/study';
 
 export interface ECrfRows extends ECrfParticipant {
 	id: number;
 }
 
 export type EProParticipantsType = {
-	stdNo: string | undefined
+	stdNo: string | undefined,
+	studyDetail: StudyDetail
 }
-const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
+const ECrfParticipants = ({ stdNo, studyDetail } : EProParticipantsType) => {
     const theme = useTheme();
 	const [ stdNum, setStdNum ] = useState(Number(stdNo));
 	const confirm = useConfirmation();
@@ -238,7 +240,7 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
             <Box sx={{ width: '100%', borderRadius: '8px', backgroundColor: 'white', p: '1rem', position:'relative' }} mb="1rem">
 				{
 					selectedParticipant ? 
-					<Participant participant={selectedParticipant} backToList={() => setSelectedParticipant(null)}/> 
+					<Participant participant={selectedParticipant} backToList={() => setSelectedParticipant(null)} studyDetail={studyDetail} /> 
 				:
 				<>
 					<Typography variant='h4' gutterBottom>List Participants</Typography>
@@ -319,10 +321,6 @@ const ECrfParticipants = ({ stdNo } : EProParticipantsType) => {
                 />
 				</>
 				}
-				
-                
-
-				
             </Box>
 			
 			<AddParticipant

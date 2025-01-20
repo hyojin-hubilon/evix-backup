@@ -20,7 +20,10 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		if(response.code === 200) {
 			setCrfDetail(response.content);
 			handleSetData(response.content.crf_form_json as CRFFormJson[]);
-			setCrfFile(response.content.crf_form_json[0] as ItemType);
+			if('itemType' in response.content.crf_form_json[0] && response.content.crf_form_json[0].itemType === 'File Input') {
+				setCrfFile(response.content.crf_form_json[0]);
+			}
+			
 		}
 	}
 
@@ -37,6 +40,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		}
 
 		setCrfJson(editJson);
+		console.log(editJson);
 	}
 
 	useEffect(() => {
@@ -88,7 +92,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 						}
 					</Box>
 					{
-						crfJson && crfJson.map((crf:CRFFormJson, index) => {
+						crfJson && crfJson.length > 0 && crfJson.map((crf:CRFFormJson, index) => {
 							return (
 								<Box key={index} sx={{background: '#eeeeee', borderRadius: '4px'}}>
 									<Box display="flex" sx={{width:'100%'}} flexDirection="row" flexWrap="wrap" gap={1} p={1}>
