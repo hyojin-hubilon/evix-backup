@@ -1,6 +1,6 @@
 import ecrfApi from "@/apis/ecrf";
 import { CRFFormJson, ECrfDetail } from "@/types/ecrf";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { ItemType } from '../../../../types/ecrf';
 import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import InputItem from "./InputItem";
@@ -15,7 +15,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 	const [crfJson, setCrfJson] = useState<CRFFormJson[] | null>(null);
 	const [addedFiles, setAddedFiles] = useState<(File | null)[]>([null, null, null]);
 	
-	const getCrfDetail = async (crfNo:number) => {
+	const getCrfDetail = useCallback(async (crfNo:number) => {
 		const response = await ecrfApi.getCRF(crfNo);
 		if(response.code === 200) {
 			setCrfDetail(response.content);
@@ -25,7 +25,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 			}
 			
 		}
-	}
+	}, []);
 
 	const handleSetData = (data:CRFFormJson[]) => {
 		const detail = data;
@@ -45,7 +45,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 
 	useEffect(() => {
 		if(crfNo) getCrfDetail(crfNo);
-	}, [crfNo]);
+	}, [crfNo, getCrfDetail]);
 
 	const changeValue = (item:ItemType) => {
 

@@ -5,7 +5,11 @@ import { StudyDetail } from "@/types/study";
 import { ECrfParticipant } from "@/types/ecrfParticipant";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useTheme } from '@mui/material/styles';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
+import dayjs, { Dayjs } from "dayjs";
+import { setIn } from "formik";
 
 type ECrfInputDialogType = {
 	isOpen: boolean;
@@ -17,11 +21,21 @@ type ECrfInputDialogType = {
 }
 
 const ECrfInputDialog = ({isOpen, handleClose, selectedCrf, studyDetail, participant, crfPairList} : ECrfInputDialogType) => {
-	const [selectedCrfForView, setSelectedCrfforView] = useState<StudyCrfListRespone | null>(selectedCrf)
+	const [selectedCrfForView, setSelectedCrfforView] = useState<StudyCrfListRespone | null>(null);
+	const [inspactDate, setInspactDate] = useState<Dayjs | null | undefined>(null);
 	const theme = useTheme();
 
 	const handleSelectCrf = (crfPair: StudyCrfListRespone) => {
 		setSelectedCrfforView(crfPair);
+	}
+
+	useEffect(() => {
+		setSelectedCrfforView(selectedCrf);
+	}, [selectedCrf]);
+
+	const handleChangeInspectDate = (e:Dayjs |  null) => {
+		console.log(e);
+		if(e) { setInspactDate(e); }
 	}
 	
 	return (
@@ -29,16 +43,23 @@ const ECrfInputDialog = ({isOpen, handleClose, selectedCrf, studyDetail, partici
 			<Box p={2}>
 				<Typography variant="h5" gutterBottom>New Input eCRF</Typography>
 
-				<Box borderTop="1px solid #ddd">
-					<Typography>Home {">"} Study {">"} List Participants {">"} List eCRF {">"} New Input eCRF</Typography>
+				<Box borderTop="1px solid #ddd" display="flex" flexDirection={"column"} gap={1} p="10px 0 0 0">
+					<Typography variant="h6">Home {">"} Study {">"} List Participants {">"} List eCRF {">"} New Input eCRF</Typography>
+					
 					{/* 스터디 이름 */}
-					<Typography variant="h5">{ studyDetail.title }</Typography>
+					<Typography variant="h4">{ studyDetail.title }</Typography>
 
-					<Box>
+					<Box display="flex" gap={2}>
 						{/* Institution 이름 */}
-						<Typography>{participant.allotment_agency_name}</Typography>
+						<Box display="flex" gap={.5}>
+							<ApartmentIcon />
+							<Typography>{participant.allotment_agency_name}</Typography>
+						</Box>
 						{/* 참가자 이름 */}
-						<Typography>{participant.full_name}</Typography>
+						<Box display="flex" gap={.5}>
+							<EmojiPeopleIcon />
+							<Typography>{participant.full_name}</Typography>
+						</Box>
 					</Box>
 
 				</Box>
@@ -69,8 +90,11 @@ const ECrfInputDialog = ({isOpen, handleClose, selectedCrf, studyDetail, partici
 					<Grid item xs={9.5} p={0}>
 						<Box p={2}>
 							{/* Date선택 */}
-							<Card sx={{p:1, mb:1}}>
-								Inspect(Visit) Date <DatePicker />
+							<Card sx={{p:"10px 20px", mb:1}}>
+								<Box display="flex" gap={2} alignItems="center">
+									<Typography variant="h5">Inspect(Visit) Date <span style={{color: 'red'}}>*</span></Typography>
+									<DatePicker value={inspactDate} format="YYYY/MM/DD" onChange={(e) => handleChangeInspectDate(e)}/>
+								</Box>
 							</Card>
 							{
 								selectedCrfForView &&
