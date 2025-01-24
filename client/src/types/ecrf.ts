@@ -16,6 +16,10 @@ export interface ItemType {
 	content: ItemContents;
 }
 
+export interface FileItemTypes extends ItemType {
+	files: File[] | [];
+}
+
 export type SelectedItem = {
 	columnId:string;
 	index: number;

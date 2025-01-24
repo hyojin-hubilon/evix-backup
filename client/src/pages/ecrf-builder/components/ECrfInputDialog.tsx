@@ -22,7 +22,7 @@ type ECrfInputDialogType = {
 
 const ECrfInputDialog = ({isOpen, handleClose, selectedCrf, studyDetail, participant, crfPairList} : ECrfInputDialogType) => {
 	const [selectedCrfForView, setSelectedCrfforView] = useState<StudyCrfListRespone | null>(null);
-	const [inspactDate, setInspactDate] = useState<Dayjs | null | undefined>(null);
+	
 	const theme = useTheme();
 
 	const handleSelectCrf = (crfPair: StudyCrfListRespone) => {
@@ -33,11 +33,6 @@ const ECrfInputDialog = ({isOpen, handleClose, selectedCrf, studyDetail, partici
 		setSelectedCrfforView(selectedCrf);
 	}, [selectedCrf]);
 
-	const handleChangeInspectDate = (e:Dayjs |  null) => {
-		console.log(e);
-		if(e) { setInspactDate(e); }
-	}
-	
 	return (
 		<Dialog open={isOpen} onClose={handleClose} maxWidth="xl">
 			<Box p={2}>
@@ -89,13 +84,7 @@ const ECrfInputDialog = ({isOpen, handleClose, selectedCrf, studyDetail, partici
 					</Grid>
 					<Grid item xs={9.5} p={0}>
 						<Box p={2}>
-							{/* Date선택 */}
-							<Card sx={{p:"10px 20px", mb:1}}>
-								<Box display="flex" gap={2} alignItems="center">
-									<Typography variant="h5">Inspect(Visit) Date <span style={{color: 'red'}}>*</span></Typography>
-									<DatePicker value={inspactDate} format="YYYY/MM/DD" onChange={(e) => handleChangeInspectDate(e)}/>
-								</Box>
-							</Card>
+							
 							{
 								selectedCrfForView &&
 								<ECrfPreview crfNo={selectedCrfForView.crf_no}/>

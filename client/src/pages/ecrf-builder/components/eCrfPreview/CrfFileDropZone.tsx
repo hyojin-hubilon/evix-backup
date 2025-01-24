@@ -36,7 +36,7 @@ const CrfFileDropzone = ({changefiles} : CrfFileDropzoneType) => {
 			'application/pdf': []
 		},
 		multiple: false,
-		noDrag: true
+		noDrag: true,
 	});
 
 	
@@ -60,10 +60,7 @@ const CrfFileDropzone = ({changefiles} : CrfFileDropzoneType) => {
 					<FileUploadOutlinedIcon  />
 					<Typography variant="body1">						
 						Click to select file
-						
 					</Typography>
-					
-						
 					</Box>
 				</Box>
 				
