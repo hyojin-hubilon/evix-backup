@@ -2,7 +2,7 @@ import ecrfApi from "@/apis/ecrf";
 import { CRFFormJson, ECrfDetail, FileItemTypes, ItemContents } from "@/types/ecrf";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { ItemType } from '../../../../types/ecrf';
-import { Box, Button, Card, Input, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, Input, Stack, Typography, Theme } from '@mui/material';
 import InputItem from "./InputItem";
 import CrfFileDropzone from "./CrfFileDropZone";
 import { Dayjs } from "dayjs";
@@ -24,6 +24,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 	const [crfFile, setCrfFile] = useState<ItemType | null>(null)
 	const [crfJson, setCrfJson] = useState<CRFFormJson[] | null>(null);
 	const [addedFiles, setAddedFiles] = useState<(File | null)[]>([null, null, null]);
+	const [fileError, setFileError] = useState<string | null>(null);
 	const [inspactDate, setInspactDate] = useState<Dayjs | null | undefined>(null);
 	const [initialValues, setInitialValues] = useState<CrfSubmitType>({inspectDate: null, answers: [], files: null, text: ''});
 	
@@ -45,11 +46,9 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		//첫번째에 파일인풋이 있는 경우
 		if('itemType' in detail[0] && detail[0].itemType === 'File Input') {
 			editJson = detail.slice(1);
-			console.log(detail);
+			
 			const fileItem = detail[0] as unknown as FileItemTypes;
-			console.log(fileItem);
 			fileItem.files = [];
-			console.log(fileItem);
 			setInitialValues({ ...initialValues, files: fileItem});
 			console.log(initialValues);
 		} else {
@@ -63,29 +62,9 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 
 	const schema = Yup.object().shape({
 		inspectDate: Yup.string().required('필수항목 입니다.'),
-		// text: Yup.string().required('필수항목 입니다.'),
 		answers: Yup.array().of(Yup.object().shape({
 			
 		})),
-		//require 체크를 하려면 files에 ITEMTYPE object를 적용할 필요가..있고 파일리스트를 따로 둬야할듯.
-		files: Yup.object().shape({
-			// files: Yup.array().of(Yup.mixed().test('fileSize', '5MB이하의 파일만 업로드 가능합니다.', (value) => {
-			// 	if(value && value.size <= 5242880) {
-			// 		return true;
-			// 	} else {
-			// 		return false;
-			// 	}
-			// });
-			
-			// files: Yup.array().min(1, "적어도 하나의 파일이 필요합니다.").max(3, "최대 3개의 파일까지 첨부가능합니다.").when(['cotent'], {
-			// 	is: (content: ItemContents) => { 
-			// 		console.log(content.required);
-			// 		return content.required; 
-			// 	},
-			// 	then: (s) => s.required('필수항목 입니다.'),
-			// 	otherwise: (s) => s.notRequired(),
-			// })
-		}),
 	});
 
 	useEffect(() => {
@@ -102,11 +81,28 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		setAddedFiles(newFiles);
 	}
 
+	const fileRequiredCheck = () => {
+		if(crfFile && crfFile.content.required && addedFiles.map(file => file !== null).filter(Boolean).length === 0) {
+			console.log('fileRequiredCheck');
+			setFileError('적어도 한개의 파일이 필요합니다.');
+			return true;
+		} 
+		setFileError(null);
+		return false;
+	};
+
+	useEffect(() => {
+		fileRequiredCheck();
+	}, [addedFiles]);
+
 	const handleChangeInspectDate = (e:Dayjs |  null) => {
 		setInspactDate(e);
 	}
 
 	const handleSumbitCRF = (values) => {
+		if(fileRequiredCheck()) {
+			return false;
+		}
 		console.log(values);
 	}		
 
@@ -142,9 +138,9 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 				<Field name="inspectDate">
 					{({
 						field,
-						form : {touched, errors}
+						form
 					}: {field: FieldInputProps<Dayjs | null>, form: FormikProps<CrfSubmitType>}) => {
-						// console.log(errors)
+						console.log(errors)
 						return (
 						<Card sx={{p:"10px 20px", mb:1}}>
 							<Box display="flex" gap={2} alignItems="center">
@@ -203,19 +199,17 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 										
 										<CrfFileDropzone changefiles={
 											(file) => {
-												setFieldValue(`files.files.0`, file);
 												onChangeFile(file, 0)}
 											}
 										/>
 										<CrfFileDropzone changefiles={
 											(file) => {
-												setFieldValue(`files.files.1`, file);
 												onChangeFile(file, 1)}
 											}
 										/>
 										<CrfFileDropzone changefiles={
 											(file) => {
-												setFieldValue(`files.files.2`, file);
+												// setFieldValue(`files.files.2`, file ?  file : null);
 												onChangeFile(file, 2)
 											}
 										}
@@ -223,11 +217,11 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 										
 									</Box>
 									{
-											errors.files && 
-											<Box>	
-												<Typography color="error">{errors.files}</Typography>
-											</Box>
-										}
+										fileError && 
+										<Box mt={1}>	
+											<Typography color="error">{fileError}</Typography>
+										</Box>
+									}
 								</Box>
 							</Card>
 						}

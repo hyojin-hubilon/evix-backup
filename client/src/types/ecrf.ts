@@ -17,7 +17,7 @@ export interface ItemType {
 }
 
 export interface FileItemTypes extends ItemType {
-	files: File[] | [];
+	files: File[] | [] | null[];
 }
 
 export type SelectedItem = {
