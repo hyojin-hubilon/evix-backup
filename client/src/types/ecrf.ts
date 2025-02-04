@@ -20,6 +20,10 @@ export interface FileItemTypes extends ItemType {
 	files: File[] | [] | null[];
 }
 
+export interface ItemWithValue extends ItemType {
+	value: string | string[] | null;
+}
+
 export type SelectedItem = {
 	columnId:string;
 	index: number;
@@ -34,7 +38,7 @@ export type DeletedItem = {
 	index: number;
 }
 export interface CRFFormJson {
-	[x:number] : [{[x:number] : ItemType[]}]
+	[x:number] : [{[x:number] : ItemWithValue[]}]
 }
 export interface CRFPostReqBody {
 	crf_title: string;

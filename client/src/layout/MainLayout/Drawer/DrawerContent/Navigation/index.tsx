@@ -19,7 +19,6 @@ const Navigation = () => {
 				<Box key={index}>
 				{
 					item.children && item.children.map(child => {
-						console.log(child);
 						return (
 							<>
 								<NavItem key={child.id} item={child} level={1} />

@@ -1,5 +1,5 @@
 import ecrfApi from "@/apis/ecrf";
-import { CRFFormJson, ECrfDetail, FileItemTypes, ItemContents } from "@/types/ecrf";
+import { CRFFormJson, ECrfDetail, FileItemTypes, ItemContents, ItemWithValue } from "@/types/ecrf";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { ItemType } from '../../../../types/ecrf';
 import { Box, Button, Card, Input, Stack, Typography, Theme } from '@mui/material';
@@ -13,8 +13,6 @@ import { DatePicker } from "@mui/x-date-pickers";
 type CrfSubmitType = {
 	inspectDate: Dayjs | null;
 	answers: CRFFormJson[];
-	files: FileItemTypes | null;
-	text: string;
 }
 type ECrfPreviewType = {
 	crfNo: number | null;
@@ -26,7 +24,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 	const [addedFiles, setAddedFiles] = useState<(File | null)[]>([null, null, null]);
 	const [fileError, setFileError] = useState<string | null>(null);
 	const [inspactDate, setInspactDate] = useState<Dayjs | null | undefined>(null);
-	const [initialValues, setInitialValues] = useState<CrfSubmitType>({inspectDate: null, answers: [], files: null, text: ''});
+	const [initialValues, setInitialValues] = useState<CrfSubmitType>({inspectDate: null, answers: []});
 	
 	const getCrfDetail = useCallback(async (crfNo:number) => {
 		const response = await ecrfApi.getCRF(crfNo);
@@ -46,26 +44,14 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		//첫번째에 파일인풋이 있는 경우
 		if('itemType' in detail[0] && detail[0].itemType === 'File Input') {
 			editJson = detail.slice(1);
-			
-			const fileItem = detail[0] as unknown as FileItemTypes;
-			fileItem.files = [];
-			setInitialValues({ ...initialValues, files: fileItem});
-			console.log(initialValues);
 		} else {
 			editJson = detail;
-			setInitialValues({ ...initialValues, answers: editJson });
 		}
 
+		setInitialValues({ ...initialValues, answers: editJson });
 		setCrfJson(editJson);
 		
 	}
-
-	const schema = Yup.object().shape({
-		inspectDate: Yup.string().required('필수항목 입니다.'),
-		answers: Yup.array().of(Yup.object().shape({
-			
-		})),
-	});
 
 	useEffect(() => {
 		if(crfNo) getCrfDetail(crfNo);
@@ -95,8 +81,12 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		fileRequiredCheck();
 	}, [addedFiles]);
 
-	const handleChangeInspectDate = (e:Dayjs |  null) => {
-		setInspactDate(e);
+	const inspectDateValidate = (value) => {
+		let error: string | null = null;
+		if (!value) {
+			error = '필수 입력사항입니다.';
+		}
+		return error;
 	}
 
 	const handleSumbitCRF = (values) => {
@@ -122,7 +112,6 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 					actions.setSubmitting(false);
 					handleSumbitCRF(values);
 				}}
-				validationSchema={schema}
 			>
 			{({
 				values,
@@ -135,12 +124,12 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 			}) => (
 			<Form>
 				{/* Date선택 */}
-				<Field name="inspectDate">
+				<Field name="inspectDate" validate={inspectDateValidate}>
 					{({
 						field,
 						form
 					}: {field: FieldInputProps<Dayjs | null>, form: FormikProps<CrfSubmitType>}) => {
-						console.log(errors)
+						console.log(values, errors)
 						return (
 						<Card sx={{p:"10px 20px", mb:1}}>
 							<Box display="flex" gap={2} alignItems="center">
@@ -163,24 +152,6 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 						
 					}
 				</Field>
-				
-				{/* <Field name="text">
-					{({
-						field,
-						form : {touched, errors}
-					}: {field: FieldInputProps<Dayjs | null>, form: FormikProps<CrfSubmitType>}) => {
-						return (
-						<Card sx={{p:"10px 20px", mb:1}}>
-							<Box display="flex" gap={2} alignItems="center">
-								<Typography variant="h5">TEST<span style={{color: 'red'}}>*</span></Typography>
-								<Input name={field.name} value={field.value} onChange={(e) => field.onChange(e)}/>
-								{errors.text && <Typography color="error">{errors.text}</Typography>}
-							</Box>
-						</Card>
-						)}	
-						
-					}
-				</Field> */}
 				{
 					crfDetail && <>
 						
@@ -238,14 +209,14 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 										<Box display="flex" sx={{width:'100%'}} flexDirection="row" flexWrap="wrap" gap={1} p={1}>
 										{
 											Object.keys(crf).map((key) => {
-												const items: ItemType[] = crf[key];
+												const items: ItemWithValue[] = crf[key];
 												return (
 													<Box key={key} display="flex" flexDirection="column" flex="1" gap={1}>
 															{
 																items && items.map((item, index2) => {
 																	return (
 																		<Card key={index2} sx={item.itemType ==='Headline' ? {background: 'transparent', padding: 1, boxShadow: 'none'} : {padding: 1}}>
-																			<InputItem item={item} onChange={changeValue} />	
+																			<InputItem item={item} onChange={changeValue} answerIndex={index} keyIndex={key} itemIndex={index2} />	
 																		</Card>
 																	)
 																})
