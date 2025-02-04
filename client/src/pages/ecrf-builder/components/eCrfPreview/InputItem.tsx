@@ -1,6 +1,7 @@
 import { ItemType, ItemWithValue } from "@/types/ecrf";
 import { Box, Checkbox, FormControlLabel, FormGroup, Input, MenuItem, Radio, RadioGroup, Select, Stack, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import dayjs, { Dayjs } from "dayjs";
 import { Field } from "formik";
 
 type InputItemType = {
@@ -143,9 +144,16 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 							}}>
 								<Field name={`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`}>
 									{({
-										field
-									} : { field: { name: string; onChange: (e) => void } }) => (
-										<DatePicker format="YYYY/MM/DD" onChange={field.onChange} />
+										field,
+										form: { setFieldValue }
+									}: {field: { name: string, value:string }, form : {setFieldValue: (name, value) => void}}) => (
+										<DatePicker
+											name={field.name}
+											value={dayjs(field.value)}
+											format="YYYY/MM/DD" 
+											onChange={(e: Dayjs | null) => {
+											setFieldValue(`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`, e?.format('YYYY/MM/DD'));
+										}} />
 									)}
 								</Field>
 						</Box>
