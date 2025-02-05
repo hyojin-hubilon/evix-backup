@@ -3,7 +3,7 @@ import { Box, Checkbox, FormControlLabel, FormGroup, Input, MenuItem, Radio, Rad
 import { DatePicker } from "@mui/x-date-pickers";
 import { error } from "console";
 import dayjs, { Dayjs } from "dayjs";
-import { Field } from "formik";
+import { Field, FormikProps } from 'formik';
 import { validate } from 'uuid';
 
 type InputItemType = {
@@ -13,13 +13,21 @@ type InputItemType = {
 	itemIndex: number;
 	onChange: (e: ItemWithValue) => void;
 }
+
+interface FormikFieldType {
+	field: { name: string; value:string, onChange: (e: React.ChangeEvent<{ value: unknown }>) => void };
+	form: { errors: any; setFieldValue: (name: string, value: string) => void };
+}
+
+
 const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputItemType) => {
 	//console.log(answerIndex, keyIndex, itemIndex, item);
 
 	
 	const itemValidate = (value) => {
+		//table은 required가 없음으로 처리할까...
 		let error: string | null = null;
-		if (item.content.required && !value) {
+		if (item.itemType !== 'Table' && item.content.required && !value) {
 			error = '필수 입력사항입니다.';
 		}
 		return error;
@@ -44,8 +52,8 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 				<Field name={`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`} validate={itemValidate}>
 					{({
 						field,
-						form: { touched, errors }
-					} : { field: { name: string; onChange: (e: React.ChangeEvent<{ value: unknown }>) => void }, form: {touched, errors} }) => (
+						form: { errors }
+					} : FormikFieldType) => (
 						<>
 						<TextField
 							size="small"
@@ -54,7 +62,8 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 							onChange={(e) => field.onChange(e as React.ChangeEvent<{ value: unknown }>)}
 						/>
 						{
-							errors && 
+							
+							errors && errors.answers && 
 							<Box>
 								<Typography sx={{color: 'red'}}>
 									{errors.answers[answerIndex][keyIndex][itemIndex].value}
@@ -70,16 +79,27 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 				item.itemType === 'Text Area' && 
 				<Field name={`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`} validate={itemValidate}>
 					{({
-						field
-					} : { field: { name: string; onChange: (e: React.ChangeEvent<{ value: unknown }>) => void } }) => (
-						<TextField
-							size="small"
-							placeholder={item.content?.placeholder}
-							multiline
-							rows={3}
-							name={field.name}
-							onChange={(e) => field.onChange(e as React.ChangeEvent<{ value: unknown }>)}
-						/>
+						field,
+						form: { errors }
+					} : FormikFieldType ) => (
+						<>
+							<TextField
+								size="small"
+								placeholder={item.content?.placeholder}
+								multiline
+								rows={3}
+								name={field.name}
+								onChange={(e) => field.onChange(e as React.ChangeEvent<{ value: unknown }>)}
+							/>
+							{
+							errors && errors.answers && 
+							<Box>
+								<Typography sx={{color: 'red'}}>
+									{errors.answers[answerIndex][keyIndex][itemIndex].value}
+								</Typography>
+							</Box>
+							}
+						</>
 					)}
 				</Field>
 			}
@@ -87,25 +107,36 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 				item.itemType === 'Select Box' &&
 				<Field name={`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`} validate={itemValidate}>
 					{({
-						field
-					} : { field: { name: string; onChange: (e: React.ChangeEvent<{ value: unknown }>) => void } }) => (
-					<Select
-						size="small"
-						value="Select"
-						name={field.name}
-						onChange={(e) => field.onChange(e as React.ChangeEvent<{ value: unknown }>)}>
-						<MenuItem value="Select">
-							<em>Select</em>
-						</MenuItem>
-						{
-							item.content?.options?.map((option, index) => {
-								return <MenuItem value={option} key={index}>
-									{option}
+						field,
+						form: { errors }
+					} : FormikFieldType) => (
+						<>
+							<Select
+								size="small"
+								value="Select"
+								name={field.name}
+								onChange={(e) => field.onChange(e as React.ChangeEvent<{ value: unknown }>)}>
+								<MenuItem value="Select">
+									<em>Select</em>
 								</MenuItem>
-							})
-							
-						}
-					</Select>
+								{
+									item.content?.options?.map((option, index) => {
+										return <MenuItem value={option} key={index}>
+											{option}
+										</MenuItem>
+									})
+									
+								}
+							</Select>
+							{
+								errors && errors.answers && 
+								<Box>
+									<Typography sx={{color: 'red'}}>
+										{errors.answers[answerIndex][keyIndex][itemIndex].value}
+									</Typography>
+								</Box>
+							}
+						</>
 					)} 
 				</Field>
 			}
@@ -113,8 +144,10 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 				item.itemType === 'Radio Buttons' &&
 				<Field name={`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`} validate={itemValidate}>
 					{({
-						field
-					} : { field: { name: string; onChange: (e: React.ChangeEvent<{ value: unknown }>) => void } }) => (
+						field,
+						form: { errors }
+					} : FormikFieldType) => (
+						<>
 						<RadioGroup name={field.name} onChange={(e) => field.onChange(e as React.ChangeEvent<{ value: unknown }>)}>
 							{
 								item.content?.options?.map((option, index) => {
@@ -123,6 +156,15 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 								
 							}
 						</RadioGroup> 
+						{
+							errors && errors.answers && 
+							<Box>
+								<Typography sx={{color: 'red'}}>
+									{errors.answers[answerIndex][keyIndex][itemIndex].value}
+								</Typography>
+							</Box>
+						}
+						</>
 					)}
 				</Field>
 			}
@@ -130,21 +172,31 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 				item.itemType === 'Checkbox' &&
 				<Field name={`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`} validate={itemValidate}>
 					{({
-						field
-					} : { field: { name: string; onChange: (e) => void } }) => (
-				
-					<FormGroup>
-						{
-							item.content?.options?.map((option, index) => {
-							return <FormControlLabel key={index}
-									control={
-										<Checkbox name={option} onChange={field.onChange}/>
-									}
-									label={option}
-								/>
-							})	
-						}
-					</FormGroup> 
+						field,
+						form: { errors }
+					} : FormikFieldType) => (
+						<>
+							<FormGroup>
+								{
+									item.content?.options?.map((option, index) => {
+									return <FormControlLabel key={index}
+											control={
+												<Checkbox name={option} onChange={field.onChange}/>
+											}
+											label={option}
+										/>
+									})	
+								}
+							</FormGroup>
+							{
+								errors && errors.answers && 
+								<Box>
+									<Typography sx={{color: 'red'}}>
+										{errors.answers[answerIndex][keyIndex][itemIndex].value}
+									</Typography>
+								</Box>
+							}
+					</>
 					)}
 				</Field>
 			}
@@ -169,8 +221,9 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 							<Field name={`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`} validate={itemValidate}>
 								{({
 									field,
-									form: { setFieldValue }
-								}: {field: { name: string, value:string }, form : {setFieldValue: (name, value) => void}}) => (
+									form: { setFieldValue, errors }
+								}: {field: { name: string, value:string }, form : {setFieldValue: (name, value) => void, errors:any}}) => (
+									<>
 									<DatePicker
 										name={field.name}
 										value={dayjs(field.value)}
@@ -178,6 +231,16 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 										onChange={(e: Dayjs | null) => {
 										setFieldValue(`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`, e?.format('YYYY/MM/DD'));
 									}} />
+
+									{
+										errors && errors.answers && 
+										<Box>
+											<Typography sx={{color: 'red'}}>
+												{errors.answers[answerIndex][keyIndex][itemIndex].value}
+											</Typography>
+										</Box>
+									}
+									</>
 								)}
 							</Field>
 					</Box>
