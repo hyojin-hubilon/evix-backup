@@ -30,10 +30,10 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		const response = await ecrfApi.getCRF(crfNo);
 		if(response.code === 200) {
 			setCrfDetail(response.content);
-			handleSetData(response.content.crf_form_json as CRFFormJson[]);
 			if('itemType' in response.content.crf_form_json[0] && response.content.crf_form_json[0].itemType === 'File Input') {
 				setCrfFile(response.content.crf_form_json[0]);
 			}
+			handleSetData(response.content.crf_form_json as CRFFormJson[]);
 		}
 	}, []);
 
@@ -69,7 +69,6 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 
 	const fileRequiredCheck = () => {
 		if(crfFile && crfFile.content.required && addedFiles.map(file => file !== null).filter(Boolean).length === 0) {
-			console.log('fileRequiredCheck');
 			setFileError('적어도 한개의 파일이 필요합니다.');
 			return true;
 		} 
@@ -90,14 +89,14 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 	}
 
 	const handleSumbitCRF = (values) => {
-		if(fileRequiredCheck()) {
-			return false;
-		}
+		console.log(crfFile);
+		fileRequiredCheck();
+		if(fileRequiredCheck()) return;	
 		console.log(values);
 	}		
 
 	useEffect(() => {
-		console.log(initialValues);
+	//	console.log(initialValues);
 	}, [initialValues])
 
 	return (
@@ -108,7 +107,6 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 				validateOnChange={true}
 				validateOnBlur={true}
 				onSubmit={(values, actions) => {
-					console.log(values);
 					actions.setSubmitting(false);
 					handleSumbitCRF(values);
 				}}
@@ -129,7 +127,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 						field,
 						form
 					}: {field: FieldInputProps<Dayjs | null>, form: FormikProps<CrfSubmitType>}) => {
-						console.log(values, errors)
+						// console.log(values, errors)
 						return (
 						<Card sx={{p:"10px 20px", mb:1}}>
 							<Box display="flex" gap={2} alignItems="center">
@@ -167,7 +165,6 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 										{/* 업로드 할 파일을 첨부하세요. (5mb이하의 jpg, jpeg, png, pdf 파일) - 최대 3개 첨부가능 */}
 									</Typography>
 									<Box display="flex" gap={1} flexWrap="wrap">
-										
 										<CrfFileDropzone changefiles={
 											(file) => {
 												onChangeFile(file, 0)}
@@ -185,7 +182,6 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 											}
 										}
 										/>
-										
 									</Box>
 									{
 										fileError && 
@@ -235,7 +231,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 						</Stack>
 					</>
 				}
-				<Button type="submit" variant="contained" color="primary">Submit</Button>
+				<Button type="submit" variant="contained" color="primary" onClick={handleSumbitCRF}>Submit</Button>
 				</Form>
 			)}
 			</Formik>
