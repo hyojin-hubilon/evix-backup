@@ -1,5 +1,5 @@
 import ecrfApi from "@/apis/ecrf";
-import { CRFFormJson, ECrfDetail, FileItemTypes, ItemContents, ItemWithValue } from "@/types/ecrf";
+import { CRFFormJson, ECrfDetail, FileItemTypes, ItemContents } from "@/types/ecrf";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { ItemType } from '../../../../types/ecrf';
 import { Box, Button, Card, Input, Stack, Typography, Theme } from '@mui/material';
@@ -127,7 +127,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 						field,
 						form
 					}: {field: FieldInputProps<Dayjs | null>, form: FormikProps<CrfSubmitType>}) => {
-						// console.log(values, errors)
+						console.log(values, errors)
 						return (
 						<Card sx={{p:"10px 20px", mb:1}}>
 							<Box display="flex" gap={2} alignItems="center">
@@ -205,7 +205,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 										<Box display="flex" sx={{width:'100%'}} flexDirection="row" flexWrap="wrap" gap={1} p={1}>
 										{
 											Object.keys(crf).map((key) => {
-												const items: ItemWithValue[] = crf[key];
+												const items: ItemType[] = crf[key];
 												return (
 													<Box key={key} display="flex" flexDirection="column" flex="1" gap={1}>
 															{

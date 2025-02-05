@@ -14,14 +14,11 @@ export interface ItemType {
 	id:string; //draggableid, key로 사용, json 저장시에는 삭제
 	itemType: 'Headline' | 'Paragraph' | 'Radio Buttons' | 'Checkbox' | 'Select Box' | 'Text Input' | 'Text Area' | 'Datepicker' | 'Table' | 'File Input';
 	content: ItemContents;
+	value: string | string[] | any[] | null;
 }
 
 export interface FileItemTypes extends ItemType {
 	files: File[] | [] | null[];
-}
-
-export interface ItemWithValue extends ItemType {
-	value: string | string[] | null;
 }
 
 export type SelectedItem = {
@@ -38,7 +35,7 @@ export type DeletedItem = {
 	index: number;
 }
 export interface CRFFormJson {
-	[x:number] : [{[x:number] : ItemWithValue[]}]
+	[x:number] : [{[x:number] : ItemType[]}]
 }
 export interface CRFPostReqBody {
 	crf_title: string;

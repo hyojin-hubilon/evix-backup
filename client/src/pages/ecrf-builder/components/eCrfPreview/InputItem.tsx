@@ -1,27 +1,25 @@
-import { ItemType, ItemWithValue } from "@/types/ecrf";
+import { ItemType } from "@/types/ecrf";
 import { Box, Checkbox, FormControlLabel, FormGroup, Input, MenuItem, Radio, RadioGroup, Select, Stack, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { error } from "console";
 import dayjs, { Dayjs } from "dayjs";
-import { Field, FormikProps } from 'formik';
-import { validate } from 'uuid';
+import { Field } from 'formik';
 
 type InputItemType = {
-	item: ItemWithValue;
+	item: ItemType;
 	answerIndex: number;
 	keyIndex: string | number;
 	itemIndex: number;
-	onChange: (e: ItemWithValue) => void;
+	onChange: (e: ItemType) => void;
 }
 
 interface FormikFieldType {
-	field: { name: string; value:string, onChange: (e: React.ChangeEvent<{ value: unknown }>) => void };
+	field: { name: string; value:string, onChange: (e : string) => void };
 	form: { errors: any; setFieldValue: (name: string, value: string) => void };
 }
 
 
 const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputItemType) => {
-	//console.log(answerIndex, keyIndex, itemIndex, item);
+	console.log(`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`);
 
 	
 	const itemValidate = (value) => {
@@ -49,7 +47,7 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 
 			{
 				item.itemType === 'Text Input' && 
-				<Field name={`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`} validate={itemValidate}>
+				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
 					{({
 						field,
 						form: { errors }
@@ -59,7 +57,7 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 							size="small"
 							placeholder={item.content?.placeholder}
 							name={field.name}
-							onChange={(e) => field.onChange(e as React.ChangeEvent<{ value: unknown }>)}
+							onChange={(e) => field.onChange(e.target.value)}
 						/>
 						{
 							
@@ -77,7 +75,7 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 			}
 			{
 				item.itemType === 'Text Area' && 
-				<Field name={`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`} validate={itemValidate}>
+				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
 					{({
 						field,
 						form: { errors }
@@ -89,7 +87,7 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 								multiline
 								rows={3}
 								name={field.name}
-								onChange={(e) => field.onChange(e as React.ChangeEvent<{ value: unknown }>)}
+								onChange={(e) => field.onChange(e.target.value)}
 							/>
 							{
 							errors && errors.answers && 
@@ -105,7 +103,7 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 			}
 			{
 				item.itemType === 'Select Box' &&
-				<Field name={`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`} validate={itemValidate}>
+				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
 					{({
 						field,
 						form: { errors }
@@ -113,9 +111,9 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 						<>
 							<Select
 								size="small"
-								value="Select"
+								defaultValue="Select"
 								name={field.name}
-								onChange={(e) => field.onChange(e as React.ChangeEvent<{ value: unknown }>)}>
+								onChange={(e) => field.onChange(e.target.value)}>
 								<MenuItem value="Select">
 									<em>Select</em>
 								</MenuItem>
@@ -142,13 +140,13 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 			}
 			{
 				item.itemType === 'Radio Buttons' &&
-				<Field name={`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`} validate={itemValidate}>
+				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
 					{({
 						field,
 						form: { errors }
 					} : FormikFieldType) => (
 						<>
-						<RadioGroup name={field.name} onChange={(e) => field.onChange(e as React.ChangeEvent<{ value: unknown }>)}>
+						<RadioGroup name={field.name} onChange={(e) => field.onChange(e.target.value)}>
 							{
 								item.content?.options?.map((option, index) => {
 									return <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
@@ -170,7 +168,7 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 			}
 			{
 				item.itemType === 'Checkbox' &&
-				<Field name={`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`} validate={itemValidate}>
+				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
 					{({
 						field,
 						form: { errors }
@@ -181,7 +179,7 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 									item.content?.options?.map((option, index) => {
 									return <FormControlLabel key={index}
 											control={
-												<Checkbox name={option} onChange={field.onChange}/>
+												<Checkbox name={option} onChange={(e) => field.onChange(e.target.value)} />
 											}
 											label={option}
 										/>
@@ -218,7 +216,7 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 								}
 							}
 						}}>
-							<Field name={`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`} validate={itemValidate}>
+							<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
 								{({
 									field,
 									form: { setFieldValue, errors }
@@ -229,7 +227,7 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 										value={dayjs(field.value)}
 										format="YYYY/MM/DD" 
 										onChange={(e: Dayjs | null) => {
-										setFieldValue(`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`, e?.format('YYYY/MM/DD'));
+										setFieldValue(`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`, e?.format('YYYY/MM/DD'));
 									}} />
 
 									{

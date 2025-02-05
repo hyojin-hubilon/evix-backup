@@ -29,14 +29,16 @@ const ITEMS: ItemType[] = [
         itemType: 'Headline',
 		content: {
 			title: 'Headline'
-		}
+		},
+		value: null
     },
 	{
         id: uuidv4(),
         itemType: 'Paragraph',
 		content: {
 			title: 'Paragraph'
-		}
+		},
+		value: null
     },
     {
         id: uuidv4(),
@@ -44,7 +46,8 @@ const ITEMS: ItemType[] = [
 		content: {
 			title: "Radio Title",
 			options: ['option 1', 'option 2']
-		}
+		},
+		value: null
     },
     {
         id: uuidv4(),
@@ -52,7 +55,8 @@ const ITEMS: ItemType[] = [
 		content: {
 			title: 'Checkbox Title',
 			options: ['option 1', 'option 2']
-		}
+		},
+		value: []
     },
 	{
         id: uuidv4(),
@@ -60,7 +64,8 @@ const ITEMS: ItemType[] = [
 		content: {
 			title: 'Select Box Title',
 			options: ['option 1', 'option 2']
-		}
+		},
+		value: null
     },
 	{
         id: uuidv4(),
@@ -68,7 +73,8 @@ const ITEMS: ItemType[] = [
 		content: {
 			title: 'Text Input Title',
 			placeholder: 'Placeholder'
-		}
+		},
+		value: null
     },
 	{
         id: uuidv4(),
@@ -76,21 +82,24 @@ const ITEMS: ItemType[] = [
 		content: {
 			title: 'Text Area Title',
 			placeholder: 'Placeholder'
-		}
+		},
+		value: null
     },
 	{
         id: uuidv4(),
         itemType: 'Datepicker',
 		content: {
 			title: 'Datepicker'
-		}
+		},
+		value: null
     },
     {
         id: uuidv4(),
         itemType: 'Table',
 		content : {
 			title: 'Table Title'
-		}
+		},
+		value: null
     },
     
 ];
@@ -116,7 +125,8 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 		itemType: 'File Input',
 		content: {
 			title: 'File Input Title'
-		}
+		},
+		value: null
 	}
 
 	const [ fileAddShow, setFileAddShow ] = useState(false);
