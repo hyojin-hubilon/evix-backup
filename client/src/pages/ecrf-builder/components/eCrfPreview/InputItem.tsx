@@ -3,6 +3,7 @@ import { Box, Checkbox, FormControlLabel, FormGroup, Input, MenuItem, Radio, Rad
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { Field } from 'formik';
+import { error } from 'console';
 
 type InputItemType = {
 	item: ItemType;
@@ -13,13 +14,14 @@ type InputItemType = {
 }
 
 interface FormikFieldType {
-	field: { name: string; value:string, onChange: (e : string) => void };
+	field: { name: string; value:string, error: string, onChange: (e : string) => void };
 	form: { errors: any; setFieldValue: (name: string, value: string) => void };
+	meta : { error: string | null, touched: boolean };
 }
 
 
 const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputItemType) => {
-	console.log(`answers[${answerIndex}].${keyIndex}[${itemIndex}].value`);
+	// console.log(`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`);
 
 	
 	const itemValidate = (value) => {
@@ -50,7 +52,8 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
 					{({
 						field,
-						form: { errors }
+						form: { errors },
+						meta
 					} : FormikFieldType) => (
 						<>
 						<TextField
@@ -61,10 +64,10 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 						/>
 						{
 							
-							errors && errors.answers && 
+							meta.error &&
 							<Box>
 								<Typography sx={{color: 'red'}}>
-									{errors.answers[answerIndex][keyIndex][itemIndex].value}
+									{meta.error}
 								</Typography>
 							</Box>
 							}
@@ -78,7 +81,8 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
 					{({
 						field,
-						form: { errors }
+						form: { errors },
+						meta
 					} : FormikFieldType ) => (
 						<>
 							<TextField
@@ -90,10 +94,11 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 								onChange={(e) => field.onChange(e.target.value)}
 							/>
 							{
-							errors && errors.answers && 
+							
+							meta.error &&
 							<Box>
 								<Typography sx={{color: 'red'}}>
-									{errors.answers[answerIndex][keyIndex][itemIndex].value}
+									{meta.error}
 								</Typography>
 							</Box>
 							}
@@ -106,7 +111,8 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
 					{({
 						field,
-						form: { errors }
+						form: { errors },
+						meta
 					} : FormikFieldType) => (
 						<>
 							<Select
@@ -127,12 +133,13 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 								}
 							</Select>
 							{
-								errors && errors.answers && 
-								<Box>
-									<Typography sx={{color: 'red'}}>
-										{errors.answers[answerIndex][keyIndex][itemIndex].value}
-									</Typography>
-								</Box>
+							
+							meta.error &&
+							<Box>
+								<Typography sx={{color: 'red'}}>
+									{meta.error}
+								</Typography>
+							</Box>
 							}
 						</>
 					)} 
@@ -143,7 +150,8 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
 					{({
 						field,
-						form: { errors }
+						form: { errors },
+						meta
 					} : FormikFieldType) => (
 						<>
 						<RadioGroup name={field.name} onChange={(e) => field.onChange(e.target.value)}>
@@ -155,10 +163,10 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 							}
 						</RadioGroup> 
 						{
-							errors && errors.answers && 
+							meta.error &&
 							<Box>
 								<Typography sx={{color: 'red'}}>
-									{errors.answers[answerIndex][keyIndex][itemIndex].value}
+									{meta.error}
 								</Typography>
 							</Box>
 						}
@@ -171,7 +179,8 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
 					{({
 						field,
-						form: { errors }
+						form: { errors },
+						meta
 					} : FormikFieldType) => (
 						<>
 							<FormGroup>
@@ -187,13 +196,13 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 								}
 							</FormGroup>
 							{
-								errors && errors.answers && 
-								<Box>
-									<Typography sx={{color: 'red'}}>
-										{errors.answers[answerIndex][keyIndex][itemIndex].value}
-									</Typography>
-								</Box>
-							}
+							meta.error &&
+							<Box>
+								<Typography sx={{color: 'red'}}>
+									{meta.error}
+								</Typography>
+							</Box>
+						}
 					</>
 					)}
 				</Field>
@@ -219,8 +228,9 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 							<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
 								{({
 									field,
-									form: { setFieldValue, errors }
-								}: {field: { name: string, value:string }, form : {setFieldValue: (name, value) => void, errors:any}}) => (
+									form: { setFieldValue, errors },
+									meta
+								}: {field: { name: string, value:string }, form : {setFieldValue: (name, value) => void, errors:any}, meta:{error}}) => (
 									<>
 									<DatePicker
 										name={field.name}
@@ -231,10 +241,10 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 									}} />
 
 									{
-										errors && errors.answers && 
+										meta.error &&
 										<Box>
 											<Typography sx={{color: 'red'}}>
-												{errors.answers[answerIndex][keyIndex][itemIndex].value}
+												{meta.error}
 											</Typography>
 										</Box>
 									}

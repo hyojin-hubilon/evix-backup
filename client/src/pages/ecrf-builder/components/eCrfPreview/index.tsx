@@ -50,7 +50,6 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 
 		setInitialValues({ ...initialValues, answers: editJson });
 		setCrfJson(editJson);
-		
 	}
 
 	useEffect(() => {
