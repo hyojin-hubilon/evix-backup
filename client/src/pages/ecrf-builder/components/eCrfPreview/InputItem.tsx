@@ -2,7 +2,7 @@ import { ItemType } from "@/types/ecrf";
 import { Box, Checkbox, FormControlLabel, FormGroup, Input, MenuItem, Radio, RadioGroup, Select, Stack, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 
 export interface ChangedItmeType {
@@ -41,10 +41,16 @@ const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCh
 		onChange({changedItem, answerIndex, answerKey, itemIndex});
 	}
 
-	const handleChangeCheckBoxValue = (value) => {
-		console.log(value);
-		// const values = [value];
-		// onChange({...item, value: values});
+	const handleChangeCheckBoxValue = (e: ChangeEvent<HTMLInputElement>) => {
+		if(e.target.checked) {
+			const values = item.value ? [...item.value, e.target.name] : [e.target.name];
+			const changedItem = {...item, value: values};
+			onChange({changedItem, answerIndex, answerKey, itemIndex});
+		} else {
+			const values = Array.isArray(item.value) ? item.value.filter((v) => v !== e.target.name) : [];
+			const changedItem = {...item, value: values};
+			onChange({changedItem, answerIndex, answerKey, itemIndex});
+		}
 	}
 	
 	return (
@@ -122,7 +128,7 @@ const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCh
 						item.content?.options?.map((option, index) => {
 						return <FormControlLabel key={index}
 								control={
-									<Checkbox name={option} onChange={(e) => handleChangeCheckBoxValue(e.target.value)} />
+									<Checkbox name={option} onChange={(e) => handleChangeCheckBoxValue(e)} checked={item.value?.includes(option)}/>
 								}
 								label={option}
 							/>
