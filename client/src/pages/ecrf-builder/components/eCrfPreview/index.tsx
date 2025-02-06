@@ -3,10 +3,10 @@ import { CRFFormJson, ECrfDetail, FileItemTypes, ItemContents } from "@/types/ec
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { ItemType } from '../../../../types/ecrf';
 import { Box, Button, Card, Input, Stack, Typography, Theme } from '@mui/material';
-import InputItem from "./InputItem";
+import InputItem, { ChangedItmeType } from "./InputItem";
 import CrfFileDropzone from "./CrfFileDropZone";
 import { Dayjs } from "dayjs";
-import { Formik, Form, FieldArray, Field, FieldAttributes, FieldInputProps, FormikProps } from 'formik';
+import { Formik, Form, FieldArray, Field, FieldAttributes, FieldInputProps, FormikProps, setIn } from 'formik';
 import * as Yup from 'yup';
 import { DatePicker } from "@mui/x-date-pickers";
 
@@ -24,7 +24,8 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 	const [addedFiles, setAddedFiles] = useState<(File | null)[]>([null, null, null]);
 	const [fileError, setFileError] = useState<string | null>(null);
 	const [inspactDate, setInspactDate] = useState<Dayjs | null | undefined>(null);
-	const [initialValues, setInitialValues] = useState<CrfSubmitType>({inspectDate: null, answers: []});
+	const [inspectDateError, setInspectDateError] = useState<string | null>(null);
+	const [submitCheck, setSubmitCheck] = useState<boolean>(false);
 	
 	const getCrfDetail = useCallback(async (crfNo:number) => {
 		const response = await ecrfApi.getCRF(crfNo);
@@ -48,7 +49,6 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 			editJson = detail;
 		}
 
-		setInitialValues({ ...initialValues, answers: editJson });
 		setCrfJson(editJson);
 	}
 
@@ -56,8 +56,15 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		if(crfNo) getCrfDetail(crfNo);
 	}, [crfNo, getCrfDetail]);
 
-	const changeValue = (item:ItemType) => {
+	const changeValue = ({changedItem, answerIndex, answerKey, itemIndex}:ChangedItmeType) => {
+		console.log(changedItem);
+		console.log(crfJson);
 
+		setCrfJson((prev) => {
+			const newJson = prev ? [...prev] : [];
+			newJson[answerIndex][answerKey][itemIndex] = changedItem;
+			return newJson;
+		});
 	}
 
 	const onChangeFile = (file: File | null, indexNum:number) => {
@@ -79,161 +86,123 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		fileRequiredCheck();
 	}, [addedFiles]);
 
-	const inspectDateValidate = (value) => {
-		let error: string | null = null;
-		if (!value) {
-			error = '필수 입력사항입니다.';
+	const inspectDateValidate = () => {
+		if (!inspactDate) {
+			const error = '필수 입력사항입니다.';
+			setInspectDateError(error);
+			return true;
 		}
-		return error;
+		setInspectDateError(null);
+		return false;
 	}
 
-	const handleSumbitCRF = (values) => {
-		console.log(crfFile);
+	const handleSumbitCRF = () => {
 		fileRequiredCheck();
-		if(fileRequiredCheck()) return;	
-		console.log(values);
+		inspectDateValidate();		
 	}		
-
-	useEffect(() => {
-	//	console.log(initialValues);
-	}, [initialValues])
 
 	return (
 		<div>
-			<Formik
-				initialValues={initialValues}
-				enableReinitialize={true}
-				validateOnChange={true}
-				validateOnBlur={true}
-				onSubmit={(values, actions) => {
-					actions.setSubmitting(false);
-					handleSumbitCRF(values);
-				}}
-			>
-			{({
-				values,
-				touched,
-				errors,
-				handleChange,
-				handleBlur,
-				handleSubmit,
-				setFieldValue
-			}) => (
-			<Form>
-				{/* Date선택 */}
-				<Field name="inspectDate" validate={inspectDateValidate}>
-					{({
-						field,
-						form
-					}: {field: FieldInputProps<Dayjs | null>, form: FormikProps<CrfSubmitType>}) => {
-						console.log(values, errors)
-						return (
-						<Card sx={{p:"10px 20px", mb:1}}>
-							<Box display="flex" gap={2} alignItems="center">
-								<Typography variant="h5">Inspect(Visit) Date <span style={{color: 'red'}}>*</span></Typography>
-								<DatePicker 
-									value={inspactDate}
-									format="YYYY/MM/DD"
-									onChange={(e) => {
-										console.log(e?.format('YYYY/MM/DD'));
-										setFieldValue('inspectDate', e?.format('YYYY/MM/DD'));
-										setInspactDate(e);
-									}}
-									name={field.name}
-									
-								/>
-								{errors.inspectDate && <Typography color="error">{errors.inspectDate}</Typography>}
+			
+			<Card sx={{p:"10px 20px", mb:1}}>
+				<Box display="flex" gap={2} alignItems="center">
+					<Typography variant="h5">Inspect(Visit) Date <span style={{color: 'red'}}>*</span></Typography>
+					<DatePicker 
+						value={inspactDate}
+						format="YYYY/MM/DD"
+						onChange={(e) => {
+							console.log(e?.format('YYYY/MM/DD'));
+							//setFieldValue('inspectDate', e?.format('YYYY/MM/DD'));
+							setInspactDate(e);
+						}}
+						name="inspectDate"
+						
+					/>
+					{inspectDateError && <Typography color="error">{inspectDateError}</Typography>}
+				</Box>
+			</Card>
+			{
+				crfDetail && <>
+					
+					<Stack spacing={1}>
+					{
+						crfFile	&& <Card sx={{marginBottom: '1rem'}}>
+							<Box p={2}>
+								<Typography variant="h5">
+									File Upload { crfFile.content.required && <span style={{color: 'red'}}>*</span> } 
+								</Typography>
+								<Typography mb={1}>
+									Attach the file to upload. (jpg, jpeg, png, pdf files under 5mb) - Up to 3 files can be attached.<br />
+									{/* 업로드 할 파일을 첨부하세요. (5mb이하의 jpg, jpeg, png, pdf 파일) - 최대 3개 첨부가능 */}
+								</Typography>
+								<Box display="flex" gap={1} flexWrap="wrap">
+									<CrfFileDropzone changefiles={
+										(file) => {
+											onChangeFile(file, 0)}
+										}
+									/>
+									<CrfFileDropzone changefiles={
+										(file) => {
+											onChangeFile(file, 1)}
+										}
+									/>
+									<CrfFileDropzone changefiles={
+										(file) => {
+											// setFieldValue(`files.files.2`, file ?  file : null);
+											onChangeFile(file, 2)
+										}
+									}
+									/>
+								</Box>
+								{
+									fileError && 
+									<Box mt={1}>	
+										<Typography color="error">{fileError}</Typography>
+									</Box>
+								}
 							</Box>
 						</Card>
-						)}	
-						
 					}
-				</Field>
-				{
-					crfDetail && <>
-						
-						<Stack spacing={1}>
+					<Box mb={1} p="1rem 1rem 0 1rem">
+						<Typography variant="h3">{crfDetail.crf_title}</Typography>
 						{
-							crfFile	&& <Card sx={{marginBottom: '1rem'}}>
-								<Box p={2}>
-									<Typography variant="h5">
-										File Upload { crfFile.content.required && <span style={{color: 'red'}}>*</span> } 
-									</Typography>
-									<Typography mb={1}>
-										Attach the file to upload. (jpg, jpeg, png, pdf files under 5mb) - Up to 3 files can be attached.<br />
-										{/* 업로드 할 파일을 첨부하세요. (5mb이하의 jpg, jpeg, png, pdf 파일) - 최대 3개 첨부가능 */}
-									</Typography>
-									<Box display="flex" gap={1} flexWrap="wrap">
-										<CrfFileDropzone changefiles={
-											(file) => {
-												onChangeFile(file, 0)}
-											}
-										/>
-										<CrfFileDropzone changefiles={
-											(file) => {
-												onChangeFile(file, 1)}
-											}
-										/>
-										<CrfFileDropzone changefiles={
-											(file) => {
-												// setFieldValue(`files.files.2`, file ?  file : null);
-												onChangeFile(file, 2)
-											}
-										}
-										/>
-									</Box>
+							crfDetail.crf_description && <Typography variant="h6">{crfDetail.crf_description}</Typography>
+						}
+					</Box>
+					{
+						crfJson && crfJson.length > 0 && crfJson.map((crf:CRFFormJson, index) => {
+							return (
+								<Box key={index} sx={{background: '#eeeeee', borderRadius: '4px'}}>
+									<Box display="flex" sx={{width:'100%'}} flexDirection="row" flexWrap="wrap" gap={1} p={1}>
 									{
-										fileError && 
-										<Box mt={1}>	
-											<Typography color="error">{fileError}</Typography>
-										</Box>
+										Object.keys(crf).map((key) => {
+											const items: ItemType[] = crf[key];
+											return (
+												<Box key={key} display="flex" flexDirection="column" flex="1" gap={1}>
+														{
+															items && items.map((item, index2) => {
+																return (
+																	<Card key={index2} sx={item.itemType ==='Headline' ? {background: 'transparent', padding: 1, boxShadow: 'none'} : {padding: 1}}>
+																		<InputItem item={item} onChange={changeValue} submitCheck={submitCheck} answerIndex={index} answerKey={key} itemIndex={index2} />	
+																	</Card>
+																)
+															})
+														}
+												</Box>
+											)
+											
+										})
 									}
-								</Box>
-							</Card>
-						}
-						<Box mb={1} p="1rem 1rem 0 1rem">
-							<Typography variant="h3">{crfDetail.crf_title}</Typography>
-							{
-								crfDetail.crf_description && <Typography variant="h6">{crfDetail.crf_description}</Typography>
-							}
-						</Box>
-						{
-							crfJson && crfJson.length > 0 && crfJson.map((crf:CRFFormJson, index) => {
-								return (
-									<Box key={index} sx={{background: '#eeeeee', borderRadius: '4px'}}>
-										<Box display="flex" sx={{width:'100%'}} flexDirection="row" flexWrap="wrap" gap={1} p={1}>
-										{
-											Object.keys(crf).map((key) => {
-												const items: ItemType[] = crf[key];
-												return (
-													<Box key={key} display="flex" flexDirection="column" flex="1" gap={1}>
-															{
-																items && items.map((item, index2) => {
-																	return (
-																		<Card key={index2} sx={item.itemType ==='Headline' ? {background: 'transparent', padding: 1, boxShadow: 'none'} : {padding: 1}}>
-																			<InputItem item={item} onChange={changeValue} answerIndex={index} keyIndex={key} itemIndex={index2} />	
-																		</Card>
-																	)
-																})
-															}
-													</Box>
-												)
-												
-											})
-										}
-										</Box>
-										
 									</Box>
-								)
-							})
-						}
-						</Stack>
-					</>
-				}
-				<Button type="submit" variant="contained" color="primary" onClick={handleSumbitCRF}>Submit</Button>
-				</Form>
-			)}
-			</Formik>
+									
+								</Box>
+							)
+						})
+					}
+					</Stack>
+				</>
+			}
+			<Button variant="contained" color="primary" onClick={handleSumbitCRF}>Submit</Button>
 		</div>
 	);
 }

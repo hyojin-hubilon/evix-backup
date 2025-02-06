@@ -2,35 +2,49 @@ import { ItemType } from "@/types/ecrf";
 import { Box, Checkbox, FormControlLabel, FormGroup, Input, MenuItem, Radio, RadioGroup, Select, Stack, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
-import { Field } from 'formik';
-import { error } from 'console';
+import { useState } from "react";
+
+
+export interface ChangedItmeType {
+	changedItem: ItemType;
+	answerIndex: number;
+	answerKey: string;
+	itemIndex: number;
+}
 
 type InputItemType = {
 	item: ItemType;
 	answerIndex: number;
-	keyIndex: string | number;
+	answerKey: string;
 	itemIndex: number;
-	onChange: (e: ItemType) => void;
-}
-
-interface FormikFieldType {
-	field: { name: string; value:string, error: string, onChange: (e : string) => void };
-	form: { errors: any; setFieldValue: (name: string, value: string) => void };
-	meta : { error: string | null, touched: boolean };
+	onChange: (e: ChangedItmeType) => void;
+	submitCheck: boolean;
 }
 
 
-const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputItemType) => {
-	// console.log(`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`);
-
+const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCheck }: InputItemType) => {
+	const [error, setError] = useState<string | null>(null);
 	
-	const itemValidate = (value) => {
+	
+	const itemValidate = () => {
 		//table은 required가 없음으로 처리할까...
 		let error: string | null = null;
-		if (item.itemType !== 'Table' && item.content.required && !value) {
+		if (item.itemType !== 'Table' && item.content.required && !item.value) {
 			error = '필수 입력사항입니다.';
 		}
 		return error;
+	}
+
+	const handleChangeValue = (value) => {
+		const changedItem = {...item, value: value};
+		console.log(changedItem);
+		onChange({changedItem, answerIndex, answerKey, itemIndex});
+	}
+
+	const handleChangeCheckBoxValue = (value) => {
+		console.log(value);
+		// const values = [value];
+		// onChange({...item, value: values});
 	}
 	
 	return (
@@ -49,163 +63,72 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 
 			{
 				item.itemType === 'Text Input' && 
-				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
-					{({
-						field,
-						form: { errors },
-						meta
-					} : FormikFieldType) => (
 						<>
 						<TextField
 							size="small"
 							placeholder={item.content?.placeholder}
-							name={field.name}
-							onChange={(e) => field.onChange(e.target.value)}
+							onChange={(e) => {handleChangeValue(e.target.value)}}
 						/>
-						{
-							
-							meta.error &&
-							<Box>
-								<Typography sx={{color: 'red'}}>
-									{meta.error}
-								</Typography>
-							</Box>
-							}
 						</>
-						
-					)}
-				</Field>
+				
 			}
 			{
 				item.itemType === 'Text Area' && 
-				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
-					{({
-						field,
-						form: { errors },
-						meta
-					} : FormikFieldType ) => (
-						<>
-							<TextField
-								size="small"
-								placeholder={item.content?.placeholder}
-								multiline
-								rows={3}
-								name={field.name}
-								onChange={(e) => field.onChange(e.target.value)}
-							/>
-							{
-							
-							meta.error &&
-							<Box>
-								<Typography sx={{color: 'red'}}>
-									{meta.error}
-								</Typography>
-							</Box>
-							}
-						</>
-					)}
-				</Field>
+				<TextField
+					size="small"
+					placeholder={item.content?.placeholder}
+					multiline
+					rows={3}
+					onBlur={(e) => { 
+						handleChangeValue(e.target.value);
+					}}
+				/>
 			}
 			{
-				item.itemType === 'Select Box' &&
-				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
-					{({
-						field,
-						form: { errors },
-						meta
-					} : FormikFieldType) => (
-						<>
-							<Select
-								size="small"
-								defaultValue="Select"
-								name={field.name}
-								onChange={(e) => field.onChange(e.target.value)}>
-								<MenuItem value="Select">
-									<em>Select</em>
-								</MenuItem>
-								{
-									item.content?.options?.map((option, index) => {
-										return <MenuItem value={option} key={index}>
-											{option}
-										</MenuItem>
-									})
-									
-								}
-							</Select>
-							{
-							
-							meta.error &&
-							<Box>
-								<Typography sx={{color: 'red'}}>
-									{meta.error}
-								</Typography>
-							</Box>
-							}
-						</>
-					)} 
-				</Field>
+				item.itemType === 'Select Box' &&		
+				<Select
+					size="small"
+					defaultValue="Select"
+					value={item.value === null ? 'Select' : item.value}
+					onChange={(e) => handleChangeValue(e.target.value)}>
+					<MenuItem value="Select">
+						<em>Select</em>
+					</MenuItem>
+					{
+						item.content?.options?.map((option, index) => {
+							return <MenuItem value={option} key={index}>
+								{option}
+							</MenuItem>
+						})
+						
+					}
+				</Select>		
 			}
 			{
-				item.itemType === 'Radio Buttons' &&
-				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
-					{({
-						field,
-						form: { errors },
-						meta
-					} : FormikFieldType) => (
-						<>
-						<RadioGroup name={field.name} onChange={(e) => field.onChange(e.target.value)}>
-							{
-								item.content?.options?.map((option, index) => {
-									return <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
-								})
-								
-							}
-						</RadioGroup> 
-						{
-							meta.error &&
-							<Box>
-								<Typography sx={{color: 'red'}}>
-									{meta.error}
-								</Typography>
-							</Box>
-						}
-						</>
-					)}
-				</Field>
+				item.itemType === 'Radio Buttons' &&		
+				<RadioGroup onChange={(e) => handleChangeValue(e.target.value)} value={item.value}>
+					{
+						item.content?.options?.map((option, index) => {
+							return <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
+						})
+						
+					}
+				</RadioGroup> 
 			}
 			{
 				item.itemType === 'Checkbox' &&
-				<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
-					{({
-						field,
-						form: { errors },
-						meta
-					} : FormikFieldType) => (
-						<>
-							<FormGroup>
-								{
-									item.content?.options?.map((option, index) => {
-									return <FormControlLabel key={index}
-											control={
-												<Checkbox name={option} onChange={(e) => field.onChange(e.target.value)} />
-											}
-											label={option}
-										/>
-									})	
+				<FormGroup>
+					{
+						item.content?.options?.map((option, index) => {
+						return <FormControlLabel key={index}
+								control={
+									<Checkbox name={option} onChange={(e) => handleChangeCheckBoxValue(e.target.value)} />
 								}
-							</FormGroup>
-							{
-							meta.error &&
-							<Box>
-								<Typography sx={{color: 'red'}}>
-									{meta.error}
-								</Typography>
-							</Box>
-						}
-					</>
-					)}
-				</Field>
+								label={option}
+							/>
+						})	
+					}
+				</FormGroup>
 			}
 		
 			{
@@ -225,32 +148,12 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 								}
 							}
 						}}>
-							<Field name={`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`} validate={itemValidate}>
-								{({
-									field,
-									form: { setFieldValue, errors },
-									meta
-								}: {field: { name: string, value:string }, form : {setFieldValue: (name, value) => void, errors:any}, meta:{error}}) => (
-									<>
-									<DatePicker
-										name={field.name}
-										value={dayjs(field.value)}
-										format="YYYY/MM/DD" 
-										onChange={(e: Dayjs | null) => {
-										setFieldValue(`answers[${answerIndex}][${keyIndex}][${itemIndex}].value`, e?.format('YYYY/MM/DD'));
-									}} />
-
-									{
-										meta.error &&
-										<Box>
-											<Typography sx={{color: 'red'}}>
-												{meta.error}
-											</Typography>
-										</Box>
-									}
-									</>
-								)}
-							</Field>
+						<DatePicker
+							value={item.value ? dayjs(item.value as string) : null}
+							format="YYYY/MM/DD" 
+							onChange={(e: Dayjs | null) => {
+								handleChangeValue(e?.format('YYYY/MM/DD'));
+						}} />
 					</Box>
 			}
 			{
@@ -289,6 +192,15 @@ const InputItem = ({ item, answerIndex, keyIndex, itemIndex, onChange }: InputIt
 						</tbody>
 
 					</table>
+				</Box>
+			}
+
+			{				
+				error &&
+				<Box>
+					<Typography sx={{color: 'red'}}>
+						{error}
+					</Typography>
 				</Box>
 			}
 		</Stack>
