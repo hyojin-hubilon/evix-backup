@@ -58,7 +58,7 @@ const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCh
 	}
 
 	const handleChangeValue = (value) => {
-		const changedItem = {...item, value: value};
+		const changedItem = {...itemValue, value: value};
 		setItemValue(changedItem);
 	}
 

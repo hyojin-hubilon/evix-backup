@@ -1,19 +1,13 @@
 import ecrfApi from "@/apis/ecrf";
-import { CRFFormJson, ECrfDetail, FileItemTypes, ItemContents } from "@/types/ecrf";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { CRFFormJson, ECrfDetail } from "@/types/ecrf";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ItemType } from '../../../../types/ecrf';
-import { Box, Button, Card, Input, Stack, Typography, Theme } from '@mui/material';
+import { Box, Button, Card, Stack, Typography } from '@mui/material';
 import InputItem, { ChangedItmeType, ItemErrorType } from "./InputItem";
 import CrfFileDropzone from "./CrfFileDropZone";
 import { Dayjs } from "dayjs";
-import { Formik, Form, FieldArray, Field, FieldAttributes, FieldInputProps, FormikProps, setIn } from 'formik';
-import * as Yup from 'yup';
 import { DatePicker } from "@mui/x-date-pickers";
 
-type CrfSubmitType = {
-	inspectDate: Dayjs | null;
-	answers: CRFFormJson[];
-}
 type ECrfPreviewType = {
 	crfNo: number | null;
 }
@@ -27,7 +21,13 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 	const [inspectDateError, setInspectDateError] = useState<string | null>(null);
 	const [submitCheck, setSubmitCheck] = useState<boolean>(false);
 	const [fieldError, setFieldError] = useState<null[][][]>([]);
-	const [notValidate, setNotValidate] = useState(false);
+	
+
+	const handleValidateStart = async () => {
+		setSubmitCheck(true);
+		await new Promise(resolve => setTimeout(resolve, 100));
+	}
+	
 	
 	const getCrfDetail = useCallback(async (crfNo:number) => {
 		const response = await ecrfApi.getCRF(crfNo);
@@ -98,54 +98,67 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		setAddedFiles(newFiles);
 	}
 
-	const fileRequiredCheck = () => {
-		if(crfFile && crfFile.content.required && addedFiles.map(file => file !== null).filter(Boolean).length === 0) {
-			setFileError('적어도 한개의 파일이 필요합니다.');
-			return true;
-		} 
-		setFileError(null);
-		return false;
-	};
-
-	useEffect(() => {
-		fileRequiredCheck();
-	}, [addedFiles]);
 
 	const inspectDateValidate = () => {
-		if (!inspactDate) {
-			const error = '필수 입력사항입니다.';
-			setInspectDateError(error);
-			return true;
-		}
-		setInspectDateError(null);
-		return false;
+		console.log('dateCheck');
+		return new Promise<void>((resolve, reject) => {
+			if (!inspactDate) {
+				const error = '필수 입력사항입니다.';
+				setInspectDateError(error);
+				reject();
+			} else {
+				setInspectDateError(null);
+				resolve();
+			}		
+		});
 	}
 
+	const fileRequiredCheck = () => {
+		console.log('fileCheck');
+		return new Promise<void>((resolve, reject) => {
+			if(crfFile && crfFile.content.required && addedFiles.map(file => file !== null).filter(Boolean).length === 0) {
+				setFileError('적어도 한개의 파일이 필요합니다.');
+				reject();
+			} else {
+				setFileError(null);
+				resolve();
+			}
+		});
+	};
+
 	const checkFieldError = () => {
-		console.log(crfJson)
-		let notNullError = [];
+		console.log(crfJson, 'fieldCheck')
+		return new Promise<void>((resolve, reject) => {
+			let notNullError = [];
 		
-		fieldError.forEach(subArray => {
-			subArray.forEach(items => {
-				const notNull = items.filter(el => el !== null);
-				notNullError = notNull.concat(notNullError);
-			})	
+			fieldError.forEach(subArray => {
+				subArray.forEach(items => {
+					const notNull = items.filter(el => el !== null);
+					notNullError = notNull.concat(notNullError);
+				})	
+			})
+
+			if(notNullError.length > 0) {
+				reject();
+			} else {
+				resolve();
+			}
 		})
-		
-		if(notNullError.length > 0) {
-			setNotValidate(true);
-			return;
-		}
 	}
 
 	const handleSumbitCRF = () => {
-		fileRequiredCheck();
-		inspectDateValidate();
-		setSubmitCheck(true);
-		setTimeout(() => {
-			setSubmitCheck(false);
-			checkFieldError();
-		}, 100)
+		console.log('submit');
+		handleValidateStart()
+			.then(() => inspectDateValidate())
+			.then(() => fileRequiredCheck())
+			.then(() => checkFieldError())
+			.then(() => {
+				console.log('save')
+				setSubmitCheck(false);
+			})
+			.catch((e) => {
+				setSubmitCheck(false);
+			})
 	}		
 
 	return (

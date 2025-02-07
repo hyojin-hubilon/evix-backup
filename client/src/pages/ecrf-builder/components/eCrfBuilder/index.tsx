@@ -116,7 +116,6 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 	const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
 	const [selectedTableData, setSelectedTableData] = useState<{[x:number] : string}[][] | null>(null);
 	const [openTableEditor, setOpenTableEditor] = useState(false);
-
 	const confirm = useConfirmation();
 	const navigate = useNavigate();
 
@@ -234,6 +233,7 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 			Object.keys(idsItem).map((id, j) => {				
 				if(idsItem[id].length > 0) {
 					const items = idsItem[id];
+
 					const newIds = {[j] : items} //uuid를 number로 변경
 					Object.assign(newCrf, newIds);
 				}				
@@ -260,7 +260,13 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 
 			const parentId = getParentIndexByChildId(ids, columnId);
 			
-			const newItem = selectedItem
+			const newItem: ItemType = selectedItem;
+			if (newItem && 'columnId' in newItem) {
+				delete newItem.columnId;
+			}
+			if (newItem && 'index' in newItem) {
+				delete newItem.index;
+			}
 			newItem.content.table = tableState;
 			const result = Array.from(ids);
 			result[parentId][columnId][itemIndex] = newItem;
@@ -278,7 +284,15 @@ const ECrfBuilder = ({saveCRF, eCrfJson, existFileSet}: ECrfBuilderType) => {
 		const parentId = getParentIndexByChildId(ids, columnId);
 		
 		const result = Array.from(ids);
-		result[parentId][columnId][itemIndex] = item;
+		
+		const newItem: ItemType = item;
+		if (newItem && 'columnId' in newItem) {
+			delete newItem.columnId;
+		}
+		if (newItem && 'index' in newItem) {
+			delete newItem.index;
+		}
+		result[parentId][columnId][itemIndex] = newItem;
 		
 		console.log(result);
 		setIds(result);

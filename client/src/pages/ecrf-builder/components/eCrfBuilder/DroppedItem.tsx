@@ -57,7 +57,7 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 							droppedItem.content?.description && <Typography>{ droppedItem.content?.description }</Typography>
 						}
 						{
-							(droppedItem.content?.placeholder && droppedItem.itemType === 'Text Input') && 
+							(droppedItem.itemType === 'Text Input') && 
 								<TextField
 									size="small"
 									placeholder={droppedItem.content?.placeholder}
@@ -65,7 +65,7 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 								/>
 						}
 						{
-							(droppedItem.content?.placeholder && droppedItem.itemType === 'Text Area') && 
+							(droppedItem.itemType === 'Text Area') && 
 								<TextField
 									size="small"
 									placeholder={droppedItem.content?.placeholder}
@@ -75,12 +75,12 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 								/>
 						}
 						{
-							(droppedItem.content?.options && droppedItem.itemType === 'Select Box') &&
+							(droppedItem.itemType === 'Select Box') &&
 								<Select size="small" value="Select">
 									<MenuItem value="Select" disabled>
 										<em>Select</em>
 									</MenuItem>
-									{
+									{	droppedItem.content?.options &&
 										droppedItem.content?.options.map((option, index) => {
 											return <MenuItem value={option} key={index}>
 												{option}
@@ -91,9 +91,10 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 								</Select> 
 						}
 						{
-							(droppedItem.content?.options && droppedItem.itemType === 'Radio Buttons') &&
+							(droppedItem.itemType === 'Radio Buttons') &&
 								<RadioGroup>
 									{
+										droppedItem.content?.options &&
 										droppedItem.content?.options.map((option, index) => {
 											return <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
 										})
@@ -102,9 +103,10 @@ const DroppedItem = ({droppedItem, index, columnId, deleteThisItem, editThisItem
 								</RadioGroup> 
 						}
 						{
-							(droppedItem.content?.options && droppedItem.itemType === 'Checkbox') &&
+							(droppedItem.itemType === 'Checkbox') &&
 								<FormGroup>
 									{
+										droppedItem.content?.options &&
 										droppedItem.content?.options.map((option, index) => {
 											return <FormControlLabel key={index}
 													control={

@@ -120,7 +120,7 @@ const SelectedItemEdit = ({selectedItem, saveChanges, openTableEditor} : Selecte
 						</Stack>
 					}
 					{
-						(selectedItem.itemType !== 'Headline' && selectedItem.itemType !== 'Paragraph') &&
+						(selectedItem.itemType !== 'Headline' && selectedItem.itemType !== 'Paragraph' && selectedItem.itemType !== 'Table') &&
 						<FormControlLabel
 								control={
 								<Checkbox checked={required} onChange={handleChangeRequired} name="required" />
