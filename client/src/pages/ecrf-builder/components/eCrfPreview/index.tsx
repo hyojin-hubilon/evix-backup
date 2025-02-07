@@ -3,7 +3,7 @@ import { CRFFormJson, ECrfDetail, FileItemTypes, ItemContents } from "@/types/ec
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { ItemType } from '../../../../types/ecrf';
 import { Box, Button, Card, Input, Stack, Typography, Theme } from '@mui/material';
-import InputItem, { ChangedItmeType } from "./InputItem";
+import InputItem, { ChangedItmeType, ItemErrorType } from "./InputItem";
 import CrfFileDropzone from "./CrfFileDropZone";
 import { Dayjs } from "dayjs";
 import { Formik, Form, FieldArray, Field, FieldAttributes, FieldInputProps, FormikProps, setIn } from 'formik';
@@ -26,6 +26,8 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 	const [inspactDate, setInspactDate] = useState<Dayjs | null | undefined>(null);
 	const [inspectDateError, setInspectDateError] = useState<string | null>(null);
 	const [submitCheck, setSubmitCheck] = useState<boolean>(false);
+	const [fieldError, setFieldError] = useState<null[][][]>([]);
+	const [notValidate, setNotValidate] = useState(false);
 	
 	const getCrfDetail = useCallback(async (crfNo:number) => {
 		const response = await ecrfApi.getCRF(crfNo);
@@ -49,6 +51,24 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 			editJson = detail;
 		}
 
+		const crfList: null[][][] = [];
+		editJson.forEach(crf => {
+			const crfItem: null[][] = [];
+			Object.keys(crf).map(key => {
+				const items: ItemType[] = crf[key];
+				const itemList: null[] = [];
+				if (items) {
+					items.map(item => itemList.push(null));
+				}
+				crfItem.push(itemList)
+			})
+
+			crfList.push(crfItem);
+		});
+
+		console.log(editJson);
+
+		setFieldError(crfList);
 		setCrfJson(editJson);
 	}
 
@@ -57,12 +77,17 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 	}, [crfNo, getCrfDetail]);
 
 	const changeValue = ({changedItem, answerIndex, answerKey, itemIndex}:ChangedItmeType) => {
-		console.log(changedItem);
-		console.log(crfJson);
-
 		setCrfJson((prev) => {
 			const newJson = prev ? [...prev] : [];
 			newJson[answerIndex][answerKey][itemIndex] = changedItem;
+			return newJson;
+		});
+	}
+
+	const errorCheck = ({error, answerIndex, answerKey, itemIndex}:ItemErrorType) => {
+		setFieldError((prev) => {
+			const newJson = prev ? [...prev] : [];
+			newJson[answerIndex][answerKey][itemIndex] = error;
 			return newJson;
 		});
 	}
@@ -96,9 +121,31 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		return false;
 	}
 
+	const checkFieldError = () => {
+		console.log(crfJson)
+		let notNullError = [];
+		
+		fieldError.forEach(subArray => {
+			subArray.forEach(items => {
+				const notNull = items.filter(el => el !== null);
+				notNullError = notNull.concat(notNullError);
+			})	
+		})
+		
+		if(notNullError.length > 0) {
+			setNotValidate(true);
+			return;
+		}
+	}
+
 	const handleSumbitCRF = () => {
 		fileRequiredCheck();
-		inspectDateValidate();		
+		inspectDateValidate();
+		setSubmitCheck(true);
+		setTimeout(() => {
+			setSubmitCheck(false);
+			checkFieldError();
+		}, 100)
 	}		
 
 	return (
@@ -148,7 +195,6 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 									/>
 									<CrfFileDropzone changefiles={
 										(file) => {
-											// setFieldValue(`files.files.2`, file ?  file : null);
 											onChangeFile(file, 2)
 										}
 									}
@@ -179,15 +225,15 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 											const items: ItemType[] = crf[key];
 											return (
 												<Box key={key} display="flex" flexDirection="column" flex="1" gap={1}>
-														{
-															items && items.map((item, index2) => {
-																return (
-																	<Card key={index2} sx={item.itemType ==='Headline' ? {background: 'transparent', padding: 1, boxShadow: 'none'} : {padding: 1}}>
-																		<InputItem item={item} onChange={changeValue} submitCheck={submitCheck} answerIndex={index} answerKey={key} itemIndex={index2} />	
-																	</Card>
-																)
-															})
-														}
+													{
+														items && items.map((item, index2) => {
+															return (
+																<Card key={index2} sx={item.itemType ==='Headline' ? {background: 'transparent', padding: 1, boxShadow: 'none'} : {padding: 1}}>
+																	<InputItem item={item} onChange={changeValue} submitCheck={submitCheck} answerIndex={index} answerKey={key} itemIndex={index2} onError={errorCheck} />	
+																</Card>
+															)
+														})
+													}
 												</Box>
 											)
 											

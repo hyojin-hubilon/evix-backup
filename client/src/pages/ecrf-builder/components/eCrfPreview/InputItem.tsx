@@ -2,11 +2,19 @@ import { ItemType } from "@/types/ecrf";
 import { Box, Checkbox, FormControlLabel, FormGroup, Input, MenuItem, Radio, RadioGroup, Select, Stack, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
-import { ChangeEvent, useState } from "react";
+import { use } from "i18next";
+import { ChangeEvent, useEffect, useState } from "react";
 
 
 export interface ChangedItmeType {
 	changedItem: ItemType;
+	answerIndex: number;
+	answerKey: string;
+	itemIndex: number;
+}
+
+export interface ItemErrorType {
+	error: string | null;
 	answerIndex: number;
 	answerKey: string;
 	itemIndex: number;
@@ -19,39 +27,69 @@ type InputItemType = {
 	itemIndex: number;
 	onChange: (e: ChangedItmeType) => void;
 	submitCheck: boolean;
+	onError: (e: ItemErrorType) => void;
 }
 
 
-const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCheck }: InputItemType) => {
+const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCheck, onError }: InputItemType) => {
+	const [itemValue, setItemValue] = useState<ItemType>(item);
 	const [error, setError] = useState<string | null>(null);
 	
-	
-	const itemValidate = () => {
-		//table은 required가 없음으로 처리할까...
-		let error: string | null = null;
-		if (item.itemType !== 'Table' && item.content.required && !item.value) {
-			error = '필수 입력사항입니다.';
+	const itemValidateAndSet = () => {
+		const changedItem = {...item, value: itemValue.value};
+		onChange({changedItem, answerIndex, answerKey, itemIndex});
+
+		if(itemValue.itemType === 'Table') {
+			const changedItem = {...item, content: {...item.content, table: itemValue.content.table}};
+			onChange({changedItem, answerIndex, answerKey, itemIndex});
 		}
-		return error;
+
+		let error: string | null = null;
+		if (itemValue.itemType !== 'Table' && itemValue.content.required && !itemValue.value) {
+			error = '필수 입력사항입니다.';
+		} else if(itemValue.itemType === 'Checkbox' && itemValue.content.required && itemValue.value?.length == 0) {
+			error = '필수 입력사항입니다.';
+		} else {
+			error = null;
+		}
+
+		setError(error);
+		onError({error, answerIndex, answerKey, itemIndex});
 	}
 
 	const handleChangeValue = (value) => {
 		const changedItem = {...item, value: value};
-		console.log(changedItem);
-		onChange({changedItem, answerIndex, answerKey, itemIndex});
+		setItemValue(changedItem);
 	}
 
 	const handleChangeCheckBoxValue = (e: ChangeEvent<HTMLInputElement>) => {
 		if(e.target.checked) {
-			const values = item.value ? [...item.value, e.target.name] : [e.target.name];
-			const changedItem = {...item, value: values};
-			onChange({changedItem, answerIndex, answerKey, itemIndex});
+			const values = itemValue.value ? [...itemValue.value, e.target.name] : [e.target.name];
+			const changedItem = {...itemValue, value: values};
+			setItemValue(changedItem);
 		} else {
-			const values = Array.isArray(item.value) ? item.value.filter((v) => v !== e.target.name) : [];
-			const changedItem = {...item, value: values};
-			onChange({changedItem, answerIndex, answerKey, itemIndex});
+			const values = Array.isArray(itemValue.value) ? itemValue.value.filter((v) => v !== e.target.name) : [];
+			const changedItem = {...itemValue, value: values};
+			setItemValue(changedItem);
 		}
 	}
+
+	const handleChangeColumn = (e:string, rowIndex:number, colIndex:number) => {
+		setItemValue((prev) => {
+			const newTable = prev;
+			if(newTable.content.table) {
+				newTable.content.table[rowIndex][colIndex].INPUT = e;
+			}
+			return newTable;
+		})
+		
+	}
+
+	useEffect(() => {
+		if(submitCheck) {
+			itemValidateAndSet();
+		}
+	}, [submitCheck]);
 	
 	return (
 	<Box>
@@ -59,33 +97,35 @@ const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCh
 		<Stack spacing={1} maxWidth="inherit">
 			
 				<Box display="flex" mb={0.5}>
-					<Typography variant={item.itemType ==='Headline' ? 'h3' : 'h5'}>{item.content?.title}</Typography>
-					{ item.content?.required &&  <Typography sx={{fontSize: '0.7rem', color:'red'}}>*</Typography>}
+					<Typography variant={itemValue.itemType ==='Headline' ? 'h3' : 'h5'}>{itemValue.content?.title}</Typography>
+					{ itemValue.content?.required &&  <Typography sx={{fontSize: '0.7rem', color:'red'}}>*</Typography>}
 				</Box>
 				{
-					item.content?.description && <Typography variant="body1">{ item.content?.description }</Typography>
+					itemValue.content?.description && <Typography variant="body1">{ itemValue.content?.description }</Typography>
 				}
 			
 
 			{
-				item.itemType === 'Text Input' && 
+				itemValue.itemType === 'Text Input' && 
 						<>
 						<TextField
 							size="small"
-							placeholder={item.content?.placeholder}
+							placeholder={itemValue.content?.placeholder}
+							value={itemValue.value ? itemValue.value : ''}
 							onChange={(e) => {handleChangeValue(e.target.value)}}
 						/>
 						</>
 				
 			}
 			{
-				item.itemType === 'Text Area' && 
+				itemValue.itemType === 'Text Area' && 
 				<TextField
 					size="small"
-					placeholder={item.content?.placeholder}
+					placeholder={itemValue.content?.placeholder}
 					multiline
 					rows={3}
-					onBlur={(e) => { 
+					value={itemValue.value ? itemValue.value : ''}
+					onChange={(e) => { 
 						handleChangeValue(e.target.value);
 					}}
 				/>
@@ -95,13 +135,13 @@ const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCh
 				<Select
 					size="small"
 					defaultValue="Select"
-					value={item.value === null ? 'Select' : item.value}
+					value={itemValue.value === null ? 'Select' : itemValue.value}
 					onChange={(e) => handleChangeValue(e.target.value)}>
 					<MenuItem value="Select">
 						<em>Select</em>
 					</MenuItem>
 					{
-						item.content?.options?.map((option, index) => {
+						itemValue.content?.options?.map((option, index) => {
 							return <MenuItem value={option} key={index}>
 								{option}
 							</MenuItem>
@@ -111,10 +151,10 @@ const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCh
 				</Select>		
 			}
 			{
-				item.itemType === 'Radio Buttons' &&		
-				<RadioGroup onChange={(e) => handleChangeValue(e.target.value)} value={item.value}>
+				itemValue.itemType === 'Radio Buttons' &&		
+				<RadioGroup onChange={(e) => handleChangeValue(e.target.value)} value={itemValue.value}>
 					{
-						item.content?.options?.map((option, index) => {
+						itemValue.content?.options?.map((option, index) => {
 							return <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
 						})
 						
@@ -122,13 +162,13 @@ const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCh
 				</RadioGroup> 
 			}
 			{
-				item.itemType === 'Checkbox' &&
+				itemValue.itemType === 'Checkbox' &&
 				<FormGroup>
 					{
-						item.content?.options?.map((option, index) => {
+						itemValue.content?.options?.map((option, index) => {
 						return <FormControlLabel key={index}
 								control={
-									<Checkbox name={option} onChange={(e) => handleChangeCheckBoxValue(e)} checked={item.value?.includes(option)}/>
+									<Checkbox name={option} onChange={(e) => handleChangeCheckBoxValue(e)} checked={itemValue.value?.includes(option)}/>
 								}
 								label={option}
 							/>
@@ -138,7 +178,7 @@ const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCh
 			}
 		
 			{
-				item.itemType === 'Datepicker' &&
+				itemValue.itemType === 'Datepicker' &&
 					<Box alignItems="center" display="flex" gap={1}
 						sx={{
 							".MuiInputBase-input" : {
@@ -155,7 +195,7 @@ const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCh
 							}
 						}}>
 						<DatePicker
-							value={item.value ? dayjs(item.value as string) : null}
+							value={itemValue.value ? dayjs(itemValue.value as string) : null}
 							format="YYYY/MM/DD" 
 							onChange={(e: Dayjs | null) => {
 								handleChangeValue(e?.format('YYYY/MM/DD'));
@@ -164,13 +204,13 @@ const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCh
 			}
 			{
 				// 테이블 미리보기
-				item.itemType === 'Table' && item.content.table &&
+				itemValue.itemType === 'Table' && itemValue.content.table &&
 				<Box sx={{overflowX: 'auto', maxWidth: '100%'}}>
 					<table className="viewTable">
 						<thead>
 							<tr>
 							{
-								item.content.table[0].map((column, i) => {
+								itemValue.content.table[0].map((column, i) => {
 									return <th key={i}><div className="th-content">{column['COLUMN']}</div></th>
 								})
 							}
@@ -178,14 +218,14 @@ const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCh
 						</thead>
 						<tbody>
 						{
-							item.content.table.slice(1).map(
+							itemValue.content.table.slice(1).map(
 								(row, i) => {
 									return <tr key={i}>
 										{
 											row.map((column, k) => {
 												return <td key={k}>
 													<div className="td-content">
-														{ column['TEXT'] ? column['TEXT'] : <Input size="small" /> }
+														{ column['TEXT'] ? column['TEXT'] : <Input size="small" onChange={(e) => handleChangeColumn(e.target.value, i + 1, k)}/> }
 													</div>
 												</td>
 											})
