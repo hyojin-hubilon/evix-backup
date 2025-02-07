@@ -1,16 +1,16 @@
 import {
 	ResCommonError,
-	api
+	api,
+	file_api
 } from '@/apis/axios-common';
-
 
 const BASE_API_URL = '/researcher/case-report-form-input';
 
 const eCrfInputApi = {
 	//POST CRF(증례기록서) Data 입력등록(파일첨부 포함)
-	postECrfInput: async (requestDto: any, crf_file_attachments: Array<any>) => {
+	postECrfInput: async (data: FormData) => {
 		try {
-			const responseData = await api<object>(BASE_API_URL, 'post', requestDto);
+			const responseData = await file_api<object>(BASE_API_URL, 'post', data);
 			return responseData;
 		} catch (error) {
 			const e = error as ResCommonError;

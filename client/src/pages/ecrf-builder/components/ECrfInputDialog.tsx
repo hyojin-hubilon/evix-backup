@@ -87,7 +87,7 @@ const ECrfInputDialog = ({isOpen, handleClose, selectedCrf, studyDetail, partici
 							
 							{
 								selectedCrfForView &&
-								<ECrfPreview crfNo={selectedCrfForView.crf_no}/>
+								<ECrfPreview crfNo={selectedCrfForView.crf_no} stdNo={studyDetail.std_no} pairNo={selectedCrf?.pair_no} participantNo={participant.std_crf_participant_no} />
 							}
 						</Box>
 					</Grid>

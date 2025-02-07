@@ -5,13 +5,19 @@ import { ItemType } from '../../../../types/ecrf';
 import { Box, Button, Card, Stack, Typography } from '@mui/material';
 import InputItem, { ChangedItmeType, ItemErrorType } from "./InputItem";
 import CrfFileDropzone from "./CrfFileDropZone";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers";
+import eCrfInputApi from '@/apis/eCrfInput';
+import { ECrfPostReqBody } from "@/types/eCrfInput";
 
 type ECrfPreviewType = {
 	crfNo: number | null;
+	pairNo?: number;
+	stdNo?: number;
+	participantNo?: number;
+
 }
-const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
+const ECrfPreview = ({crfNo, pairNo, stdNo, participantNo} : ECrfPreviewType) => {
 	const [crfDetail, setCrfDetail] = useState<ECrfDetail | null>(null);
 	const [crfFile, setCrfFile] = useState<ItemType | null>(null)
 	const [crfJson, setCrfJson] = useState<CRFFormJson[] | null>(null);
@@ -27,7 +33,6 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		setSubmitCheck(true);
 		await new Promise(resolve => setTimeout(resolve, 100));
 	}
-	
 	
 	const getCrfDetail = useCallback(async (crfNo:number) => {
 		const response = await ecrfApi.getCRF(crfNo);
@@ -146,6 +151,38 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 		})
 	}
 
+	const handleCollectData = async () => {
+
+		const crfInputValues: ECrfPostReqBody = {
+			pair_no: pairNo,
+			std_no: stdNo,
+			crf_no: crfNo,
+			std_crf_participant_no: participantNo,
+			inspect_date: dayjs(inspactDate).format('YYYY-MM-DD'),
+			input_crf_form_json: crfJson
+		}
+
+		console.log(crfInputValues);
+		
+		const formData = new FormData();
+		
+		formData.append(
+			'requestDto',
+			new Blob([JSON.stringify(crfInputValues)], { type: 'application/json' })
+		);
+
+		if (addedFiles) {
+			const files = addedFiles.filter(el => el !== null);
+			files.forEach(file => {
+				formData.append('crf_file_attachments', files[0], files[0].name)
+			})
+		}
+
+		const resp = await eCrfInputApi.postECrfInput(formData);
+		console.log(resp);
+
+	}
+
 	const handleSumbitCRF = () => {
 		console.log('submit');
 		handleValidateStart()
@@ -154,6 +191,7 @@ const ECrfPreview = ({crfNo} : ECrfPreviewType) => {
 			.then(() => checkFieldError())
 			.then(() => {
 				console.log('save')
+				handleCollectData();
 				setSubmitCheck(false);
 			})
 			.catch((e) => {

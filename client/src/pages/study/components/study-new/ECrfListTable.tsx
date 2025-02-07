@@ -7,13 +7,11 @@ import {
     TableCell,
     TableBody,
     useTheme,
-    IconButton,
 } from '@mui/material';
 import dayjs from 'dayjs';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import PreviewIcon from '@mui/icons-material/Preview';
+import { ChangeEvent, useEffect, useRef } from 'react';
 import { t } from 'i18next';
-import { MyCRFList, SelectedCrfList } from '@/types/ecrf';
+import { MyCRFList } from '@/types/ecrf';
 
 export type CrfAdd = {
     type: 'add' | 'delete';

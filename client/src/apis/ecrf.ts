@@ -2,7 +2,7 @@ import {
     ResCommonError,
     api
 } from '@/apis/axios-common';
-import { CRFPostReqBody, CRFPostResponse, CRFPutReqBody, ECrfDetail, MyCRFList, SelectedCrfList, StudyCrfListRespone, StudyCrfPairDeleteBody, StudyCrfPairPostBody } from '@/types/ecrf';
+import { CRFPostReqBody, CRFPostResponse, CRFPutReqBody, ECrfDetail, MyCRFList, StudyCrfListRespone, StudyCrfPairDeleteBody, StudyCrfPairPostBody } from '@/types/ecrf';
 
 const BASE_API_URL = '/researcher/case-report-form';
 const BASE_API_URL_2 = '/researcher/study-case-report-form-pair';
@@ -53,7 +53,7 @@ const ecrfApi = {
 	 */
 	getCRFList : async() => {
 		try {
-			const responeData = await api<MyCRFList[] | SelectedCrfList[]>(
+			const responeData = await api<MyCRFList[]>(
 				`${BASE_API_URL}/full-my-list`,
 				'get'
 			)
@@ -68,7 +68,7 @@ const ecrfApi = {
 	 */
 	getRegistrableCRFList : async() => {
 		try {
-			const responeData = await api<MyCRFList[] | SelectedCrfList[]>(
+			const responeData = await api<MyCRFList[]>(
 				`${BASE_API_URL}/my-list-registrable`,
 				'get'
 			)

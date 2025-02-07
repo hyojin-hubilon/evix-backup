@@ -23,7 +23,7 @@ import { t } from 'i18next';
 
 import { Link, useNavigate } from 'react-router-dom';
 import ecrfApi from '@/apis/ecrf';
-import { MyCRFList, SelectedCrfList, StudyCrfListRespone } from '@/types/ecrf';
+import { MyCRFList, StudyCrfListRespone } from '@/types/ecrf';
 import CrfDraggableList from './CrfDraggableList';
 import ECrfListTable, { CrfAdd } from './ECrfListTable';
 import { StudyCrfSet, StudyCrfSetForEdit } from '@/types/study';
@@ -88,7 +88,7 @@ const ECrfConnectDialog = ({
         }
     };
 
-    const handleDeleteClick = (crf: SelectedCrfList) => {
+    const handleDeleteClick = (crf: MyCRFList) => {
         if (mode === 'edit') {
             confirm({
 				description : t('study.are_you_sure_to_delete_pair'),
@@ -104,7 +104,7 @@ const ECrfConnectDialog = ({
         }
     };
 
-    const handleDeleteConfirm = async (crfToDelete:SelectedCrfList) => {
+    const handleDeleteConfirm = async (crfToDelete:MyCRFList) => {
             try {
                 await ecrfApi.deleteCrfpair({
                     std_no: crfToDelete.std_no,
