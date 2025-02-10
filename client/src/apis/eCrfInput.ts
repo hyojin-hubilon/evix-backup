@@ -3,6 +3,7 @@ import {
 	api,
 	file_api
 } from '@/apis/axios-common';
+import { InputCrfList } from '@/types/eCrfInput';
 
 const BASE_API_URL = '/researcher/case-report-form-input';
 
@@ -30,7 +31,7 @@ const eCrfInputApi = {
 	//CRF(증례기록서) Data 입력 삭제
 	deleteECrfInput: async (crf_input_no: number) => {
 		try {
-			const responseData = await api<object>(BASE_API_URL, 'delete', crf_input_no);
+			const responseData = await api<object>(BASE_API_URL, 'delete', {crf_input_no: crf_input_no});
 			return responseData;
 		} catch (error) {
 			const e = error as ResCommonError;
@@ -84,7 +85,7 @@ const eCrfInputApi = {
 	 */
 	getECrfInputList: async (pairNo:number, stdNo: number, crfNo: number, stdCrfParticipantNo:number) => {
 		try {
-			const responseData = await api<Array<any>>(`${BASE_API_URL}/list-participant-crf/${pairNo}/${stdNo}/${crfNo}/${stdCrfParticipantNo}`, 'get');
+			const responseData = await api<InputCrfList[]>(`${BASE_API_URL}/list-participant-crf/${pairNo}/${stdNo}/${crfNo}/${stdCrfParticipantNo}`, 'get');
 			return responseData;
 		} catch (error) {
 			const e = error as ResCommonError;
