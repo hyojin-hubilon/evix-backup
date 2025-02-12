@@ -10,12 +10,13 @@ import { StudyCrfListRespone } from "@/types/ecrf";
 import eCrfInputApi from "@/apis/eCrfInput";
 import { StudyDetail } from "@/types/study";
 import ECrfInputDialog from "@/pages/ecrf-builder/components/ECrfInputDialog";
-import { InputCrfList } from "@/types/eCrfInput";
+import { InputCrfDetail, InputCrfList } from "@/types/eCrfInput";
 import dayjs from 'dayjs';
 const { RangePicker } = DatePicker;
 import { paginator } from '@/utils/helper';
 import { Title } from '../../../mdpp/styles';
 import { useConfirmation } from "@/context/ConfirmDialogContext";
+import ECrfEditDialog from "@/pages/ecrf-builder/components/ECrfEditDialog";
 
 
 type ParticipantType = {
@@ -31,11 +32,16 @@ const Participant = ({participant, backToList, studyDetail}: ParticipantType) =>
 	const [ activeTab, setActiveTab ] = useState<number | null>(null);
 	const [ selectedCrf, setSelectedCrf ] =  useState<StudyCrfListRespone | null>(null);
 	const [ inputList, setInputList] = useState<InputCrfList[]>([]);
-	const [ openInput, setOpenInput ] = useState<boolean>(false);
+	const [ searched, setSearched ] = useState<InputCrfList[]>([]);
+	
 	const [ pageCount, setPageCount ] = useState(0);
 	const [ page, setPage] = useState(1);
-	const [ searched, setSearched ] = useState<InputCrfList[]>([]);
+	
 	const itemPerPage = 10;
+
+	const [ openInput, setOpenInput ] = useState<boolean>(false);
+	const [ openEdit, setOpenEdit ] = useState<boolean>(false);
+	const [ selectedCrfInput, setSelectedCrfInput ] = useState<InputCrfDetail | null>(null)
 
 	const confirm = useConfirmation();
 
@@ -105,6 +111,10 @@ const Participant = ({participant, backToList, studyDetail}: ParticipantType) =>
 		setOpenInput(false);
 	}
 
+	const handleCloseInputEdit = () => {
+		setOpenEdit(false);
+	}
+
 	const handleChangePage = (_e, value:number) => {
 		setPage(paginator(searched, value, itemPerPage).page);
 	}
@@ -116,14 +126,21 @@ const Participant = ({participant, backToList, studyDetail}: ParticipantType) =>
 		}
 	}
 
-	const handleDeleteCrfInput = (crf_input_no:number|null) => {
-		if(crf_input_no) {
-			confirm({
-				description: '이 CRF를 삭제하시겠습니까?',
-				variant: 'danger',
-			}).then(() => {		
-				deleteSelectedCrfInput(crf_input_no);}
-			);
+	const handleDeleteCrfInput = (crf_input_no:number) => {	
+		confirm({
+			description: '이 CRF를 삭제하시겠습니까?',
+			variant: 'danger',
+		}).then(() => {		
+			deleteSelectedCrfInput(crf_input_no);}
+		);
+	}
+
+	const handleEditCrfInputOpen = async (crf_input_no: number) => {
+		const resp = await eCrfInputApi.getECrfInputDetail(crf_input_no);
+		if(resp.result) {
+			console.log(resp.content)
+			setOpenEdit(true);
+			setSelectedCrfInput(resp.content);
 		}
 	}
 	
@@ -212,10 +229,9 @@ const Participant = ({participant, backToList, studyDetail}: ParticipantType) =>
 										<Grid item xs={3}>
 											<Box gap={1} display="flex">
 												<Button color="error" variant="contained" onClick={() => handleDeleteCrfInput(inputCrf.crf_input_no)}>Delete</Button>
-												<Button variant="contained">Edit</Button>
+												<Button variant="contained" onClick={() => handleEditCrfInputOpen(inputCrf.crf_input_no)}>Edit</Button>
 											</Box>
 										</Grid>
-											{/* <ECrfListItem crf={crf} refresh={fetchCrf} preivew={(crfNo:number) => handlePreview(crfNo)} /> */}
 									</Grid>
 									)
 								})}
@@ -254,7 +270,15 @@ const Participant = ({participant, backToList, studyDetail}: ParticipantType) =>
 				participant={participant}
 				crfPairList={crfPairList}
 				selectedCrf={selectedCrf}
-			/>		
+			/>
+			
+			<ECrfEditDialog
+				isOpen={openEdit}
+				handleClose={handleCloseInputEdit}
+				studyDetail={studyDetail}
+				participant={participant}
+				selectedCrfInput={selectedCrfInput}
+			/>
 		</>
 	);
 }

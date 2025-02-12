@@ -8,16 +8,16 @@ import CrfFileDropzone from "./CrfFileDropZone";
 import dayjs, { Dayjs } from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import eCrfInputApi from '@/apis/eCrfInput';
-import { ECrfPostReqBody } from "@/types/eCrfInput";
+import { ECrfPostReqBody, InputCrfDetail } from "@/types/eCrfInput";
 
 type ECrfPreviewType = {
-	crfNo: number | null;
+	crfNo?: number | null;
 	pairNo?: number;
 	stdNo?: number;
 	participantNo?: number;
-
+	selectedCrfInput?: InputCrfDetail;
 }
-const ECrfPreview = ({crfNo, pairNo, stdNo, participantNo} : ECrfPreviewType) => {
+const ECrfPreview = ({crfNo, pairNo, stdNo, participantNo, selectedCrfInput} : ECrfPreviewType) => {
 	const [crfDetail, setCrfDetail] = useState<ECrfDetail | null>(null);
 	const [crfFile, setCrfFile] = useState<ItemType | null>(null)
 	const [crfJson, setCrfJson] = useState<CRFFormJson[] | null>(null);
@@ -27,7 +27,7 @@ const ECrfPreview = ({crfNo, pairNo, stdNo, participantNo} : ECrfPreviewType) =>
 	const [inspectDateError, setInspectDateError] = useState<string | null>(null);
 	const [submitCheck, setSubmitCheck] = useState<boolean>(false);
 	const [fieldError, setFieldError] = useState<null[][][]>([]);
-	
+	const [editingCrfNo, setEditingCrfNo] = useState<number | null>(crfNo ? crfNo : null)
 
 	const handleValidateStart = async () => {
 		setSubmitCheck(true);
@@ -80,6 +80,35 @@ const ECrfPreview = ({crfNo, pairNo, stdNo, participantNo} : ECrfPreviewType) =>
 	useEffect(() => {
 		if(crfNo) getCrfDetail(crfNo);
 	}, [crfNo, getCrfDetail]);
+
+	const handleSetEditData = (inputDetail:InputCrfDetail) => {
+		const detail:CRFFormJson[] = inputDetail.input_crf_form_json;
+
+		setEditingCrfNo(inputDetail.crf_no);
+		
+		const crfList: null[][][] = [];
+		detail.forEach(crf => {
+			const crfItem: null[][] = [];
+			Object.keys(crf).map(key => {
+				const items: ItemType[] = crf[key];
+				const itemList: null[] = [];
+				if (items) {
+					items.map(item => itemList.push(null));
+				}
+				crfItem.push(itemList)
+			})
+
+			crfList.push(crfItem);
+		});
+
+		setFieldError(crfList);
+		setCrfJson(detail);
+	}
+
+	useEffect(() => {
+		console.log(selectedCrfInput);
+		if(selectedCrfInput) handleSetEditData(selectedCrfInput);
+	}, [selectedCrfInput])
 
 	const changeValue = ({changedItem, answerIndex, answerKey, itemIndex}:ChangedItmeType) => {
 		setCrfJson((prev) => {
@@ -156,7 +185,7 @@ const ECrfPreview = ({crfNo, pairNo, stdNo, participantNo} : ECrfPreviewType) =>
 		const crfInputValues: ECrfPostReqBody = {
 			pair_no: pairNo,
 			std_no: stdNo,
-			crf_no: crfNo,
+			crf_no: editingCrfNo,
 			std_crf_participant_no: participantNo,
 			inspect_date: dayjs(inspactDate).format('YYYY-MM-DD'),
 			input_crf_form_json: crfJson
@@ -209,8 +238,6 @@ const ECrfPreview = ({crfNo, pairNo, stdNo, participantNo} : ECrfPreviewType) =>
 						value={inspactDate}
 						format="YYYY/MM/DD"
 						onChange={(e) => {
-							console.log(e?.format('YYYY/MM/DD'));
-							//setFieldValue('inspectDate', e?.format('YYYY/MM/DD'));
 							setInspactDate(e);
 						}}
 						name="inspectDate"
@@ -220,7 +247,7 @@ const ECrfPreview = ({crfNo, pairNo, stdNo, participantNo} : ECrfPreviewType) =>
 				</Box>
 			</Card>
 			{
-				crfDetail && <>
+				(crfDetail || selectedCrfInput) && <>
 					
 					<Stack spacing={1}>
 					{
@@ -260,12 +287,15 @@ const ECrfPreview = ({crfNo, pairNo, stdNo, participantNo} : ECrfPreviewType) =>
 							</Box>
 						</Card>
 					}
-					<Box mb={1} p="1rem 1rem 0 1rem">
+					{
+						crfDetail && <Box mb={1} p="1rem 1rem 0 1rem">
 						<Typography variant="h3">{crfDetail.crf_title}</Typography>
-						{
-							crfDetail.crf_description && <Typography variant="h6">{crfDetail.crf_description}</Typography>
-						}
-					</Box>
+							{
+								crfDetail.crf_description && <Typography variant="h6">{crfDetail.crf_description}</Typography>
+							}
+						</Box>
+					}
+					
 					{
 						crfJson && crfJson.length > 0 && crfJson.map((crf:CRFFormJson, index) => {
 							return (
@@ -273,6 +303,7 @@ const ECrfPreview = ({crfNo, pairNo, stdNo, participantNo} : ECrfPreviewType) =>
 									<Box display="flex" sx={{width:'100%'}} flexDirection="row" flexWrap="wrap" gap={1} p={1}>
 									{
 										Object.keys(crf).map((key) => {
+											console.log(crfJson)
 											const items: ItemType[] = crf[key];
 											return (
 												<Box key={key} display="flex" flexDirection="column" flex="1" gap={1}>

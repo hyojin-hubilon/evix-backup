@@ -3,7 +3,7 @@ import {
 	api,
 	file_api
 } from '@/apis/axios-common';
-import { InputCrfList } from '@/types/eCrfInput';
+import { InputCrfDetail, InputCrfList } from '@/types/eCrfInput';
 
 const BASE_API_URL = '/researcher/case-report-form-input';
 
@@ -44,7 +44,7 @@ const eCrfInputApi = {
 	 */
 	getECrfInputDetail: async (crfInputNo: number) => {
 		try {
-			const responseData = await api<object>(`${BASE_API_URL}/${crfInputNo}`, 'get');
+			const responseData = await api<InputCrfDetail>(`${BASE_API_URL}/${crfInputNo}`, 'get');
 			return responseData;
 		} catch (error) {
 			const e = error as ResCommonError;

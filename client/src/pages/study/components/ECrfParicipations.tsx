@@ -97,7 +97,7 @@ const ECrfParticipants = ({ stdNo, studyDetail } : EProParticipantsType) => {
 		
 				return (
 					<Box>
-						<Button onClick={(e) => onClickDelete(e)} variant="outlined" color="error" sx={{mr:'0.5rem'}}>Delete</Button>
+						<Button onClick={(e) => onClickDelete(e)} variant="contained" color="error" sx={{mr:'0.5rem'}}>Delete</Button>
 						<Button onClick={(e) => onClickEdit(e)} variant="contained" color="primary">Edit</Button>
 					</Box>
 			);
