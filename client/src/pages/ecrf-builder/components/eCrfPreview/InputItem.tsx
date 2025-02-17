@@ -225,7 +225,7 @@ const InputItem = ({ item, answerIndex, answerKey, itemIndex, onChange, submitCh
 											row.map((column, k) => {
 												return <td key={k}>
 													<div className="td-content">
-														{ column['TEXT'] ? column['TEXT'] : <Input size="small" onChange={(e) => handleChangeColumn(e.target.value, i + 1, k)}/> }
+														{ column['TEXT'] ? column['TEXT'] : <Input size="small" defaultValue={column['INPUT'] ? column['INPUT'] : ''} onChange={(e) => handleChangeColumn(e.target.value, i + 1, k)}/> }
 													</div>
 												</td>
 											})

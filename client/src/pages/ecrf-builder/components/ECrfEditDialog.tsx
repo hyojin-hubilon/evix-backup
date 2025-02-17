@@ -20,6 +20,14 @@ type ECrfEditDialogType = {
 const ECrfEditDialog = ({isOpen, handleClose, studyDetail, participant, selectedCrfInput} : ECrfEditDialogType) => {
 	
 	const theme = useTheme();
+	const [saveClick, setSaveClick] = useState<boolean>(false);
+
+	const handleSave = () => {
+		setSaveClick(true);
+		setTimeout(() => {
+			setSaveClick(false);
+		}, 100)
+	}
 	
 	return (
 		<Dialog open={isOpen} onClose={handleClose} maxWidth="xl">
@@ -52,14 +60,14 @@ const ECrfEditDialog = ({isOpen, handleClose, studyDetail, participant, selected
 				<Box p={2}>					
 					{
 						selectedCrfInput &&
-						<ECrfPreview selectedCrfInput={selectedCrfInput} />
+						<ECrfPreview selectedCrfInput={selectedCrfInput} saveClick={saveClick}/>
 						// crfNo={selectedCrfInput.crf_no} stdNo={selectedCrfInput.std_no} pairNo={selectedCrfInput.pair_no} participantNo={selectedCrfInput.std_crf_participant_no}
 					}
 				</Box>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={handleClose}>Cancel</Button>
-				<Button onClick={handleClose} variant="contained">Save</Button>
+			<DialogActions sx={{flexGrow: 1}}>
+				<Button onClick={handleClose} variant="outlined" color="error" sx={{width:'50%'}}>Cancel</Button>
+				<Button onClick={handleSave} variant="contained" sx={{width:'50%'}}>Save</Button>
 			</DialogActions>
 		</Dialog>
 	);

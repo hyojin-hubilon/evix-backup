@@ -109,6 +109,9 @@ const Participant = ({participant, backToList, studyDetail}: ParticipantType) =>
 
 	const handleCloseInput = () => {
 		setOpenInput(false);
+		if(selectedCrf) {
+			getCRFInputList(selectedCrf.pair_no, selectedCrf.std_no, selectedCrf.crf_no);
+		}
 	}
 
 	const handleCloseInputEdit = () => {

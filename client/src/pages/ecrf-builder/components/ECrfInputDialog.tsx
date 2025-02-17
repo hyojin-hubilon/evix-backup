@@ -10,6 +10,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import dayjs, { Dayjs } from "dayjs";
 import { setIn } from "formik";
+import { useConfirmation } from "@/context/ConfirmDialogContext";
 
 type ECrfInputDialogType = {
 	isOpen: boolean;
@@ -21,12 +22,31 @@ type ECrfInputDialogType = {
 }
 
 const ECrfInputDialog = ({isOpen, handleClose, selectedCrf, studyDetail, participant, crfPairList} : ECrfInputDialogType) => {
+	const confirm = useConfirmation();
+
 	const [selectedCrfForView, setSelectedCrfforView] = useState<StudyCrfListRespone | null>(null);
+	const [saveClick, setSaveClick] = useState<boolean>(false);
 	
 	const theme = useTheme();
 
 	const handleSelectCrf = (crfPair: StudyCrfListRespone) => {
 		setSelectedCrfforView(crfPair);
+	}
+
+	const handleSave = () => {
+		setSaveClick(true);
+		setTimeout(() => {
+			setSaveClick(false);
+		}, 100)
+	}
+
+	const handleInputClose = () => {
+		confirm({
+			description: "창을 닫을 경우 입력한 내용이 사라집니다.",
+			variant: 'danger'
+		}).then(() => {
+			handleClose()
+		});
 	}
 
 	useEffect(() => {
@@ -87,15 +107,16 @@ const ECrfInputDialog = ({isOpen, handleClose, selectedCrf, studyDetail, partici
 							
 							{
 								selectedCrfForView &&
-								<ECrfPreview crfNo={selectedCrfForView.crf_no} stdNo={studyDetail.std_no} pairNo={selectedCrf?.pair_no} participantNo={participant.std_crf_participant_no} />
+								<ECrfPreview crfNo={selectedCrfForView.crf_no} stdNo={studyDetail.std_no} pairNo={selectedCrf?.pair_no} participantNo={participant.std_crf_participant_no} saveClick={saveClick} handleCloseDialog={handleClose} />
 							}
 						</Box>
 					</Grid>
 				</Grid>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={handleClose}>Cancel</Button>
-				<Button onClick={handleClose} variant="contained">Save</Button>
+			<DialogActions sx={{flexGrow: 1}}>
+				<Button onClick={handleInputClose} variant="outlined" color="error" sx={{width:'50%'}}>Cancel</Button>
+				<Button onClick={handleSave} variant="contained" sx={{width:'50%'}}>Save</Button>
+				
 			</DialogActions>
 		</Dialog>
 	);

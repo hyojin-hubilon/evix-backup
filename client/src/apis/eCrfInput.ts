@@ -19,9 +19,9 @@ const eCrfInputApi = {
 		}
 	},
 	//PUT CRF(증례기록서) Data 입력등록(파일첨부 포함)
-	putECrfInput: async (requestDto: any, crf_file_attachments: Array<any>) => {
+	putECrfInput: async (data: FormData) => {
 		try {
-			const responseData = await api<object>(BASE_API_URL, 'put', requestDto);
+			const responseData = await api<object>(BASE_API_URL, 'put', data);
 			return responseData;
 		} catch (error) {
 			const e = error as ResCommonError;
